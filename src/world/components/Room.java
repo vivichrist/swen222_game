@@ -15,7 +15,7 @@ public class Room {
 	private Door eastDoor;
 	private Door southDoor;
 	private Door westDoor;
-	private List<GameObject> objects;
+	private List<MoveableObject> objects;
 	
 	/**
 	 * Constructor - creates a Room with a given name.
@@ -23,7 +23,7 @@ public class Room {
 	 */
 	public Room(String name){
 		this.name = name;
-		objects = new ArrayList<GameObject>();
+		objects = new ArrayList<MoveableObject>();
 	}
 	
 	/**

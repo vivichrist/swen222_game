@@ -7,7 +7,7 @@ import java.awt.Color;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Key implements GameObject {
+public class Key implements MoveableObject {
 
 	//TODO: is the name field necessary for a key???
 	private final String name;
