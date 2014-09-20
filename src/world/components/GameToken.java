@@ -3,7 +3,8 @@ package world.components;
 import java.awt.Color;
 
 /**
- * A collectable Token in the game - players are required to collect a given set of Tokens to win the game
+ * A collectable GameToken in the game - players are required to collect a given set of GameTokens to win the game
+ * GameTokens are considered "equal" if they have the same color and type (the found state is not evaluated)
  * @author Kalo Pilato - ID: 300313803
  *
  */
@@ -47,7 +48,7 @@ public class GameToken {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
