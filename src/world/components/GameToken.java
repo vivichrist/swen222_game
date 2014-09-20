@@ -23,6 +23,22 @@ public class GameToken {
 		this.type = type;
 		this.color = color;
 	}
+	
+	/**
+	 * Returns the Color of this GameToken
+	 * @return the Color of this GameToken
+	 */
+	public Color getColor(){
+		return color;
+	}
+	
+	/**
+	 * Returns the type of this GameToken
+	 * @return the type of this GameToken
+	 */
+	public String getType(){
+		return type;
+	}
 
 	/**
 	 * Checks whether this Token has been found

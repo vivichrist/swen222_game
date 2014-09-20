@@ -35,10 +35,19 @@ public class TokenList {
 	/**
 	 * Returns the specified GameToken from this list
 	 * @param token the GameToken to return
-	 * @return 
+	 * @return the specified GameToken
 	 */
 	public GameToken get(GameToken token){
 		return tokens.get(tokens.indexOf(token));
+	}
+	
+	/**
+	 * Returns the GameToken at a given index position from this list
+	 * @param index the index position of the GameToken to return
+	 * @return the GameToken at index
+	 */
+	public GameToken get(int index){
+		return tokens.get(index);
 	}
 	
 	/**
