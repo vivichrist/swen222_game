@@ -1,0 +1,51 @@
+package world.components;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The list of GameTokens a Player is required to collect to win the game
+ * @author Kalo Pilato - ID: 300313803
+ *
+ */
+public class TokenList {
+
+	// Defines the Color palette to use for every TokenList
+	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.RED};
+	
+	private final List<GameToken> tokens;
+	
+	//TODO: What should the token count be here? Is 5 an appropriate value? If changed we need to change the COLORS array size to match
+	// Defines the number of tokens to be collected by each Player
+	private final int tokenCount = 5;
+
+	
+	/**
+	 * Constructor - creates a new TokenList, populating it with new GameTokens of a given type (Colors are assigned from the predefined COLORS array) 
+	 * @param type the type of GameTokens to be used in this TokenList
+	 */
+	public TokenList(String type){
+		tokens = new ArrayList<GameToken>();
+		for(int i = 0; i < tokenCount; i++){
+			tokens.add(new GameToken(type, COLORS[i]));
+		}
+	}
+	
+	/**
+	 * Returns the specified GameToken from this list
+	 * @param token the GameToken to return
+	 * @return 
+	 */
+	public GameToken get(GameToken token){
+		return tokens.get(tokens.indexOf(token));
+	}
+	
+	/**
+	 * Returns the size of this TokenList
+	 * @return the size of this TokenList
+	 */
+	public int size(){
+		return tokens.size();
+	}
+}
