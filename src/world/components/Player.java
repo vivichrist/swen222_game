@@ -1,8 +1,14 @@
 package world.components;
 
+/**
+ * Represents a Player in the game world.
+ * @author Kalo Pilato
+ *
+ */
 public class Player {
 	
 	private final String name;
+	private final Inventory inventory;
 	private int xPos;
 	private int yPos;
 	
@@ -12,6 +18,7 @@ public class Player {
 	 */
 	public Player(String name){
 		this.name = name;
+		this.inventory = new Inventory();
 	}
 	
 	/**
