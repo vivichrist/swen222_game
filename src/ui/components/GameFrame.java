@@ -31,7 +31,6 @@ public class GameFrame extends JFrame
 {
 	private ArrayList<GraphicalObject> toDraw = new ArrayList<GraphicalObject>();
 	public static final int		cellsize = 10;
-	public static final int		cellAcross = 20;
 	public static final double
 					PI2 = Math.PI * 2;
 	public static final float
@@ -39,22 +38,22 @@ public class GameFrame extends JFrame
 	private float	newdir, direction = newdir = 0.0f ; // newdir is a more current alias to direction
 	private float	speed = 0.5f; // forward reverse constant
 	private boolean keyUpdate = false, w = false, a = false, s = false, d = false;
-	private Point2D.Float
-					position = new Point2D.Float( 
-							(cellAcross / 4.0f) * cellsize, (cellAcross / 4.0f) * cellsize )
-				  , newpos = new Point2D.Float();// newpos is a more current alias to position
-	private GameCollision map = new GameCollision( cellAcross, cellAcross );
+	private Point2D.Float position, newpos = 
+			new Point2D.Float();// newpos is a buffer alias to position
+	private GameCollision map = new GameCollision();
+	public final Point	extents = map.mapsize();
 	private float	turnSpeed = 0.05f;
 	
     public GameFrame( String str )
     {
     	super(str);
-    	newpos.setLocation( position );
     	GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
         GLJPanel gameView = new GLJPanel( glcapabilities );
-        
+        position = new Point2D.Float( 
+				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
+        newpos.setLocation( position );
         gameView.addGLEventListener( new GLEventListener() {
             
             @Override
@@ -82,24 +81,11 @@ public class GameFrame extends JFrame
             	gl2.glBlendFunc( GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA );
             	gl2.glClearColor( 0.0f, 0.0f, 0.01f, 0.0f );
             	gl2.glEnable( GL.GL_DEPTH_TEST );
-            	toDraw.add( new Plane( cellAcross, 0, cellsize ) );
-            	toDraw.add( new Wall(new Point( 0, 0 ), new Point( 19, 0 )
-            						, cellAcross, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 0, 9 ), new Point( 9, 9 )
-            						, 5, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 0, 0 ), new Point( 0, 19 )
-            						, cellAcross, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 9, 0 ), new Point( 9, 9 )
-            						, 5, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 0, 19 ), new Point( 19, 19 )
-            						, cellAcross, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 9, 9 ), new Point( 9, 19 )
-            						, 5, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 19, 0 ), new Point( 19, 19 )
-            						, cellAcross, cellsize, map ) );
-            	toDraw.add( new Wall(new Point( 9, 9 ), new Point( 19, 9 )
-            						, 5, cellsize, map ) );
-            	toDraw.add( new Plane( cellAcross, 2, cellsize ) );
+            	gl2.glDepthFunc(GL.GL_LEQUAL);
+                gl2.glShadeModel(GL2.GL_SMOOTH);
+            	toDraw.add( new Plane( extents, 0, cellsize ) );
+            	toDraw.add( new Plane( extents, 2, cellsize ) );
+            	map.addSurrounds( toDraw, cellsize );
             	for( GraphicalObject go: toDraw )
                 	go.makeDisplayList( gl2 );
             }

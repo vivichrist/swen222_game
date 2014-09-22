@@ -1,4 +1,6 @@
 package ui.components;
+import java.awt.Point;
+
 import javax.media.opengl.GL2;
 
 public class Plane implements GraphicalObject
@@ -9,10 +11,10 @@ public class Plane implements GraphicalObject
 	 * @param width
 	 * @param bredth
 	 */
-	public Plane( int breadth, int level, int cellsize )
+	public Plane( Point extents, int level, int cellsize )
 	{
 		super();
-		this.breadth = breadth;
+		this.breadth = Math.max( extents.x, extents.y );
 		this.cellsize = cellsize;
 		this.level = level * cellsize;
 	}
