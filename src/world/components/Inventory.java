@@ -11,6 +11,7 @@ import java.util.List;
 public class Inventory {
 	
 	private List<MoveableObject> inventory;
+	private int maxSize = 5;
 	
 	/**
 	 * Constructor - creates an empty Inventory
@@ -20,12 +21,14 @@ public class Inventory {
 	}
 	
 	/**
-	 * Adds a MoveableObject to this Inventory
+	 * Adds a MoveableObject to this Inventory (provided that the Inventory has available space)
 	 * @param item the MoveableObject to add
 	 * @return true if added
 	 */
 	public boolean add(MoveableObject item){
-		return inventory.add(item);
+		//TODO: Should this throw an exception???
+		if(inventory.size() == maxSize) return false;
+		else return inventory.add(item);
 	}
 	
 	/**
