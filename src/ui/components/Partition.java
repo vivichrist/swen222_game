@@ -38,9 +38,7 @@ public class Partition implements GraphicalObject
 	{
 		float wallwidth = (1.0f/3.0f) * cellsize;
 		listID = gl.glGenLists( 1 );
-
 		gl.glNewList(listID, GL2.GL_COMPILE); 
-		// walls come in two types? ...hmmm
 		makeWall( gl, wallwidth );
 		gl.glEndList();
 
