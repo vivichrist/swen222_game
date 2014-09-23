@@ -97,7 +97,7 @@ public class DoorWay implements GraphicalObject
 			gl.glEnd();
 		}
 		else
-		{
+		{// same order as above but different orientation
 			gl.glBegin( GL2.GL_QUAD_STRIP );
 			gl.glColor3f( .0f, .0f, .0f );
 			gl.glVertex3f(  doorwidth, 0, 1.5f * cellsize );
