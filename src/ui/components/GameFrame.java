@@ -88,7 +88,7 @@ public class GameFrame extends JFrame
             	toDraw.add( new Plane( extents, 2, cellsize ) );
             	map.addSurrounds( toDraw, cellsize );
             	for( GraphicalObject go: toDraw )
-                	go.makeDisplayList( gl2 );
+                	go.initialise( gl2 );
             }
             
             @Override

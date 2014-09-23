@@ -34,7 +34,7 @@ public class Partition implements GraphicalObject
 	}
 
 	@Override
-	public boolean makeDisplayList( GL2 gl )
+	public boolean initialise( GL2 gl )
 	{
 		float wallwidth = cellsize/3.0f;
 		listID = gl.glGenLists( 1 );
