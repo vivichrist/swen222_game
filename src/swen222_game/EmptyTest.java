@@ -2,5 +2,6 @@ package swen222_game;
 
 public class EmptyTest {
 	// Only created to test git repositories are correctly configured
-	//looking at git
+	//looking at git`\
+	System.out.print();
 }
