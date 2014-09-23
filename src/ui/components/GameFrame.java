@@ -74,6 +74,7 @@ public class GameFrame extends JFrame
             	GL2 gl2 = glautodrawable.getGL().getGL2();
             	gl2.glLineWidth( 3.0f );
             	gl2.glEnable( GL.GL_LINE_SMOOTH );
+            	gl2.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
             	gl2.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );
             	// Antialias lines
             	gl2.glEnable( GL.GL_BLEND );

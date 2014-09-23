@@ -36,10 +36,13 @@ public class Partition implements GraphicalObject
 	@Override
 	public boolean makeDisplayList( GL2 gl )
 	{
-		float wallwidth = (1.0f/3.0f) * cellsize;
+		float wallwidth = cellsize/3.0f;
 		listID = gl.glGenLists( 1 );
-		gl.glNewList(listID, GL2.GL_COMPILE); 
+		gl.glNewList(listID, GL2.GL_COMPILE);
+		gl.glPushMatrix();
+		gl.glTranslatef( position.x, position.y, 0 );
 		makeWall( gl, wallwidth );
+		gl.glPopMatrix();
 		gl.glEndList();
 
 		return true;
@@ -49,117 +52,117 @@ public class Partition implements GraphicalObject
 	{
 		gl.glBegin( GL2.GL_QUAD_STRIP );
 		gl.glColor3f( .0f, .0f, .0f );
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 0 );
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 2 * cellsize );
+		gl.glVertex3f( wallwidth, wallwidth, 0 );
+		gl.glVertex3f( wallwidth, wallwidth, 2 * cellsize );
 		if ( west )
 		{
-			gl.glVertex3f( position.x, position.y + wallwidth, 0 );
-			gl.glVertex3f( position.x, position.y + wallwidth, 2 * cellsize );
-			gl.glVertex3f( position.x, position.y + 2 * wallwidth, 0 );
-			gl.glVertex3f( position.x, position.y + 2 * wallwidth, 2 * cellsize );
+			gl.glVertex3f( 0, wallwidth, 0 );
+			gl.glVertex3f( 0, wallwidth, 2 * cellsize );
+			gl.glVertex3f( 0, 2 * wallwidth, 0 );
+			gl.glVertex3f( 0, 2 * wallwidth, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + wallwidth, position.y + 2 * wallwidth, 0 );
-		gl.glVertex3f( position.x + wallwidth, position.y + 2 * wallwidth, 2 * cellsize );
+		gl.glVertex3f( wallwidth, 2 * wallwidth, 0 );
+		gl.glVertex3f( wallwidth, 2 * wallwidth, 2 * cellsize );
 		if ( south )
 		{
-			gl.glVertex3f( position.x + wallwidth, position.y + cellsize, 0 );
-			gl.glVertex3f( position.x + wallwidth, position.y + cellsize, 2 * cellsize );
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y + cellsize, 0 );
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y + cellsize, 2 * cellsize );
+			gl.glVertex3f( wallwidth, cellsize, 0 );
+			gl.glVertex3f( wallwidth, cellsize, 2 * cellsize );
+			gl.glVertex3f( 2 * wallwidth, cellsize, 0 );
+			gl.glVertex3f( 2 * wallwidth, cellsize, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + 2 * wallwidth, 0 );
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + 2 * wallwidth, 2 * cellsize );
+		gl.glVertex3f( 2 * wallwidth, 2 * wallwidth, 0 );
+		gl.glVertex3f( 2 * wallwidth, 2 * wallwidth, 2 * cellsize );
 		if ( east )
 		{
-			gl.glVertex3f( position.x + cellsize, position.y + 2 * wallwidth, 0 );
-			gl.glVertex3f( position.x + cellsize, position.y + 2 * wallwidth, 2 * cellsize );
-			gl.glVertex3f( position.x + cellsize, position.y + wallwidth, 0 );
-			gl.glVertex3f( position.x + cellsize, position.y + wallwidth, 2 * cellsize );
+			gl.glVertex3f( cellsize, 2 * wallwidth, 0 );
+			gl.glVertex3f( cellsize, 2 * wallwidth, 2 * cellsize );
+			gl.glVertex3f( cellsize, wallwidth, 0 );
+			gl.glVertex3f( cellsize, wallwidth, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + wallwidth, 0 );
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + wallwidth, 2 * cellsize );
+		gl.glVertex3f( 2 * wallwidth, wallwidth, 0 );
+		gl.glVertex3f( 2 * wallwidth, wallwidth, 2 * cellsize );
 		if ( north )
 		{
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y, 0 );
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y, 2 * cellsize );
-			gl.glVertex3f( position.x + wallwidth, position.y, 0 );
-			gl.glVertex3f( position.x + wallwidth, position.y, 2 * cellsize );
+			gl.glVertex3f( 2 * wallwidth, 0, 0 );
+			gl.glVertex3f( 2 * wallwidth, 0, 2 * cellsize );
+			gl.glVertex3f( wallwidth, 0, 0 );
+			gl.glVertex3f( wallwidth, 0, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 0 );
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 2 * cellsize );
+		gl.glVertex3f( wallwidth, wallwidth, 0 );
+		gl.glVertex3f( wallwidth, wallwidth, 2 * cellsize );
 		gl.glEnd();
 		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 		gl.glBegin( GL2.GL_LINE_LOOP );
 		gl.glColor3f( 1.0f, 1.0f, 1.0f );
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 0 );
+		gl.glVertex3f( wallwidth, wallwidth, 0 );
 		if ( west )
 		{
-			gl.glVertex3f( position.x, position.y + wallwidth, 0 );
-			gl.glVertex3f( position.x, position.y + 2 * wallwidth, 0 );
+			gl.glVertex3f( 0, wallwidth, 0 );
+			gl.glVertex3f( 0, 2 * wallwidth, 0 );
 		}
-		gl.glVertex3f( position.x + wallwidth, position.y + 2 * wallwidth, 0 );
+		gl.glVertex3f( wallwidth, 2 * wallwidth, 0 );
 		if ( south )
 		{
-			gl.glVertex3f( position.x + wallwidth, position.y + cellsize, 0 );
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y + cellsize, 0 );
+			gl.glVertex3f( wallwidth, cellsize, 0 );
+			gl.glVertex3f( 2 * wallwidth, cellsize, 0 );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + 2 * wallwidth, 0 );
+		gl.glVertex3f( 2 * wallwidth, 2 * wallwidth, 0 );
 		if ( east )
 		{
-			gl.glVertex3f( position.x + cellsize, position.y + 2 * wallwidth, 0 );
-			gl.glVertex3f( position.x + cellsize, position.y + wallwidth, 0 );
+			gl.glVertex3f( cellsize, 2 * wallwidth, 0 );
+			gl.glVertex3f( cellsize, wallwidth, 0 );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + wallwidth, 0 );
+		gl.glVertex3f( 2 * wallwidth, wallwidth, 0 );
 		if ( north )
 		{
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y, 0 );
-			gl.glVertex3f( position.x + wallwidth, position.y, 0 );
+			gl.glVertex3f( 2 * wallwidth, 0, 0 );
+			gl.glVertex3f( wallwidth, 0, 0 );
 		}
 		gl.glEnd();
 		gl.glBegin( GL2.GL_LINE_LOOP );
-		gl.glVertex3f( position.x + wallwidth, position.y + wallwidth, 2 * cellsize );
+		gl.glVertex3f( wallwidth, wallwidth, 2 * cellsize );
 		if ( west )
 		{
-			gl.glVertex3f( position.x, position.y + wallwidth, 2 * cellsize );
-			gl.glVertex3f( position.x, position.y + 2 * wallwidth, 2 * cellsize );
+			gl.glVertex3f( 0, wallwidth, 2 * cellsize );
+			gl.glVertex3f( 0, 2 * wallwidth, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + wallwidth, position.y + 2 * wallwidth, 2 * cellsize );
+		gl.glVertex3f( wallwidth, 2 * wallwidth, 2 * cellsize );
 		if ( south )
 		{
-			gl.glVertex3f( position.x + wallwidth, position.y + cellsize, 2 * cellsize );
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y + cellsize, 2 * cellsize );
+			gl.glVertex3f( wallwidth, cellsize, 2 * cellsize );
+			gl.glVertex3f( 2 * wallwidth, cellsize, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + 2 * wallwidth, 2 * cellsize );
+		gl.glVertex3f( 2 * wallwidth, 2 * wallwidth, 2 * cellsize );
 		if ( east )
 		{
-			gl.glVertex3f( position.x + cellsize, position.y + 2 * wallwidth, 2 * cellsize );
-			gl.glVertex3f( position.x + cellsize, position.y + wallwidth, 2 * cellsize );
+			gl.glVertex3f( cellsize, 2 * wallwidth, 2 * cellsize );
+			gl.glVertex3f( cellsize, wallwidth, 2 * cellsize );
 		}
-		gl.glVertex3f( position.x + 2 * wallwidth, position.y + wallwidth, 2 * cellsize );
+		gl.glVertex3f( 2 * wallwidth, wallwidth, 2 * cellsize );
 		if ( north )
 		{
-			gl.glVertex3f( position.x + 2 * wallwidth, position.y, 2 * cellsize );
-			gl.glVertex3f( position.x + wallwidth, position.y, 2 * cellsize );
+			gl.glVertex3f( 2 * wallwidth, 0, 2 * cellsize );
+			gl.glVertex3f( wallwidth, 0, 2 * cellsize );
 		}
 		gl.glEnd();
 		gl.glEnd();
 		gl.glBegin( GL2.GL_LINES );
 		if ( west && north )
 		{
-			gl.glVertex3f( position.x + wallwidth - 0.1f, position.y + wallwidth - 0.1f, 2 * cellsize );// 1, 1
-			gl.glVertex3f( position.x + wallwidth - 0.1f, position.y + wallwidth - 0.1f, 0 );
+			gl.glVertex3f( wallwidth - 0.1f, wallwidth - 0.1f, 2 * cellsize );// 1, 1
+			gl.glVertex3f( wallwidth - 0.1f, wallwidth - 0.1f, 0 );
 		} if ( west && south )
 		{
-			gl.glVertex3f( position.x + wallwidth - 0.1f, position.y + 2 * wallwidth + 0.1f, 2 * cellsize );// 1, 2
-			gl.glVertex3f( position.x + wallwidth - 0.1f, position.y + 2 * wallwidth + 0.1f, 0 );
+			gl.glVertex3f( wallwidth - 0.1f, 2 * wallwidth + 0.1f, 2 * cellsize );// 1, 2
+			gl.glVertex3f( wallwidth - 0.1f, 2 * wallwidth + 0.1f, 0 );
 		} if ( north && east )
 		{
-			gl.glVertex3f( position.x + 2 * wallwidth + 0.1f, position.y + wallwidth - 0.1f, 2 * cellsize );// 2, 1
-			gl.glVertex3f( position.x + 2 * wallwidth + 0.1f, position.y + wallwidth - 0.1f, 0 );
+			gl.glVertex3f( 2 * wallwidth + 0.1f, wallwidth - 0.1f, 2 * cellsize );// 2, 1
+			gl.glVertex3f( 2 * wallwidth + 0.1f, wallwidth - 0.1f, 0 );
 		} if ( east && south )
 		{
-			gl.glVertex3f( position.x + 2 * wallwidth + 0.1f, position.y + 2 * wallwidth + 0.1f, 2 * cellsize );// 2, 2
-			gl.glVertex3f( position.x + 2 * wallwidth + 0.1f, position.y + 2 * wallwidth + 0.1f, 0 );
+			gl.glVertex3f( 2 * wallwidth + 0.1f, 2 * wallwidth + 0.1f, 2 * cellsize );// 2, 2
+			gl.glVertex3f( 2 * wallwidth + 0.1f, 2 * wallwidth + 0.1f, 0 );
 		}
 		gl.glEnd();
 	}
