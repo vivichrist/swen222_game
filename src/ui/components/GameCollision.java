@@ -114,11 +114,11 @@ public class GameCollision
 				switch( map[i][j] )
 				{
 				case WALL :
-					toDraw.add( new Partition( center, north, east, south, west, new Point( i, j ), scale ) );
+					toDraw.add( new Partition( north, east, south, west
+							, new Point( i, j ), scale ) );
 					break;
 				case DOOR :
-					// TODO: very very bung!!
-					//toDraw.add( new DoorWay( north, south, new Point( i, j ), scale ) );
+					toDraw.add( new DoorWay( north, south, new Point( i, j ), scale ) );
 					break;
 				case OPENDOOR :
 					;
