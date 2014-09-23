@@ -118,8 +118,7 @@ public class GameCollision
 							, new Point( i, j ), scale ) );
 					break;
 				case DOOR :
-					// TODO: very very bung!!
-					//toDraw.add( new DoorWay( north, south, new Point( i, j ), scale ) );
+					toDraw.add( new DoorWay( north, south, new Point( i, j ), scale ) );
 					break;
 				case OPENDOOR :
 					;
