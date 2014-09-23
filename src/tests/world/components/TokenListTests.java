@@ -1,4 +1,4 @@
-package tests.components;
+package tests.world.components;
 
 import static org.junit.Assert.assertTrue;
 

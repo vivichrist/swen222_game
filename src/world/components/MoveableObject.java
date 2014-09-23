@@ -6,5 +6,6 @@ package world.components;
  *
  */
 public interface MoveableObject {
-
+	
+	
 }
