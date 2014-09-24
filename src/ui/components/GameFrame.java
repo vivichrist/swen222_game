@@ -8,14 +8,9 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
-
-import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.FPSAnimator;
-
 import java.awt.BorderLayout;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
@@ -35,14 +30,15 @@ public class GameFrame extends JFrame
 					PI2 = Math.PI * 2;
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
-	private float	newdir, direction = newdir = 0.0f ; // newdir is a more current alias to direction
-	private float	speed = 0.5f; // forward reverse constant
-	private boolean keyUpdate = false, w = false, a = false, s = false, d = false;
-	private Point2D.Float position, newpos = 
-			new Point2D.Float();// newpos is a buffer alias to position
+	// keyInput.setDirection( is a more current alias to direction
+	private float direction = 0.0f;
+	// forward reverse constant
+	public static final float	speed = 0.5f;
+	private Point2D.Float position;
 	private GameCollision map = new GameCollision();
-	public final Point	extents = map.mapsize();
-	private float	turnSpeed = 0.05f;
+	private Point extents = map.mapsize();
+	private GameListener	keyInput;
+	public static final float	turnSpeed = 0.05f;
 	
     public GameFrame( String str )
     {
@@ -53,7 +49,7 @@ public class GameFrame extends JFrame
         GLJPanel gameView = new GLJPanel( glcapabilities );
         position = new Point2D.Float( 
 				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
-        newpos.setLocation( position );
+        keyInput = new GameListener( toDraw, position, direction, map );
         gameView.addGLEventListener( new GLEventListener() {
             
             @Override
@@ -116,84 +112,7 @@ public class GameFrame extends JFrame
                 render( gl2 );
             }
         });
-        gameView.addKeyListener( new KeyListener()
-		{
-			@Override
-			public void keyTyped( KeyEvent arg0 )
-			{
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyReleased( KeyEvent key )
-			{
-				if ( key.getKeyCode() == KeyEvent.VK_W )
-				{
-					w = false;
-				}
-				else if ( key.getKeyCode() == KeyEvent.VK_S )
-				{
-					s = false;
-				}
-				else if ( key.getKeyCode() == KeyEvent.VK_A )
-				{
-					a = false;
-				}
-				else if ( key.getKeyCode() == KeyEvent.VK_D )
-				{
-					d = false;
-				}
-			}
-			
-			@Override
-			public void keyPressed( KeyEvent key )
-			{
-				if ( key.getKeyCode() == KeyEvent.VK_W || (!keyUpdate && w) )
-				{
-					movePos( true );
-				}
-				if ( key.getKeyCode() == KeyEvent.VK_S || (!keyUpdate && s) )
-				{
-					movePos( false );
-				}
-				if ( key.getKeyCode() == KeyEvent.VK_A || (!keyUpdate && a) )
-				{
-					newdir -= turnSpeed;
-					newdir %= PI2;
-					keyUpdate = true;
-					a = true;
-				}
-				if ( key.getKeyCode() == KeyEvent.VK_D || (!keyUpdate && d) )
-				{
-					newdir += turnSpeed;
-					newdir %= PI2;
-					keyUpdate = true;
-					d = true;
-				}
-			}
-
-			private void movePos(boolean b)
-			{
-				int invert = b ? -1 : 1;
-				float newx = (float) ( newpos.x
-						+ invert * Math.sin( newdir ) * speed );
-				float newy = (float) ( newpos.y
-						+ invert * Math.cos( newdir ) * speed );
-				// TODO: collision detection
-				if ( map.isCollidable( newx, newy ) )
-				{
-					if ( !map.isCollidable( newpos.x, newy ) )
-						newpos.setLocation( newpos.x, newy );
-					if ( !map.isCollidable( newx, newpos.y ) )
-						newpos.setLocation( newx, newpos.y );
-				}
-				else newpos.setLocation( newx, newy );
-				keyUpdate = true;
-				if ( b ) w = true;
-				else s = true;
-			}
-		} );
+        gameView.addKeyListener( keyInput );
         
         addWindowListener( new WindowAdapter()
         {
@@ -215,54 +134,53 @@ public class GameFrame extends JFrame
     
     private void update()
 	{
-    	if ( !keyUpdate )
+    	if ( !keyInput.isKeyUpdate() )
     	{
-	    	if ( w )
+	    	if ( keyInput.isKey( 'w' ) )
 			{
-	    		float newx = (float) ( newpos.x
-						- Math.sin( newdir ) * speed );
-				float newy = (float) ( newpos.y
-						- Math.cos( newdir ) * speed );
-				// TODO: collision detection
+	    		float newx = (float) ( keyInput.getNewX()
+						- Math.sin( keyInput.getDirection() ) * speed );
+				float newy = (float) ( keyInput.getNewY()
+						- Math.cos( keyInput.getDirection() ) * speed );
+				// collision detection
 				if ( map.isCollidable( newx, newy ) )
 				{
-					if ( !map.isCollidable( newpos.x, newy ) )
-						newpos.setLocation( newpos.x, newy );
-					if ( !map.isCollidable( newx, newpos.y ) )
-						newpos.setLocation( newx, newpos.y );
+					if ( !map.isCollidable( keyInput.getNewX(), newy ) )
+						keyInput.setLocation( keyInput.getNewX(), newy );
+					if ( !map.isCollidable( newx, keyInput.getNewY() ) )
+						keyInput.setLocation( newx, keyInput.getNewY() );
 				}
-				else newpos.setLocation( newx, newy );
+				else keyInput.setLocation( newx, newy );
 			}
-			if ( s )
+			if ( keyInput.isKey( 's' ) )
 			{
-				float newx = (float) ( newpos.x
-						+ Math.sin( newdir ) * speed );
-				float newy = (float) ( newpos.y
-						+ Math.cos( newdir ) * speed );
-				// TODO: collision detection
+				float newx = (float) ( keyInput.getNewX()
+						+ Math.sin( keyInput.getDirection() ) * speed );
+				float newy = (float) ( keyInput.getNewY()
+						+ Math.cos( keyInput.getDirection() ) * speed );
+				// collision detection
 				if ( map.isCollidable( newx, newy ) )
 				{
-					if ( !map.isCollidable( newpos.x, newy ) )
-						newpos.setLocation( newpos.x, newy );
-					if ( !map.isCollidable( newx, newpos.y ) )
-						newpos.setLocation( newx, newpos.y );
+					if ( !map.isCollidable( keyInput.getNewX(), newy ) )
+						keyInput.setLocation( keyInput.getNewX(), newy );
+					if ( !map.isCollidable( newx, keyInput.getNewY() ) )
+						keyInput.setLocation( newx, keyInput.getNewY() );
 				}
-				else newpos.setLocation( newx, newy );
+				else keyInput.setLocation( newx, newy );
 			}
-			if ( a )
+			
+			if ( keyInput.isKey( 's' ) )
 			{
-				newdir -= turnSpeed;
-				newdir %= PI2;
+				keyInput.addToDirection( -turnSpeed );
 			}
-			if ( d )
+			if ( keyInput.isKey( 's' ) )
 			{
-				newdir += turnSpeed;
-				newdir %= PI2;
+				keyInput.addToDirection( turnSpeed );
 			}
 		}
-    	direction = newdir * DEG;
-    	position.setLocation( newpos );
-    	keyUpdate = false;
+    	direction = keyInput.getDirection() * DEG;
+    	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
+    	keyInput.setKeyUpdate( false );
     }
 
 	private void render( GL2 gl2 )
