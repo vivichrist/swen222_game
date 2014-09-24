@@ -1,6 +1,7 @@
 package world.game;
 
 
+
 /**
  * Represents a Player in the game world.
  * @author Kalo Pilato
@@ -9,16 +10,19 @@ package world.game;
 public class Player {
 	
 	private final String name;
+	private final TokenList toCollect;
 	private final Inventory inventory;
+	//TODO: should Players maintain their position? or should the game state? or both?
 	private int xPos;
 	private int yPos;
 	
 	/**
-	 * Constructor - Creates a Player with a given name
+	 * Constructor - Creates a Player with a given name, an empty inventory, and a TokenList of items to collect
 	 * @param name the name of this Player
 	 */
-	public Player(String name){
+	public Player(String name, GameBuilder.TokenType type){
 		this.name = name;
+		toCollect = new TokenList(type);
 		this.inventory = new Inventory();
 	}
 	

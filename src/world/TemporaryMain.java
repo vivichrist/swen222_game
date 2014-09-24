@@ -1,12 +1,10 @@
 package world;
 
-import java.io.File;
-
-import world.components.Map;
+import world.game.GameBuilder;
 
 public class TemporaryMain {
 
 	public static void main(String[] args){
-		new Map(new File("map1.txt"));
+		new GameBuilder();
 	}
 }
