@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 /**
- * @author Home
+ * @author  Zhaojiang Chang
  *
  */
 public class Server {

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Home
+ * @author  Zhaojiang Chang
  *
  */
 public class clientNameMap<K,V> extends HashMap<K,V> {

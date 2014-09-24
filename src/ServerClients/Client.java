@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+/**
+ * @author  Zhaojiang Chang
+ * 
+ * */
 public class Client {
 	private static final int SERVER_PORT = 3000;
 	private Socket socket;
@@ -33,7 +36,21 @@ public class Client {
 		new ClientThread(brServer).start();
 		
 	}
-
+	private void readAndSend(){
+		try{
+			String line = null;
+		
+		while((line = brClient.readLine())!=null){
+		  ps.println(line);
+			
+		}
+	}
+		catch(IOException ex){
+			System.out.println("can not connect, redo the log in");
+			closeAll();
+			System.exit(1);
+		}
+	}
 	private void closeAll() {
 		// TODO Auto-generated method stub
 		try{
@@ -44,5 +61,10 @@ public class Client {
     	}catch(IOException ex){
     		ex.printStackTrace();
     	}
+	}
+	public static void main(String[]args){
+		Client client = new Client();
+		client.init();
+		client.readAndSend();
 	}
 }

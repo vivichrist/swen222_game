@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 /**
- * @author Home
+ * @author Zhaojiang Chang
  * socket for individual client  
  */
 public class ServerThread extends Thread {
@@ -39,7 +39,7 @@ public class ServerThread extends Thread {
                 }
                 else {
                 	System.out.println("Seccuss connected");
-                	ps.println(ServerClientProtocal.loginSeccuss);
+                	ps.println(ServerClientProtocal.loginSuccess);
                 	Server.clients.put(userName, ps);
                 }
             }

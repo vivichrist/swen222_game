@@ -6,7 +6,7 @@ package ServerClients;
 import java.io.BufferedReader;
 
 /**
- * @author Home
+ * @author  Zhaojiang Chang
  *
  */
 public class ClientThread extends Thread {
@@ -15,5 +15,6 @@ public class ClientThread extends Thread {
 		// TODO Auto-generated constructor stub
 		this.brServer = brServer;
 	}
+	
 
 }
