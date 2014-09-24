@@ -12,6 +12,8 @@ public class GameListener implements KeyListener
 	public float			direction = 0f;
 	private boolean			keyUpdate = false;
 	private boolean			w = false, a = false, s = false, d = false;
+	private final float		speed = 0.5f;
+	private final float		turnSpeed = 0.05f;
 	private Point2D.Float	position;
 	private GameCollision	map;
 	
@@ -107,28 +109,76 @@ public class GameListener implements KeyListener
 		}
 		if ( key.getKeyCode() == KeyEvent.VK_A || (!keyUpdate && a) )
 		{
-			direction -= GameFrame.turnSpeed;
+			direction -= turnSpeed;
 			direction %= GameFrame.PI2;
 			keyUpdate = true;
 			a = true;
 		}
 		if ( key.getKeyCode() == KeyEvent.VK_D || (!keyUpdate && d) )
 		{
-			direction += GameFrame.turnSpeed;
+			direction += turnSpeed;
 			direction %= GameFrame.PI2;
 			keyUpdate = true;
 			d = true;
 		}
 	}
 
+	public void update()
+	{
+		if ( !keyUpdate )
+    	{
+	    	if ( w )
+			{
+	    		float newx = (float) ( position.x
+						- Math.sin( direction ) * speed );
+				float newy = (float) ( position.y
+						- Math.cos( direction ) * speed );
+				// collision detection
+				if ( map.isCollidable( newx, newy ) )
+				{
+					if ( !map.isCollidable( position.x, newy ) )
+						position.setLocation( position.x, newy );
+					if ( !map.isCollidable( newx, position.y ) )
+						position.setLocation( newx, position.y );
+				}
+				else position.setLocation( newx, newy );
+			}
+			if ( s )
+			{
+				float newx = (float) ( position.x
+						+ Math.sin( direction ) * speed );
+				float newy = (float) ( position.y
+						+ Math.cos( direction ) * speed );
+				// collision detection
+				if ( map.isCollidable( newx, newy ) )
+				{
+					if ( !map.isCollidable( position.x, newy ) )
+						position.setLocation( position.x, newy );
+					if ( !map.isCollidable( newx, position.y ) )
+						position.setLocation( newx, position.y );
+				}
+				else position.setLocation( newx, newy );
+			}
+			
+			if ( a )
+			{
+				addToDirection( -turnSpeed );
+			}
+			if ( d )
+			{
+				addToDirection( turnSpeed );
+			}
+		}
+	}
+	
 	private void movePos(boolean b)
 	{
 		int invert = b ? -1 : 1;
 		float newx = (float) ( position.x
-				+ invert * Math.sin( direction ) * GameFrame.speed );
+				+ invert * Math.sin( direction ) * speed );
 		float newy = (float) ( position.y
-				+ invert * Math.cos( direction ) * GameFrame.speed );
-		// TODO: collision detection
+				+ invert * Math.cos( direction ) * speed );
+		// collision detection
 		if ( map.isCollidable( newx, newy ) )
 		{
 			if ( !map.isCollidable( position.x, newy ) )

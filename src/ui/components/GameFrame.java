@@ -33,12 +33,10 @@ public class GameFrame extends JFrame
 	// keyInput.setDirection( is a more current alias to direction
 	private float direction = 0.0f;
 	// forward reverse constant
-	public static final float	speed = 0.5f;
 	private Point2D.Float position;
 	private GameCollision map = new GameCollision();
 	private Point extents = map.mapsize();
 	private GameListener	keyInput;
-	public static final float	turnSpeed = 0.05f;
 	
     public GameFrame( String str )
     {
@@ -134,50 +132,7 @@ public class GameFrame extends JFrame
     
     private void update()
 	{
-    	if ( !keyInput.isKeyUpdate() )
-    	{
-	    	if ( keyInput.isKey( 'w' ) )
-			{
-	    		float newx = (float) ( keyInput.getNewX()
-						- Math.sin( keyInput.getDirection() ) * speed );
-				float newy = (float) ( keyInput.getNewY()
-						- Math.cos( keyInput.getDirection() ) * speed );
-				// collision detection
-				if ( map.isCollidable( newx, newy ) )
-				{
-					if ( !map.isCollidable( keyInput.getNewX(), newy ) )
-						keyInput.setLocation( keyInput.getNewX(), newy );
-					if ( !map.isCollidable( newx, keyInput.getNewY() ) )
-						keyInput.setLocation( newx, keyInput.getNewY() );
-				}
-				else keyInput.setLocation( newx, newy );
-			}
-			if ( keyInput.isKey( 's' ) )
-			{
-				float newx = (float) ( keyInput.getNewX()
-						+ Math.sin( keyInput.getDirection() ) * speed );
-				float newy = (float) ( keyInput.getNewY()
-						+ Math.cos( keyInput.getDirection() ) * speed );
-				// collision detection
-				if ( map.isCollidable( newx, newy ) )
-				{
-					if ( !map.isCollidable( keyInput.getNewX(), newy ) )
-						keyInput.setLocation( keyInput.getNewX(), newy );
-					if ( !map.isCollidable( newx, keyInput.getNewY() ) )
-						keyInput.setLocation( newx, keyInput.getNewY() );
-				}
-				else keyInput.setLocation( newx, newy );
-			}
-			
-			if ( keyInput.isKey( 's' ) )
-			{
-				keyInput.addToDirection( -turnSpeed );
-			}
-			if ( keyInput.isKey( 's' ) )
-			{
-				keyInput.addToDirection( turnSpeed );
-			}
-		}
+    	keyInput.update();
     	direction = keyInput.getDirection() * DEG;
     	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );
