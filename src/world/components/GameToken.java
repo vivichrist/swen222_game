@@ -2,6 +2,8 @@ package world.components;
 
 import java.awt.Color;
 
+import world.game.GameBuilder;
+
 /**
  * A collectable GameToken in the game - players are required to collect a given set of GameTokens to win the game
  * GameTokens are considered "equal" if they have the same color and type (the found state is not evaluated)
@@ -12,14 +14,14 @@ public class GameToken {
 
 	private boolean found = false;
 	private final Color color;
-	private final String type;
+	private final GameBuilder.TokenType type;
 	
 	/**
 	 * Constructor - creates a Token with a given type and color, found state is set to false by default
 	 * @param type the type of this Token
 	 * @param color the Color of this Token
 	 */
-	public GameToken(String type, Color color){
+	public GameToken(GameBuilder.TokenType type, Color color){
 		this.type = type;
 		this.color = color;
 	}
@@ -36,7 +38,7 @@ public class GameToken {
 	 * Returns the type of this GameToken
 	 * @return the type of this GameToken
 	 */
-	public String getType(){
+	public GameBuilder.TokenType getType(){
 		return type;
 	}
 

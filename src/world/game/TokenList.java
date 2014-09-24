@@ -27,7 +27,7 @@ public class TokenList {
 	 * Constructor - creates a new TokenList, populating it with new GameTokens of a given type (Colors are assigned from the predefined COLORS array) 
 	 * @param type the type of GameTokens to be used in this TokenList
 	 */
-	public TokenList(String type){
+	public TokenList(GameBuilder.TokenType type){
 		tokens = new ArrayList<GameToken>();
 		for(int i = 0; i < tokenCount; i++){
 			tokens.add(new GameToken(type, COLORS[i]));
