@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 enum CellType {
-	EMPTY, WALL, DOOR, OPENDOOR, OUTOFBOUNDS;
+	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS;
 }
 
 /**
