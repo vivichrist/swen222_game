@@ -1,8 +1,10 @@
-package world.components;
+package world.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import world.components.GameToken;
 
 /**
  * The list of GameTokens a Player is required to collect to win the game

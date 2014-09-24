@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class Room {
 
+	//TODO: Remove this class if it remains unused - if we're using flat maps maybe we don't need Room objects
 	private final String name;
 	private Door northDoor;
 	private Door eastDoor;

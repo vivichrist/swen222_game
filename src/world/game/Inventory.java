@@ -1,7 +1,9 @@
-package world.components;
+package world.game;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import world.components.MoveableObject;
 
 /**
  * An inventory for a Player in the game world.  Contains MoveableObjects.

@@ -1,4 +1,5 @@
-package world.components;
+package world.game;
+
 
 /**
  * Represents a Player in the game world.

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import world.components.TokenList;
+import world.game.TokenList;
 
 /**
  * Tests for the TokenList class
