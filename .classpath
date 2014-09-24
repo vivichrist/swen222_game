@@ -3,17 +3,9 @@
 	<classpathentry excluding="ui/components/Tree.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/jogamp-jogl-linux64/gluegen-rt.jar" sourcepath="lib/jogamp-jogl-linux64/gluegen-java-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/usr/share/doc/libjogl2-java-doc/jogl/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jogamp-jogl-linux64/jogl-all.jar" sourcepath="lib/jogamp-jogl-linux64/jogl-all-natives-linux-amd64.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/usr/share/doc/libjogl2-java-doc/jogl/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogamp-jogl-mac64/gluegen-rt-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="lib/jogamp-jogl-mac64/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="lib/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
