@@ -2,11 +2,14 @@ package ui.components;
 import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * @author Vivian Stewart
+ * every type of entity that can occupy one square of the game
+ */
 enum Type {
 	EMPTY, WALL, DOOR, OPENDOOR, OUTOFBOUNDS;
 	public static boolean isCollision( Type t )
@@ -15,19 +18,14 @@ enum Type {
 	}
 }
 
+/**
+ * @author Vivian Stewart
+ *
+ */
 public class GameCollision
 {
 	private Type[][] map;
 	private int xlimit, ylimit;
-
-	public GameCollision( int x, int y )
-	{
-		map = new Type[ x ][ y ];
-		for ( Type[] i : map )
-			Arrays.fill( i, Type.EMPTY );
-		xlimit = x;
-		ylimit = y;
-	}
 	
 	public GameCollision()
 	{
@@ -39,10 +37,15 @@ public class GameCollision
 			if ( sc.next().indexOf( 'x' ) == -1 || xlimit < 1 )
 			{
 				sc.close();
-				throw new Exception("Format error, header corrupt: " + xlimit + " ?");
+				throw new RuntimeException("Format error, header corrupt: columns = " + xlimit + " ?");
 			}
 			ylimit = sc.hasNextInt() ? sc.nextInt() : 0;
-			System.out.println( "width height:" +xlimit+ ","+ylimit);
+			if ( ylimit < 1 )
+			{
+				sc.close();
+				throw new RuntimeException("Format error, header corrupt: rows = " + ylimit + " ?");
+			}
+			System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 			map = new Type[ xlimit ][ ylimit ];
 			// map values
 			for ( int j = 0; j < ylimit; ++j )
@@ -52,10 +55,15 @@ public class GameCollision
 					if ( !sc.hasNext() )
 					{
 						sc.close();
-						throw new Exception("Format error, not enough data");
+						throw new RuntimeException("Format error, not enough data");
 					}
 					map[i][j] = Type.values()[ sc.nextInt() ];
 				}
+			}
+			if ( sc.hasNext() )
+			{
+				sc.close();
+				throw new RuntimeException("Format error, overflow of data");
 			}
 			sc.close();
 		} catch ( Exception e )

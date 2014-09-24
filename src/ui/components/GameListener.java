@@ -1,21 +1,19 @@
 package ui.components;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 
 public class GameListener implements KeyListener
 {
-	public float			direction = 0f;
+	public float			direction = 0f; // accumulated direction
 	private boolean			keyUpdate = false;
 	private boolean			wKey = false, aKey = false, sKey = false
 						  , dKey = false, ctrl = false;
-	private final float		speed = 0.5f;
-	private final float		turnSpeed = 0.05f;
-	private Point2D.Float	position;
+	private final float		speed = 0.5f; // forward reverse constant
+	private final float		turnSpeed = 0.05f; // 
+	private Point2D.Float	position; // accumulated position
 	private GameCollision	map;
 	
 	public void setKeyUpdate( boolean keyUpdate )
@@ -53,12 +51,6 @@ public class GameListener implements KeyListener
 	public float getDirection()
 	{
 		return direction;
-	}
-
-	public void setDirection( float direction )
-	{
-		if ( direction > GameFrame.PI2 ) return;
-		this.direction = direction;
 	}
 
 	@Override
@@ -126,7 +118,8 @@ public class GameListener implements KeyListener
 
 /**
  * keep moving and turning even if there are no key press or release events,
- * but only if keys have not been released.
+ * but only if keys have not been released and there has not been a recent
+ * update.
  */
 	public void update()
 	{
@@ -175,7 +168,7 @@ public class GameListener implements KeyListener
 		else position.setLocation( newx, newy );
 	}
 
-	public void addToDirection( float f )
+	private void addToDirection( float f )
 	{
 		direction += f;
 		direction %= GameFrame.PI2;
