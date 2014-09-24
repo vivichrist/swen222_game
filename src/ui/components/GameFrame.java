@@ -132,7 +132,8 @@ public class GameFrame extends JFrame
     
     private void update()
 	{
-    	keyInput.update();
+    	// keep moving and turning even if there are no key press or release events
+    	keyInput.update(); 
     	direction = keyInput.getDirection() * DEG;
     	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );

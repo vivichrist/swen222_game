@@ -11,7 +11,8 @@ public class GameListener implements KeyListener
 {
 	public float			direction = 0f;
 	private boolean			keyUpdate = false;
-	private boolean			w = false, a = false, s = false, d = false;
+	private boolean			wKey = false, aKey = false, sKey = false
+						  , dKey = false, ctrl = false;
 	private final float		speed = 0.5f;
 	private final float		turnSpeed = 0.05f;
 	private Point2D.Float	position;
@@ -41,18 +42,6 @@ public class GameListener implements KeyListener
 		this.map = map;
 	}
 	
-	public boolean isKey( char ch )
-	{
-		switch( ch )
-		{
-		case 'w' : return w;
-		case 'a' : return a;
-		case 's' : return s;
-		case 'd' : return d;
-		}
-		return false;
-	}
-	
 	public float getNewX()
 	{
 		return position.x;
@@ -80,104 +69,101 @@ public class GameListener implements KeyListener
 	{
 		if ( key.getKeyCode() == KeyEvent.VK_W )
 		{
-			w = false;
+			wKey = false;
 		}
 		else if ( key.getKeyCode() == KeyEvent.VK_S )
 		{
-			s = false;
+			sKey = false;
 		}
 		else if ( key.getKeyCode() == KeyEvent.VK_A )
 		{
-			a = false;
+			aKey = false;
 		}
 		else if ( key.getKeyCode() == KeyEvent.VK_D )
 		{
-			d = false;
+			dKey = false;
 		}
+		if ( !key.isControlDown() ) ctrl = false; 
 	}
 	
 	@Override
 	public void keyPressed( KeyEvent key )
 	{
-		if ( key.getKeyCode() == KeyEvent.VK_W || (!keyUpdate && w) )
+		if ( key.getKeyCode() == KeyEvent.VK_W || (!keyUpdate && wKey) )
 		{
-			movePos( true );
+			movePos( (float) (direction - Math.PI) );
+			wKey = true;
 		}
-		if ( key.getKeyCode() == KeyEvent.VK_S || (!keyUpdate && s) )
+		if ( key.getKeyCode() == KeyEvent.VK_S || (!keyUpdate && sKey) )
 		{
-			movePos( false );
+			movePos( direction );
+			sKey = true;
 		}
-		if ( key.getKeyCode() == KeyEvent.VK_A || (!keyUpdate && a) )
+		if ( key.getKeyCode() == KeyEvent.VK_A || (!keyUpdate && aKey) )
 		{
-			direction -= turnSpeed;
-			direction %= GameFrame.PI2;
-			keyUpdate = true;
-			a = true;
+			if ( key.isControlDown() )
+			{
+				movePos( (float) ( direction + 0.5f * Math.PI ) );
+				ctrl = true;
+			}
+			else
+				addToDirection( -turnSpeed );
+			aKey = true;
 		}
-		if ( key.getKeyCode() == KeyEvent.VK_D || (!keyUpdate && d) )
+		if ( key.getKeyCode() == KeyEvent.VK_D || (!keyUpdate && dKey) )
 		{
-			direction += turnSpeed;
-			direction %= GameFrame.PI2;
-			keyUpdate = true;
-			d = true;
+			if ( key.isControlDown() )
+			{
+				movePos( (float) ( direction - 0.5f * Math.PI ) );
+				ctrl = true;
+			}
+			else
+				addToDirection( turnSpeed );
+			dKey = true;
 		}
+		keyUpdate = true;
 	}
 
+/**
+ * keep moving and turning even if there are no key press or release events,
+ * but only if keys have not been released.
+ */
 	public void update()
 	{
 		if ( !keyUpdate )
     	{
-	    	if ( w )
+	    	if ( wKey )
 			{
-	    		float newx = (float) ( position.x
-						- Math.sin( direction ) * speed );
-				float newy = (float) ( position.y
-						- Math.cos( direction ) * speed );
-				// collision detection
-				if ( map.isCollidable( newx, newy ) )
-				{
-					if ( !map.isCollidable( position.x, newy ) )
-						position.setLocation( position.x, newy );
-					if ( !map.isCollidable( newx, position.y ) )
-						position.setLocation( newx, position.y );
-				}
-				else position.setLocation( newx, newy );
+	    		movePos( (float) (direction - Math.PI) );
 			}
-			if ( s )
+			if ( sKey )
 			{
-				float newx = (float) ( position.x
-						+ Math.sin( direction ) * speed );
-				float newy = (float) ( position.y
-						+ Math.cos( direction ) * speed );
-				// collision detection
-				if ( map.isCollidable( newx, newy ) )
-				{
-					if ( !map.isCollidable( position.x, newy ) )
-						position.setLocation( position.x, newy );
-					if ( !map.isCollidable( newx, position.y ) )
-						position.setLocation( newx, position.y );
-				}
-				else position.setLocation( newx, newy );
+				movePos( direction );
 			}
 			
-			if ( a )
+			if ( aKey )
 			{
-				addToDirection( -turnSpeed );
+				if ( ctrl ) movePos( (float) (direction + 0.5f * Math.PI) );
+				else addToDirection( -turnSpeed );
 			}
-			if ( d )
+			if ( dKey )
 			{
-				addToDirection( turnSpeed );
+				if ( ctrl ) movePos( (float) (direction - 0.5f * Math.PI) );
+				else addToDirection( turnSpeed );
 			}
 		}
 	}
 	
-	private void movePos(boolean b)
+/**
+ * Buffer a new player position to be updated when display() is called.
+ * @param backward 
+ */
+	private void movePos( float dir )
 	{
-		int invert = b ? -1 : 1;
 		float newx = (float) ( position.x
-				+ invert * Math.sin( direction ) * speed );
+				+ Math.sin( dir ) * speed );
 		float newy = (float) ( position.y
-				+ invert * Math.cos( direction ) * speed );
+				+ Math.cos( dir ) * speed );
 		// collision detection
 		if ( map.isCollidable( newx, newy ) )
 		{
@@ -187,9 +173,6 @@ public class GameListener implements KeyListener
 				position.setLocation( newx, position.y );
 		}
 		else position.setLocation( newx, newy );
-		keyUpdate = true;
-		if ( b ) w = true;
-		else s = true;
 	}
 
 	public void addToDirection( float f )
