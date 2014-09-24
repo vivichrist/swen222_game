@@ -20,7 +20,7 @@ public class Plane implements GraphicalObject
 	}
 
 	@Override
-	public boolean makeDisplayList( GL2 gl )
+	public boolean initialise( GL2 gl )
 	{
 		float x, y;
 		listID = gl.glGenLists( 1 );
