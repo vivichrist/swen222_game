@@ -47,14 +47,16 @@ public class ClientThread extends Thread implements KeyListener {
 		// TODO Auto-generated method stub
 		int code = e.getKeyCode();
 		if(code == KeyEvent.VK_RIGHT) {													
-			ps.write(3);
+			ps.println(ServerClientProtocal.KeyListeners+3+ServerClientProtocal.KeyListeners);
 			//totalSent += 4;
 		} else if(code == KeyEvent.VK_LEFT) {				
-			ps.write(4);				//totalSent += 4;
-		} else if(code == KeyEvent.VK_UP) {				
-			ps.write(1);				//totalSent += 4;
+			ps.println(ServerClientProtocal.KeyListeners+4+ServerClientProtocal.KeyListeners);
+		} else if(code == KeyEvent.VK_UP) {
+			System.out.println("moveUp");
+
+			ps.println(ServerClientProtocal.KeyListeners+1+ServerClientProtocal.KeyListeners);
 		} else if(code == KeyEvent.VK_DOWN) {						
-			ps.write(2);				//totalSent += 4;
+			ps.println(ServerClientProtocal.KeyListeners+2+ServerClientProtocal.KeyListeners);
 		}
 		ps.flush();
 

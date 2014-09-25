@@ -14,4 +14,5 @@ public interface ServerClientProtocal {
 	String chatSent = "@@";//for player sent message to other players
 	String playerListSent = "**";//for server send playerList to all clients
 	String playerName = "!!";//for check player name
+	String KeyListeners = "^^";
 }
