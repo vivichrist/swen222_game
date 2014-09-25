@@ -53,7 +53,7 @@ public class Client {
 			System.exit(1);
 			
 		}
-		new ClientThread(brServer).start();
+		new ClientThread(brServer,ps).start();
 		
 	}
 	private void readAndSend(){
