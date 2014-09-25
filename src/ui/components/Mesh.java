@@ -30,7 +30,7 @@ public class Mesh
 			j = 0;
 			for ( int i: idxs )
 			{
-				copyi[j] = i;
+				copyi[j] = i - 1; // convert from start at 1 to start at 0
 				++j;
 			}
 			copy.add( copyi );
@@ -71,7 +71,7 @@ public class Mesh
 			if ( idxs.length != n ) continue;
 			for ( int i: idxs )
 			{ // then pack each integer into a temporary list
-				prebuf.add( i );
+				prebuf.add( i ); // this mite also be from 0 instead of 1
 				++j;
 			}
 		}

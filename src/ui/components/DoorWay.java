@@ -60,34 +60,56 @@ public class DoorWay implements GraphicalObject
 			  , xaligned ? position.y : position.y + open, 0 );
 		gl.glRotatef( 90.0f, 0f, 0f, 1.f );
 		gl.glTranslatef( 0f, -cellsize, 0f ); // this could be off
-		
-		gl.glColor3f( .0f, .0f, .0f );
 		for ( int[] i: indices )
 		{
 			if ( i.length == 4 )
 			{
 				gl.glBegin( GL2.GL_QUADS );
-				gl.glVertex3fv( vertices.get( i[0] ), 1 );
+				gl.glColor3f( .0f, .0f, .0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
 				gl.glEnd();
 			}
 			if ( i.length == 3 )
 			{
 				gl.glBegin( GL2.GL_TRIANGLES );
+				gl.glColor3f( .0f, .0f, .0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
 				gl.glEnd();
 			}
 			if ( i.length == 2 )
 			{
-				gl.glBegin( GL2.GL_LINES );
+				gl.glBegin( GL2.GL_LINE );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glEnd();
 			}
 			if ( i.length == 1 )
 			{
 				gl.glBegin( GL2.GL_POINTS );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glEnd();
 			}
 		}
-		//...
-		gl.glEnd();
 		gl.glPopMatrix();
 	}
 
