@@ -33,7 +33,8 @@ public class ServerThread extends Thread {
             String line = null;
           
             while((line = br.readLine())!=null){
-                String userName = br.readLine();//get client name
+            	if(line.startsWith(ServerClientProtocal.playerName)&&line.endsWith(ServerClientProtocal.playerName)){
+                String userName = getRealMsg(line);;//get client name
                 if(Server.clients.containsKey(userName)){
                 	System.out.println("Duplicate username!");
                 	ps.println(ServerClientProtocal.playerNameRep);
@@ -43,6 +44,12 @@ public class ServerThread extends Thread {
                 	ps.println(ServerClientProtocal.loginSuccess);
                 	Server.clients.put(userName, ps);
                 }
+            }
+            	else{
+            		for(PrintStream clientPs: Server.clients.valueSet()){
+            			clientPs.println(Server.clients.getKeyByValue(ps)+" say: "+ line);
+              	}
+            	}
             }
             
         }catch(IOException e){
@@ -57,5 +64,9 @@ public class ServerThread extends Thread {
         	}
         }
     }
+	private String getRealMsg(String line) {
+		// TODO Auto-generated method stub
+		return line.substring(ServerClientProtocal.PROTOCOL_LEN, line.length() -ServerClientProtocal.PROTOCOL_LEN );
+	}
     
 }
