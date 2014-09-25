@@ -17,9 +17,9 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
- * A minimal program that draws with JOGL in a Swing JFrame using the AWT GLJPanel.
- *
- * @author Wade Walker
+ * A simple line drawn 3D adventure board game program that draws with JOGL in
+ * a Swing JFrame using the AWT GLJPanel.
+ * @author Vivian Stewart
  */
 @SuppressWarnings( "serial" )
 public class GameFrame extends JFrame 
@@ -30,12 +30,14 @@ public class GameFrame extends JFrame
 					PI2 = Math.PI * 2;
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
-	// keyInput.setDirection( is a more current alias to direction
+	// actual direction before update
 	private float direction = 0.0f;
-	// forward reverse constant
+	// actual position before update
 	private Point2D.Float position;
 	private GameCollision map = new GameCollision();
+	// map boundaries in the positive x y directions
 	private Point extents = map.mapsize();
+	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
 	
     public GameFrame( String str )
@@ -50,6 +52,9 @@ public class GameFrame extends JFrame
         keyInput = new GameListener( toDraw, position, direction, map );
         gameView.addGLEventListener( new GLEventListener() {
             
+            /* (non-Javadoc)
+             * @see javax.media.opengl.GLEventListener#reshape(javax.media.opengl.GLAutoDrawable, int, int, int, int)
+             */
             @Override
             public void reshape( GLAutoDrawable glautodrawable
             		, int x, int y, int width, int height ) {
@@ -62,6 +67,9 @@ public class GameFrame extends JFrame
             	glu.gluPerspective( 65.0f, (float)width/(float)height, 1.0f, 1000.0f );
             }
             
+            /* (non-Javadoc)
+             * @see javax.media.opengl.GLEventListener#init(javax.media.opengl.GLAutoDrawable)
+             */
             @Override
             public void init( GLAutoDrawable glautodrawable ) {
             	glautodrawable.getGL().setSwapInterval(1);
@@ -85,6 +93,9 @@ public class GameFrame extends JFrame
                 	go.initialise( gl2 );
             }
             
+            /* (non-Javadoc)
+             * @see javax.media.opengl.GLEventListener#dispose(javax.media.opengl.GLAutoDrawable)
+             */
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
             	GL2 gl = glautodrawable.getGL().getGL2();
@@ -92,6 +103,9 @@ public class GameFrame extends JFrame
             		g.clean( gl );
             }
             
+            /* (non-Javadoc)
+             * @see javax.media.opengl.GLEventListener#display(javax.media.opengl.GLAutoDrawable)
+             */
             @Override
             public void display( GLAutoDrawable glautodrawable ) {
             	update();
@@ -120,24 +134,31 @@ public class GameFrame extends JFrame
                 System.exit( 0 );
             }
         });
-        
+        // steady 60 frame animation
         FPSAnimator animator = new FPSAnimator(60);
         animator.add( gameView );
         animator.start();
-
+        
         getContentPane().add( gameView, BorderLayout.CENTER );
+        // TODO: add application panel here...
+        
         setSize( 800, 600 );
         setVisible( true );
     }
     
     private void update()
 	{
-    	keyInput.update();
+    	// keep moving and turning even if there are no key press or release events
+    	keyInput.update(); 
     	direction = keyInput.getDirection() * DEG;
     	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );
     }
 
+	/**
+	 * All game objects to render themselves
+	 * @param gl2 - opengl rendering context
+	 */
 	private void render( GL2 gl2 )
 	{
         for( GraphicalObject go: toDraw )
@@ -145,6 +166,6 @@ public class GameFrame extends JFrame
     }
 
 	public static void main( String [] args ) {
-		new GameFrame( "Swing GLJPanel" );
+		new GameFrame( "Simple Adverture Board Game" );
 	}
 }

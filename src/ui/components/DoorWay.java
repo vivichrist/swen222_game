@@ -2,6 +2,7 @@ package ui.components;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import javax.media.opengl.GL2;
 
@@ -16,6 +17,9 @@ public class DoorWay implements GraphicalObject
 	private Point2D.Float	position;
 	private int	cellsize;
 	private int	listID;
+	private float open = 0f;
+	private List<float[]> vertices;
+	private List<int[]> indices;
 
 	/**
 	 * @param north and @param south indicate if the door is aligned
@@ -30,6 +34,10 @@ public class DoorWay implements GraphicalObject
 		this.position = new Point2D.Float( position.x * scale
 				, position.y * scale );
 		cellsize = scale;
+		MeshStore m = MeshStore.instance();
+		Mesh mesh = m.getMesh( Type.DOOR );
+		vertices = mesh.getVertices();
+		indices = mesh.getIndices();
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +48,74 @@ public class DoorWay implements GraphicalObject
 	{
 		if ( listID == 0 ) return false;
 		gl.glCallList(listID);
+		drawDynamic( gl );
 		return true;
+	}
+
+	private void drawDynamic( GL2 gl )
+	{
+		gl.glPushMatrix();
+		gl.glTranslatef(
+				xaligned ? position.x + open : position.x
+			  , xaligned ? position.y : position.y + open, 0 );
+		
+		if ( !xaligned )
+		{
+			gl.glTranslatef( cellsize, 0f, 0f ); // this could be off
+			gl.glRotatef( 90.0f, 0f, 0f, 1.f );
+		}
+		gl.glScalef( cellsize, cellsize, 0.75f*cellsize );
+		for ( int[] i: indices )
+		{
+			if ( i.length == 4 )
+			{
+				gl.glBegin( GL2.GL_QUADS );
+				gl.glColor3f( .0f, .0f, .0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
+				gl.glEnd();
+			}
+			if ( i.length == 3 )
+			{
+				gl.glBegin( GL2.GL_TRIANGLES );
+				gl.glColor3f( .0f, .0f, .0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glEnd();
+			}
+			if ( i.length == 2 )
+			{
+				gl.glBegin( GL2.GL_LINE );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glEnd();
+			}
+			if ( i.length == 1 )
+			{
+				gl.glBegin( GL2.GL_POINTS );
+				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glEnd();
+			}
+		}
+		gl.glPopMatrix();
 	}
 
 	/**
