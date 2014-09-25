@@ -31,14 +31,15 @@ public class ServerThread extends Thread {
             //get output stream from scoket
             ps = new PrintStream(socket.getOutputStream());
             String line = null;
+          
             while((line = br.readLine())!=null){
                 String userName = br.readLine();//get client name
                 if(Server.clients.containsKey(userName)){
                 	System.out.println("Duplicate username!");
-                	ps.println(ServerClientProtocal.userNameRep);
+                	ps.println(ServerClientProtocal.playerNameRep);
                 }
                 else {
-                	System.out.println("Seccuss connected");
+                	System.out.println("success connected");
                 	ps.println(ServerClientProtocal.loginSuccess);
                 	Server.clients.put(userName, ps);
                 }
