@@ -11,7 +11,7 @@ import java.util.Scanner;
  * every type of entity that can occupy one square of the game
  */
 enum Type {
-	EMPTY, WALL, DOOR, OPENDOOR, OUTOFBOUNDS;
+	EMPTY, WALL, DOOR, OPENDOOR, KEY, OUTOFBOUNDS;
 	public static boolean isCollision( Type t )
 	{
 		return t == WALL;// || t == DOOR;
@@ -30,9 +30,9 @@ public class GameCollision
 	public GameCollision()
 	{
 		try
-		{
+		{// read in the map
 			Scanner sc = new Scanner( new BufferedInputStream( new FileInputStream( "map.txt" ) ) );
-			// size of map
+			// size of map is in the header
 			xlimit = sc.hasNextInt() ? sc.nextInt() : 0;
 			if ( sc.next().indexOf( 'x' ) == -1 || xlimit < 1 )
 			{
@@ -47,7 +47,7 @@ public class GameCollision
 			}
 			System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 			map = new Type[ xlimit ][ ylimit ];
-			// map values
+			// map values, a 2D array labelling the viewable scene
 			for ( int j = 0; j < ylimit; ++j )
 			{
 				for ( int i = 0; i < xlimit; ++i )
