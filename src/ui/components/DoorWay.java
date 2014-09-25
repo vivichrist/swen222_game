@@ -17,7 +17,7 @@ public class DoorWay implements GraphicalObject
 	private Point2D.Float	position;
 	private int	cellsize;
 	private int	listID;
-	private float open = 0f;
+	private float open = 0f, openSpeed = 0f;
 	private List<float[]> vertices;
 	private List<int[]> indices;
 
@@ -39,6 +39,11 @@ public class DoorWay implements GraphicalObject
 		vertices = mesh.getVertices();
 		indices = mesh.getIndices();
 	}
+	
+	public void open()
+	{
+		openSpeed = 0.7f / cellsize;
+	}
 
 	/* (non-Javadoc)
 	 * @see ui.components.GraphicalObject#draw(javax.media.opengl.GL2)
@@ -54,17 +59,24 @@ public class DoorWay implements GraphicalObject
 
 	private void drawDynamic( GL2 gl )
 	{
+		open += openSpeed;
+		if ( open > 2 * cellsize ) openSpeed = -openSpeed;
+		if ( open < 0 )
+		{
+			openSpeed = 0f;
+			open = 0f;
+		}
 		gl.glPushMatrix();
 		gl.glTranslatef(
-				xaligned ? position.x + open : position.x
-			  , xaligned ? position.y : position.y + open, 0 );
+				xaligned ? position.x - Math.min(open, cellsize * 0.9f) : position.x
+			  , xaligned ? position.y : position.y - Math.min(open, cellsize * 0.9f), 0 );
 		
 		if ( !xaligned )
 		{
-			gl.glTranslatef( cellsize, 0f, 0f ); // this could be off
+			gl.glTranslatef( cellsize, 0f, 0f );
 			gl.glRotatef( 90.0f, 0f, 0f, 1.f );
 		}
-		gl.glScalef( cellsize, cellsize, 0.75f*cellsize );
+		gl.glScalef( cellsize, cellsize, cellsize );
 		for ( int[] i: indices )
 		{
 			if ( i.length == 4 )

@@ -25,10 +25,10 @@ public class Partition implements GraphicalObject
 	public Partition( Type n, Type e, Type s, Type w
 			, Point position, int cellsize )
 	{	// walls connect with other walls or doors
-		north = n == Type.WALL || n == Type.DOOR;
-		east = e == Type.WALL || e == Type.DOOR;
-		west = w == Type.WALL || w == Type.DOOR;
-		south = s == Type.WALL || s == Type.DOOR;
+		north = n == Type.WALL || n == Type.DOOR || n == Type.OPENDOOR;
+		east = e == Type.WALL || e == Type.DOOR || e == Type.OPENDOOR;
+		west = w == Type.WALL || w == Type.DOOR || w == Type.OPENDOOR;
+		south = s == Type.WALL || s == Type.DOOR || s == Type.OPENDOOR;
 
 		this.position = new Point2D.Float( position.x * cellsize
 				, position.y * cellsize );
