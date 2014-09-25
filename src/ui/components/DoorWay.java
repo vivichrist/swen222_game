@@ -58,8 +58,13 @@ public class DoorWay implements GraphicalObject
 		gl.glTranslatef(
 				xaligned ? position.x + open : position.x
 			  , xaligned ? position.y : position.y + open, 0 );
-		gl.glRotatef( 90.0f, 0f, 0f, 1.f );
-		gl.glTranslatef( 0f, -cellsize, 0f ); // this could be off
+		
+		if ( !xaligned )
+		{
+			gl.glTranslatef( cellsize, 0f, 0f ); // this could be off
+			gl.glRotatef( 90.0f, 0f, 0f, 1.f );
+		}
+		gl.glScalef( cellsize, cellsize, 0.75f*cellsize );
 		for ( int[] i: indices )
 		{
 			if ( i.length == 4 )
