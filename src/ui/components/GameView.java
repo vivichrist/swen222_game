@@ -8,7 +8,10 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+
 import com.jogamp.opengl.util.FPSAnimator;
+
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
@@ -40,7 +43,7 @@ public class GameView extends GLJPanel
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
 
-    public GameView( GLCapabilities gc, JFrame window )
+    public GameView( GLCapabilities gc, JLayeredPane pane, JFrame frame )
     {
     	super( gc );
         position = new Point2D.Float(
@@ -119,9 +122,9 @@ public class GameView extends GLJPanel
             }
 
         });
-        addKeyListener( keyInput );
+        frame.getRootPane().getParent().addKeyListener( keyInput );
 
-        window.addWindowListener( new WindowAdapter()
+        frame.addWindowListener( new WindowAdapter()
         {
             public void windowClosing( WindowEvent windowevent )
             {
@@ -159,6 +162,7 @@ public class GameView extends GLJPanel
 
 	public static void main( String [] args ) {
 		JFrame jf = new JFrame();
-		new GameView( new GLCapabilities( GLProfile.getDefault() ), jf );
+		new GameView( new GLCapabilities( GLProfile.getDefault() ), null, jf );
+		jf.setVisible( true );
 	}
 }

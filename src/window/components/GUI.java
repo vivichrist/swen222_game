@@ -100,12 +100,12 @@ public class GUI extends JFrame {
 		//backgroundPanel=new JButton("AAA");
 		//jb.setBounds(100,100,100,100);
 
-		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
 		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);
 		frame.setLayeredPane(layeredPane);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		frame.setVisible( true );
 
 
 
@@ -256,7 +256,9 @@ public class GUI extends JFrame {
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        gameView = new GameView( glcapabilities, this );
+        gameView = new GameView( glcapabilities, layeredPane, frame );
+        gameView.setEnabled( true );
+        layeredPane.add( gameView, BorderLayout.NORTH );
 		southPanel = new SouthPanel();
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
