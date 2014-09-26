@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -11,10 +12,10 @@ import java.util.Scanner;
  * every type of entity that can occupy one square of the game
  */
 enum Type {
-	EMPTY, WALL, DOOR, OPENDOOR, OUTOFBOUNDS;
+	EMPTY, WALL, OPENDOOR, DOOR, KEY, OUTOFBOUNDS;
 	public static boolean isCollision( Type t )
 	{
-		return t == WALL;// || t == DOOR;
+		return t == WALL || t == DOOR;
 	}
 }
 
@@ -25,14 +26,15 @@ enum Type {
 public class GameCollision
 {
 	private Type[][] map;
+	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
 	
 	public GameCollision()
 	{
 		try
-		{
+		{// read in the map
 			Scanner sc = new Scanner( new BufferedInputStream( new FileInputStream( "map.txt" ) ) );
-			// size of map
+			// size of map is in the header
 			xlimit = sc.hasNextInt() ? sc.nextInt() : 0;
 			if ( sc.next().indexOf( 'x' ) == -1 || xlimit < 1 )
 			{
@@ -47,7 +49,7 @@ public class GameCollision
 			}
 			System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 			map = new Type[ xlimit ][ ylimit ];
-			// map values
+			// map values, a 2D array labelling the viewable scene
 			for ( int j = 0; j < ylimit; ++j )
 			{
 				for ( int i = 0; i < xlimit; ++i )
@@ -105,6 +107,8 @@ public class GameCollision
 			return false;
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
+		if ( map[x][y] == Type.OPENDOOR )
+			((DoorWay)gameElements.get( new Point( x, y ) )).open();
 		return Type.isCollision( map[x][y] );
 	}
 
@@ -125,11 +129,13 @@ public class GameCollision
 					toDraw.add( new Partition( north, east, south, west
 							, new Point( i, j ), scale ) );
 					break;
-				case DOOR :
-					toDraw.add( new DoorWay( north, south, new Point( i, j ), scale ) );
-					break;
 				case OPENDOOR :
-					;
+					DoorWay door = new DoorWay( north, south, new Point( i, j ), scale );
+					toDraw.add( door );
+					gameElements.put( new Point( i, j ), door );
+					break;
+				case DOOR :
+					break;
 				default:
 					break;
 				}
