@@ -97,7 +97,7 @@ public class GameCollision
 	
 	public boolean isCollidable( float x, float y )
 	{
-		return isCollidable( (int)(x/GameFrame.cellsize), (int)(y/GameFrame.cellsize) );
+		return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
 	}
 	
 	public boolean isCollidable( int x, int y )

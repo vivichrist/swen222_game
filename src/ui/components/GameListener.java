@@ -171,6 +171,6 @@ public class GameListener implements KeyListener
 	private void addToDirection( float f )
 	{
 		direction += f;
-		direction %= GameFrame.PI2;
+		direction %= GameView.PI2;
 	}
 }

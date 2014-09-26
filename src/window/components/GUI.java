@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLJPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import ui.components.GameView;
+
 
 /**
  * frame setup
@@ -40,6 +45,7 @@ public class GUI extends JFrame {
 	private static int width = 800;
 	private static int height = 770;
 	Canvas canvas = new Canvas();
+	GLJPanel gameView;
 	JFrame frame;
 	JLayeredPane layeredPane;
 	JPanel backgroundPanel;
@@ -47,7 +53,7 @@ public class GUI extends JFrame {
 	JPanel startPanel;
 	JPanel choosePlayerPanel;
 	JPanel chooseNamePanel;
-	
+
 	String name;
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
@@ -65,7 +71,7 @@ public class GUI extends JFrame {
 
 
 	public GUI(){
-		
+
 		//cardCanvas = new BoardCanvasSouth(board, canvas);
 
 		setUp();
@@ -83,23 +89,23 @@ public class GUI extends JFrame {
 //		frame.setLayout(null);
 //		frame.setResizable(false);
 
-		layeredPane = new JLayeredPane();  
-		ImageIcon background = new ImageIcon("Resource/Background.png");        
-		backgroundPanel = new JPanel();  
-		backgroundPanel.setBounds(0, 0, width, height);  
+		layeredPane = new JLayeredPane();
+		ImageIcon background = new ImageIcon("Resource/Background.png");
+		backgroundPanel = new JPanel();
+		backgroundPanel.setBounds(0, 0, width, height);
 
-		JLabel jl = new JLabel(background);  
-		backgroundPanel.add(jl);  
+		JLabel jl = new JLabel(background);
+		backgroundPanel.add(jl);
 
-		//backgroundPanel=new JButton("AAA");  
-		//jb.setBounds(100,100,100,100);  
+		//backgroundPanel=new JButton("AAA");
+		//jb.setBounds(100,100,100,100);
 
-		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);  
-		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);  
-		frame.setLayeredPane(layeredPane);  
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-		frame.setVisible(true);    
+		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);
+		frame.setLayeredPane(layeredPane);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 
 
 
@@ -119,26 +125,26 @@ public class GUI extends JFrame {
 		startPanel = new JPanel();
 		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
 //		startPanel.setLayout(null);
-		
+
 		jbNewGame = new JButton("New Game");
 		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
-		
+
 //		jbNewGame.setLayout(null);
 //		jbNewGame.setBounds(350, 200, 30, 30);
 //		jbLoad.setLayout(null);
 //		jbLoad.setBounds(350, 200, 30, 30);
 //		jbNewGame.setLayout(null);
 //		jbNewGame.setBounds(350, 200, 30, 30);
-		
+
 		startPanel.add(jbNewGame);
 		startPanel.add(jbLoad);
 		startPanel.add(jbInfo);
 		startPanel.add(jbExit);
 
 		startPanel.setOpaque(false);
-		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);  
+		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
 
 	}
@@ -161,7 +167,7 @@ public class GUI extends JFrame {
 		choosePlayerPanel.add(jbHelp);
 
 		choosePlayerPanel.setOpaque(false);
-		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);  
+		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChoosePlayer();
 	}
 
@@ -183,7 +189,7 @@ public class GUI extends JFrame {
 		chooseNamePanel.add(jbStart);
 
 		chooseNamePanel.setOpaque(false);
-		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);  
+		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
 	}
 
@@ -213,7 +219,7 @@ public class GUI extends JFrame {
 					chooseNamePanel();
 					frame.repaint();
 				}}});
-		
+
 		jbMultiple.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
@@ -237,7 +243,7 @@ public class GUI extends JFrame {
 						frame.repaint();
 						//textFieldRealName.setText("");
 					}}}});
-		
+
 		textFieldName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				name = textFieldName.getText();
@@ -247,10 +253,14 @@ public class GUI extends JFrame {
 
 
 	protected void startGame() {
+		GLProfile.initSingleton();
+    	GLProfile glprofile = GLProfile.getDefault();
+        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+        gameView = new GameView( glcapabilities, this );
 		southPanel = new SouthPanel();
-		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);  
+		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
-	
+
 	public static void main(String[] args){
 		GUI gui = new GUI();
 	}

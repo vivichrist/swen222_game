@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * @author Vivian Stewart
  */
 @SuppressWarnings( "serial" )
-public class GameFrame extends JFrame 
+public class GameView extends GLJPanel
 {
 	private ArrayList<GraphicalObject> toDraw = new ArrayList<GraphicalObject>();
 	public static final int		cellsize = 10;
@@ -39,23 +39,18 @@ public class GameFrame extends JFrame
 	private Point extents = map.mapsize();
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
-	
-    public GameFrame( String str )
+
+    public GameView( GLCapabilities gc, JFrame window )
     {
-    	super(str);
-    	GLProfile.initSingleton();
-    	GLProfile glprofile = GLProfile.getDefault();
-        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        GLJPanel gameView = new GLJPanel( glcapabilities );
-        position = new Point2D.Float( 
+    	super( gc );
+        position = new Point2D.Float(
 				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
         keyInput = new GameListener( toDraw, position, direction, map );
-        gameView.addGLEventListener( new GLEventListener() {
-            
+        addGLEventListener( new GLEventListener() {
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#reshape(javax.media.opengl.GLAutoDrawable, int, int, int, int)
              */
-            @Override
+        	@Override
             public void reshape( GLAutoDrawable glautodrawable
             		, int x, int y, int width, int height ) {
             	GL2 gl2 = glautodrawable.getGL().getGL2();
@@ -66,7 +61,6 @@ public class GameFrame extends JFrame
             	gl2.glLoadIdentity();
             	glu.gluPerspective( 65.0f, (float)width/(float)height, 1.0f, 1000.0f );
             }
-            
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#init(javax.media.opengl.GLAutoDrawable)
              */
@@ -92,7 +86,7 @@ public class GameFrame extends JFrame
             	for( GraphicalObject go: toDraw )
                 	go.initialise( gl2 );
             }
-            
+
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#dispose(javax.media.opengl.GLAutoDrawable)
              */
@@ -102,7 +96,7 @@ public class GameFrame extends JFrame
             	for ( GraphicalObject g: toDraw )
             		g.clean( gl );
             }
-            
+
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#display(javax.media.opengl.GLAutoDrawable)
              */
@@ -123,10 +117,11 @@ public class GameFrame extends JFrame
             	gl2.glTranslatef( -position.x, -position.y, -10.0f );
                 render( gl2 );
             }
+
         });
-        gameView.addKeyListener( keyInput );
-        
-        addWindowListener( new WindowAdapter()
+        addKeyListener( keyInput );
+
+        window.addWindowListener( new WindowAdapter()
         {
             public void windowClosing( WindowEvent windowevent )
             {
@@ -136,20 +131,17 @@ public class GameFrame extends JFrame
         });
         // steady 60 frame animation
         FPSAnimator animator = new FPSAnimator(60);
-        animator.add( gameView );
+        animator.add( this );
         animator.start();
-        
-        getContentPane().add( gameView, BorderLayout.CENTER );
-        // TODO: add application panel here...
-        
+
         setSize( 800, 600 );
         setVisible( true );
     }
-    
+
     private void update()
 	{
     	// keep moving and turning even if there are no key press or release events
-    	keyInput.update(); 
+    	keyInput.update();
     	direction = keyInput.getDirection() * DEG;
     	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );
@@ -166,6 +158,7 @@ public class GameFrame extends JFrame
     }
 
 	public static void main( String [] args ) {
-		new GameFrame( "Simple Adverture Board Game" );
+		JFrame jf = new JFrame();
+		new GameView( new GLCapabilities( GLProfile.getDefault() ), jf );
 	}
 }
