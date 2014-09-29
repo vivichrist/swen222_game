@@ -122,7 +122,7 @@ public class GameView extends GLJPanel
             }
 
         });
-        frame.getRootPane().getParent().addKeyListener( keyInput );
+        addKeyListener( keyInput );
 
         frame.addWindowListener( new WindowAdapter()
         {
@@ -162,7 +162,9 @@ public class GameView extends GLJPanel
 
 	public static void main( String [] args ) {
 		JFrame jf = new JFrame();
-		new GameView( new GLCapabilities( GLProfile.getDefault() ), null, jf );
+		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), null, jf );
+		jf.setSize( 800, 600 );
+		jf.add( gv );
 		jf.setVisible( true );
 	}
 }
