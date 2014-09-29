@@ -29,6 +29,7 @@ public class GameBuilder {
 		buildFloors(players.size());
 	}
 	
+	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players
 	/**
 	 * Prompts users to input names and builds Players with the corresponding names
 	 */
