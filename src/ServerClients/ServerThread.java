@@ -15,7 +15,7 @@ import java.util.HashMap;
  * socket for individual client  
  */
 public class ServerThread extends Thread {
-
+	public Timer timer;
 	private Socket socket;
 	BufferedReader br = null;
 	PrintStream ps = null;
@@ -39,40 +39,41 @@ public class ServerThread extends Thread {
 					System.out.println(keyCode);
 
 
-						
-						switch(keyCode) {
-						case 1:
-							//board.player(uid).moveUp();
-							System.out.println("moveUp");
-							break;
-						case 2:
-							//board.player(uid).moveDown();
-							System.out.println("moveDown");
 
-							break;
-						case 3:
-							//board.player(uid).moveRight();
-							System.out.println("moveRight");
+					switch(keyCode) {
+					case 1:
+						//board.player(uid).moveUp();
+						System.out.println("moveUp");
+						break;
+					case 2:
+						//board.player(uid).moveDown();
+						System.out.println("moveDown");
 
-							break;
-						case 4:
-							//board.player(uid).moveLeft();
-							System.out.println("moveLeft");
+						break;
+					case 3:
+						//board.player(uid).moveRight();
+						System.out.println("moveRight");
 
-							break;
-						}
-						ps.flush();
-					} 
+						break;
+					case 4:
+						//board.player(uid).moveLeft();
+						System.out.println("moveLeft");
 
-					// Now, broadcast the state of the board to client
-					//byte[] state = board.toByteArray(); 
-					//output.writeInt(state.length);
-					//output.write(state);
-					 //
-					//Thread.sleep(broadcastClock);
+						break;
+					}
+					ps.flush();
+				} 
 
-				
-			else if(line.startsWith(ServerClientProtocal.playerName)&&line.endsWith(ServerClientProtocal.playerName)){
+				// Now, broadcast the state of the board to client
+				//byte[] state = board.toByteArray(); 
+				//output.writeInt(state.length);
+				//output.write(state);
+				//
+				//Thread.sleep(broadcastClock);
+
+
+				if(line.startsWith(ServerClientProtocal.playerName)
+						&&line.endsWith(ServerClientProtocal.playerName)){
 					String userName = getRealMsg(line);;//get client name
 					if(Server.clients.containsKey(userName)){
 						System.out.println("Duplicate username!");
@@ -82,6 +83,16 @@ public class ServerThread extends Thread {
 						System.out.println("success connected");
 						ps.println(ServerClientProtocal.loginSuccess);
 						Server.clients.put(userName, ps);
+						timer = new Timer();
+						timer.timerWaiting();//waiting for all clients join the game
+						
+						while(timer.getCountDownPre()>0){
+							ps.println(timer.getCountDownPre());
+						}
+						timer.timerGameStart();
+						while(timer.getCountDownGame()>0){
+							ps.println(timer.getCountDownGame());
+						}
 					}
 				}
 				else{
@@ -89,7 +100,7 @@ public class ServerThread extends Thread {
 						clientPs.println(Server.clients.getKeyByValue(ps)+" say: "+ line);
 					}
 				}
-			
+
 			}
 		}catch(IOException e){
 			Server.clients.removeByValue(ps);

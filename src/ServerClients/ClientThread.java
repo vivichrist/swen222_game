@@ -5,6 +5,8 @@ package ServerClients;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -13,7 +15,7 @@ import java.io.PrintStream;
  * @author  Zhaojiang Chang
  *
  */
-public class ClientThread extends Thread implements KeyListener {
+public class ClientThread extends Thread implements KeyListener,MouseListener {
 	BufferedReader brServer = null;
 	PrintStream ps =null;
 	public ClientThread(BufferedReader brServer, PrintStream ps) {
@@ -46,16 +48,16 @@ public class ClientThread extends Thread implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		int code = e.getKeyCode();
-		if(code == KeyEvent.VK_RIGHT) {													
+		if(code == KeyEvent.VK_D) {													
 			ps.println(ServerClientProtocal.KeyListeners+3+ServerClientProtocal.KeyListeners);
 			//totalSent += 4;
-		} else if(code == KeyEvent.VK_LEFT) {				
+		} else if(code == KeyEvent.VK_A) {				
 			ps.println(ServerClientProtocal.KeyListeners+4+ServerClientProtocal.KeyListeners);
-		} else if(code == KeyEvent.VK_UP) {
+		} else if(code == KeyEvent.VK_W) {
 			System.out.println("moveUp");
 
 			ps.println(ServerClientProtocal.KeyListeners+1+ServerClientProtocal.KeyListeners);
-		} else if(code == KeyEvent.VK_DOWN) {						
+		} else if(code == KeyEvent.VK_S) {						
 			ps.println(ServerClientProtocal.KeyListeners+2+ServerClientProtocal.KeyListeners);
 		}
 		ps.flush();
@@ -66,9 +68,35 @@ public class ClientThread extends Thread implements KeyListener {
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+		
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
