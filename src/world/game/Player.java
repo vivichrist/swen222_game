@@ -46,5 +46,14 @@ public class Player {
 	public void setFloor(Map floor){
 		this.floor = floor;
 	}
+	
+	//TODO: return a clone of the TokenList
+	/**
+	 * Returns this Player's TokenList
+	 * @return this Player's TokenList
+	 */
+	public TokenList getTokenList(){
+		return toCollect;
+	}
 
 }

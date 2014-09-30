@@ -3,6 +3,7 @@ package world.game;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -27,7 +28,10 @@ public class GameBuilder {
 		players = new ArrayList<Player>();
 		getPlayers();
 		buildFloors(players.size());
+		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
+		//TODO: place StationaryObjects
 		placePlayers();
+		//TODO: place MoveableObjects
 		placePlayerTokens();
 	}
 	
@@ -59,7 +63,7 @@ public class GameBuilder {
 	
 	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
 	/**
-	 * Places a Player in the game world, setting their start position to a hard coded floor and x/y coordinate.  
+	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.  
 	 */
 	private void placePlayers(){
 		for(int i = 0; i < players.size(); i++){
@@ -69,9 +73,21 @@ public class GameBuilder {
 		}
 	}
 	
+	/**
+	 * Distributes each Player's Tokens throughout the game world, choosing floors and Points at random
+	 */
 	private void placePlayerTokens(){
-		
-	
+		for(int i = 0; i < players.size(); i++){
+			Player currentPlayer = players.get(i);
+			TokenList currentTokens = currentPlayer.getTokenList();
+			for(int j = 0; j < currentTokens.size(); j++){
+				Random random = new Random();
+				// Select a random floor in this world
+				Map randomFloor = floors[random.nextInt(floors.length)];
+				// Place the Token in a random cell on the floor
+				randomFloor.addGameToken(randomFloor.randomEmptyCell(), currentTokens.get(j));
+			}
+		}
 	}
 	
 }

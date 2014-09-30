@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.sun.tools.example.debug.expr.Token;
+
 enum CellType {
 	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS
 }
@@ -29,6 +31,7 @@ public class Map {
 	private HashMap<Point, MoveableObject> moveableObjects;
 	private HashMap<Point, StationaryObject> stationaryObjects;
 	private HashMap<Point, Door> doors;
+	private HashMap<Point, GameToken> tokens;
 	
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
@@ -50,7 +53,7 @@ public class Map {
 			map = new CellType[xLimit][yLimit];
 			emptyCells = new ArrayList<Point>();
 			
-			// Read the map, populating the 2d map array and list of empty cells
+			// Read the map, populating the 2d map array, list of empty cells and hashmap of doors
 			for(int y = 0; y < yLimit; y++){
 				for(int x = 0; x < xLimit; x++){
 					if(!scan.hasNextInt()){
@@ -113,7 +116,7 @@ public class Map {
 	 * @return true if successfully added
 	 */
 	public boolean addStationary(Point p, StationaryObject s){
-		if(moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
+		if(moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
 			return false;
 		}
 		else{
@@ -124,17 +127,34 @@ public class Map {
 	
 	/**
 	 * Adds a MoveableObject to this floor
-	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world objects
+	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
 	 * @param p the Point to add this Stationary Object to
 	 * @param m the MoveableObject to add
 	 * @return true if successfully added
 	 */
 	public boolean addMoveable(Point p, MoveableObject m){
-		if(stationaryObjects.containsKey(p) | moveableObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+		if(stationaryObjects.containsKey(p) | moveableObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
 			moveableObjects.put(p,  m);
+			return true;
+		}
+	}
+	
+	/**
+	 * Adds a Token to this floor
+	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
+	 * @param p the Point to add this Token to
+	 * @param t the Token to add
+	 * @return true if successfully added
+	 */
+	public boolean addGameToken(Point p, GameToken t){
+		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+			return false;
+		}
+		else{
+			tokens.put(p,  t);
 			return true;
 		}
 	}
