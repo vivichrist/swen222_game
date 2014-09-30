@@ -253,14 +253,18 @@ public class GUI extends JFrame {
 
 
 	protected void startGame() {
+		southPanel = new SouthPanel();
+		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
         gameView = new GameView( glcapabilities, layeredPane, frame );
         gameView.setEnabled( true );
-        layeredPane.add( gameView, BorderLayout.NORTH );
-		southPanel = new SouthPanel();
-		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+        gameView.setVisible( true );
+        gameView.setFocusable( true );
+        layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
+        if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+
 	}
 
 	public static void main(String[] args){
