@@ -43,7 +43,7 @@ public class GameView extends GLJPanel
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
 
-    public GameView( GLCapabilities gc, JLayeredPane pane, JFrame frame )
+    public GameView( GLCapabilities gc, JFrame frame )
     {
     	super( gc );
         position = new Point2D.Float(
@@ -162,7 +162,7 @@ public class GameView extends GLJPanel
 
 	public static void main( String [] args ) {
 		JFrame jf = new JFrame();
-		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), null, jf );
+		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), jf );
 		jf.setSize( 800, 600 );
 		jf.add( gv );
 		jf.setVisible( true );
