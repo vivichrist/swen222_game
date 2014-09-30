@@ -39,6 +39,23 @@ public class GameBuilder {
 		//TODO: place MoveableObjects
 		placePlayerTokens();
 		state = new GameState(players, floors);
+		serialize();
+	}
+	
+	private void serialize(){
+		try
+	      {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("../state.ser");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(state);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in ../state.ser");
+	      }catch(IOException i)
+	      {
+	          i.printStackTrace();
+	      }
 	}
 	
 	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players

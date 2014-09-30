@@ -10,7 +10,7 @@ import world.game.GameBuilder;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class GameToken {
+public class GameToken implements java.io.Serializable{
 
 	private boolean found = false;
 	private final Color color;

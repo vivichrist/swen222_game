@@ -9,7 +9,7 @@ import world.components.Map;
  * @author Kalo Pilato
  *
  */
-public class Player {
+public class Player implements java.io.Serializable{
 	
 	private final String name;
 	private final TokenList toCollect;

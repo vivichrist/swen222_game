@@ -4,7 +4,7 @@ package world.components;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Door {
+public class Door implements java.io.Serializable{
 
 	private Key key;
 	private boolean lockable;

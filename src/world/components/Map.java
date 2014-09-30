@@ -24,7 +24,7 @@ enum CellType {
  * 		& Vivian Stewart
  *
  */
-public class Map {
+public class Map implements java.io.Serializable{
 
 	private int xLimit, yLimit;
 	private CellType[][] map;
