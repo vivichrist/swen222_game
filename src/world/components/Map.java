@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import com.sun.tools.example.debug.expr.Token;
+import world.game.Player;
+
 
 enum CellType {
 	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS
@@ -28,10 +29,11 @@ public class Map {
 	private int xLimit, yLimit;
 	private CellType[][] map;
 	private List<Point> emptyCells;
-	private HashMap<Point, MoveableObject> moveableObjects;
-	private HashMap<Point, StationaryObject> stationaryObjects;
-	private HashMap<Point, Door> doors;
-	private HashMap<Point, GameToken> tokens;
+	private HashMap<Point, MoveableObject> moveableObjects = new HashMap<Point, MoveableObject>();
+	private HashMap<Point, StationaryObject> stationaryObjects = new HashMap<Point, StationaryObject>();
+	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
+	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
+	private HashMap<Point, Player> players = new HashMap<Point, Player>();
 	
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
@@ -150,11 +152,27 @@ public class Map {
 	 * @return true if successfully added
 	 */
 	public boolean addGameToken(Point p, GameToken t){
-		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
 			tokens.put(p,  t);
+			return true;
+		}
+	}
+	
+	/**
+	 * Positions a Player on this floor
+	 * @param p the Point to position the Player at
+	 * @param player the Player to position
+	 * @return true if successfully placed
+	 */
+	public boolean placePlayer(Point p, Player player){
+		if(players.containsKey(p)){
+			return false;
+		}
+		else{
+			players.put(p,  player);
 			return true;
 		}
 	}

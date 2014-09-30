@@ -1,6 +1,10 @@
 package world.game;
 
+import java.awt.Point;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +23,7 @@ public class GameBuilder {
 	
 	private List<Player> players;
 	private Map[] floors;
+	private GameState state;
 	
 	/**
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
@@ -33,6 +38,7 @@ public class GameBuilder {
 		placePlayers();
 		//TODO: place MoveableObjects
 		placePlayerTokens();
+		state = new GameState(players, floors);
 	}
 	
 	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players
@@ -63,13 +69,15 @@ public class GameBuilder {
 	
 	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
 	/**
-	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.  
+	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.
+	 * Players are placed at the same Point on different floors.  
 	 */
 	private void placePlayers(){
 		for(int i = 0; i < players.size(); i++){
 			Player currentPlayer = players.get(i);
 			currentPlayer.setPosition(18,  20);
 			currentPlayer.setFloor(floors[i]);
+			floors[i].placePlayer(new Point(18, 20), currentPlayer);
 		}
 	}
 	
