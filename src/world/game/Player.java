@@ -1,5 +1,7 @@
 package world.game;
 
+import world.components.Map;
+
 
 
 /**
@@ -13,6 +15,7 @@ public class Player {
 	private final TokenList toCollect;
 	private final Inventory inventory;
 	//TODO: should Players maintain their position? or should the game state? or both?
+	private Map floor;
 	private int xPos;
 	private int yPos;
 	
@@ -34,6 +37,14 @@ public class Player {
 	public void setPosition(int x, int y){
 		xPos = x;
 		yPos = y;
+	}
+	
+	/**
+	 * Sets the Map that this Player is currently on
+	 * @param floor the Map to set for this Player
+	 */
+	public void setFloor(Map floor){
+		this.floor = floor;
 	}
 
 }

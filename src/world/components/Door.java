@@ -6,9 +6,8 @@ package world.components;
  */
 public class Door {
 
-	private final Room room1;
-	private final Room room2;
 	private Key key;
+	private boolean lockable;
 	private boolean locked = false;
 	private String description = null;
 	
@@ -17,9 +16,8 @@ public class Door {
 	 * @param room1 the Room on one side of the door
 	 * @param room2 the Room on the other side of the door
 	 */
-	public Door(Room room1, Room room2){
-		this.room1 = room1;
-		this.room2 = room2;
+	public Door(boolean isLockable){
+		lockable = isLockable;
 	}
 
 	/**

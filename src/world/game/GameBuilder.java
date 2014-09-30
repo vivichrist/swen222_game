@@ -27,6 +27,8 @@ public class GameBuilder {
 		players = new ArrayList<Player>();
 		getPlayers();
 		buildFloors(players.size());
+		placePlayers();
+		placePlayerTokens();
 	}
 	
 	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players
@@ -54,4 +56,22 @@ public class GameBuilder {
 			floors[i] = new Map(new File("map1.txt"));
 		}
 	}
+	
+	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
+	/**
+	 * Places a Player in the game world, setting their start position to a hard coded floor and x/y coordinate.  
+	 */
+	private void placePlayers(){
+		for(int i = 0; i < players.size(); i++){
+			Player currentPlayer = players.get(i);
+			currentPlayer.setPosition(18,  20);
+			currentPlayer.setFloor(floors[i]);
+		}
+	}
+	
+	private void placePlayerTokens(){
+		
+	
+	}
+	
 }

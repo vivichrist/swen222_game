@@ -3,6 +3,7 @@ package world.components;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -25,8 +26,9 @@ public class Map {
 	private int xLimit, yLimit;
 	private CellType[][] map;
 	private List<Point> emptyCells;
-	private MoveableObject[][] moveObj;
-	private StationaryObject[][] statObj;
+	private HashMap<Point, MoveableObject> moveableObjects;
+	private HashMap<Point, StationaryObject> stationaryObjects;
+	private HashMap<Point, Door> doors;
 	
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
@@ -46,8 +48,6 @@ public class Map {
 			
 			// Initialise arrays
 			map = new CellType[xLimit][yLimit];
-			moveObj = new MoveableObject[xLimit][yLimit];
-			statObj = new StationaryObject[xLimit][yLimit];
 			emptyCells = new ArrayList<Point>();
 			
 			// Read the map, populating the 2d map array and list of empty cells
@@ -60,6 +60,9 @@ public class Map {
 					CellType current = CellType.values()[scan.nextInt()];
 					if(current == CellType.EMPTY){
 						emptyCells.add(new Point(x, y));
+					}
+					if(current == CellType.DOOR){
+						doors.put(new Point(x, y), new Door(false));
 					}
 					map[x][y] = current;
 				}
@@ -103,37 +106,35 @@ public class Map {
 	}
 	
 	/**
-	 * Adds a StationaryObject to this floor.  
+	 * Adds a StationaryObject to this floor.
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
-	 * @param x the x coordinate of the cell 
-	 * @param y the y coordinate of the cell
-	 * @param s the StationaryObject to place at x, y
+	 * @param p the Point to add this Stationary Object to
+	 * @param s the StationaryObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addStationary(int x, int y, StationaryObject s){
-		if(statObj[x][y] != null || moveObj[x][y] != null || map[x][y] != CellType.EMPTY){
+	public boolean addStationary(Point p, StationaryObject s){
+		if(moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
 			return false;
 		}
 		else{
-			statObj[x][y] = s;
+			stationaryObjects.put(p, s);
 			return true;
 		}
 	}
 	
 	/**
-	 * Adds a MoveableObject to this floor.  
-	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
-	 * @param x the x coordinate of the cell 
-	 * @param y the y coordinate of the cell
-	 * @param s the MoveableObject to place at x, y
+	 * Adds a MoveableObject to this floor
+	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world objects
+	 * @param p the Point to add this Stationary Object to
+	 * @param m the MoveableObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addMoveable(int x, int y, MoveableObject m){
-		if(moveObj[x][y] != null || statObj[x][y] != null || map[x][y] != CellType.EMPTY){
+	public boolean addMoveable(Point p, MoveableObject m){
+		if(stationaryObjects.containsKey(p) | moveableObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
-			moveObj[x][y] = m;
+			moveableObjects.put(p,  m);
 			return true;
 		}
 	}
