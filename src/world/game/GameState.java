@@ -26,6 +26,11 @@ public class GameState implements java.io.Serializable{
 		this.floors = floors;
 	}
 	
+	/**
+	 * Moves a Player in the game
+	 * @param player the Player to move 
+	 * @param point the Point to move the Player to
+	 */
 	public void movePlayer(Player player, Point point){
 		player.move(point);
 	}
