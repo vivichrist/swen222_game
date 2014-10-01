@@ -2,7 +2,8 @@ package world.components;
 
 public class Chest extends Container{
 
-	public Chest(){	
+	public Chest(String name){
+		super(name);
 	}
 	
 	@Override
@@ -21,5 +22,4 @@ public class Chest extends Container{
 		return super.contents;
 	}
 
-	
 }
