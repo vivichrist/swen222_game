@@ -78,6 +78,12 @@ public class DoorWay implements GraphicalObject
 			gl.glRotatef( 90.0f, 0f, 0f, 1.f );
 		}
 		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
+		renderMesh( gl );
+		gl.glPopMatrix();
+	}
+
+	private void renderMesh( GL2 gl )
+	{
 		for ( int[] i: indices )
 		{
 			if ( i.length == 4 )
@@ -128,7 +134,6 @@ public class DoorWay implements GraphicalObject
 				gl.glEnd();
 			}
 		}
-		gl.glPopMatrix();
 	}
 
 	/**
