@@ -11,9 +11,7 @@ import java.util.Scanner;
 import world.game.Player;
 
 
-enum CellType {
-	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS;
-}
+
 
 /**
  * A Map for a "level" or floor in the game.  Created by reading from valid map files.
@@ -26,6 +24,10 @@ enum CellType {
  */
 public class Map implements java.io.Serializable{
 
+	public enum CellType {
+		EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS;
+	}
+	
 	private int xLimit, yLimit;
 	private CellType[][] map;
 	private List<Point> emptyCells;
