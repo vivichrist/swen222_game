@@ -1,5 +1,7 @@
 package world.game;
 
+import java.awt.Point;
+
 import world.components.Map;
 
 
@@ -16,8 +18,7 @@ public class Player implements java.io.Serializable{
 	private final Inventory inventory;
 	//TODO: should Players maintain their position? or should the game state? or both?
 	private Map floor;
-	private int xPos;
-	private int yPos;
+	private Point position;
 	
 	/**
 	 * Constructor - Creates a Player with a given name, an empty inventory, and a TokenList of items to collect
@@ -35,8 +36,7 @@ public class Player implements java.io.Serializable{
 	 * @param y the y coordinate of the Player
 	 */
 	public void setPosition(int x, int y){
-		xPos = x;
-		yPos = y;
+		position = new Point(x, y);
 	}
 	
 	/**
@@ -47,13 +47,17 @@ public class Player implements java.io.Serializable{
 		this.floor = floor;
 	}
 	
-	//TODO: return a clone of the TokenList
+	//TODO: return a clone of the TokenList to make it immutable
 	/**
 	 * Returns this Player's TokenList
 	 * @return this Player's TokenList
 	 */
 	public TokenList getTokenList(){
 		return toCollect;
+	}
+	
+	public Map getFloor(){
+		return floor;
 	}
 
 }
