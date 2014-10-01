@@ -12,7 +12,7 @@ import world.game.Player;
 
 
 enum CellType {
-	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS
+	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS;
 }
 
 /**
@@ -192,5 +192,29 @@ public class Map implements java.io.Serializable{
 			players.put(newPos, player);
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns the xLimit for this Map
+	 * @return the xLimit for this Map
+	 */
+	public int getXLimit(){
+		return xLimit;
+	}
+	
+	/**
+	 * Returns the yLimit for this Map
+	 * @return the yLimit for this Map
+	 */
+	public int getYLimit(){
+		return yLimit;
+	}
+	
+	/**
+	 * Returns the CellType map for this Map
+	 * @return
+	 */
+	public CellType[][] getMap(){
+		return map;
 	}
 }

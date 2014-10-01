@@ -30,6 +30,15 @@ public class GameState implements java.io.Serializable{
 		player.move(point);
 	}
 	
+	//TODO: replace with better accessor methods to get Maps for given players - may not need to be in this class at all
+	/**
+	 * Returns the Map representing the first floor in this game world
+	 * @return
+	 */
+	public Map getMap(){
+		return floors[1];
+	}
+	
 	
 	
 	

@@ -73,8 +73,11 @@ public class Player implements java.io.Serializable{
 	}
 	
 	public boolean move(Point p){
-		if(floor.movePlayer(this, position, p));
-		position = p;
+		if(floor.movePlayer(this, position, p)){
+			position = p;
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -44,7 +44,7 @@ public class GameBuilder {
 	
 	/**
 	 * Returns the newly constructed GameState
-	 * @return
+	 * @return the newly constructed GameState
 	 */
 	public GameState getGameState(){
 		return state;
