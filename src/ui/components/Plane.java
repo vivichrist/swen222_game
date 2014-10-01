@@ -5,31 +5,28 @@ import javax.media.opengl.GL2;
 
 public class Plane implements GraphicalObject
 {
-	private int	breadth, level, cellsize, listID;
+	private int	breadth, level;
 
 	/**
 	 * @param width
 	 * @param bredth
 	 */
-	public Plane( Point extents, int level, int cellsize )
+	public Plane( Point extents, int level )
 	{
 		super();
 		this.breadth = Math.max( extents.x, extents.y );
-		this.cellsize = cellsize;
-		this.level = level * cellsize;
+		this.level = level * GameView.cellsize;
 	}
 
 	@Override
 	public boolean initialise( GL2 gl )
 	{
 		float x, y;
-		listID = gl.glGenLists( 1 );
-		gl.glNewList(listID, GL2.GL_COMPILE); 
 		gl.glBegin( GL2.GL_LINES );
 		for ( int i = 0; i <= breadth; ++i )
 		{
-			x = (i * cellsize);
-			y = (breadth * cellsize);
+			x = (i * GameView.cellsize);
+			y = (breadth * GameView.cellsize);
 			if ( i == breadth / 2 )
 			{
 				gl.glColor3f( .6f, .3f, .3f );
@@ -50,22 +47,27 @@ public class Plane implements GraphicalObject
 			gl.glVertex3f( y, x, level );
 		}
 		gl.glEnd();
-		gl.glEndList();
 		return true;
 	}
 
 	@Override
 	public boolean draw( GL2 gl )
 	{
-		if ( listID == 0 ) return false;
-		gl.glCallList(listID);
+//		if ( listID == 0 ) return false;
+//		gl.glCallList(listID);
 		return true;
 	}
 
 	@Override
 	public void clean( GL2 gl )
 	{
-		gl.glDeleteLists( listID, 1 );
+//		gl.glDeleteLists( listID, 1 );
+	}
+	
+	@Override
+	public boolean isDynamic()
+	{
+		return false;
 	}
 
 }

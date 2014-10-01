@@ -298,7 +298,7 @@ public class GUI  {
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        gameView = new GameView( glcapabilities, layeredPane, frame );
+        gameView = new GameView( glcapabilities, frame );
         gameView.setEnabled( true );
         gameView.setVisible( true );
         gameView.setFocusable( true );

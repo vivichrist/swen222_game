@@ -10,7 +10,7 @@ import world.components.MoveableObject;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Inventory {
+public class Inventory implements java.io.Serializable{
 	
 	private List<MoveableObject> inventory;
 	private int maxSize = 5;

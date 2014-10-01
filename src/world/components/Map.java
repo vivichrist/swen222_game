@@ -3,9 +3,13 @@ package world.components;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
+import world.game.Player;
+
 
 enum CellType {
 	EMPTY, WALL, DOOR, TELEPORT, OPENDOOR, OUTOFBOUNDS
@@ -20,13 +24,16 @@ enum CellType {
  * 		& Vivian Stewart
  *
  */
-public class Map {
+public class Map implements java.io.Serializable{
 
 	private int xLimit, yLimit;
 	private CellType[][] map;
 	private List<Point> emptyCells;
-	private MoveableObject[][] moveObj;
-	private StationaryObject[][] statObj;
+	private HashMap<Point, MoveableObject> moveableObjects = new HashMap<Point, MoveableObject>();
+	private HashMap<Point, StationaryObject> stationaryObjects = new HashMap<Point, StationaryObject>();
+	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
+	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
+	private HashMap<Point, Player> players = new HashMap<Point, Player>();
 	
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
@@ -46,11 +53,9 @@ public class Map {
 			
 			// Initialise arrays
 			map = new CellType[xLimit][yLimit];
-			moveObj = new MoveableObject[xLimit][yLimit];
-			statObj = new StationaryObject[xLimit][yLimit];
 			emptyCells = new ArrayList<Point>();
 			
-			// Read the map, populating the 2d map array and list of empty cells
+			// Read the map, populating the 2d map array, list of empty cells and hashmap of doors
 			for(int y = 0; y < yLimit; y++){
 				for(int x = 0; x < xLimit; x++){
 					if(!scan.hasNextInt()){
@@ -60,6 +65,9 @@ public class Map {
 					CellType current = CellType.values()[scan.nextInt()];
 					if(current == CellType.EMPTY){
 						emptyCells.add(new Point(x, y));
+					}
+					if(current == CellType.DOOR){
+						doors.put(new Point(x, y), new Door(false));
 					}
 					map[x][y] = current;
 				}
@@ -103,37 +111,68 @@ public class Map {
 	}
 	
 	/**
-	 * Adds a StationaryObject to this floor.  
+	 * Adds a StationaryObject to this floor.
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
-	 * @param x the x coordinate of the cell 
-	 * @param y the y coordinate of the cell
-	 * @param s the StationaryObject to place at x, y
+	 * @param p the Point to add this Stationary Object to
+	 * @param s the StationaryObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addStationary(int x, int y, StationaryObject s){
-		if(statObj[x][y] != null || moveObj[x][y] != null || map[x][y] != CellType.EMPTY){
+	public boolean addStationary(Point p, StationaryObject s){
+		if(moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
 			return false;
 		}
 		else{
-			statObj[x][y] = s;
+			stationaryObjects.put(p, s);
 			return true;
 		}
 	}
 	
 	/**
-	 * Adds a MoveableObject to this floor.  
+	 * Adds a MoveableObject to this floor
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
-	 * @param x the x coordinate of the cell 
-	 * @param y the y coordinate of the cell
-	 * @param s the MoveableObject to place at x, y
+	 * @param p the Point to add this Stationary Object to
+	 * @param m the MoveableObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addMoveable(int x, int y, MoveableObject m){
-		if(moveObj[x][y] != null || statObj[x][y] != null || map[x][y] != CellType.EMPTY){
+	public boolean addMoveable(Point p, MoveableObject m){
+		if(stationaryObjects.containsKey(p) | moveableObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
-			moveObj[x][y] = m;
+			moveableObjects.put(p,  m);
+			return true;
+		}
+	}
+	
+	/**
+	 * Adds a Token to this floor
+	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
+	 * @param p the Point to add this Token to
+	 * @param t the Token to add
+	 * @return true if successfully added
+	 */
+	public boolean addGameToken(Point p, GameToken t){
+		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+			return false;
+		}
+		else{
+			tokens.put(p,  t);
+			return true;
+		}
+	}
+	
+	/**
+	 * Positions a Player on this floor
+	 * @param p the Point to position the Player at
+	 * @param player the Player to position
+	 * @return true if successfully placed
+	 */
+	public boolean placePlayer(Point p, Player player){
+		if(players.containsKey(p)){
+			return false;
+		}
+		else{
+			players.put(p,  player);
 			return true;
 		}
 	}

@@ -1,8 +1,13 @@
 package world.game;
 
+import java.awt.Point;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -18,6 +23,7 @@ public class GameBuilder {
 	
 	private List<Player> players;
 	private Map[] floors;
+	private GameState state;
 	
 	/**
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
@@ -27,6 +33,29 @@ public class GameBuilder {
 		players = new ArrayList<Player>();
 		getPlayers();
 		buildFloors(players.size());
+		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
+		//TODO: place StationaryObjects
+		placePlayers();
+		//TODO: place MoveableObjects
+		placePlayerTokens();
+		state = new GameState(players, floors);
+		serialize();
+	}
+	
+	private void serialize(){
+		try
+	      {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("../state.ser");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(state);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in ../state.ser");
+	      }catch(IOException i)
+	      {
+	          i.printStackTrace();
+	      }
 	}
 	
 	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players
@@ -54,4 +83,36 @@ public class GameBuilder {
 			floors[i] = new Map(new File("map1.txt"));
 		}
 	}
+	
+	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
+	/**
+	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.
+	 * Players are placed at the same Point on different floors.  
+	 */
+	private void placePlayers(){
+		for(int i = 0; i < players.size(); i++){
+			Player currentPlayer = players.get(i);
+			currentPlayer.setPosition(18,  20);
+			currentPlayer.setFloor(floors[i]);
+			floors[i].placePlayer(new Point(18, 20), currentPlayer);
+		}
+	}
+	
+	/**
+	 * Distributes each Player's Tokens throughout the game world, choosing floors and Points at random
+	 */
+	private void placePlayerTokens(){
+		for(int i = 0; i < players.size(); i++){
+			Player currentPlayer = players.get(i);
+			TokenList currentTokens = currentPlayer.getTokenList();
+			for(int j = 0; j < currentTokens.size(); j++){
+				Random random = new Random();
+				// Select a random floor in this world
+				Map randomFloor = floors[random.nextInt(floors.length)];
+				// Place the Token in a random cell on the floor
+				randomFloor.addGameToken(randomFloor.randomEmptyCell(), currentTokens.get(j));
+			}
+		}
+	}
+	
 }

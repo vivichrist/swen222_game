@@ -11,7 +11,7 @@ import world.components.GameToken;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class TokenList {
+public class TokenList implements java.io.Serializable{
 
 	// Defines the Color palette to use for every TokenList
 	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.RED};

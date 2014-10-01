@@ -12,24 +12,20 @@ import java.util.Scanner;
  * every type of entity that can occupy one square of the game
  */
 enum Type {
-	EMPTY, WALL, OPENDOOR, DOOR, KEY, OUTOFBOUNDS;
-	public static boolean isCollision( Type t )
-	{
-		return t == WALL || t == DOOR;
-	}
+	EMPTY, WALL, DOOR, KEY, OUTOFBOUNDS;
 }
 
 /**
  * @author Vivian Stewart
  *
  */
-public class GameCollision
+public class GameScene
 {
 	private Type[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
 	
-	public GameCollision()
+	public GameScene()
 	{
 		try
 		{// read in the map
@@ -107,9 +103,9 @@ public class GameCollision
 			return false;
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
-		if ( map[x][y] == Type.OPENDOOR )
-			((DoorWay)gameElements.get( new Point( x, y ) )).open();
-		return Type.isCollision( map[x][y] );
+		if ( map[x][y] == Type.DOOR )
+			return ((DoorWay)gameElements.get( new Point( x, y ) )).open();
+		return map[x][y] == Type.WALL;
 	}
 
 	public void addSurrounds( ArrayList<GraphicalObject> toDraw, int scale )
@@ -118,8 +114,7 @@ public class GameCollision
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
-				Type center = map[i][j]
-					, north = j - 1 < 0       ? Type.OUTOFBOUNDS : map[ i ]  [j - 1]
+				Type north = j - 1 < 0       ? Type.OUTOFBOUNDS : map[ i ]  [j - 1]
 					, east = i + 1 >= xlimit ? Type.OUTOFBOUNDS : map[i + 1] [ j ]
 					, south = j + 1 >= ylimit ? Type.OUTOFBOUNDS : map[ i ]  [j + 1]
 					, west = i - 1 < 0       ? Type.OUTOFBOUNDS : map[i - 1] [ j ];
@@ -127,14 +122,12 @@ public class GameCollision
 				{
 				case WALL :
 					toDraw.add( new Partition( north, east, south, west
-							, new Point( i, j ), scale ) );
-					break;
-				case OPENDOOR :
-					DoorWay door = new DoorWay( north, south, new Point( i, j ), scale );
-					toDraw.add( door );
-					gameElements.put( new Point( i, j ), door );
+							, new Point( i, j ) ) );
 					break;
 				case DOOR :
+					DoorWay door = new DoorWay( north, south, new Point( i, j ) );
+					toDraw.add( door );
+					gameElements.put( new Point( i, j ), door );
 					break;
 				default:
 					break;
