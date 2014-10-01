@@ -22,24 +22,29 @@ import javax.swing.ToolTipManager;
  * @author sunzhih
  *
  */
-public class SouthPanel extends JPanel {
+public class SouthPanel {
 	/**
 	 *
 	 */
 	private static int left = 0;
 	private static int top = 600;
 	private static int width = 800;
-	private static int height = 770;
-	
+	private static int height = 170;
 
 	private JPanel panel;
-	private JLabel characterShow = new JLabel();
 
-
+	private CollectItemsCanvas collectItemsCanvas;
+	private UsefulItemsCanvas usefulItemsCanvas;
+	
 	public SouthPanel() {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
-		panel.setBackground(Color.DARK_GRAY);
+		panel.setBackground(Color.LIGHT_GRAY);
+		collectItemsCanvas = new CollectItemsCanvas();
+		panel.add(collectItemsCanvas, BorderLayout.WEST);
+		usefulItemsCanvas = new UsefulItemsCanvas();
+		panel.add(usefulItemsCanvas, BorderLayout.WEST);
+		panel.repaint();
 	}
 	
 	public JPanel getPanel() {

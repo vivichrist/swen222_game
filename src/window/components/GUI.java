@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -31,8 +32,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import com.jogamp.graph.font.Font;
+
 import ui.components.GameView;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * frame setup
@@ -40,7 +46,7 @@ import ui.components.GameView;
  *
  */
 
-public class GUI extends JFrame {
+public class GUI  {
 
 	private static int width = 800;
 	private static int height = 770;
@@ -64,7 +70,6 @@ public class GUI extends JFrame {
 	JButton jbExit;
 	JButton jbSingle;
 	JButton jbMultiple;
-	JButton jbHelp;
 	JButton jbStart;
 
 	JTextField textFieldName;
@@ -125,24 +130,49 @@ public class GUI extends JFrame {
 		startPanel = new JPanel();
 		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
 //		startPanel.setLayout(null);
-
+//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
+//		startPanel.setLayout(null);
+		
+		
 		jbNewGame = new JButton("New Game");
 		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 
+		jbNewGame.setOpaque(false);
+		jbNewGame.setContentAreaFilled(false);
+		jbNewGame.setBorderPainted(false);
+		
+		jbLoad.setOpaque(false);
+		jbLoad.setContentAreaFilled(false);
+		jbLoad.setBorderPainted(false);
+		
+		jbInfo.setOpaque(false);
+		jbInfo.setContentAreaFilled(false);
+		jbInfo.setBorderPainted(false);
+		
+		jbExit.setOpaque(false);
+		jbExit.setContentAreaFilled(false);
+		jbExit.setBorderPainted(false);
+//		jbNewGame.setPreferredSize(new Dimension(100, 40));
+//		jbNewGame.setFont((java.awt.Font) new Font("Arial", Font.PLAIN, 40));
+		
+		
 //		jbNewGame.setLayout(null);
 //		jbNewGame.setBounds(350, 200, 30, 30);
 //		jbLoad.setLayout(null);
 //		jbLoad.setBounds(350, 200, 30, 30);
-//		jbNewGame.setLayout(null);
-//		jbNewGame.setBounds(350, 200, 30, 30);
-
+		
+		
+		
+		
 		startPanel.add(jbNewGame);
 		startPanel.add(jbLoad);
 		startPanel.add(jbInfo);
 		startPanel.add(jbExit);
 
+		
+		jbNewGame.setOpaque(false);
 		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
@@ -160,11 +190,17 @@ public class GUI extends JFrame {
 
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
-		jbHelp = new JButton("Help");
 
+		jbSingle.setOpaque(false);
+		jbSingle.setContentAreaFilled(false);
+		jbSingle.setBorderPainted(false);
+		
+		jbMultiple.setOpaque(false);
+		jbMultiple.setContentAreaFilled(false);
+		jbMultiple.setBorderPainted(false);
+		
 		choosePlayerPanel.add(jbSingle);
 		choosePlayerPanel.add(jbMultiple);
-		choosePlayerPanel.add(jbHelp);
 
 		choosePlayerPanel.setOpaque(false);
 		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
@@ -184,6 +220,10 @@ public class GUI extends JFrame {
 		textFieldName = new JTextField(8);
 		jbStart = new JButton("Start");
 
+		jbStart.setOpaque(false);
+		jbStart.setContentAreaFilled(false);
+		jbStart.setBorderPainted(false);
+		
 		chooseNamePanel.add(chooseName);
 		chooseNamePanel.add(textFieldName);
 		chooseNamePanel.add(jbStart);
@@ -253,18 +293,17 @@ public class GUI extends JFrame {
 
 
 	protected void startGame() {
-		southPanel = new SouthPanel();
-		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        gameView = new GameView( glcapabilities, layeredPane, frame );
+        gameView = new GameView( glcapabilities, frame );
         gameView.setEnabled( true );
         gameView.setVisible( true );
         gameView.setFocusable( true );
         layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
         if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-
+        southPanel = new SouthPanel();
+		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
 
 	public static void main(String[] args){

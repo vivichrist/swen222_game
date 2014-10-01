@@ -27,4 +27,5 @@ public interface GraphicalObject
 	 * @param gl - opengl drawing context
 	 */
 	public void clean( GL2 gl );
+	public boolean isDynamic();
 }

@@ -37,13 +37,14 @@ public class GameView extends GLJPanel
 	private float direction = 0.0f;
 	// actual position before update
 	private Point2D.Float position;
-	private GameCollision map = new GameCollision();
+	private GameScene map = new GameScene();
 	// map boundaries in the positive x y directions
 	private Point extents = map.mapsize();
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
+	private int	staticID = 0;
 
-    public GameView( GLCapabilities gc, JLayeredPane pane, JFrame frame )
+    public GameView( GLCapabilities gc, JFrame frame )
     {
     	super( gc );
         position = new Point2D.Float(
@@ -83,11 +84,20 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_DEPTH_TEST );
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
-            	toDraw.add( new Plane( extents, 0, cellsize ) );
-            	toDraw.add( new Plane( extents, 2, cellsize ) );
+            	toDraw.add( new Plane( extents, 0 ) );
+            	toDraw.add( new Plane( extents, 2 ) );
             	map.addSurrounds( toDraw, cellsize );
             	for( GraphicalObject go: toDraw )
-                	go.initialise( gl2 );
+            	{
+            		if ( go.isDynamic() ) go.initialise( gl2 );
+            	}
+            	staticID  = gl2.glGenLists( 1 );
+            	gl2.glNewList(staticID, GL2.GL_COMPILE);
+            	for( GraphicalObject go: toDraw )
+            	{
+            		if ( !go.isDynamic() ) go.initialise( gl2 );
+            	}
+            	gl2.glEndList();
             }
 
             /* (non-Javadoc)
@@ -156,13 +166,15 @@ public class GameView extends GLJPanel
 	 */
 	private void render( GL2 gl2 )
 	{
-        for( GraphicalObject go: toDraw )
-        	go.draw( gl2 );
+		for( GraphicalObject go: toDraw )
+        	if ( go.isDynamic() ) go.draw( gl2 );
+		if ( staticID == 0 ) return;
+		gl2.glCallList(staticID );
     }
 
 	public static void main( String [] args ) {
 		JFrame jf = new JFrame();
-		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), null, jf );
+		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), jf );
 		jf.setSize( 800, 600 );
 		jf.add( gv );
 		jf.setVisible( true );
