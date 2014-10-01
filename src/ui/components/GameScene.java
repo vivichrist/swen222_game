@@ -12,7 +12,7 @@ import java.util.Scanner;
  * every type of entity that can occupy one square of the game
  */
 enum Type {
-	EMPTY, WALL, DOOR, KEY, OUTOFBOUNDS;
+	EMPTY, WALL, DOOR, CONE, CUBE, DIAMOND, BALL, KEY, OUTOFBOUNDS;
 }
 
 /**
