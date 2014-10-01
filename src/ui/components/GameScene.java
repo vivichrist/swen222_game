@@ -19,13 +19,13 @@ enum Type {
  * @author Vivian Stewart
  *
  */
-public class GameCollision
+public class GameScene
 {
 	private Type[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
 	
-	public GameCollision()
+	public GameScene()
 	{
 		try
 		{// read in the map

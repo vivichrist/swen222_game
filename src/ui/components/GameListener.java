@@ -14,7 +14,7 @@ public class GameListener implements KeyListener
 	private final float		speed = 0.5f; // forward reverse constant
 	private final float		turnSpeed = 0.05f; // 
 	private Point2D.Float	position; // accumulated position
-	private GameCollision	map;
+	private GameScene	map;
 	
 	public void setKeyUpdate( boolean keyUpdate )
 	{
@@ -33,7 +33,7 @@ public class GameListener implements KeyListener
 	}
 
 	public GameListener( ArrayList<GraphicalObject> toDraw,
-			Point2D.Float position, float direction, GameCollision map)
+			Point2D.Float position, float direction, GameScene map)
 	{
 		this.position = new Point2D.Float( position.x, position.y );
 		this.direction = direction;

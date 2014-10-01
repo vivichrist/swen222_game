@@ -37,7 +37,7 @@ public class GameView extends GLJPanel
 	private float direction = 0.0f;
 	// actual position before update
 	private Point2D.Float position;
-	private GameCollision map = new GameCollision();
+	private GameScene map = new GameScene();
 	// map boundaries in the positive x y directions
 	private Point extents = map.mapsize();
 	// keyInput (keyboard) is also responsible for position and direction changes
