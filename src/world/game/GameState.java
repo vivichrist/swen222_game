@@ -10,6 +10,7 @@ import world.components.Map;
  */
 public class GameState implements java.io.Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private final List<Player> players;
 	private final Map[] floors;
 	
@@ -22,6 +23,7 @@ public class GameState implements java.io.Serializable{
 		this.players = players;
 		this.floors = floors;
 	}
+	
 	
 	
 	

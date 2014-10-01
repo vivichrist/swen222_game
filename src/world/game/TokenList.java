@@ -17,8 +17,7 @@ public class TokenList implements java.io.Serializable{
 	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.MAGENTA, Color.CYAN, Color.RED};
 	
 	private final List<GameToken> tokens;
-	
-	//TODO: What should the token count be here? Is 5 an appropriate value? If changed we need to change the COLORS array size to match
+
 	// Defines the number of tokens to be collected by each Player
 	private final int tokenCount = 5;
 

@@ -18,7 +18,7 @@ public class GameBuilder {
 
 	//TODO: Decide how TokenTypes should be graphically represented and update TokenTypes here to match
 	public enum TokenType{
-		SQUARE, CIRCLE, TRIANGLE
+		CUBE, BALL, CONE, DIAMOND
 	}
 	
 	private List<Player> players;
