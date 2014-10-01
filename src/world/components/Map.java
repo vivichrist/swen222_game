@@ -162,7 +162,7 @@ public class Map implements java.io.Serializable{
 	}
 	
 	/**
-	 * Positions a Player on this floor
+	 * Positions a Player on this floor.  Doesn't allow two Players to occupy the same cell
 	 * @param p the Point to position the Player at
 	 * @param player the Player to position
 	 * @return true if successfully placed
@@ -177,4 +177,20 @@ public class Map implements java.io.Serializable{
 		}
 	}
 	
+	/**
+	 * Moves a Player on this Map.  A Player cannot be moved if their origin position doesn't match the Map's record of the Player's position
+	 * or the Player's destination is occupied by another Player.
+	 * @param player the Player to move
+	 * @param oldPos the Player's origin position
+	 * @param newPos the Player's destination position
+	 * @return true if successfully moved
+	 */
+	public boolean movePlayer(Player player, Point oldPos, Point newPos){
+		if(!players.containsKey(oldPos) || players.containsKey(newPos)) return false;
+		else{
+			players.remove(oldPos);
+			players.put(newPos, player);
+			return true;
+		}
+	}
 }

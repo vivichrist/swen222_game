@@ -42,6 +42,14 @@ public class GameBuilder {
 		serialize();
 	}
 	
+	/**
+	 * Returns the newly constructed GameState
+	 * @return
+	 */
+	public GameState getGameState(){
+		return state;
+	}
+	
 	private void serialize(){
 		try
 	      {

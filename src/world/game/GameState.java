@@ -1,6 +1,8 @@
 package world.game;
 
+import java.awt.Point;
 import java.util.List;
+
 import world.components.Map;
 
 /**
@@ -22,6 +24,10 @@ public class GameState implements java.io.Serializable{
 	public GameState(List<Player> players, Map[] floors){
 		this.players = players;
 		this.floors = floors;
+	}
+	
+	public void movePlayer(Player player, Point point){
+		player.move(point);
 	}
 	
 	

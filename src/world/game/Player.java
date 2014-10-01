@@ -31,12 +31,20 @@ public class Player implements java.io.Serializable{
 	}
 	
 	/**
-	 * Sets the position of this Player
+	 * Sets the position of this Player using x/y coordinates
 	 * @param x the x coordinate of the Player
 	 * @param y the y coordinate of the Player
 	 */
 	public void setPosition(int x, int y){
 		position = new Point(x, y);
+	}
+	
+	/**
+	 * Sets the position of this Player using a Point
+	 * @param p the Point to set as this Player's position
+	 */
+	public void setPosition(Point p){
+		position = p;
 	}
 	
 	/**
@@ -56,8 +64,17 @@ public class Player implements java.io.Serializable{
 		return toCollect;
 	}
 	
+	/**
+	 * Returns the Map representing the Player's current floor
+	 * @return the Map representing the Player's current floor
+	 */
 	public Map getFloor(){
 		return floor;
+	}
+	
+	public boolean move(Point p){
+		if(floor.movePlayer(this, position, p));
+		position = p;
 	}
 
 }
