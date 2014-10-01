@@ -214,7 +214,7 @@ public class Map implements java.io.Serializable{
 	 * Returns the CellType map for this Map
 	 * @return
 	 */
-	public CellType[][] getMap(){
+	public CellType[][] getCellTypeMap(){
 		return map;
 	}
 }
