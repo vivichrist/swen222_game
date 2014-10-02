@@ -15,8 +15,16 @@ public class MeshStore
 			put( CellType.KEY, "key.obj" );
 			put( CellType.DOOR, "door.obj" );
 			put( CellType.CONE, "cone.obj" );
+			put( CellType.CUBE, "cube.obj" );
 			put( CellType.BALL, "ball.obj" );
 			put( CellType.DIAMOND, "diamond.obj" );
+			put( CellType.CHEST, "chest.obj" );
+			put( CellType.BREIFCASE, "breifcase.obj" );
+			put( CellType.DRAWERS, "drawers.obj" );
+			put( CellType.TABLE, "table.obj" );
+			put( CellType.DRAWERS, "drawers.obj" );
+			put( CellType.TICKET, "ticket.obj" );
+			put( CellType.TORCH, "torch.obj" );
 			put( CellType.TELEPORT, "teleport.obj" );
 		}
 	};

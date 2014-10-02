@@ -106,8 +106,16 @@ public class GameScene
 			}
 		}
 		Point p =  new Point( 4, 4 );
-		Dymanic cone = new Dymanic( CellType.CONE, Behave.ROTATE, p );
-		toDraw.add( cone );
-		gameElements.put( p, cone );
+		Dymanic dyn = new Dymanic( CellType.CONE, Behave.ROTATE, p );
+		toDraw.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 4, 8 );
+		dyn = new Dymanic( CellType.BALL, Behave.ROTATE, p );
+		toDraw.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 4, 12 );
+		dyn = new Dymanic( CellType.CUBE, Behave.ROTATE, p );
+		toDraw.add( dyn );
+		gameElements.put( p, dyn );
 	}
 }

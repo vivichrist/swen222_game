@@ -133,7 +133,7 @@ public class Mesh
 	 */
 	public static void main( String[] args )
 	{
-		ObjReader ob = new ObjReader( "mesh/cone.obj" );
+		ObjReader ob = new ObjReader( "mesh/cube.obj" );
 		Mesh mesh = new Mesh( ob.getIndices(), ob.getVertices() );
 		for ( float[] fs: mesh.getVertices() )
 		{	
