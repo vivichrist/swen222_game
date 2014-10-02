@@ -5,6 +5,6 @@ package world.components;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public interface StationaryObject {
+public interface StationaryObject extends GameObject {
 
 }

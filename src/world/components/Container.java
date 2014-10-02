@@ -2,7 +2,12 @@ package world.components;
 
 import world.components.MoveableObject;
 
-public abstract class Container implements StationaryObject{
+/**
+ * Represents the abstract concept of a GameObject that can contain another GameObject
+ * @author Kalo Pilato - ID: 300313803
+ *
+ */
+public abstract class Container implements GameObject{
 
 	protected String name;
 	protected MoveableObject contents;
