@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -48,14 +49,17 @@ public class ObjReader
 		else if ( line.startsWith( "f " ) ) parseFace( sc );
 		else if ( line.startsWith( "p " ) ) parsePoint( sc );
 		else if ( line.startsWith( "l " ) ) parseEdge( sc );
-		else if ( line.startsWith( "#" ) ) return;
+		else if ( line.startsWith( "#" ) ) 
+		{
+			sc.close();
+			return;
+		}
 		else 
 		{
 			System.out.println(
 					"Unsupported parameter:" + lineNumber + " -> " + line );
-			sc.close();
 		}
-				
+		sc.close();
 	}
 
 	private void parseEdge( Scanner sc )
@@ -78,30 +82,20 @@ public class ObjReader
 		if ( sc.hasNextInt() )
 		{
 			idx[0] = sc.nextInt();
-		} else fail( "first index missing at line " + lineNumber );
+		} else fail( "index missing at line " + lineNumber );
 		indices.add( idx );
 	}
 
 	private void parseFace( Scanner sc )
 	{
-		Integer[] idx = new Integer[4]; 
-		if ( sc.hasNextFloat() )
+		LinkedList<Integer> list = new LinkedList<Integer>(); 
+		while ( sc.hasNextInt() )
 		{
-			idx[0] = sc.nextInt();
-		} else fail( "first vertex missing at line " + lineNumber );
-		if ( sc.hasNextFloat() )
-		{
-			idx[1] = sc.nextInt();
-		} else fail( "second vertex missing at line " + lineNumber );
-		if ( sc.hasNextFloat() )
-		{
-			idx[2] = sc.nextInt();
-		} else fail( "thrird vertex missing at line " + lineNumber );
-		if ( sc.hasNextFloat() )
-		{
-			idx[3] = sc.nextInt();
+			list.add( sc.nextInt() );
 		}
-		indices.add( idx );
+		if ( list.size() > 4 ) System.out.println("N-Gon:" + list.size());
+		Integer[] idx = new Integer[list.size()];
+		indices.add( list.toArray( idx ) );
 	}
 
 	private void parseVertex( Scanner sc )
@@ -141,7 +135,7 @@ public class ObjReader
 	 */
 	public static void main( String[] args )
 	{
-		ObjReader ob = new ObjReader( "mesh/door.obj" );
+		ObjReader ob = new ObjReader( "mesh/cone.obj" );
 		for ( Float[] fs: ob.vertices )
 		{	
 			for ( float f: fs )

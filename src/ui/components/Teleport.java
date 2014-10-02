@@ -14,6 +14,7 @@ public class Teleport implements GraphicalObject
 	private Point2D.Float	position;
 	private List<float[]>	vertices;
 	private List<int[]>		indices;
+	public static int height = (2 * GameView.cellsize);
 	private int				move = 0;
 
 	public Teleport( Point position )
@@ -30,7 +31,7 @@ public class Teleport implements GraphicalObject
 		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
 		renderMesh( gl );
 		gl.glPopMatrix();
-		move = (move + 1) % (2 * GameView.cellsize);
+		//move = (move + 1) % height;
 		return true;
 	}
 	
@@ -82,13 +83,14 @@ public class Teleport implements GraphicalObject
 			}
 			if ( i.length == 2 )
 			{
-				gl.glTranslatef( 0f, 0f, move );
 				gl.glBegin( GL2.GL_LINE );
 				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				//gl.glTranslatef( 0f, 0f, move % height );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				//gl.glTranslatef( 0f, 0f, -(move % height) );
 				gl.glEnd();
-				gl.glTranslatef( 0f, 0f, -move );
+				//System.out.println( "teleport lines:" + move );
 			}
 			if ( i.length == 1 )
 			{

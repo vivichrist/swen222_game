@@ -16,7 +16,6 @@ public class Rotate implements Behavior
 	@Override
 	public void modify( GL2 gl, Point2D.Float pos )
 	{
-		gl.glTranslatef( pos.x + (GameView.cellsize >> 2), pos.y  + (GameView.cellsize >> 2), 0 );
 		gl.glRotatef( rotate, 0f, 0f, 1.f );
 		rotate = (rotate + 1) % 360;
 	}

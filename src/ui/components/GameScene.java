@@ -100,15 +100,14 @@ public class GameScene
 					toDraw.add( tele );
 					gameElements.put( p, tele );
 					break;
-//				case CONE :
-//					Dymanic cone = new Dymanic( CellType.CONE, Behave.ROTATE, p );
-//					toDraw.add( door );
-//					gameElements.put( p, cone );
-//					break;
 				default:
 					break;
 				}
 			}
 		}
+		Point p =  new Point( 4, 4 );
+		Dymanic cone = new Dymanic( CellType.CONE, Behave.ROTATE, p );
+		toDraw.add( cone );
+		gameElements.put( p, cone );
 	}
 }

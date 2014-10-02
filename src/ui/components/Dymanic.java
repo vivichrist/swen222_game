@@ -11,13 +11,22 @@ import world.components.CellType;
 public class Dymanic implements GraphicalObject
 {
 	private Point2D.Float	position;
+	private CellType		type;
 	private Behavior anim;
 	private List<float[]> vertices;
 	private List<int[]> indices;
 	
 	public Dymanic( CellType type, Behave act, Point position )
 	{
-		this.position = new Point2D.Float( position.x * GameView.cellsize
+		this.type = type;
+		if ( type == CellType.BALL || type == CellType.CONE
+				|| type == CellType.CUBE || type == CellType.DIAMOND
+				|| type == CellType.KEY )
+			this.position = new Point2D.Float(
+					  position.x * GameView.cellsize + (GameView.cellsize >> 2)
+					, position.y * GameView.cellsize + (GameView.cellsize >> 2) );
+		else this.position = new Point2D.Float(
+				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
 		if ( act == Behave.ROTATE )
 			anim = new Rotate( 0 );
@@ -27,7 +36,9 @@ public class Dymanic implements GraphicalObject
 	@Override
 	public boolean draw( GL2 gl )
 	{
+		//if ( indices == null || vertices == null ) throw new RuntimeException( "indices or vertices not initialised" );
 		gl.glPushMatrix();
+		gl.glTranslatef( position.x + (GameView.cellsize >> 2), position.y  + (GameView.cellsize >> 2), 0 );
 		anim.modify( gl, position );
 		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
 		renderMesh( gl );
@@ -39,7 +50,7 @@ public class Dymanic implements GraphicalObject
 	public boolean initialise( GL2 gl )
 	{
 		MeshStore m = MeshStore.instance();
-		Mesh mesh = m.getMesh( CellType.CUBE );
+		Mesh mesh = m.getMesh( type );
 		vertices = mesh.getVertices();
 		indices = mesh.getIndices();
 		return true;
