@@ -20,7 +20,7 @@ public class GameScene
 	private CellType[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
-	private GameState game = new GameBuilder().getGameState();
+	private GameState game;
 	
 	public GameScene(GameState state)
 	{

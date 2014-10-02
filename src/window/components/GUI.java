@@ -35,8 +35,11 @@ import javax.swing.JTextField;
 import com.jogamp.graph.font.Font;
 
 import ui.components.GameView;
+import world.game.GameBuilder;
+import world.game.GameState;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -296,7 +299,12 @@ public class GUI  {
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        gameView = new GameView( glcapabilities, frame );
+        
+        //Code added by Kalo
+        GameState state = new GameBuilder(name).getGameState();
+        gameView = new GameView( glcapabilities, frame, state );
+        
+        //gameView = new GameView( glcapabilities, frame );
         gameView.setEnabled( true );
         gameView.setVisible( true );
         gameView.setFocusable( true );

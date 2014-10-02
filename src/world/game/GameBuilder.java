@@ -29,9 +29,11 @@ public class GameBuilder {
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
 	 * @param players the list of Players in this game.
 	 */
-	public GameBuilder(){
+	public GameBuilder(String name){
+		
 		players = new ArrayList<Player>();
-		getPlayers();
+		players.add(new Player(name, TokenType.CUBE));
+		//getPlayers();
 		buildFloors(players.size());
 		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
 		//TODO: place StationaryObjects
@@ -39,7 +41,7 @@ public class GameBuilder {
 		//TODO: place MoveableObjects
 		placePlayerTokens();
 		state = new GameState(players, floors);
-		serialize();
+		//serialize();
 	}
 	
 	/**

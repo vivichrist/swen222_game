@@ -41,9 +41,18 @@ public class GameState implements java.io.Serializable{
 	 * @return
 	 */
 	public Map getMap(){
-		return floors[1];
+		return floors[0];
 	}
 	
+	//TODO: assign Players to clients as appropriate - this method is purely for integration testing of a single player game state
+	/**
+	 * Returns the first Player in this Players collection
+	 * @param index the index of the Player
+	 * @return the Player at the given index
+	 */
+	public Player getPlayer(){
+		return players.get(0);
+	}
 	
 	
 	
