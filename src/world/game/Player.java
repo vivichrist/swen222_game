@@ -31,6 +31,14 @@ public class Player implements java.io.Serializable{
 	}
 	
 	/**
+	 * Returns the name of this Player
+	 * @return the name of this Player
+	 */
+	public String getName(){
+		return name;
+	}
+	
+	/**
 	 * Sets the position of this Player using x/y coordinates
 	 * @param x the x coordinate of the Player
 	 * @param y the y coordinate of the Player
