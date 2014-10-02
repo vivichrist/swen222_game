@@ -57,6 +57,14 @@ public class Player implements java.io.Serializable{
 	}
 	
 	/**
+	 * Returns the current position of this Player
+	 * @param p the Point representing the current position of this Player
+	 */
+	public Point getPosition(Point p){
+		return position;
+	}
+	
+	/**
 	 * Sets the Map that this Player is currently on
 	 * @param floor the Map to set for this Player
 	 */
