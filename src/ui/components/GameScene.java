@@ -20,10 +20,12 @@ public class GameScene
 	private CellType[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
-	private GameState game = new GameBuilder().getGameState();
+	private GameState game;
 	
-	public GameScene()
+	public GameScene(GameState state)
 	{
+		//Kalo added
+		game = state;
 		// read in the map
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();

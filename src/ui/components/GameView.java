@@ -10,6 +10,8 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
+import world.game.GameState;
+
 import com.jogamp.opengl.util.FPSAnimator;
 
 import java.awt.BorderLayout;
@@ -37,16 +39,20 @@ public class GameView extends GLJPanel
 	private float direction = 0.0f;
 	// actual position before update
 	private Point2D.Float position;
-	private GameScene map = new GameScene();
+	private GameScene map;
 	// map boundaries in the positive x y directions
-	private Point extents = map.mapsize();
+	private Point extents;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
 	private int	staticID = 0;
 
-    public GameView( GLCapabilities gc, JFrame frame )
+    public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
     	super( gc );
+    	
+    	map = new GameScene(state);
+    	extents = map.mapsize();
+    			
         position = new Point2D.Float(
 				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
         keyInput = new GameListener( toDraw, position, direction, map );
@@ -172,6 +178,8 @@ public class GameView extends GLJPanel
 		gl2.glCallList(staticID );
     }
 
+	// Kalo commented out for rough integration
+	/*
 	public static void main( String [] args ) {
 		JFrame jf = new JFrame();
 		GameView gv = new GameView( new GLCapabilities( GLProfile.getDefault() ), jf );
@@ -179,4 +187,5 @@ public class GameView extends GLJPanel
 		jf.add( gv );
 		jf.setVisible( true );
 	}
+	*/
 }

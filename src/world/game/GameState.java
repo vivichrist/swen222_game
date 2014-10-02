@@ -41,7 +41,7 @@ public class GameState implements java.io.Serializable{
 	 * @return
 	 */
 	public Map getMap(){
-		return floors[1];
+		return floors[0];
 	}
 	
 	
