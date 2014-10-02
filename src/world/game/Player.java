@@ -74,6 +74,7 @@ public class Player implements java.io.Serializable{
 	
 	public boolean move(Point p){
 		if(floor.movePlayer(this, position, p)){
+			System.out.println(name + " moved from " + position.toString() + " to " + p.toString());
 			position = p;
 			return true;
 		}
