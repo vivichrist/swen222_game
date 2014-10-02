@@ -22,8 +22,10 @@ public class GameScene
 	private int xlimit, ylimit;
 	private GameState game = new GameBuilder().getGameState();
 	
-	public GameScene()
+	public GameScene(GameState state)
 	{
+		//Kalo added
+		game = state;
 		// read in the map
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
