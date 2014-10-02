@@ -14,7 +14,7 @@ public class Teleport implements GraphicalObject
 	private Point2D.Float	position;
 	private List<float[]>	vertices;
 	private List<int[]>		indices;
-	private float			move = 0;
+	private int				move = 0;
 
 	public Teleport( Point position )
 	{
@@ -30,7 +30,7 @@ public class Teleport implements GraphicalObject
 		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
 		renderMesh( gl );
 		gl.glPopMatrix();
-		move  = (move + 1) % GameView.cellsize;
+		move = (move + 1) % (2 * GameView.cellsize);
 		return true;
 	}
 	

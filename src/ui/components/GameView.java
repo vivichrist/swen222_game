@@ -162,7 +162,12 @@ public class GameView extends GLJPanel
     	// keep moving and turning even if there are no key press or release events
     	keyInput.update();
     	direction = keyInput.getDirection() * DEG;
-    	position.setLocation( keyInput.getNewX(), keyInput.getNewY() );
+    	float newx = keyInput.getNewX(), newy = keyInput.getNewY();
+    	int cellx = (int) ( newx / cellsize ), celly = (int) ( newy / cellsize );
+    	if ( (int) ( position.x / cellsize ) != cellx
+    			|| (int) ( position.y / cellsize ) != celly )
+    		
+    	position.setLocation( newx, keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );
     }
 
