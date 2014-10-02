@@ -21,12 +21,16 @@ public class UsefulItemsCanvas extends Canvas {
 	
 	private void getUsefulItems() {
 		usefulItems = new ArrayList<ImageIcon>();
-		usefulItems.add(new ImageIcon("Resource/torch.png"));
-		usefulItems.add(new ImageIcon("Resource/key.png"));
+		usefulItems.add(new ImageIcon("Resource/11.png"));
+		usefulItems.add(new ImageIcon("Resource/22.png"));
+		usefulItems.add(new ImageIcon("Resource/33.png"));
+		usefulItems.add(new ImageIcon("Resource/44.png"));
+		usefulItems.add(new ImageIcon("Resource/55.png"));
+
 	}
 
 	public void paint(Graphics g) {
-		int gap = 100;
+		int gap = 70;
 		for(int i = 0; i < usefulItems.size(); i++){
 			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, null);
 		}
