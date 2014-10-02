@@ -3,6 +3,7 @@ package world.game;
 import java.awt.Point;
 
 import world.components.Map;
+import world.components.TokenType;
 
 
 
@@ -24,7 +25,7 @@ public class Player implements java.io.Serializable{
 	 * Constructor - Creates a Player with a given name, an empty inventory, and a TokenList of items to collect
 	 * @param name the name of this Player
 	 */
-	public Player(String name, GameBuilder.TokenType type){
+	public Player(String name, TokenType type){
 		this.name = name;
 		toCollect = new TokenList(type);
 		this.inventory = new Inventory();

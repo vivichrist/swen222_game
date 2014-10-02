@@ -35,6 +35,12 @@ public class GameState implements java.io.Serializable{
 		player.move(point);
 	}
 	
+	/*
+	public boolean addPlayer(String name){
+		players.add(new Player(name, TokenType[players.size()]));
+	}
+	*/
+	
 	//TODO: replace with better accessor methods to get Maps for given players - may not need to be in this class at all
 	/**
 	 * Returns the Map representing the first floor in this game world

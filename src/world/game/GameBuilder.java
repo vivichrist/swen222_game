@@ -12,15 +12,11 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import world.components.Map;
+import world.components.TokenType;
 
 
 public class GameBuilder {
 
-	//TODO: Decide how TokenTypes should be graphically represented and update TokenTypes here to match
-	public enum TokenType{
-		CUBE, BALL, CONE, DIAMOND
-	}
-	
 	private List<Player> players;
 	private Map[] floors;
 	private GameState state;
