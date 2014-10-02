@@ -58,9 +58,8 @@ public class Player implements java.io.Serializable{
 	
 	/**
 	 * Returns the current position of this Player
-	 * @param p the Point representing the current position of this Player
 	 */
-	public Point getPosition(Point p){
+	public Point getPosition(){
 		return position;
 	}
 	

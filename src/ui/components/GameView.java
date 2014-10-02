@@ -45,14 +45,17 @@ public class GameView extends GLJPanel
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener	keyInput;
 	private int	staticID = 0;
+	private GameState	state;
 
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
     	super( gc );
     	
     	map = new GameScene(state);
+    	
     	extents = map.mapsize();
-    			
+    	this.state = state;
+    	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
 				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
         keyInput = new GameListener( toDraw, position, direction, map );
@@ -166,7 +169,7 @@ public class GameView extends GLJPanel
     	int cellx = (int) ( newx / cellsize ), celly = (int) ( newy / cellsize );
     	if ( (int) ( position.x / cellsize ) != cellx
     			|| (int) ( position.y / cellsize ) != celly )
-    		
+    		state.movePlayer( state.getPlayer(), new Point( cellx, celly ) );
     	position.setLocation( newx, keyInput.getNewY() );
     	keyInput.setKeyUpdate( false );
     }
