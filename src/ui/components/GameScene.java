@@ -92,11 +92,11 @@ public class GameScene
 					toDraw.add( door );
 					gameElements.put( p, door );
 					break;
-//				case TELRPORT :
-//					Teleport tele = new Teleport( p );
-//					toDraw.add( tele );
-//					gameElements.put( p, tele );
-//					break;
+				case TELEPORT :
+					Teleport tele = new Teleport( p );
+					toDraw.add( tele );
+					gameElements.put( p, tele );
+					break;
 //				case CONE :
 //					Dymanic cone = new Dymanic( CellType.CONE, Behave.ROTATE, p );
 //					toDraw.add( door );
