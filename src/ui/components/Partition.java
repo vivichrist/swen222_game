@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 
 import javax.media.opengl.GL2;
 
+import world.components.CellType;
+
 
 /**
  * @author Vivian Stewart
@@ -20,13 +22,13 @@ public class Partition implements GraphicalObject
 	 * @param position
 	 * @param GameView.cellsize
 	 */
-	public Partition( Type n, Type e, Type s, Type w
+	public Partition( CellType n, CellType e, CellType s, CellType w
 			, Point position )
 	{	// walls connect with other walls or doors
-		north = n == Type.WALL || n == Type.DOOR;
-		east = e == Type.WALL || e == Type.DOOR;
-		west = w == Type.WALL || w == Type.DOOR;
-		south = s == Type.WALL || s == Type.DOOR;
+		north = n == CellType.WALL || n == CellType.DOOR;
+		east = e == CellType.WALL || e == CellType.DOOR;
+		west = w == CellType.WALL || w == CellType.DOOR;
+		south = s == CellType.WALL || s == CellType.DOOR;
 
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );

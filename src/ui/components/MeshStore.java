@@ -2,20 +2,26 @@ package ui.components;
 
 import java.util.HashMap;
 
+import world.components.CellType;
+
 public class MeshStore
 {
 	private static MeshStore instance = null;
-	HashMap<Type, Mesh> meshes = new HashMap<Type, Mesh>();
-	HashMap<Type, String> loading = new HashMap<Type, String>()
+	HashMap<CellType, Mesh> meshes = new HashMap<CellType, Mesh>();
+	HashMap<CellType, String> loading = new HashMap<CellType, String>()
 	{
 		private static final long	serialVersionUID	= 1L;
 		{// add new meshes to load here...
-			put( Type.KEY, "key.obj" );
-			put( Type.DOOR, "door.obj" );
+			put( CellType.KEY, "key.obj" );
+			put( CellType.DOOR, "door.obj" );
+			put( CellType.CONE, "cone.obj" );
+			put( CellType.BALL, "ball.obj" );
+			put( CellType.DIAMOND, "diamond.obj" );
+			put( CellType.TELEPORT, "teleport.obj" );
 		}
 	};
 	private MeshStore(){
-		for ( Type t: loading.keySet() )
+		for ( CellType t: loading.keySet() )
 		{
 			ObjReader read = new ObjReader( "mesh/" +  loading.get( t ) );
 			meshes.put( t, new Mesh( read.getIndices(), read.getVertices() ) );
@@ -28,7 +34,7 @@ public class MeshStore
 		return instance;
 	}
 
-	public Mesh getMesh( Type type )
+	public Mesh getMesh( CellType type )
 	{
 		if ( !meshes.containsKey( type ) )
 			throw new RuntimeException( "There is no mesh for that type." );

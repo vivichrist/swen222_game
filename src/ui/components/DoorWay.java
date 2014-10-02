@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+import world.components.CellType;
+
 /**
  * @author Vivian Stewart
  * The arch above a doorway.
@@ -27,13 +29,13 @@ public class DoorWay implements GraphicalObject
 	 * drawn. (Needs to be scaled)
 	 * @param scale
 	 */
-	public DoorWay( Type north, Type south, Point position )
+	public DoorWay( CellType north, CellType south, Point position )
 	{
-		if ( north == south && north == Type.WALL ) xaligned = false;
+		if ( north == south && north == CellType.WALL ) xaligned = false;
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
 		MeshStore m = MeshStore.instance();
-		Mesh mesh = m.getMesh( Type.DOOR );
+		Mesh mesh = m.getMesh( CellType.DOOR );
 		vertices = mesh.getVertices();
 		indices = mesh.getIndices();
 	}

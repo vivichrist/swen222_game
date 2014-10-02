@@ -7,13 +7,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/**
- * @author Vivian Stewart
- * every type of entity that can occupy one square of the game
- */
-enum Type {
-	EMPTY, WALL, DOOR, CONE, CUBE, DIAMOND, BALL, KEY, OUTOFBOUNDS;
-}
+import world.components.CellType;
+import world.game.GameBuilder;
+import world.game.GameState;
 
 /**
  * @author Vivian Stewart
@@ -21,67 +17,34 @@ enum Type {
  */
 public class GameScene
 {
-	private Type[][] map;
+	private CellType[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
 	private int xlimit, ylimit;
+	private GameState game = new GameBuilder().getGameState();
 	
 	public GameScene()
 	{
-		try
-		{// read in the map
-			Scanner sc = new Scanner( new BufferedInputStream( new FileInputStream( "map.txt" ) ) );
-			// size of map is in the header
-			xlimit = sc.hasNextInt() ? sc.nextInt() : 0;
-			if ( sc.next().indexOf( 'x' ) == -1 || xlimit < 1 )
-			{
-				sc.close();
-				throw new RuntimeException("Format error, header corrupt: columns = " + xlimit + " ?");
-			}
-			ylimit = sc.hasNextInt() ? sc.nextInt() : 0;
-			if ( ylimit < 1 )
-			{
-				sc.close();
-				throw new RuntimeException("Format error, header corrupt: rows = " + ylimit + " ?");
-			}
-			System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
-			map = new Type[ xlimit ][ ylimit ];
-			// map values, a 2D array labelling the viewable scene
-			for ( int j = 0; j < ylimit; ++j )
-			{
-				for ( int i = 0; i < xlimit; ++i )
-				{
-					if ( !sc.hasNext() )
-					{
-						sc.close();
-						throw new RuntimeException("Format error, not enough data");
-					}
-					map[i][j] = Type.values()[ sc.nextInt() ];
-				}
-			}
-			if ( sc.hasNext() )
-			{
-				sc.close();
-				throw new RuntimeException("Format error, overflow of data");
-			}
-			sc.close();
-		} catch ( Exception e )
-		{
-			e.printStackTrace();
-		}
+		// read in the map
+		// size of map is in the header
+		xlimit = game.getMap().getXLimit();
+		ylimit = game.getMap().getYLimit();
+		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
+		map = game.getMap().getCellTypeMap();
+		// map values, a 2D array labelling the viewable scene
 	}
 
-	public void setBit( int x, int y, Type type )
+	public void setBit( int x, int y, CellType type )
 	{
 		if ( x >= xlimit || y >= ylimit )
 			throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		map[ x ][ y ] = type;
 	}
 	
-	public Type queryBit( int x, int y )
+	public CellType queryBit( int x, int y )
 	{
 		if ( x >= xlimit || y >= ylimit )
 		{
-			return Type.OUTOFBOUNDS;
+			return CellType.OUTOFBOUNDS;
 		}
 		return map[ x ][ y ];
 	}
@@ -103,9 +66,9 @@ public class GameScene
 			return false;
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
-		if ( map[x][y] == Type.DOOR )
+		if ( map[x][y] == CellType.DOOR )
 			return ((DoorWay)gameElements.get( new Point( x, y ) )).open();
-		return map[x][y] == Type.WALL;
+		return map[x][y] == CellType.WALL;
 	}
 
 	public void addSurrounds( ArrayList<GraphicalObject> toDraw, int scale )
@@ -114,21 +77,31 @@ public class GameScene
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
-				Type north = j - 1 < 0       ? Type.OUTOFBOUNDS : map[ i ]  [j - 1]
-					, east = i + 1 >= xlimit ? Type.OUTOFBOUNDS : map[i + 1] [ j ]
-					, south = j + 1 >= ylimit ? Type.OUTOFBOUNDS : map[ i ]  [j + 1]
-					, west = i - 1 < 0       ? Type.OUTOFBOUNDS : map[i - 1] [ j ];
+				CellType north = j - 1 < 0   ? CellType.OUTOFBOUNDS : map[ i ]  [j - 1]
+					, east = i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
+					, south = j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]  [j + 1]
+					, west = i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ];
+				Point p =  new Point( i, j );
 				switch( map[i][j] )
 				{
 				case WALL :
-					toDraw.add( new Partition( north, east, south, west
-							, new Point( i, j ) ) );
+					toDraw.add( new Partition( north, east, south, west, p ) );
 					break;
 				case DOOR :
-					DoorWay door = new DoorWay( north, south, new Point( i, j ) );
+					DoorWay door = new DoorWay( north, south, p );
 					toDraw.add( door );
-					gameElements.put( new Point( i, j ), door );
+					gameElements.put( p, door );
 					break;
+//				case TELRPORT :
+//					Teleport tele = new Teleport( p );
+//					toDraw.add( tele );
+//					gameElements.put( p, tele );
+//					break;
+//				case CONE :
+//					Dymanic cone = new Dymanic( CellType.CONE, Behave.ROTATE, p );
+//					toDraw.add( door );
+//					gameElements.put( p, cone );
+//					break;
 				default:
 					break;
 				}

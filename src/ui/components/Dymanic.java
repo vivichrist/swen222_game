@@ -1,9 +1,12 @@
 package ui.components;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.List;
 
 import javax.media.opengl.GL2;
+
+import world.components.CellType;
 
 public class Dymanic implements GraphicalObject
 {
@@ -12,7 +15,7 @@ public class Dymanic implements GraphicalObject
 	private List<float[]> vertices;
 	private List<int[]> indices;
 	
-	public Dymanic( Type type, Behave act, Point2D.Float position )
+	public Dymanic( CellType type, Behave act, Point position )
 	{
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
@@ -36,7 +39,7 @@ public class Dymanic implements GraphicalObject
 	public boolean initialise( GL2 gl )
 	{
 		MeshStore m = MeshStore.instance();
-		Mesh mesh = m.getMesh( Type.CUBE );
+		Mesh mesh = m.getMesh( CellType.CUBE );
 		vertices = mesh.getVertices();
 		indices = mesh.getIndices();
 		return true;
