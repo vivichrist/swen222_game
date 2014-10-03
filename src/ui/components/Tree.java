@@ -104,16 +104,23 @@ public class Tree implements GraphicalObject
 	}
 
 	@Override
-	public boolean makeDisplayList( GL2 gl )
+	public void clean( GL2 gl )
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean initialise( GL2 gl )
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void clean( GL2 gl )
+	public boolean isDynamic()
 	{
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 }
