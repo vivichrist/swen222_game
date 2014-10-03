@@ -37,6 +37,7 @@ import com.jogamp.graph.font.Font;
 import ui.components.GameView;
 import world.game.GameBuilder;
 import world.game.GameState;
+import world.game.Player;
 
 import javax.swing.*;
 
@@ -63,6 +64,7 @@ public class GUI  {
 	JPanel choosePlayerPanel;
 	JPanel chooseNamePanel;
 
+	private Player player;
 	String name;
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
@@ -307,13 +309,14 @@ public class GUI  {
         GameState state = new GameBuilder(name).getGameState();
         gameView = new GameView( glcapabilities, frame, state );
         
+        player = state.getPlayer(name);
         //gameView = new GameView( glcapabilities, frame );
         gameView.setEnabled( true );
         gameView.setVisible( true );
         gameView.setFocusable( true );
         layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
         if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-        southPanel = new SouthPanel();
+        southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
 
