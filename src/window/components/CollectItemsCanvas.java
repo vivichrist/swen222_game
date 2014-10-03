@@ -22,13 +22,13 @@ public class CollectItemsCanvas extends Canvas {
 	
 	private void getCollectItems() {
 		collectItems = new ArrayList<ImageIcon>();
-		ImageIcon temp = new ImageIcon("Resource/0.png");
-		collectItems.add(new ImageIcon("Resource/1.png"));
-		collectItems.add(new ImageIcon("Resource/2.png"));
-		collectItems.add(new ImageIcon("Resource/3.png"));
-		collectItems.add(new ImageIcon("Resource/4.png"));
-		collectItems.add(new ImageIcon("Resource/5.png"));
-		collectItems.add(new ImageIcon("Resource/6.png"));
+		// should get the collected items from a method call;
+		collectItems.add(new ImageIcon("Resource/9.png"));
+		collectItems.add(new ImageIcon("Resource/9.png"));
+		collectItems.add(new ImageIcon("Resource/9.png"));
+		collectItems.add(new ImageIcon("Resource/9.png"));
+		collectItems.add(new ImageIcon("Resource/9.png"));
+		collectItems.add(new ImageIcon("Resource/9.png"));
 
 	}
 
