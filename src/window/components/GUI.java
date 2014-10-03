@@ -281,6 +281,7 @@ public class GUI  {
 				if(button == jbStart){
 					if(!textFieldName.getText().equals("")){
 						name = textFieldName.getText();
+						System.out.println("Player name: " + name);
 						layeredPane.remove(chooseNamePanel);
 						System.out.println(name);
 						layeredPane.remove(backgroundPanel);
