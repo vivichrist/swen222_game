@@ -280,6 +280,7 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStart){
 					if(!textFieldName.getText().equals("")){
+						name = textFieldName.getText();
 						layeredPane.remove(chooseNamePanel);
 						layeredPane.remove(backgroundPanel);
 						startGame();
