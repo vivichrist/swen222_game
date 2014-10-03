@@ -16,6 +16,7 @@ public class Player implements java.io.Serializable{
 	
 	private final String name;
 	private final TokenList toCollect;
+	private final TokenType type;
 	private final Inventory inventory;
 	//TODO: should Players maintain their position? or should the game state? or both?
 	private Map floor;
@@ -27,6 +28,7 @@ public class Player implements java.io.Serializable{
 	 */
 	public Player(String name, TokenType type){
 		this.name = name;
+		this.type = type;
 		toCollect = new TokenList(type);
 		this.inventory = new Inventory();
 	}
@@ -88,6 +90,11 @@ public class Player implements java.io.Serializable{
 		return floor;
 	}
 	
+	/**
+	 * Moves this Player from one Point to another Point
+	 * @param p the Point to move this Player to
+	 * @return true if successfully moved
+	 */
 	public boolean move(Point p){
 		if(floor.movePlayer(this, position, p)){
 			System.out.println(name + " moved from " + position.toString() + " to " + p.toString());
@@ -95,6 +102,14 @@ public class Player implements java.io.Serializable{
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns the type of tokens this Player is collecting
+	 * @return the TokenType for this Player
+	 */
+	public TokenType getType(){
+		return type;
 	}
 
 }
