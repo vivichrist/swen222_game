@@ -67,7 +67,7 @@ public class GameState implements java.io.Serializable{
 	 */
 	public Player getPlayer(String name){
 		for(Player p: players){
-			if(p.getName() == name) return p;
+			if(p.getName().equals(name)) return p;
 		}
 		return null;
 	}
