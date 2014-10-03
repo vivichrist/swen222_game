@@ -282,6 +282,7 @@ public class GUI  {
 					if(!textFieldName.getText().equals("")){
 						name = textFieldName.getText();
 						layeredPane.remove(chooseNamePanel);
+						System.out.println(name);
 						layeredPane.remove(backgroundPanel);
 						startGame();
 						frame.repaint();
