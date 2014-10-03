@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 
+import world.game.Player;
+
 /**
  *
  * @author sunzhih
@@ -36,13 +38,13 @@ public class SouthPanel {
 	private CollectItemsCanvas collectItemsCanvas;
 	private UsefulItemsCanvas usefulItemsCanvas;
 	
-	public SouthPanel() {
+	public SouthPanel(Player player) {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
 		panel.setBackground(Color.LIGHT_GRAY);
-		collectItemsCanvas = new CollectItemsCanvas();
+		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
-		usefulItemsCanvas = new UsefulItemsCanvas();
+		usefulItemsCanvas = new UsefulItemsCanvas(player);
 		panel.add(usefulItemsCanvas, BorderLayout.WEST);
 		panel.repaint();
 	}

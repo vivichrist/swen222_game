@@ -8,12 +8,15 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import world.game.Player;
+
 public class CollectItemsCanvas extends Canvas {
 	
+	private Player player;
 	private ArrayList<ImageIcon> collectItems;
 	
-	
-	public CollectItemsCanvas() {
+	public CollectItemsCanvas(Player player) {
+		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 400, 60);
 		//this.setSize(new Dimension(400, 70));

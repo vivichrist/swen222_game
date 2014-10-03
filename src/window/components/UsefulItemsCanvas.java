@@ -7,18 +7,21 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-public class UsefulItemsCanvas extends Canvas {
+import world.game.Player;
 
+public class UsefulItemsCanvas extends Canvas {
+	
+	private Player player;
 	private ArrayList<ImageIcon> usefulItems;
-	
-	
-	public UsefulItemsCanvas() {
+
+	public UsefulItemsCanvas(Player player) {
+		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 400, 70);
 		//this.setSize(new Dimension(400, 70));
 		getUsefulItems();
 	}
-	
+
 	private void getUsefulItems() {
 		usefulItems = new ArrayList<ImageIcon>();
 		usefulItems.add(new ImageIcon("Resource/11.png"));
