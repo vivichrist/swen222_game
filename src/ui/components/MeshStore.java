@@ -26,6 +26,7 @@ public class MeshStore
 			put( CellType.TICKET, "ticket.obj" );
 			put( CellType.TORCH, "torch.obj" );
 			put( CellType.TELEPORT, "teleport.obj" );
+			put( CellType.PLAYER, "player.obj" );
 		}
 	};
 	private MeshStore(){
@@ -53,6 +54,6 @@ public class MeshStore
 	 */
 	public static void main( String[] args )
 	{
-		
+
 	}
 }
