@@ -61,6 +61,22 @@ public class GameState implements java.io.Serializable{
 	}
 	
 	/**
+	 * Teleports a Player from one floor to another.
+	 * @param p the Player to teleport
+	 * @param floorNumber the number of the floor to teleport to
+	 * @return true if successfully teleported
+	 */
+	public boolean teleport(Player p, int floorNumber){
+		if(floorNumber >= floors.length) return false;
+		else{
+			p.getFloor().removePlayer(p);
+			floors[floorNumber].placePlayer(p.getPosition(), p);
+			p.setFloor(floors[floorNumber]);
+			return true;
+		}
+	}
+	
+	/**
 	 * Returns a Player with a given name
 	 * @param name the name of the Player to return
 	 * @return the Player with the given name - returns null if the name is not found

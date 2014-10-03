@@ -189,6 +189,22 @@ public class Map implements java.io.Serializable{
 	}
 	
 	/**
+	 * Removes a given Player from this Map
+	 * @param player the Player to remove
+	 * @return true if successfully removed
+	 */
+	public boolean removePlayer(Player player){
+		Point playerPos = player.getPosition();
+		if(players.containsKey(playerPos)){
+			players.remove(player.getPosition());
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns the xLimit for this Map
 	 * @return the xLimit for this Map
 	 */
