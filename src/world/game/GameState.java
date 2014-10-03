@@ -60,6 +60,18 @@ public class GameState implements java.io.Serializable{
 		return players.get(0);
 	}
 	
+	/**
+	 * Returns a Player with a given name
+	 * @param name the name of the Player to return
+	 * @return the Player with the given name - returns null if the name is not found
+	 */
+	public Player getPlayer(String name){
+		for(Player p: players){
+			if(p.getName() == name) return p;
+		}
+		return null;
+	}
+	
 	
 	
 	
