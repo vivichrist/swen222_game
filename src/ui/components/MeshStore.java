@@ -17,6 +17,8 @@ public class MeshStore
 			put( CellType.CONE, "cone.obj" );
 			put( CellType.CUBE, "cube.obj" );
 			put( CellType.BALL, "ball.obj" );
+			put( CellType.BED, "bed.obj" );
+			put( CellType.COUCH, "couch.obj" );
 			put( CellType.DIAMOND, "diamond.obj" );
 			put( CellType.CHEST, "chest.obj" );
 			put( CellType.BREIFCASE, "breifcase.obj" );

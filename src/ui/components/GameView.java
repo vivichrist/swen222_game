@@ -95,7 +95,7 @@ public class GameView extends GLJPanel
                 gl2.glShadeModel(GL2.GL_SMOOTH);
             	toDraw.add( new Plane( extents, 0 ) );
             	toDraw.add( new Plane( extents, 2 ) );
-            	map.addSurrounds( toDraw, cellsize );
+            	map.addSurrounds( toDraw );
             	for( GraphicalObject go: toDraw )
             	{
             		if ( go.isDynamic() ) go.initialise( gl2 );

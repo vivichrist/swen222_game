@@ -33,6 +33,7 @@ public class GameScene
 		ylimit = game.getMap().getYLimit();
 		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 		map = game.getMap().getCellTypeMap();
+		System.out.println( "map:\n" + map );
 		// map values, a 2D array labelling the viewable scene
 	}
 
@@ -70,28 +71,33 @@ public class GameScene
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
 		if ( map[x][y] == CellType.DOOR )
-			return ((DoorWay)gameElements.get( new Point( x, y ) )).open();
+			return ((DymanicRender)gameElements.get( new Point( x, y ) ))
+					.collide();
 		return map[x][y] == CellType.WALL;
 	}
 
-	public void addSurrounds( ArrayList<GraphicalObject> toDraw, int scale )
+	public void addSurrounds( ArrayList<GraphicalObject> toDraw )
 	{
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
-				CellType north = j - 1 < 0   ? CellType.OUTOFBOUNDS : map[ i ]  [j - 1]
-					, east = i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
-					, south = j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]  [j + 1]
-					, west = i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ];
+				CellType[] nesw = { 
+					  j - 1 < 0		  ? CellType.OUTOFBOUNDS : map[ i ]   [j - 1]
+					, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
+					, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
+					, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
 				Point p =  new Point( i, j );
 				switch( map[i][j] )
 				{
 				case WALL :
-					toDraw.add( new Partition( north, east, south, west, p ) );
+					toDraw.add( new StaticRender( map[i][j], nesw, p ) );
 					break;
 				case DOOR :
-					DoorWay door = new DoorWay( north, south, p );
+					DymanicRender door = new DymanicRender( map[i][j], Behave.OPEN_CLOSE, p
+							, nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY );
+					StaticRender doorWay = new StaticRender( map[i][j], nesw, p );
+					toDraw.add( doorWay );
 					toDraw.add( door );
 					gameElements.put( p, door );
 					break;
@@ -106,15 +112,15 @@ public class GameScene
 			}
 		}
 		Point p =  new Point( 4, 4 );
-		Dymanic dyn = new Dymanic( CellType.CONE, Behave.ROTATE, p );
+		DymanicRender dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p, false );
 		toDraw.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 4, 8 );
-		dyn = new Dymanic( CellType.BALL, Behave.ROTATE, p );
+		dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p, false );
 		toDraw.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 4, 12 );
-		dyn = new Dymanic( CellType.CUBE, Behave.ROTATE, p );
+		dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p, false );
 		toDraw.add( dyn );
 		gameElements.put( p, dyn );
 	}

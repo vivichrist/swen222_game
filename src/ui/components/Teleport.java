@@ -15,7 +15,6 @@ public class Teleport implements GraphicalObject
 	private List<float[]>	vertices;
 	private List<int[]>		indices;
 	public static int height = (2 * GameView.cellsize);
-	private int				move = 0;
 
 	public Teleport( Point position )
 	{
@@ -83,7 +82,7 @@ public class Teleport implements GraphicalObject
 			}
 			if ( i.length == 2 )
 			{
-				gl.glBegin( GL2.GL_LINE );
+				gl.glBegin( GL2.GL_LINES );
 				gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				//gl.glTranslatef( 0f, 0f, move % height );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
