@@ -120,5 +120,10 @@ public class GameBuilder {
 			}
 		}
 	}
+
+	public int getLevelsBuilding() {
+		// TODO Auto-generated method stub
+		return floors.length;
+	}
 	
 }
