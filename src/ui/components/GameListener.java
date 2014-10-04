@@ -32,8 +32,7 @@ public class GameListener implements KeyListener
 		this.position.setLocation( x, y );
 	}
 
-	public GameListener( ArrayList<GraphicalObject> toDraw,
-			Point2D.Float position, float direction, GameScene map)
+	public GameListener( Point2D.Float position, float direction, GameScene map)
 	{
 		this.position = new Point2D.Float( position.x, position.y );
 		this.direction = direction;

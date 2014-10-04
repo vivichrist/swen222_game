@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -11,14 +12,18 @@ import world.components.CellType;
 public class DymanicRender implements GraphicalObject
 {
 	private Point2D.Float	position;
+	private float[]			meshColor, selectColor;
 	private CellType		type;
-	private Behavior anim;
-	private List<float[]> vertices;
-	private List<int[]> indices;
-	private boolean	xaligned = false;
+	private Behavior		anim;
+	private List<float[]>	vertices;
+	private List<int[]>		indices;
+	private boolean			xaligned = false;
 	
-	public DymanicRender( CellType type, Behave act, Point position, boolean xaligned )
+	public DymanicRender( CellType type, Behave act, Point position
+			, boolean xaligned, Color meshColor )
 	{
+		this.meshColor = meshColor.getRGBColorComponents( null );
+		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
 		switch ( type )
 		{
@@ -28,8 +33,8 @@ public class DymanicRender implements GraphicalObject
 		case DIAMOND: ;
 		case KEY:
 			this.position = new Point2D.Float(
-					  position.x * GameView.cellsize + (GameView.cellsize >> 2)
-					, position.y * GameView.cellsize + (GameView.cellsize >> 2) );
+					  position.x * GameView.cellsize - (GameView.cellsize/2f)
+					, position.y * GameView.cellsize + (GameView.cellsize/2f) );
 			break;
 		default:
 			this.position = new Point2D.Float(
@@ -41,7 +46,7 @@ public class DymanicRender implements GraphicalObject
 		switch ( act )
 		{
 		case ROTATE: anim = new Rotate( 0 ); break;
-		case OPEN_CLOSE: anim = new OpenClose( xaligned  ); break;
+		case OPEN_CLOSE: anim = new OpenClose(); break;
 		default: anim = null; break;
 		}
 	}
@@ -49,7 +54,11 @@ public class DymanicRender implements GraphicalObject
 	@Override
 	public boolean draw( GL2 gl )
 	{
-		//if ( indices == null || vertices == null ) throw new RuntimeException( "indices or vertices not initialised" );
+		if ( indices == null || vertices == null )
+		{
+			System.out.println( "Empty Vertices and Indices:" + type );
+			System.exit( 1 );
+		}
 		gl.glPushMatrix();
 		gl.glTranslatef( position.x, position.y, 0 );
 		if ( !xaligned )
@@ -88,14 +97,16 @@ public class DymanicRender implements GraphicalObject
 			{
 			case 4:
 				gl.glBegin( GL2.GL_QUADS );
-				gl.glColor3f( .0f, .0f, .0f );
+				gl.glColor3fv( selectColor, 0 );
+				//gl.glColor3f( .0f, .0f, .0f );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
 				gl.glVertex3fv( vertices.get( i[3] ), 0 );
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
-				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glColor3fv( meshColor ,0 );
+				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
@@ -104,13 +115,15 @@ public class DymanicRender implements GraphicalObject
 				break;
 			case 3:
 				gl.glBegin( GL2.GL_TRIANGLES );
-				gl.glColor3f( .0f, .0f, .0f );
+				// gl.glColor3f( .0f, .0f, .0f );
+				gl.glColor3fv( selectColor, 0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
-				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
@@ -118,20 +131,23 @@ public class DymanicRender implements GraphicalObject
 				break;
 			case 2:
 				gl.glBegin( GL2.GL_LINES );
-				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glEnd();
 				break;
 			case 1:
 				gl.glBegin( GL2.GL_POINTS );
-				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glEnd();
 				break;
 			default: // n-gons
 				gl.glBegin( GL2.GL_TRIANGLES );
-				gl.glColor3f( .0f, .0f, .0f );
+				gl.glColor3fv( selectColor, 0 );
+				// gl.glColor3f( .0f, .0f, .0f );
 				// make triangle fan out of polygon
 				int end = i.length - 1;
 				for ( int j = 0; j < end - 1; ++j )
@@ -142,7 +158,8 @@ public class DymanicRender implements GraphicalObject
 				}
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
-				gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
+				gl.glColor3fv( meshColor ,0 );
 				for ( int j: i )
 					gl.glVertex3fv( vertices.get( j ), 0 );
 				gl.glEnd();
@@ -157,6 +174,16 @@ public class DymanicRender implements GraphicalObject
 	{
 		
 	}
+
+//	public Color getSelectColor()
+//	{
+//		return new Color( selectColor.getRGB() );
+//	}
+//
+//	public void setSelectColor( Color selectColor )
+//	{
+//		this.selectColor = new Color( selectColor.getRGB() );
+//	}
 
 	@Override
 	public boolean isDynamic()

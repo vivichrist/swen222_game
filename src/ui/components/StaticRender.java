@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
@@ -12,6 +13,7 @@ public class StaticRender implements GraphicalObject
 
 	public final CellType	type;
 	private Point2D.Float	position;
+	private float[]			meshColor, surfaceColor;
 	private boolean	north, east, south, west;
 	
 	/**
@@ -30,6 +32,8 @@ public class StaticRender implements GraphicalObject
 		this.type = type;
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
+		this.meshColor = Color.GRAY.getRGBColorComponents( null );
+		this.surfaceColor = Color.BLACK.getRGBColorComponents( null );
 	}
 	
 	/* (non-Javadoc)
@@ -53,6 +57,7 @@ public class StaticRender implements GraphicalObject
 		{
 		case WALL : drawWall( gl ); break;
 		case DOOR : drawDoorArch( gl ); break;
+		case EMPTY : drawPlane( gl ); break;
 		default:
 			break;
 		}
@@ -69,7 +74,7 @@ public class StaticRender implements GraphicalObject
 	{
 		float wallwidth = GameView.cellsize/3.0f; // wall spacing
 		gl.glBegin( GL2.GL_QUAD_STRIP ); // filled polygons of wall
-		gl.glColor3f( .0f, .0f, .0f );
+		gl.glColor3fv( surfaceColor, 0 );
 		gl.glVertex3f( wallwidth, wallwidth, 0 );
 		gl.glVertex3f( wallwidth, wallwidth, 2 * GameView.cellsize );
 		if ( west )
@@ -110,7 +115,7 @@ public class StaticRender implements GraphicalObject
 		gl.glVertex3f( wallwidth, wallwidth, 2 * GameView.cellsize );
 		gl.glEnd();
 		gl.glBegin( GL2.GL_LINE_LOOP ); // lines around the bottom edges
-		gl.glColor3f( 1.0f, 1.0f, 1.0f );
+		gl.glColor3fv( meshColor, 0 );
 		gl.glVertex3f( wallwidth, wallwidth, 0 );
 		if ( west )
 		{
@@ -184,13 +189,13 @@ public class StaticRender implements GraphicalObject
 		gl.glEnd();
 	}
 	
-	public boolean drawDoorArch( GL2 gl )
+	public void drawDoorArch( GL2 gl )
 	{
 		float doorwidth = GameView.cellsize/3.0f;
 		if ( east && west )
 		{
 			gl.glBegin( GL2.GL_QUAD_STRIP ); // arch of doorway
-			gl.glColor3f( .0f, .0f, .0f );
+			gl.glColor3fv( surfaceColor, 0 );
 			gl.glVertex3f( 0,  doorwidth, 1.5f * GameView.cellsize );
 			gl.glVertex3f( 0,  doorwidth, 2 * GameView.cellsize );
 			gl.glVertex3f( 0,  2 * doorwidth, 1.5f * GameView.cellsize );
@@ -203,7 +208,7 @@ public class StaticRender implements GraphicalObject
 			gl.glVertex3f( 0,  doorwidth, 2 * GameView.cellsize );
 			gl.glEnd();
 			gl.glBegin( GL2.GL_LINE_LOOP ); // side of doorway
-			gl.glColor3f( 1.0f, 1.0f, 1.0f );
+			gl.glColor3fv( meshColor, 0 );
 			gl.glVertex3f( 0,  doorwidth, 1.5f * GameView.cellsize );
 			gl.glVertex3f( 0,  doorwidth, 0 );
 			gl.glVertex3f( 0,  2 * doorwidth, 0 );
@@ -231,7 +236,7 @@ public class StaticRender implements GraphicalObject
 		else
 		{// same order as above but different orientation
 			gl.glBegin( GL2.GL_QUAD_STRIP );
-			gl.glColor3f( .0f, .0f, .0f );
+			gl.glColor3fv( surfaceColor, 0 );
 			gl.glVertex3f(  doorwidth, 0, 1.5f * GameView.cellsize );
 			gl.glVertex3f(  doorwidth, 0, 2 * GameView.cellsize );
 			gl.glVertex3f(  2 * doorwidth, 0, 1.5f * GameView.cellsize );
@@ -244,7 +249,7 @@ public class StaticRender implements GraphicalObject
 			gl.glVertex3f(  doorwidth, 0, 2 * GameView.cellsize );
 			gl.glEnd();
 			gl.glBegin( GL2.GL_LINE_LOOP );
-			gl.glColor3f( 1.0f, 1.0f, 1.0f );
+			gl.glColor3fv( meshColor, 0 );
 			gl.glVertex3f( doorwidth, 0, 1.5f * GameView.cellsize );
 			gl.glVertex3f( doorwidth, 0, 0 );
 			gl.glVertex3f( 2 * doorwidth, 0, 0 );
@@ -269,7 +274,28 @@ public class StaticRender implements GraphicalObject
 			gl.glVertex3f(  doorwidth,  GameView.cellsize, 2 * GameView.cellsize );
 			gl.glEnd();
 		}
-		return false;
+	}
+	
+	private void drawPlane( GL2 gl )
+	{
+		int pad = 2, height = GameView.cellsize * 2;
+		gl.glColor3fv( meshColor, 0 );
+		gl.glBegin( GL2.GL_LINE_LOOP );
+		gl.glVertex3f( pad, pad, 0 );
+		gl.glVertex3f( GameView.cellsize - pad, pad, 0 );
+		gl.glVertex3f( GameView.cellsize - pad, GameView.cellsize - pad, 0 );
+		gl.glVertex3f( pad, GameView.cellsize - pad, 0 );
+		gl.glEnd();
+		gl.glBegin( GL2.GL_LINES );
+		gl.glVertex3f( 0f, 0f, height );
+		gl.glVertex3f( GameView.cellsize, GameView.cellsize, height );
+		gl.glVertex3f( GameView.cellsize, 0f, height );
+		gl.glVertex3f( 0f, GameView.cellsize, height );
+		gl.glEnd();
+		gl.glPointSize( 100f );
+		gl.glBegin( GL2.GL_POINTS );
+		gl.glVertex3f( GameView.cellsize/2f, GameView.cellsize/2f, height );
+		gl.glEnd();
 	}
 
 	/* (non-Javadoc)
