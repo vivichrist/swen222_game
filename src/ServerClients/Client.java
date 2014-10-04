@@ -117,7 +117,6 @@ public class Client extends Thread {
 		byte[] realData = Arrays.copyOf( packet.getData(), 20000 );
 		state.deserialize(realData);
 	}
-	public static void main(String[]arg0){
-	}
+	
 }
 

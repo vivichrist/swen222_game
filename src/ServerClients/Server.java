@@ -3,19 +3,24 @@
  */
 package ServerClients;
 
-import java.io.BufferedReader;
+import java.awt.Point;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
+import ServerClients.UDPpackets.Packet00Login;
+import ServerClients.UDPpackets.Packet01Disconnect;
+import ServerClients.UDPpackets.Packet02Data;
+import ServerClients.UDPpackets.UDPPakcet;
+import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
+import world.game.GameState;
+import world.game.Player;
+import world.game.PlayerMP;
 
 /**
  * @author  Zhaojiang Chang
@@ -24,36 +29,76 @@ import world.game.GameBuilder;
 public class Server extends Thread {
 	private static final int SERVER_PORT = 3000;
 	private DatagramSocket socket;
-	private GameBuilder game;
+	private GameState state;
+	private List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
 
-	//public Server(GameBuilder game){
-	//	this.game = game;
-	public Server(){
+
+	public Server(GameState state){
+		this.state = state;
 		try {
-			this.socket = new DatagramSocket();
+			this.socket = new DatagramSocket(SERVER_PORT);
 		} catch (SocketException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
+
 	public void run(){
 
 		while(true){
-			byte[]data = new byte[1024];
+			
+			byte[]data = new byte[20000];
+			//System.out.println("server >>run()--"+data.length);
+
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try{
+				//System.out.println("server >>run()>>before socket receive packet");
+
 				socket.receive(packet);
+				//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
+
 			}catch(IOException e){
+				//System.out.println("server >>run()>>socket did not receive packet IOException catched");
+
 				e.printStackTrace();
 			}
-			String message = new String(packet.getData());
-			if(message.equalsIgnoreCase("ping")){
-				System.out.println("CLIENT > "+ new String(packet.getData()));
-				sendData("Pong".getBytes(), packet.getAddress(), packet.getPort());
-			}
+			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+			//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
 		}
 
 
 	}
+
+	private void parsePacket(byte[] data, InetAddress address, int port) {
+		System.out.println("server>>parsePacket");
+		String message = new String(data).trim();
+		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0,2));
+		UDPPakcet packet = null;
+		switch (type) {
+		default:
+		case INVALID:
+			break;
+		case LOGIN:
+			System.out.println("Server>parsePacket>LOGIN....");
+			packet = new Packet00Login(data);
+			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+					+ ((Packet00Login) packet).getUsername() + " has connected...");
+			PlayerMP player = new PlayerMP( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port,0);
+			this.addConnection(player, (Packet00Login) packet);
+			break;
+		case DISCONNECT:
+			packet = new Packet01Disconnect(data);
+			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+					+ ((Packet01Disconnect) packet).getUsername() + " has left...");
+			this.removeConnection((Packet01Disconnect) packet);
+			break;
+		case DATA:
+			packet = new Packet02Data(data);
+			this.handleData(((Packet02Data) packet));
+			
+		}
+	}
+
+
 	private void sendData(byte[]data, InetAddress ipAddress, int port){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
 		try {
@@ -64,8 +109,75 @@ public class Server extends Thread {
 		}
 
 	}
-	public static void main(String[]arg0){
-		Server c = new Server();
+	public void sendDataToAllClients(byte[] data) {
+		for (PlayerMP p : connectedPlayers) {
+			sendData(data, p.ipAddress, p.port);
+			System.out.println(p.ipAddress+ "  "+p.port);
+		}
 	}
+	public PlayerMP getPlayerMP(String username) {
+		for (PlayerMP player : this.connectedPlayers) {
+			if (player.getUsername().equals(username)) {
+				System.out.println(player.getPosition().x+"   "+player.getPosition().y);
+				return player;
+			}
+		}
+		return null;
+	}
+	   public int getPlayerMPIndex(String username) {
+	        int index = 0;
+	        for (PlayerMP player : this.connectedPlayers) {
+	            if (player.getUsername().equals(username)) {
+	                break;
+	            }
+	            index++;
+	        }
+	        return index;
+	    }
+	private void handleData(Packet02Data packet) {
+		if (getPlayerMP(packet.getUsername()) != null) {
+			int index = getPlayerMPIndex(packet.getUsername());
+			PlayerMP player = this.connectedPlayers.get(index);
+			player.setPosition(packet.getX(), packet.getY());
+			player.setFloor(packet.getFloor());
+			
+			packet.writeData(this);
+		}
+	}
+	public void addConnection(PlayerMP player, Packet00Login packet) {
+        boolean alreadyConnected = false;
+        for (PlayerMP p : this.connectedPlayers) {
+            if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
+                if (p.ipAddress == null) {
+                    p.ipAddress = player.ipAddress;
+                }
+                if (p.port == -1) {
+                    p.port = player.port;
+                }
+                alreadyConnected = true;
+            } else {
+                // relay to the current connected player that there is a new
+                // player
+                sendData(packet.getData(), p.ipAddress, p.port);
+
+                // relay to the new player that the currently connect player
+                // exists
+                packet = new Packet00Login(p.getUsername(), p.getPosition());
+                sendData(packet.getData(), player.ipAddress, player.port);
+            }
+        }
+        if (!alreadyConnected) {
+            this.connectedPlayers.add(player);
+            for(Player p: connectedPlayers){
+            	System.out.println(p.getUsername()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y);
+            }
+        }
+    }
+
+    public void removeConnection(Packet01Disconnect packet) {
+        this.connectedPlayers.remove(getPlayerMPIndex(packet.getUsername()));
+        packet.writeData(this);
+    }
+
 }
 
