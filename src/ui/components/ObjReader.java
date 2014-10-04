@@ -135,7 +135,7 @@ public class ObjReader
 	 */
 	public static void main( String[] args )
 	{
-		ObjReader ob = new ObjReader( "mesh/cone.obj" );
+		ObjReader ob = new ObjReader( "mesh/door.obj" );
 		for ( Float[] fs: ob.vertices )
 		{	
 			for ( float f: fs )

@@ -1,14 +1,9 @@
 package ui.components;
+import java.awt.Color;
 import java.awt.Point;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
-
 import world.components.CellType;
-import world.game.GameBuilder;
 import world.game.GameState;
 
 /**
@@ -19,7 +14,7 @@ public class GameScene
 {
 	private CellType[][] map;
 	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
-	private int xlimit, ylimit;
+	public final int xlimit, ylimit;
 	private GameState game;
 	
 	public GameScene(GameState state)
@@ -35,22 +30,6 @@ public class GameScene
 		map = game.getMap().getCellTypeMap();
 		System.out.println( "map:\n" + map );
 		// map values, a 2D array labelling the viewable scene
-	}
-
-	public void setBit( int x, int y, CellType type )
-	{
-		if ( x >= xlimit || y >= ylimit )
-			throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
-		map[ x ][ y ] = type;
-	}
-	
-	public CellType queryBit( int x, int y )
-	{
-		if ( x >= xlimit || y >= ylimit )
-		{
-			return CellType.OUTOFBOUNDS;
-		}
-		return map[ x ][ y ];
 	}
 	
 	public Point mapsize()
@@ -76,8 +55,10 @@ public class GameScene
 		return map[x][y] == CellType.WALL;
 	}
 
-	public void addSurrounds( ArrayList<GraphicalObject> toDraw )
+	public void addSurrounds( ArrayList<DymanicRender> dynamicScene, ArrayList<StaticRender> staticScene )
 	{
+		boolean xaligned;
+		Point p;
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
@@ -87,23 +68,28 @@ public class GameScene
 					, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
 					, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
 					, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
-				Point p =  new Point( i, j );
+				p =  new Point( i, j );
+				xaligned = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY;
 				switch( map[i][j] )
 				{
+				case EMPTY :
+					staticScene.add( new StaticRender( map[i][j], nesw, p ) );
+					break;
 				case WALL :
-					toDraw.add( new StaticRender( map[i][j], nesw, p ) );
+					staticScene.add( new StaticRender( map[i][j], nesw, p ) );
 					break;
 				case DOOR :
 					DymanicRender door = new DymanicRender( map[i][j], Behave.OPEN_CLOSE, p
-							, nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY );
+							, xaligned, Color.GREEN );
 					StaticRender doorWay = new StaticRender( map[i][j], nesw, p );
-					toDraw.add( doorWay );
-					toDraw.add( door );
+					staticScene.add( doorWay );
+					dynamicScene.add( door );
 					gameElements.put( p, door );
 					break;
 				case TELEPORT :
-					Teleport tele = new Teleport( p );
-					toDraw.add( tele );
+					DymanicRender tele = new DymanicRender( map[i][j], Behave.NONE, p
+							, xaligned, Color.ORANGE );
+					dynamicScene.add( tele );
 					gameElements.put( p, tele );
 					break;
 				default:
@@ -111,17 +97,45 @@ public class GameScene
 				}
 			}
 		}
-		Point p =  new Point( 4, 4 );
-		DymanicRender dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p, false );
-		toDraw.add( dyn );
+		p =  new Point( 4, 4 );
+		DymanicRender dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p, false, Color.CYAN );
+		dynamicScene.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 4, 8 );
-		dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p, false );
-		toDraw.add( dyn );
+		dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p, false, Color.RED );
+		dynamicScene.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 4, 12 );
-		dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p, false );
-		toDraw.add( dyn );
+		dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p, false, Color.YELLOW );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 4, 16 );
+		dyn = new DymanicRender( CellType.BED, Behave.NONE, p, false, Color.decode( "#667788" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 4, 20 );
+		dyn = new DymanicRender( CellType.TABLE, Behave.NONE, p, false, Color.decode( "#991155" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 8, 20 );
+		dyn = new DymanicRender( CellType.TORCH, Behave.ROTATE, p, false, Color.decode( "#552299" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 12, 20 );
+		dyn = new DymanicRender( CellType.KEY, Behave.ROTATE, p, false, Color.decode( "#ffaa11" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 14, 20 );
+		dyn = new DymanicRender( CellType.COUCH, Behave.NONE, p, false, Color.decode( "#112233" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 16, 20 );
+		dyn = new DymanicRender( CellType.DRAWERS, Behave.NONE, p, false, Color.decode( "#77ff22" ) );
+		dynamicScene.add( dyn );
+		gameElements.put( p, dyn );
+		p =  new Point( 18, 20 );
+		dyn = new DymanicRender( CellType.CHEST, Behave.NONE, p, false, Color.decode( "#dd6655" ) );
+		dynamicScene.add( dyn );
 		gameElements.put( p, dyn );
 	}
 }

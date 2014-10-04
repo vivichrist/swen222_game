@@ -19,6 +19,7 @@ import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +30,8 @@ import java.util.ArrayList;
 @SuppressWarnings( "serial" )
 public class GameView extends GLJPanel
 {
-	private ArrayList<GraphicalObject> toDraw = new ArrayList<GraphicalObject>();
+	private ArrayList<StaticRender> staticScene = new ArrayList<StaticRender>();
+	private ArrayList<DymanicRender> dynamicScene = new ArrayList<DymanicRender>();
 	public static final int		cellsize = 10;
 	public static final double
 					PI2 = Math.PI * 2;
@@ -58,7 +60,7 @@ public class GameView extends GLJPanel
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
 				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
-        keyInput = new GameListener( toDraw, position, direction, map );
+        keyInput = new GameListener( position, direction, map );
         addGLEventListener( new GLEventListener() {
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#reshape(javax.media.opengl.GLAutoDrawable, int, int, int, int)
@@ -81,8 +83,15 @@ public class GameView extends GLJPanel
             public void init( GLAutoDrawable glautodrawable ) {
             	glautodrawable.getGL().setSwapInterval(1);
             	GL2 gl2 = glautodrawable.getGL().getGL2();
-            	gl2.glLineWidth( 3.0f );
+            	gl2.glPointParameterf( GL2.GL_POINT_SIZE_MIN, 1.0f );
+            	gl2.glPointParameterf( GL2.GL_POINT_SIZE_MAX, 100.0f );
+            	FloatBuffer fb = FloatBuffer.wrap( new float[]{0f,0f,0.01f} );
+            	gl2.glPointParameterfv( GL2.GL_POINT_DISTANCE_ATTENUATION, fb );
+            	gl2.glEnable( GL2.GL_POINT_SMOOTH );
             	gl2.glEnable( GL.GL_LINE_SMOOTH );
+            	gl2.glEnable( GL2.GL_POLYGON_SMOOTH );
+            	gl2.glEnable( GL2.GL_POLYGON_OFFSET_LINE );
+            	gl2.glPolygonOffset( 0.1f, 100f );
             	gl2.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
             	gl2.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );
             	// Antialias lines
@@ -93,16 +102,16 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_DEPTH_TEST );
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
-            	toDraw.add( new Plane( extents, 0 ) );
-            	toDraw.add( new Plane( extents, 2 ) );
-            	map.addSurrounds( toDraw );
-            	for( GraphicalObject go: toDraw )
+            	map.addSurrounds( dynamicScene, staticScene );
+            	gl2.glLineWidth( 1.5f );
+            	for( GraphicalObject go: dynamicScene )
             	{
             		if ( go.isDynamic() ) go.initialise( gl2 );
             	}
             	staticID  = gl2.glGenLists( 1 );
             	gl2.glNewList(staticID, GL2.GL_COMPILE);
-            	for( GraphicalObject go: toDraw )
+            	gl2.glLineWidth( 3.0f );
+            	for( GraphicalObject go: staticScene )
             	{
             		if ( !go.isDynamic() ) go.initialise( gl2 );
             	}
@@ -115,7 +124,7 @@ public class GameView extends GLJPanel
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
             	GL2 gl = glautodrawable.getGL().getGL2();
-            	for ( GraphicalObject g: toDraw )
+            	for ( GraphicalObject g: staticScene )
             		g.clean( gl );
             }
 
@@ -180,7 +189,8 @@ public class GameView extends GLJPanel
 	 */
 	private void render( GL2 gl2 )
 	{
-		for( GraphicalObject go: toDraw )
+		gl2.glLineWidth( 1.5f );
+		for( GraphicalObject go: dynamicScene )
         	if ( go.isDynamic() ) go.draw( gl2 );
 		if ( staticID == 0 ) return;
 		gl2.glCallList(staticID );
