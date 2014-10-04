@@ -22,7 +22,7 @@ import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
 import world.game.GameState;
-import world.game.PlayerMP;
+import world.game.MultyPlayer;
 /**
  * @author  Zhaojiang Chang
  * 
@@ -109,7 +109,7 @@ public class Client extends Thread {
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
-		new PlayerMP( packet.getUsername(), packet.getPoint(),null,address, port,0);
+		new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port,packet.getFloor());
 	}
 
 	private void handleData(Packet02Data packet) {

@@ -2,6 +2,7 @@ package ServerClients.UDPpackets;
 
 import java.awt.Point;
 
+import world.components.Map;
 import world.game.GameState;
 import ServerClients.Client;
 import ServerClients.Server;
@@ -11,11 +12,11 @@ public class Packet02Data extends UDPPakcet {
 
     private String username;
     private GameState state;
-    private int floor = 0;
+    private Map floor;
     private Point point;
 
 
-    public Packet02Data(String username, int x, int y,int floor) {
+    public Packet02Data(String username, int x, int y,Map floor) {
         super(02);
         this.username = username;
         this.floor = floor;
@@ -58,11 +59,11 @@ public class Packet02Data extends UDPPakcet {
 	public Point getPosition(){
 		return point;
 	}
-	public int getFloor() {
+	public Map getFloor() {
 		return floor;
 	}
 
-	public void setFloor(int floor) {
+	public void setFloor(Map floor) {
 		this.floor = floor;
 	}
 

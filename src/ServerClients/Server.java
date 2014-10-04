@@ -19,8 +19,8 @@ import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
 import world.game.GameState;
+import world.game.MultyPlayer;
 import world.game.Player;
-import world.game.PlayerMP;
 
 /**
  * @author  Zhaojiang Chang
@@ -30,7 +30,7 @@ public class Server extends Thread {
 	private static final int SERVER_PORT = 3000;
 	private DatagramSocket socket;
 	private GameState state;
-	private List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
+	private List<MultyPlayer> connectedPlayers = new ArrayList<MultyPlayer>();
 
 
 	public Server(GameState state){
@@ -82,7 +82,7 @@ public class Server extends Thread {
 			packet = new Packet00Login(data);
 			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
 					+ ((Packet00Login) packet).getUsername() + " has connected...");
-			PlayerMP player = new PlayerMP( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port,0);
+			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port,null);
 			this.addConnection(player, (Packet00Login) packet);
 			break;
 		case DISCONNECT:
@@ -110,14 +110,14 @@ public class Server extends Thread {
 
 	}
 	public void sendDataToAllClients(byte[] data) {
-		for (PlayerMP p : connectedPlayers) {
+		for (MultyPlayer p : connectedPlayers) {
 			sendData(data, p.ipAddress, p.port);
 			System.out.println(p.ipAddress+ "  "+p.port);
 		}
 	}
-	public PlayerMP getPlayerMP(String username) {
-		for (PlayerMP player : this.connectedPlayers) {
-			if (player.getUsername().equals(username)) {
+	public MultyPlayer getPlayerMP(String username) {
+		for (MultyPlayer player : this.connectedPlayers) {
+			if (player.getName().equals(username)) {
 				System.out.println(player.getPosition().x+"   "+player.getPosition().y);
 				return player;
 			}
@@ -126,8 +126,8 @@ public class Server extends Thread {
 	}
 	   public int getPlayerMPIndex(String username) {
 	        int index = 0;
-	        for (PlayerMP player : this.connectedPlayers) {
-	            if (player.getUsername().equals(username)) {
+	        for (MultyPlayer player : this.connectedPlayers) {
+	            if (player.getName().equals(username)) {
 	                break;
 	            }
 	            index++;
@@ -137,17 +137,17 @@ public class Server extends Thread {
 	private void handleData(Packet02Data packet) {
 		if (getPlayerMP(packet.getUsername()) != null) {
 			int index = getPlayerMPIndex(packet.getUsername());
-			PlayerMP player = this.connectedPlayers.get(index);
-			player.setPosition(packet.getX(), packet.getY());
+			MultyPlayer player = this.connectedPlayers.get(index);
+			player.setPosition(packet.getPosition());
 			player.setFloor(packet.getFloor());
 			
 			packet.writeData(this);
 		}
 	}
-	public void addConnection(PlayerMP player, Packet00Login packet) {
+	public void addConnection(MultyPlayer player, Packet00Login packet) {
         boolean alreadyConnected = false;
-        for (PlayerMP p : this.connectedPlayers) {
-            if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
+        for (MultyPlayer p : this.connectedPlayers) {
+            if (player.getName().equalsIgnoreCase(p.getName())) {
                 if (p.ipAddress == null) {
                     p.ipAddress = player.ipAddress;
                 }
@@ -162,14 +162,14 @@ public class Server extends Thread {
 
                 // relay to the new player that the currently connect player
                 // exists
-                packet = new Packet00Login(p.getUsername(), p.getPosition());
+                packet = new Packet00Login(p.getName(), p.getPosition(), p.getFloor());
                 sendData(packet.getData(), player.ipAddress, player.port);
             }
         }
         if (!alreadyConnected) {
             this.connectedPlayers.add(player);
             for(Player p: connectedPlayers){
-            	System.out.println(p.getUsername()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y);
+            	System.out.println(p.getName()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y);
             }
         }
     }
