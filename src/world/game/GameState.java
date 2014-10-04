@@ -1,6 +1,11 @@
 package world.game;
 
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import world.components.Map;
@@ -13,8 +18,10 @@ import world.components.Map;
 public class GameState implements java.io.Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private final List<Player> players;
-	private final Map[] floors;
+	private  List<Player> players;
+	private  Map[] floors;
+	private GameBuilder game;
+
 	
 	/**
 	 * Constructor - creates the starting game state
@@ -88,7 +95,44 @@ public class GameState implements java.io.Serializable{
 		return null;
 	}
 	
-	
+	public byte[] serialize() {
+		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
+
+		byte[] bytes = new byte[1024];
+		try {
+			//object to bytearray
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(this);
+			bytes = baos.toByteArray();
+			baos.close();
+			out.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return bytes;
+	}
+	public void deserialize(byte[]bytes) {
+		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
+
+		try{
+			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+			ObjectInputStream in = new ObjectInputStream(bais);
+			List<Player> players = new ArrayList<Player>();
+			Map[] floors = new Map[game.getLevelsBuilding()];
+			GameState gameState = new GameState(players, floors);
+			gameState = (GameState) in.readObject();
+			this.players = gameState.players;
+			this.floors = gameState.floors;
+			if(players.size() == 2){
+			System.out.println(players.get(0).getPosition().x);
+			System.out.println(players.get(1).getPosition().x);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 }
