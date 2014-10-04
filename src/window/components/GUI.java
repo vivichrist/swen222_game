@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
@@ -32,9 +33,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import ServerClients.Server;
+
 import com.jogamp.graph.font.Font;
 
 import ui.components.GameView;
+import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.Player;
@@ -54,6 +58,7 @@ public class GUI  {
 
 	private static int width = 800;
 	private static int height = 770;
+	private GameState gameState;//do not change this field for jacky only
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
 	JFrame frame;
@@ -298,8 +303,7 @@ public class GUI  {
 			}
 		});
 	}
-
-
+  
 	protected void startGame() {
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
@@ -319,7 +323,17 @@ public class GUI  {
         southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
+	
+	
+	
+	
 
+	public String getName() {
+		return name;
+	}
+	public GameState getState(){
+		return gameState;
+	}
 	public static void main(String[] args){
 		GUI gui = new GUI();
 	}
