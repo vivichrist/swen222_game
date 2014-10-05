@@ -28,7 +28,7 @@ public class Main {
 	private TokenType TokenType;
 	public void startGame(){
 		GUI gui = new GUI();
-		gui.setName("Jacky");
+		//gui.setName("Jacky");
 		playerName = gui.getName();
 		System.out.println("11 Main: " +playerName +"palyer: "+player.getName());
 
