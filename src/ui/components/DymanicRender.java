@@ -18,30 +18,22 @@ public class DymanicRender implements GraphicalObject
 	private List<float[]>	vertices;
 	private List<int[]>		indices;
 	private boolean			xaligned = false;
-	
+
 	public DymanicRender( CellType type, Behave act, Point position
 			, boolean xaligned, Color meshColor )
 	{
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
-		switch ( type )
-		{
-		case BALL: ;
-		case CONE: ;
-		case CUBE: ;
-		case DIAMOND: ;
-		case KEY:
+		if ( type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+				&& type.ordinal() < CellType.CHEST.ordinal() )
 			this.position = new Point2D.Float(
 					  position.x * GameView.cellsize - (GameView.cellsize/2f)
 					, position.y * GameView.cellsize + (GameView.cellsize/2f) );
-			break;
-		default:
+		else
 			this.position = new Point2D.Float(
 				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
-			break;
-		}
 		this.xaligned = xaligned;
 		switch ( act )
 		{
@@ -72,7 +64,7 @@ public class DymanicRender implements GraphicalObject
 		gl.glPopMatrix();
 		return true;
 	}
-	
+
 	public boolean collide()
 	{
 		if ( anim == null ) return false;
@@ -88,7 +80,7 @@ public class DymanicRender implements GraphicalObject
 		indices = mesh.getIndices();
 		return true;
 	}
-	
+
 	private void renderMesh( GL2 gl )
 	{
 		for ( int[] i: indices )
@@ -172,7 +164,7 @@ public class DymanicRender implements GraphicalObject
 	@Override
 	public void clean( GL2 gl )
 	{
-		
+
 	}
 
 //	public Color getSelectColor()
@@ -196,7 +188,7 @@ public class DymanicRender implements GraphicalObject
 	 */
 	public static void main( String[] args )
 	{
-		
+
 	}
 
 }

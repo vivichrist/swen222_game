@@ -52,9 +52,9 @@ public class GameView extends GLJPanel
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
     	super( gc );
-    	
+
     	map = new GameScene(state);
-    	
+
     	extents = map.mapsize();
     	this.state = state;
     	Point p = state.getPlayer().getPosition();
@@ -103,7 +103,7 @@ public class GameView extends GLJPanel
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
             	map.addSurrounds( dynamicScene, staticScene );
-            	gl2.glLineWidth( 1.5f );
+            	gl2.glLineWidth( 2f );
             	for( GraphicalObject go: dynamicScene )
             	{
             		if ( go.isDynamic() ) go.initialise( gl2 );
@@ -189,7 +189,7 @@ public class GameView extends GLJPanel
 	 */
 	private void render( GL2 gl2 )
 	{
-		gl2.glLineWidth( 1.5f );
+		gl2.glLineWidth( 2f );
 		for( GraphicalObject go: dynamicScene )
         	if ( go.isDynamic() ) go.draw( gl2 );
 		if ( staticID == 0 ) return;
