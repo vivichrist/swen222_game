@@ -31,6 +31,7 @@ public class Server extends Thread {
 	private DatagramSocket socket;
 	private GameState state;
 	private List<MultyPlayer> connectedPlayers = new ArrayList<MultyPlayer>();
+	public boolean serverStart = false;
 
 
 	public Server(GameState state){
@@ -40,10 +41,28 @@ public class Server extends Thread {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		
+		while(connectedPlayers.size()<3){
+			byte[]data = new byte[20000];
+			DatagramPacket packet = new DatagramPacket(data, data.length);
+			try{
+				//System.out.println("server >>run()>>before socket receive packet");
+
+				socket.receive(packet);
+				//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
+
+			}catch(IOException e){
+				//System.out.println("server >>run()>>socket did not receive packet IOException catched");
+
+				e.printStackTrace();
+			}
+			this.parsePacketLogin(packet.getData(), packet.getAddress(), packet.getPort());
+		}
+		
 	}
 
 	public void run(){
-
+		serverStart = true;
 		while(true){
 			
 			byte[]data = new byte[20000];
@@ -98,7 +117,25 @@ public class Server extends Thread {
 		}
 	}
 
-
+	private void parsePacketLogin(byte[] data, InetAddress address, int port) {
+		System.out.println("server>>parsePacketLogin");
+		String message = new String(data).trim();
+		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0,2));
+		UDPPakcet packet = null;
+		switch (type) {
+		default:
+		case INVALID:
+			break;
+		case LOGIN:
+			System.out.println("Server>parsePacket>LOGIN....");
+			packet = new Packet00Login(data);
+			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+					+ ((Packet00Login) packet).getUsername() + " has connected...");
+			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port,null);
+			this.addConnection(player, (Packet00Login) packet);
+			break;
+		}
+	}
 	private void sendData(byte[]data, InetAddress ipAddress, int port){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
 		try {
@@ -173,11 +210,17 @@ public class Server extends Thread {
             }
         }
     }
+	
 
     public void removeConnection(Packet01Disconnect packet) {
         this.connectedPlayers.remove(getPlayerMPIndex(packet.getUsername()));
         packet.writeData(this);
     }
+
+	public List<MultyPlayer> getConnectedPlayers() {
+		return connectedPlayers;
+	}
+    
 
 }
 

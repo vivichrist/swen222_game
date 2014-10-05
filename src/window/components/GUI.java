@@ -70,7 +70,7 @@ public class GUI  {
 	JPanel chooseNamePanel;
 
 	private Player player;
-	String name;
+	public  String name;
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
 
@@ -322,14 +322,6 @@ public class GUI  {
         if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
         southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
-	}
-	
-	
-	
-	
-
-	public String getName() {
-		return name;
 	}
 	public GameState getState(){
 		return gameState;

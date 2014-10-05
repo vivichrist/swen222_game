@@ -82,7 +82,7 @@ public class GameBuilder {
 	 * Builds the collection of "floors" for this game.
 	 * @param floorCount the number of floors to use in this game.
 	 */
-	private void buildFloors(int floorCount){
+	public void buildFloors(int floorCount){
 		floors = new Map[floorCount];
 		for(int i = 0; i < floorCount; i++){
 			//TODO: Create multiple map files and update this method to build each floor from a different map file - currently builds all identical floors
