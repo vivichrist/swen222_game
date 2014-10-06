@@ -26,10 +26,31 @@ public class GameBuilder {
 	 * @param players the list of Players in this game.
 	 */
 	public GameBuilder(List<String> playerNames){
-		players = new ArrayList<Player>();
-		for(int i = 0; i < playerNames.size(); i++){
-			players.add(new Player(playerNames.get(i), TokenType.values()[i]));
+		if(playerNames.size() > 4) System.out.println("This game supports a maximum of 4 players only");
+		else{
+			players = new ArrayList<Player>();
+			for(int i = 0; i < playerNames.size(); i++){
+				players.add(new Player(playerNames.get(i), TokenType.values()[i]));
+			}
+			
+			//getPlayers();
+			buildFloors(players.size());
+			//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
+			//TODO: place StationaryObjects
+			placePlayers();
+			//TODO: place MoveableObjects
+			placePlayerTokens();
+			state = new GameState(players, floors);
 		}
+	}
+	
+	//TODO: remove this constructor once integration testing is complete
+	/**
+	 * Temporary Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
+	 * @param players the list of Players in this game.
+	 */
+	public GameBuilder(String playerName){
+		players.add(new Player(playerName, TokenType.values()[0]));
 		
 		//getPlayers();
 		buildFloors(players.size());
@@ -39,7 +60,6 @@ public class GameBuilder {
 		//TODO: place MoveableObjects
 		placePlayerTokens();
 		state = new GameState(players, floors);
-		//serialize();
 	}
 	
 	/**

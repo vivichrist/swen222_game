@@ -313,8 +313,9 @@ public class GUI  {
         GameState state = new GameBuilder(name).getGameState();
         gameView = new GameView( glcapabilities, frame, state );
         
-        player = state.getPlayer(name);
+        //player = state.getPlayer(name);
         //gameView = new GameView( glcapabilities, frame );
+        
         gameView.setEnabled( true );
         gameView.setVisible( true );
         gameView.setFocusable( true );
