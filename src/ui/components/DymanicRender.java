@@ -20,7 +20,7 @@ public class DymanicRender implements GraphicalObject
 	private boolean			xaligned = false;
 
 	public DymanicRender( CellType type, Behave act, Point position
-			, boolean xaligned, Color meshColor )
+			, boolean xaligned, boolean reversed, Color meshColor )
 	{
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
@@ -39,6 +39,13 @@ public class DymanicRender implements GraphicalObject
 		{
 		case ROTATE: anim = new Rotate( 0 ); break;
 		case OPEN_CLOSE: anim = new OpenClose(); break;
+		case ORIENTATION:
+			if ( type == CellType.BED )
+				anim = new Oreintation( 2, 3, xaligned, reversed );
+			if ( type == CellType.COUCH || type == CellType.TABLE )
+				anim = new Oreintation( 2, 1, xaligned, reversed );
+			else anim = new Oreintation( 1, 1, xaligned, reversed );
+			break;
 		default: anim = null; break;
 		}
 	}
@@ -53,7 +60,7 @@ public class DymanicRender implements GraphicalObject
 		}
 		gl.glPushMatrix();
 		gl.glTranslatef( position.x, position.y, 0 );
-		if ( !xaligned )
+		if ( type == CellType.DOOR && !xaligned )
 		{
 			gl.glTranslatef( GameView.cellsize, 0f, 0f );
 			gl.glRotatef( 90.0f, 0f, 0f, 1.f );

@@ -2,20 +2,22 @@ package ui.components;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-public class GameListener implements KeyListener
+public class GameListener implements KeyListener, MouseListener
 {
 	public float			direction = 0f; // accumulated direction
 	private boolean			keyUpdate = false;
 	private boolean			wKey = false, aKey = false, sKey = false
 						  , dKey = false, ctrl = false;
 	private final float		speed = 0.5f; // forward reverse constant
-	private final float		turnSpeed = 0.05f; // 
+	private final float		turnSpeed = 0.05f; //
 	private Point2D.Float	position; // accumulated position
 	private GameScene	map;
-	
+
 	public void setKeyUpdate( boolean keyUpdate )
 	{
 		this.keyUpdate = keyUpdate;
@@ -38,7 +40,7 @@ public class GameListener implements KeyListener
 		this.direction = direction;
 		this.map = map;
 	}
-	
+
 	public float getNewX()
 	{
 		return position.x;
@@ -54,7 +56,7 @@ public class GameListener implements KeyListener
 
 	@Override
 	public void keyTyped( KeyEvent arg0 ){}
-	
+
 	@Override
 	public void keyReleased( KeyEvent key )
 	{
@@ -74,9 +76,9 @@ public class GameListener implements KeyListener
 		{
 			dKey = false;
 		}
-		if ( !key.isControlDown() ) ctrl = false; 
+		if ( !key.isControlDown() ) ctrl = false;
 	}
-	
+
 	@Override
 	public void keyPressed( KeyEvent key )
 	{
@@ -132,7 +134,7 @@ public class GameListener implements KeyListener
 			{
 				movePos( direction );
 			}
-			
+
 			if ( aKey )
 			{
 				if ( ctrl ) movePos( (float) (direction + 0.5f * Math.PI) );
@@ -145,10 +147,10 @@ public class GameListener implements KeyListener
 			}
 		}
 	}
-	
+
 /**
  * Buffer a new player position to be updated when display() is called.
- * @param backward 
+ * @param backward
  */
 	private void movePos( float dir )
 	{
@@ -172,4 +174,22 @@ public class GameListener implements KeyListener
 		direction += f;
 		direction %= GameView.PI2;
 	}
+
+	@Override
+	public void mouseClicked( MouseEvent e )
+	{
+
+	}
+
+	@Override
+	public void mousePressed( MouseEvent e ){}
+
+	@Override
+	public void mouseReleased( MouseEvent e ){}
+
+	@Override
+	public void mouseEntered( MouseEvent e ){}
+
+	@Override
+	public void mouseExited( MouseEvent e ){}
 }
