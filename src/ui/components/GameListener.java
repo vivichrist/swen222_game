@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,7 @@ public class GameListener implements KeyListener, MouseListener
 	private final float		speed = 0.5f; // forward reverse constant
 	private final float		turnSpeed = 0.05f; //
 	private Point2D.Float	position; // accumulated position
+	private Point			click = null;
 	private GameScene	map;
 
 	public void setKeyUpdate( boolean keyUpdate )
@@ -122,7 +124,7 @@ public class GameListener implements KeyListener, MouseListener
  * but only if keys have not been released and there has not been a recent
  * update.
  */
-	public void update()
+	public Point update()
 	{
 		if ( !keyUpdate )
     	{
@@ -146,6 +148,9 @@ public class GameListener implements KeyListener, MouseListener
 				else addToDirection( turnSpeed );
 			}
 		}
+		Point p = click;
+		click = null;
+		return p;
 	}
 
 /**
@@ -178,7 +183,7 @@ public class GameListener implements KeyListener, MouseListener
 	@Override
 	public void mouseClicked( MouseEvent e )
 	{
-
+		click = e.getPoint();
 	}
 
 	@Override

@@ -59,7 +59,7 @@ public class GameView extends GLJPanel
     	this.state = state;
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
-				(extents.x/ 2.0f) * cellsize, (extents.y / 2.0f) * cellsize );
+				p.x * cellsize, p.y * cellsize );
         keyInput = new GameListener( position, direction, map );
         addGLEventListener( new GLEventListener() {
             /* (non-Javadoc)
@@ -172,14 +172,24 @@ public class GameView extends GLJPanel
     private void update()
 	{
     	// keep moving and turning even if there are no key press or release events
-    	keyInput.update();
+    	Point click = keyInput.update();
+    	if ( click != null )
+    	{
+    		// mouse selection
+    		// TODO: gl.glUnProject(...
+    	}
     	direction = keyInput.getDirection() * DEG;
+    	// new position
     	float newx = keyInput.getNewX(), newy = keyInput.getNewY();
+    	// new cell to occupy?
     	int cellx = (int) ( newx / cellsize ), celly = (int) ( newy / cellsize );
-    	if ( (int) ( position.x / cellsize ) != cellx
+    	if ( 	   (int) ( position.x / cellsize ) != cellx
     			|| (int) ( position.y / cellsize ) != celly )
+    		// tell the game server
     		state.movePlayer( state.getPlayer(), new Point( cellx, celly ) );
+    	// do update
     	position.setLocation( newx, keyInput.getNewY() );
+    	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
     }
 
