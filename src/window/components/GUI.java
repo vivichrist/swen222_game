@@ -97,7 +97,7 @@ public class GUI  {
 		frame.setBackground(Color.LIGHT_GRAY);
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
-
+		frame.setResizable(false);
 //		frame.validate();
 //		frame.repaint();
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -313,7 +313,7 @@ public class GUI  {
         GameState state = new GameBuilder(name).getGameState();
         gameView = new GameView( glcapabilities, frame, state );
         
-        //player = state.getPlayer(name);
+        player = state.getPlayer(name);
         //gameView = new GameView( glcapabilities, frame );
         
         gameView.setEnabled( true );
