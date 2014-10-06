@@ -25,10 +25,12 @@ public class GameBuilder {
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
 	 * @param players the list of Players in this game.
 	 */
-	public GameBuilder(String name){
-		
+	public GameBuilder(List<String> playerNames){
 		players = new ArrayList<Player>();
-		players.add(new Player(name, TokenType.CUBE));
+		for(int i = 0; i < playerNames.size(); i++){
+			players.add(new Player(playerNames.get(i), TokenType.values()[i]));
+		}
+		
 		//getPlayers();
 		buildFloors(players.size());
 		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
