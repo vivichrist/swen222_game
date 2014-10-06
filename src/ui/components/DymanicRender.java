@@ -41,10 +41,10 @@ public class DymanicRender implements GraphicalObject
 		case OPEN_CLOSE: anim = new OpenClose(); break;
 		case ORIENTATION:
 			if ( type == CellType.BED )
-				anim = new Oreintation( 2, 3, xaligned, reversed );
-			if ( type == CellType.COUCH || type == CellType.TABLE )
-				anim = new Oreintation( 2, 1, xaligned, reversed );
-			else anim = new Oreintation( 1, 1, xaligned, reversed );
+				anim = new Orientation( 2, 3, xaligned, reversed );
+			else if ( type == CellType.COUCH || type == CellType.TABLE )
+				anim = new Orientation( 2, 1, xaligned, reversed );
+			else anim = new Orientation( 1, 1, xaligned, reversed );
 			break;
 		default: anim = null; break;
 		}

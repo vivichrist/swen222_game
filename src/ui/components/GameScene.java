@@ -126,7 +126,7 @@ public class GameScene
 		dynamicScene.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 14, 20 );
-		dyn = new DymanicRender( CellType.COUCH, Behave.ORIENTATION, p, false, true, Color.decode( "#112233" ) );
+		dyn = new DymanicRender( CellType.COUCH, Behave.ORIENTATION, p, true, true, Color.decode( "#112233" ) );
 		dynamicScene.add( dyn );
 		gameElements.put( p, dyn );
 		p =  new Point( 16, 20 );
