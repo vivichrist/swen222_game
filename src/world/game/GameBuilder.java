@@ -50,6 +50,7 @@ public class GameBuilder {
 	 * @param players the list of Players in this game.
 	 */
 	public GameBuilder(String playerName){
+		players = new ArrayList<Player>();
 		players.add(new Player(playerName, TokenType.values()[0]));
 		
 		//getPlayers();

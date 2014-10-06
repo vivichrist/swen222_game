@@ -308,7 +308,7 @@ public class GUI  {
 		GLProfile.initSingleton();
     	GLProfile glprofile = GLProfile.getDefault();
         GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-        
+
         //Code added by Kalo
         GameState state = new GameBuilder(name).getGameState();
         gameView = new GameView( glcapabilities, frame, state );
