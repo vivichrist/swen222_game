@@ -34,7 +34,7 @@ public class Server extends Thread {
 	public boolean serverStart = false;
 
 
-	public Server(GameState state){
+	public Server(){
 		this.state = state;
 		try {
 			this.socket = new DatagramSocket(SERVER_PORT);
@@ -210,7 +210,14 @@ public class Server extends Thread {
             }
         }
     }
-	
+	public ArrayList<String> getPlayerNames(){
+		ArrayList<String>names = new ArrayList<String>();
+		for(MultyPlayer p: connectedPlayers){
+			names.add(p.getName());
+			
+		}
+		return names;
+	}
 
     public void removeConnection(Packet01Disconnect packet) {
         this.connectedPlayers.remove(getPlayerMPIndex(packet.getUsername()));

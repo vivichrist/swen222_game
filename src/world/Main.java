@@ -13,6 +13,7 @@ import ServerClients.UDPpackets.Packet00Login;
 import window.components.GUI;
 import world.components.Map;
 import world.components.TokenType;
+import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
 import world.game.Player;
@@ -33,10 +34,13 @@ public class Main {
 		System.out.println("11 Main: " +playerName +"palyer: "+player.getName());
 
 		if(gui.getName()!=null){
-			if (JOptionPane.showConfirmDialog(null, "Do you want to run the server", null, 0) == 0) {
-				createState();
-				server = new Server(state);
-				server.start();
+			if(!server.serverStart){
+				//if (JOptionPane.showConfirmDialog(null, "Do you want to run the server", null, 0) == 0) {
+					createState();
+					server = new Server();
+					server.start();
+					
+				//}
 			}
 			player = new MultyPlayer(playerName, new Point(18,23),
 					null,null, -1,null);
@@ -49,7 +53,10 @@ public class Main {
 				server.addConnection(player, loginPacket);
 			}
 			loginPacket.writeData(client);
-
+			if (server.getConnectedPlayers().size()==2) {
+				GameBuilder builder = new GameBuilder(server.getPlayerNames());
+				builder.getGameState();
+			}
 		}
 	}
 	private void createState(){
