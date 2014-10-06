@@ -55,9 +55,9 @@ public class Packet00Login extends UDPPakcet {
 
 	@Override
 	public void writeData(Client client) {
-		System.out.println("Packet00Login>writeData....");
+		//System.out.println("Packet00Login>writeData....");
 		if(client==null)System.out.println("null client");
-		System.out.println("getdata().toString(): "+getData().length);
+		//System.out.println("getdata().toString(): "+getData().length);
 		//client.start();
 		client.sendData(getData());
 		System.out.println("Packet00Login>writeData.>>client sendData...");
@@ -71,7 +71,7 @@ public class Packet00Login extends UDPPakcet {
 
 	@Override
 	public byte[] getData() {
-		System.out.println("packet00Login>>getData..."+username+"  "+point.x+" "+point.y+ "  "+floor);
+		//System.out.println("packet00Login>>getData..."+username+"  "+point.x+" "+point.y+ "  "+floor);
 		return ("00" + this.username + "," + point.x + "," + point.y + floor).getBytes();
 	}
 

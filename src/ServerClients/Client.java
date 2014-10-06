@@ -32,8 +32,9 @@ public class Client extends Thread {
 	private DatagramSocket socket;
 	private static final int SERVER_PORT = 3000;
 	private GameState state;
-	public Client(GameState state, String ipAddress){
-		this.state = state;
+	//public Client(GameState state, String ipAddress){
+	public Client(String ipAddress){
+		//this.state = state;
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -44,6 +45,7 @@ public class Client extends Thread {
 		}
 	}
 	public void run(){
+		System.out.println("bbb8");
 
 		while(true){
 			//System.out.println("client>>run()");
@@ -77,8 +79,10 @@ public class Client extends Thread {
 		case INVALID:
 			break;
 		case LOGIN:
+			System.out.println("bbb20");
 			packet = new Packet00Login(data);
 			handleLogin((Packet00Login) packet, address, port);
+			System.out.println("bbb21");
 			break;
 		case DISCONNECT:
 			packet = new Packet01Disconnect(data);
@@ -115,8 +119,10 @@ public class Client extends Thread {
 	private void handleData(Packet02Data packet) {
 
 		byte[] realData = Arrays.copyOf( packet.getData(), 20000 );
-		state.deserialize(realData);
+		 state.getState().deserialize(realData);
 	}
-	
+	public void setState(GameState state){
+		this.state = state;
+	}
 }
 
