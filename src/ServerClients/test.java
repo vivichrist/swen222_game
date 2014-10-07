@@ -35,8 +35,7 @@ public class test {
 
 	public void testServerPlayerListName(){
 
-		//String playerName = "Jacky";
-		//String playerName2 = "sisi";
+	
 		MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,23),
 				null,null, -1);
 
