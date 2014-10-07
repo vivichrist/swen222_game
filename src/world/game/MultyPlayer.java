@@ -14,14 +14,14 @@ public class MultyPlayer extends Player {
 	int x;
 	int y;
 	private Point position;
-	private Map floor;
+	//private Map floor;
 
-	public MultyPlayer( String username,Point position, TokenType type,InetAddress ipAddress, int port, Map fl) {
+	public MultyPlayer( String username,Point position, TokenType type,InetAddress ipAddress, int port) {
 		super(username, type);
 		this.ipAddress = ipAddress;
 		this.port = port;
 		this.position = position;
-		this.floor = fl;
+		//this.floor = fl;
 	}
 
 	public Point getPosition() {

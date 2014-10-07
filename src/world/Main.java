@@ -36,7 +36,6 @@ public class Main {
 		if(gui.getName()!=null){
 			if(!server.serverStart){
 				//if (JOptionPane.showConfirmDialog(null, "Do you want to run the server", null, 0) == 0) {
-					createState();
 					server = new Server();
 					server.start();
 					
@@ -44,8 +43,7 @@ public class Main {
 			}
 			player = new MultyPlayer(playerName, new Point(18,23),
 					null,null, -1,null);
-			placePlayer();
-			client = new Client(state, "localhost");
+			client = new Client( "localhost");
 			client.start();
 			System.out.println("Main: " +playerName +"palyer: "+player.getName());
 			Packet00Login loginPacket = new Packet00Login(playerName, player.getPosition(),null);
@@ -59,52 +57,6 @@ public class Main {
 			}
 		}
 	}
-	private void createState(){
-		ArrayList<Player>players = new ArrayList<Player>();
-		Map[] floors = new Map[5];
-		buildFloors(5);
-		placeTokens();
-		state = new GameState(players,floors);
-	}
-	private void buildFloors(int floorCount){
-		floors = new Map[floorCount];
-		for(int i = 0; i < floorCount; i++){
-			//TODO: Create multiple map files and update this method to build each floor from a different map file - currently builds all identical floors
-			floors[i] = new Map(new File("map1.txt"));
-		}
-	}
-
-	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
-	/**
-	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.
-	 * Players are placed at the same Point on different floors.  
-	 */
-	private void placePlayer(){
-		player.setPosition(18,  20);
-		player.setFloor(floors[0]);
-		floors[0].placePlayer(new Point(18, 20), player);
-	}
-
-
-	/**
-	 * Distributes Player's Tokens throughout the game world, choosing floors and Points at random
-	 */
-
-
-	private void placeTokens(){
-		TokenList tokens = new TokenList(TokenType);
-		for(int i = 0; i<5; i++){
-			for(int j = 0; j < tokens.size(); j++){
-				Random random = new Random();
-				// Select a random floor in this world
-				Map randomFloor = floors[random.nextInt(floors.length)];
-				// Place the Token in a random cell on the floor
-				randomFloor.addGameToken(randomFloor.randomEmptyCell(), tokens.get(j));
-				System.out.println(tokens.get(j).toString());
-			}
-		}
-	}
-
 	public static void main(String[] args){
 		Main main = new Main();
 		main.startGame();

@@ -37,6 +37,7 @@ public class GameView extends GLJPanel
 					PI2 = Math.PI * 2;
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
+	public static GameView instance = null;
 	// actual direction before update
 	private float direction = 0.0f;
 	// actual position before update
@@ -167,6 +168,7 @@ public class GameView extends GLJPanel
 
         setSize( 800, 600 );
         setVisible( true );
+        instance = this;
     }
 
     private void update()
