@@ -1,8 +1,8 @@
 package world.components;
 
-public class SuitCase extends Container{
+public class Briefcase extends Container{
 
-	public SuitCase(String name) {
+	public Briefcase(String name) {
 		super(name);
 	}
 
