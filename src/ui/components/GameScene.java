@@ -67,7 +67,7 @@ public class GameScene
 			CellType ct =  gameElements.get( new Point( x, y ) ).getType();
 //			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 //					&& ct.ordinal() < CellType.CHEST.ordinal() )
-//				game.getMap().
+//			TODO:game.getMap()...
 			// System.out.println("collide:" + map[x][y]);
 			return ((DymanicRender)gameElements.get( new Point( x, y ) )).collide();
 		}
@@ -76,6 +76,9 @@ public class GameScene
 
 	public void addSurrounds( ArrayList<DymanicRender> dynamicScene, ArrayList<StaticRender> staticScene )
 	{
+		dynamicScene.clear();
+		staticScene.clear();
+		gameElements.clear();
 		boolean xaligned;
 		Point p;
 		DymanicRender dyn;
@@ -213,7 +216,7 @@ public class GameScene
 //		dynamicScene.add( dyn );
 //		gameElements.put( p, dyn );
 	}
-
+	// TODO: need to test this somehow...
 	private boolean[] findOrientation( Point p )
 	{
 		int dimX = 0, dimY = 0;
@@ -270,7 +273,7 @@ public class GameScene
 		}
 		return result;
 	}
-
+	// don't actually need this as, if the gameElements point is already there
 	private boolean leastXYcorner( CellType[] nesw, CellType type )
 	{
 		return nesw[0] != type && nesw[3] != type;
