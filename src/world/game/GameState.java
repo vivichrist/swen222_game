@@ -113,8 +113,7 @@ public class GameState implements java.io.Serializable{
 		}
 		return bytes;
 	}
-	public void deserialize(byte[]bytes) {
-		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
+	public GameState deserialize(byte[]bytes) {
 
 		try{
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -128,10 +127,12 @@ public class GameState implements java.io.Serializable{
 			if(players.size() == 2){
 			System.out.println(players.get(0).getPosition().x);
 			System.out.println(players.get(1).getPosition().x);
+			return gameState;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	public GameState getState(){
 		return this;

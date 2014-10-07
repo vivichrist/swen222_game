@@ -94,7 +94,7 @@ public class Client extends Thread {
 			break;
 		case DATA:
 			packet = new Packet02Data(data);
-			//handleData((Packet02Data) packet);
+			handleData((Packet02Data) packet);
 
 
 		}
@@ -123,7 +123,7 @@ public class Client extends Thread {
 	private void handleData(Packet02Data packet) {
 
 		byte[] realData = Arrays.copyOf( packet.getData(), 20000 );
-		state.getState().deserialize(realData);
+		state = state.deserialize(realData);
 	}
 		public void setState(GameState state){
 			this.state = state;
