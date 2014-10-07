@@ -16,41 +16,46 @@ public class Packet00Login extends UDPPakcet {
 	private String username;
 	private int x, y;
 	private Point point;
-	private Map floor;
+	//private Map floor;
 
 	public Packet00Login(byte[] data) {
 		super(00);
 		String[] dataArray = readData(data).split(",");
 		this.username = dataArray[0];
+		System.out.println("username = "+ username);
 		this.x = Integer.parseInt(dataArray[1]);
-		this.y = Integer.parseInt(dataArray[2]);
-		point = new Point(x,y);
-		byte[] temp = new byte [data.length-3];
-		for(int i = 3; i<data.length; i++){
-			temp[i-3] = data[i];
-		}
-		ByteArrayInputStream bi = new ByteArrayInputStream(temp);
-		ObjectInputStream oi;
-		try {
-			oi = new ObjectInputStream(bi);
+		System.out.println("x = "+ x);
 
-			floor = (Map) oi.readObject();
-		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.y = Integer.parseInt(dataArray[2]);
+		System.out.println("y = "+ y);
+
+		point = new Point(x,y);
+//		byte[] temp = new byte [data.length-3];
+//		for(int i = 3; i<data.length; i++){
+//			temp[i-3] = data[i];
+//		}
+//		ByteArrayInputStream bi = new ByteArrayInputStream(temp);
+//		ObjectInputStream oi;
+//		try {
+//			oi = new ObjectInputStream(bi);
+//
+//			floor = (Map) oi.readObject();
+//		}
+//		catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//		catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 
 	}
 
-	public Packet00Login(String username, Point point, Map floor) {
+	public Packet00Login(String username, int x, int y) {
 		super(00);
 		this.username = username;
-		this.point = point;
-		this.floor = floor;
+		this.point = new Point(x,y);
+
 	}
 
 	@Override
@@ -72,7 +77,7 @@ public class Packet00Login extends UDPPakcet {
 	@Override
 	public byte[] getData() {
 		//System.out.println("packet00Login>>getData..."+username+"  "+point.x+" "+point.y+ "  "+floor);
-		return ("00" + this.username + "," + point.x + "," + point.y + floor).getBytes();
+		return ("00" + this.username + "," + point.x + "," + point.y).getBytes();
 	}
 
 	public String getUsername() {
@@ -82,8 +87,8 @@ public class Packet00Login extends UDPPakcet {
 	public Point getPoint(){
 		return point;
 	}
-	public Map getFloor(){
-		return floor;
-	}
+//	public Map getFloor(){
+//		return floor;
+//	}
 
 }

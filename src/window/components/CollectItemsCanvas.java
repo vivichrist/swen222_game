@@ -21,27 +21,53 @@ public class CollectItemsCanvas extends Canvas {
 		this.player = player;
 		type = player.getType();
 		this.setBackground(Color.LIGHT_GRAY);
-		this.setBounds(0, 600, 750, 60);
+		this.setBounds(0, 600, 750, 70);
 		//this.setSize(new Dimension(400, 70));
-		collectItems = new ArrayList<ImageIcon>();
+		initialiseItems();
 		getCollectItems();
 	}
 	
-	private void getCollectItems() {
-		// should get the collected items from a method call;
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-		collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
+	private void initialiseItems() {
+		collectItems = new ArrayList<ImageIcon>();
+		for(int i = 0; i < player.getTokenList().size(); i++){
+			String resource = "Resource/" + type.toString() + "/" + type.toString() + " grey" + ".png";
+			collectItems.add(i, new ImageIcon(resource));			
+		}
+	}
+
+	private void getCollectItems() {		
+		for (int i = 0; i < player.getTokenList().size(); i++){
+			if (player.getTokenList().get(i).isFound()){
+				String color = identifyColor(player.getTokenList().get(i).getColor());
+				String resource = "Resource/" + type.toString() + "/" + type.toString() + " " + color + ".png";
+				collectItems.add(i, new ImageIcon(resource));
+			}
+		}
+
+		//collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
 
 	}
 
+	private String identifyColor(Color color) {
+		if (color.equals(Color.BLUE)){
+			return "blue";
+		} else if (color.equals(Color.GREEN)){
+			return "green";
+		} else if (color.equals(Color.MAGENTA)){
+			return "magenta";
+		} else if (color.equals(Color.RED)){
+			return "red";
+		} else if (color.equals(Color.YELLOW)){
+			return "yellow";
+		}
+		return null;
+	}
+
 	public void paint(Graphics g) {
+		getCollectItems();
 		int gap = 65;
 		for(int i = 0; i < collectItems.size(); i++){
-			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 60, null);
+			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
 	}
 
