@@ -198,4 +198,10 @@ public class DymanicRender implements GraphicalObject
 
 	}
 
+	@Override
+	public CellType getType()
+	{
+		return type;
+	}
+
 }

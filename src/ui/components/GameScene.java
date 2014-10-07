@@ -3,7 +3,15 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import world.components.CellType;
+import world.components.GameObject;
+import world.components.GameToken;
+import world.components.Key;
+import world.components.MoveableObject;
+import world.components.StationaryObject;
+import world.components.TokenType;
+import world.components.Torch;
 import world.game.GameState;
 
 /**
@@ -32,6 +40,9 @@ public class GameScene
 		// map values, a 2D array labelling the viewable scene
 	}
 
+	/**
+	 * @return the boundary of the static map
+	 */
 	public Point mapsize()
 	{
 		return new Point( xlimit, ylimit );
@@ -49,9 +60,15 @@ public class GameScene
 			return false;
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
-		if ( map[x][y].ordinal() > CellType.WALL.ordinal() )
+
+		if ( map[x][y].ordinal() > CellType.WALL.ordinal()
+			|| gameElements.get( new Point( x, y ) ) != null )
 		{
-			System.out.println("collide:" + map[x][y]);
+			CellType ct =  gameElements.get( new Point( x, y ) ).getType();
+//			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+//					&& ct.ordinal() < CellType.CHEST.ordinal() )
+//				game.getMap().
+			// System.out.println("collide:" + map[x][y]);
 			return ((DymanicRender)gameElements.get( new Point( x, y ) )).collide();
 		}
 		return map[x][y] == CellType.WALL;
@@ -92,66 +109,85 @@ public class GameScene
 					dynamicScene.add( dyn );
 					gameElements.put( p, dyn );
 					break;
-				case CONE:
-					dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p
-							, false, false, Color.CYAN );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
+				default:
 					break;
-				case BALL:
-					dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p
-							, false, false, Color.RED );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
-					break;
-				case DIAMOND:
-					dyn = new DymanicRender( CellType.DIAMOND, Behave.ROTATE, p
-							, false, false, Color.WHITE );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
-					break;
-				case CUBE:
-					dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p
-							, false, false, Color.YELLOW );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
-					break;
-				case KEY:
-					dyn = new DymanicRender( CellType.KEY, Behave.ROTATE, p
-							, false, false, Color.decode( "#ffaa11" ) );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
-					break;
-				case COUCH:
-					if ( leastXYcorner( nesw, CellType.COUCH ) )
+				}
+				GameObject go = game.getMap().objectAtPoint(p);
+				if ( go instanceof GameToken )
+				{
+					if ( ((GameToken)go).getType() == TokenType.CONE )
 					{
-						boolean[] ori = findOrientation( p );
-						dyn = new DymanicRender( CellType.COUCH, Behave.ORIENTATION, p, ori[0], ori[1], Color.GRAY );
+						dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p
+								, false, false, ((GameToken)go).getColor() );
 						dynamicScene.add( dyn );
 						gameElements.put( p, dyn );
 					}
-					break;
-				case BED:
-					if ( leastXYcorner( nesw, CellType.BED ) )
+					else if ( ((GameToken)go).getType() == TokenType.BALL )
 					{
-						boolean[] ori = findOrientation( p );
-						dyn = new DymanicRender( CellType.BED, Behave.ORIENTATION, p, ori[0], ori[1], Color.GRAY );
+						dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p
+								, false, false, ((GameToken)go).getColor() );
 						dynamicScene.add( dyn );
-						if ( ori[0] )
-						{
-							for ( int x = 0; i < 3; ++i )
-								for ( int y = 0; j < 2; ++j )
-									gameElements.put( new Point( p.x + x, p.y + y ), dyn );
-						}
-						else {
-							for ( int x = 0; i < 2; ++i )
-								for ( int y = 0; j < 3; ++j )
-									gameElements.put( new Point( p.x + x, p.y + y ), dyn );
-						}
+						gameElements.put( p, dyn );
 					}
-					break;
-				default:
-					break;
+					else if ( ((GameToken)go).getType() == TokenType.DIAMOND )
+					{
+						dyn = new DymanicRender( CellType.DIAMOND, Behave.ROTATE, p
+								, false, false, ((GameToken)go).getColor() );
+						dynamicScene.add( dyn );
+						gameElements.put( p, dyn );
+					}
+					else if ( ((GameToken)go).getType() == TokenType.CUBE )
+					{
+						dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p
+								, false, false, ((GameToken)go).getColor() );
+						dynamicScene.add( dyn );
+						gameElements.put( p, dyn );
+					}
+				}
+				if ( go instanceof MoveableObject )
+				{
+					if ( ((MoveableObject)go) instanceof Key )
+					{
+						dyn = new DymanicRender( CellType.KEY, Behave.ROTATE, p
+								, false, false, ((Key)go).getColor() );
+						dynamicScene.add( dyn );
+						gameElements.put( p, dyn );
+					}
+					else if ( ((MoveableObject)go) instanceof Torch )
+					{
+						dyn = new DymanicRender( CellType.TORCH, Behave.ROTATE, p
+								, false, false, Color.decode( "#880088" ) );
+						dynamicScene.add( dyn );
+						gameElements.put( p, dyn );
+					}
+//					{
+//						if ( leastXYcorner( nesw, CellType.COUCH ) )
+//						{
+//							boolean[] ori = findOrientation( p );
+//							dyn = new DymanicRender( CellType.COUCH, Behave.ORIENTATION, p, ori[0], ori[1], Color.GRAY );
+//							dynamicScene.add( dyn );
+//							gameElements.put( p, dyn );
+//						}
+//					}
+
+//					else if ( ((GameToken)go).getType() == TokenType.BED )
+//					if ( leastXYcorner( nesw, CellType.BED ) )
+//					{
+//						boolean[] ori = findOrientation( p );
+//						dyn = new DymanicRender( CellType.BED, Behave.ORIENTATION, p, ori[0], ori[1], Color.GRAY );
+//						dynamicScene.add( dyn );
+//						if ( ori[0] )
+//						{
+//							for ( int x = 0; i < 3; ++i )
+//								for ( int y = 0; j < 2; ++j )
+//									gameElements.put( new Point( p.x + x, p.y + y ), dyn );
+//						}
+//						else {
+//							for ( int x = 0; i < 2; ++i )
+//								for ( int y = 0; j < 3; ++j )
+//									gameElements.put( new Point( p.x + x, p.y + y ), dyn );
+//						}
+//					}
 				}
 				staticScene.add( new StaticRender( CellType.EMPTY, nesw, p ) );
 			}
@@ -238,5 +274,9 @@ public class GameScene
 	private boolean leastXYcorner( CellType[] nesw, CellType type )
 	{
 		return nesw[0] != type && nesw[3] != type;
+	}
+
+	public static void main( String [] args ) {
+
 	}
 }

@@ -1,6 +1,8 @@
 package ui.components;
 import javax.media.opengl.GL2;
 
+import world.components.CellType;
+
 
 /**
  * @author Vivian Stewart
@@ -22,10 +24,11 @@ public interface GraphicalObject
 	 * @return if successful
 	 */
 	public boolean initialise( GL2 gl );
-	/**	
+	/**
 	 * remove the displaylist from video memory when we are finished with it
 	 * @param gl - opengl drawing context
 	 */
 	public void clean( GL2 gl );
 	public boolean isDynamic();
+	public CellType getType();
 }

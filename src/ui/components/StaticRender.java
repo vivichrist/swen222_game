@@ -15,7 +15,7 @@ public class StaticRender implements GraphicalObject
 	private Point2D.Float	position;
 	private float[]			meshColor, surfaceColor;
 	private boolean	north, east, south, west;
-	
+
 	/**
 	 * @param n, @param e, @param s, @param w indicate what this static mesh is
 	 * surrounded by and hence what shape of it.
@@ -35,7 +35,7 @@ public class StaticRender implements GraphicalObject
 		this.meshColor = Color.GRAY.getRGBColorComponents( null );
 		this.surfaceColor = Color.BLACK.getRGBColorComponents( null );
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see ui.components.GraphicalObject#draw(javax.media.opengl.GL2)
 	 */
@@ -168,7 +168,7 @@ public class StaticRender implements GraphicalObject
 		}
 		gl.glEnd();
 		// vertical lines along the z-axis in the corners of the room
-		gl.glBegin( GL2.GL_LINES ); 
+		gl.glBegin( GL2.GL_LINES );
 		if ( west && north )
 		{
 			gl.glVertex3f( wallwidth - 0.1f, wallwidth - 0.1f, 2 * GameView.cellsize );// 1, 1
@@ -188,7 +188,7 @@ public class StaticRender implements GraphicalObject
 		}
 		gl.glEnd();
 	}
-	
+
 	public void drawDoorArch( GL2 gl )
 	{
 		float doorwidth = GameView.cellsize/3.0f;
@@ -275,7 +275,7 @@ public class StaticRender implements GraphicalObject
 			gl.glEnd();
 		}
 	}
-	
+
 	private void drawPlane( GL2 gl )
 	{
 		int pad = 2, height = GameView.cellsize * 2;
@@ -303,7 +303,7 @@ public class StaticRender implements GraphicalObject
 	 */
 	@Override
 	public void clean( GL2 gl ){}
-	
+
 	@Override
 	public boolean isDynamic()
 	{
@@ -317,6 +317,12 @@ public class StaticRender implements GraphicalObject
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public CellType getType()
+	{
+		return type;
 	}
 
 }
