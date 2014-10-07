@@ -18,25 +18,12 @@ public class test {
 	public Server server;
 	private JFrame frame;
 
-	//	@Test
-	//	public void testAddPlayers(){
-	//		System.out.println("aaa");
-	//		String playerName = "Jacky";
-	//		String playerName2 = "sisi";
-	//		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
-	//				null,null, -1,null);
-	//		MultyPlayer player2 = new MultyPlayer(playerName2, new Point(38,23),
-	//				null,null, -1,null);
-	//		checkConnection(player1,player2);
-	//		if(server==null)System.out.println("server==null");
-	//		assertEquals(2,server.getConnectedPlayers().size());
-	//
-	//	}
+
 
 	public void testServerPlayerListName(){
 
 	
-		MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,23),
+		MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,20),
 				null,null, -1);
 
 		System.out.println("b "+ player1.getName());
