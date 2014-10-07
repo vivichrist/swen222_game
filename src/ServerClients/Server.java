@@ -57,7 +57,6 @@ public class Server extends Thread {
 
 		while(true){
 			this.serverStart = 99;
-			System.out.println("bbb100 "+ serverStart);
 			byte[]data = new byte[20000];
 			//System.out.println("server >>run()--"+data.length);
 
@@ -66,6 +65,7 @@ public class Server extends Thread {
 				//System.out.println("server >>run()>>before socket receive packet");
 
 				socket.receive(packet);
+				
 				//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
 
 			}catch(IOException e){
@@ -74,20 +74,8 @@ public class Server extends Thread {
 				e.printStackTrace();
 			}
 			//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
-			if(connectedPlayers.size()==2 && serverOpen==false) {
-				ArrayList<String>names = new ArrayList<String>();
-				for(MultyPlayer p:connectedPlayers ){
-					names.add(p.getName());
-				}
-				System.out.println("new gamebuilder builded");
-				GameBuilder builder =new GameBuilder(names);
-				state = builder.getGameState();
-				Packet02Data pk = new Packet02Data(state);
-				pk.writeData(this);
-				serverOpen  = true;
-				this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-
-			}
+			
+			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 			System.out.println("server class connected players size:  "+connectedPlayers.size());
 		}
 
@@ -100,6 +88,7 @@ public class Server extends Thread {
 		//System.out.println("server>>parsePacket");
 		String message = new String(data).trim();
 		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0,2));
+		System.out.println("server type: "+message.substring(0,2));
 		UDPPakcet packet = null;
 		switch (type) {
 		default:
@@ -112,7 +101,7 @@ public class Server extends Thread {
 					+ ((Packet00Login) packet).getUsername() + " has connected...");
 			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
-			System.out.println("Server>parsePacket>LOGIN finished");
+			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			break;
 		case DISCONNECT:
 			packet = new Packet01Disconnect(data);
@@ -183,17 +172,32 @@ public class Server extends Thread {
 				System.out.println("allrady connected");
 			} else {
 				// relay to the current connected player that there is a new player
-				sendData(packet.getData(), p.ipAddress, p.port);
+				//sendData(packet.getData(), p.ipAddress, p.port);
 
 				// relay to the new player that the currently connect player exists
 				packet = new Packet00Login(p.getName(), p.getPosition().x,p.getPosition().y);
-				sendData(packet.getData(), player.ipAddress, player.port);
+				//sendData(packet.getData(), player.ipAddress, player.port);
 			}
 		}
 		if (!alreadyConnected) {
 			this.connectedPlayers.add(player);
-			for(Player p: connectedPlayers){
-				System.out.println(p.getName()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y);
+			if(connectedPlayers.size()==2 && serverOpen==false) {
+				System.out.println("serverOpen = "+ serverOpen);
+				ArrayList<String>names = new ArrayList<String>();
+				for(MultyPlayer p:connectedPlayers ){
+					names.add(p.getName());
+				}
+				System.out.println("new gamebuilder builded");
+				GameBuilder builder =new GameBuilder(names);
+				state = builder.getGameState();
+				Packet02Data pk = new Packet02Data(state);
+				pk.writeData(this);
+				serverOpen  = true;
+				
+
+			}
+			for(MultyPlayer p: connectedPlayers){
+				System.out.println(p.getName()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y+ " "+p.ipAddress+ "  "+ p.port);
 			}
 		}
 	}
