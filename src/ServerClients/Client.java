@@ -33,8 +33,9 @@ public class Client extends Thread {
 	private static final int SERVER_PORT = 4768;
 	private GameState state;
 	//public Client(GameState state, String ipAddress){
-	public Client(String ipAddress){
-		//this.state = state;
+	public Client(GameState state,String ipAddress){
+		this.state = state;
+
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -45,11 +46,10 @@ public class Client extends Thread {
 		}
 	}
 	public void run(){
-		System.out.println("bbb8");
 
 		while(true){
 			//System.out.println("client>>run()");
-			byte[]data = new byte[20000];
+			byte[]data = new byte[85000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			///System.out.println("client>>run()>>new packet created");
 
@@ -63,10 +63,9 @@ public class Client extends Thread {
 
 			}catch(IOException e){
 				//System.out.println("client>>run()>>IOException catched");
-
 				e.printStackTrace();
 			}
-			//System.out.println("receive data from Server >" +new String(packet.getData()));
+			System.out.println("receive data from Server >" +new String(packet.getData()));
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 
 		}
@@ -76,7 +75,7 @@ public class Client extends Thread {
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
 		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0, 2));
-		System.out.println("client type: "+message.substring(0,2));
+		System.out.println("client type: "+message.substring(0,2)+ "package size: " + message.length());
 
 		UDPPakcet packet = null;
 		switch (type) {
@@ -84,10 +83,9 @@ public class Client extends Thread {
 		case INVALID:
 			break;
 		case LOGIN:
-			System.out.println("bbb20");
 			packet = new Packet00Login(data);
 			handleLogin((Packet00Login) packet, address, port);
-			System.out.println("bbb21");
+
 			break;
 		case DISCONNECT:
 			packet = new Packet01Disconnect(data);
@@ -95,7 +93,7 @@ public class Client extends Thread {
 					+ ((Packet01Disconnect) packet).getUsername() + " has left the game...");
 			break;
 		case DATA:
-			packet = new Packet02Data(data);
+			packet = new Packet02Data(state,data);
 			handleData((Packet02Data) packet);
 
 
@@ -108,7 +106,6 @@ public class Client extends Thread {
 		try {
 			//System.out.println("Client>>sendData>>in try block");
 			socket.send(packet);
-			System.out.println("1");
 			//System.out.println("Client>>sendData>>in try>>socket send packet");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -120,15 +117,26 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
 		new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port);
+
 	}
 
 	private void handleData(Packet02Data packet) {
 
-		byte[] realData = Arrays.copyOf( packet.getData(), 20000 );
-		state = state.deserialize(realData);
-	}
-		public void setState(GameState state){
-			this.state = state;
+		byte[] realData = Arrays.copyOf( packet.getData(), 85000 );
+		
+		byte[]newData =new byte[realData.length-2];
+		
+		int count = 2;
+
+		for(byte b:realData){
+			newData[count-2] = realData[count];
+			count++;
 		}
+		state.deserialize(newData);
+
+	}
+	public void setState(GameState state){
+		this.state = state;
+	}
 }
 
