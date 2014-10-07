@@ -227,4 +227,16 @@ public class Map implements java.io.Serializable{
 	public CellType[][] getCellTypeMap(){
 		return map;
 	}
+	
+	/**
+	 * Returns the GameObject at a given Point on this Map
+	 * @param p the Point to look for GameObjects
+	 * @return the GameObject at the given Point, returns null if empty
+	 */
+	public GameObject objectAtPoint(Point p){
+		if(stationaryObjects.containsKey(p)) return stationaryObjects.get(p);
+		if(moveableObjects.containsKey(p)) return moveableObjects.get(p);
+		if(tokens.containsKey(p)) return tokens.get(p);
+		return null;
+	}
 }

@@ -8,7 +8,7 @@ import java.awt.Color;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class GameToken implements java.io.Serializable{
+public class GameToken implements java.io.Serializable, GameObject {
 
 	private boolean found = false;
 	private final Color color;
