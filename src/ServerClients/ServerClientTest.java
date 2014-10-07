@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -17,80 +18,69 @@ import ServerClients.Server;
 import ServerClients.Client;
 
 public class ServerClientTest {
-	
+
 	private Client client;
 	private Server server;
 	private Component frame;
 	
-//	@Test
-//	public void testAddPlayers(){
-//		System.out.println("aaa");
-//		String playerName = "Jacky";
-//		String playerName2 = "sisi";
-//		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
-//				null,null, -1,null);
-//		MultyPlayer player2 = new MultyPlayer(playerName2, new Point(38,23),
-//				null,null, -1,null);
-//		checkConnection(player1,player2);
-//		if(server==null)System.out.println("server==null");
-//		assertEquals(2,server.getConnectedPlayers().size());
-//			
-//	}
+	
+	public ServerClientTest(){
+		if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
+			server = new Server();
+			server.start();
+		}
+		client = new Client("localhost");
+		client.start();
+		System.out.println("client started");
+	}
+
+	
+	@Test
+	public void testAddPlayers(){
+		System.out.println("aaa");
+		String playerName = "Jacky";
+		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
+				null,null, -1);
+		checkConnection(player1);
+		assertEquals(1,server.getConnectedPlayers().size());
+		server.stop();
+		client.stop();
+	}
+	
+	
 	@Test
 	public void testServerPlayerListName(){
 
 		String playerName = "Jacky";
-		String playerName2 = "sisi";
 		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
-				null,null, -1,null);
-		MultyPlayer player2 = new MultyPlayer(playerName2, new Point(38,23),
-				null,null, -1,null);
-		System.out.println("b "+ player1.getName()+"  "+player2.getName());
+				null,null, -1);
 
-		checkConnection(player1,player2);
-		assertTrue(player1.getName().equals(server.getConnectedPlayers().get(0)));
-		assertTrue(player2.getName().equals(server.getConnectedPlayers().get(1)));
+		System.out.println("b "+ player1.getName());
 
+		checkConnection(player1);
+		//System.out.println("Size array: "+server.getConnectedPlayers().size()+ "player Name: "+server.getConnectedPlayers().get(0).getName());
+		assertTrue(playerName.equals(server.getConnectedPlayers().get(0).getName()));
+		server.stop();
+		client.stop();
 	}
 	
-	private void checkConnection(MultyPlayer player1, MultyPlayer player2){
-        if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
-
-		server = new Server();
-		System.out.println("new server created");
-		server.start();
-        }
-		System.out.println("server started");
-
-		client = new Client("localhost");
-		System.out.println("new client created");
-
-		client.start();
-		System.out.println("client started");
-
-		Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition(),null);
-		Packet00Login loginPacket2 = new Packet00Login(player2.getName(), player2.getPosition(),null);
-
 	
-		if (server != null) {
+	
+	
+	
+	private void checkConnection(MultyPlayer player1){
+
+		Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
+		System.out.println("loginPacket: "+loginPacket.getUsername());
+
+		if (server.serverStart==99) {
 			server.addConnection(player1, loginPacket);
-			server.addConnection(player2, loginPacket2);
+			int size1 = server.getConnectedPlayers().size();
+
+			System.out.println("size1: "+size1);
+
 		}else System.out.println("server== null");
-        if(client!=null)System.out.println("client !=null");
-
 		loginPacket.writeData(client);
-		loginPacket2.writeData(client);
-
-		if (server.getConnectedPlayers().size()==2) {
-			ArrayList<String>names = new ArrayList<String>();
-			names.add(player1.getName());
-			names.add(player2.getName());
-			GameBuilder builder =new GameBuilder(names);
-			builder.getGameState();
-		}
-		
-		System.out.println("size:  "+server.getConnectedPlayers().size());
-
 
 	}
 }
