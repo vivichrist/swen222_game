@@ -34,6 +34,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import ServerClients.Server;
+import ServerClients.test;
 
 import com.jogamp.graph.font.Font;
 
@@ -98,11 +99,11 @@ public class GUI  {
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
-//		frame.validate();
-//		frame.repaint();
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setLayout(null);
-//		frame.setResizable(false);
+		//		frame.validate();
+		//		frame.repaint();
+		//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//		frame.setLayout(null);
+		//		frame.setResizable(false);
 
 		layeredPane = new JLayeredPane();
 		ImageIcon background = new ImageIcon("Resource/Background.png");
@@ -139,11 +140,11 @@ public class GUI  {
 
 		startPanel = new JPanel();
 		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
-//		startPanel.setLayout(null);
-//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
-//		startPanel.setLayout(null);
-		
-		
+		//		startPanel.setLayout(null);
+		//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
+		//		startPanel.setLayout(null);
+
+
 		jbNewGame = new JButton("New Game");
 		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
@@ -152,36 +153,36 @@ public class GUI  {
 		jbNewGame.setOpaque(false);
 		jbNewGame.setContentAreaFilled(false);
 		jbNewGame.setBorderPainted(false);
-		
+
 		jbLoad.setOpaque(false);
 		jbLoad.setContentAreaFilled(false);
 		jbLoad.setBorderPainted(false);
-		
+
 		jbInfo.setOpaque(false);
 		jbInfo.setContentAreaFilled(false);
 		jbInfo.setBorderPainted(false);
-		
+
 		jbExit.setOpaque(false);
 		jbExit.setContentAreaFilled(false);
 		jbExit.setBorderPainted(false);
-//		jbNewGame.setPreferredSize(new Dimension(100, 40));
-//		jbNewGame.setFont((java.awt.Font) new Font("Arial", Font.PLAIN, 40));
-		
-		
-//		jbNewGame.setLayout(null);
-//		jbNewGame.setBounds(350, 200, 30, 30);
-//		jbLoad.setLayout(null);
-//		jbLoad.setBounds(350, 200, 30, 30);
-		
-		
-		
-		
+		//		jbNewGame.setPreferredSize(new Dimension(100, 40));
+		//		jbNewGame.setFont((java.awt.Font) new Font("Arial", Font.PLAIN, 40));
+
+
+		//		jbNewGame.setLayout(null);
+		//		jbNewGame.setBounds(350, 200, 30, 30);
+		//		jbLoad.setLayout(null);
+		//		jbLoad.setBounds(350, 200, 30, 30);
+
+
+
+
 		startPanel.add(jbNewGame);
 		startPanel.add(jbLoad);
 		startPanel.add(jbInfo);
 		startPanel.add(jbExit);
 
-		
+
 		jbNewGame.setOpaque(false);
 		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
@@ -204,11 +205,11 @@ public class GUI  {
 		jbSingle.setOpaque(false);
 		jbSingle.setContentAreaFilled(false);
 		jbSingle.setBorderPainted(false);
-		
+
 		jbMultiple.setOpaque(false);
 		jbMultiple.setContentAreaFilled(false);
 		jbMultiple.setBorderPainted(false);
-		
+
 		choosePlayerPanel.add(jbSingle);
 		choosePlayerPanel.add(jbMultiple);
 
@@ -233,7 +234,7 @@ public class GUI  {
 		jbStart.setOpaque(false);
 		jbStart.setContentAreaFilled(false);
 		jbStart.setBorderPainted(false);
-		
+
 		chooseNamePanel.add(chooseName);
 		chooseNamePanel.add(textFieldName);
 		chooseNamePanel.add(jbStart);
@@ -275,7 +276,31 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					chooseNamePanel();
+					//chooseNamePanel();
+
+
+					GLProfile.initSingleton();
+					GLProfile glprofile = GLProfile.getDefault();
+					GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+
+					//Code added by Kalo
+					//GameState state = new GameBuilder(name).getGameState();
+					gameView = new GameView( glcapabilities, frame, null );
+
+					//player = state.getPlayer(name);
+					//gameView = new GameView( glcapabilities, frame );
+
+					gameView.setEnabled( true );
+					gameView.setVisible( true );
+					gameView.setFocusable( true );
+					layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
+					if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+					southPanel = new SouthPanel(null);
+					layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+
+
+					test t = new test();
+					t.testServerPlayerListName();
 					frame.repaint();
 				}}});
 
@@ -303,25 +328,25 @@ public class GUI  {
 			}
 		});
 	}
-  
+
 	protected void startGame() {
 		GLProfile.initSingleton();
-    	GLProfile glprofile = GLProfile.getDefault();
-        GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+		GLProfile glprofile = GLProfile.getDefault();
+		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 
-        //Code added by Kalo
-        GameState state = new GameBuilder(name).getGameState();
-        gameView = new GameView( glcapabilities, frame, state );
-        
-        player = state.getPlayer(name);
-        //gameView = new GameView( glcapabilities, frame );
-        
-        gameView.setEnabled( true );
-        gameView.setVisible( true );
-        gameView.setFocusable( true );
-        layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
-        if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-        southPanel = new SouthPanel(player);
+		//Code added by Kalo
+		GameState state = new GameBuilder(name).getGameState();
+		gameView = new GameView( glcapabilities, frame, state );
+
+		player = state.getPlayer(name);
+		//gameView = new GameView( glcapabilities, frame );
+
+		gameView.setEnabled( true );
+		gameView.setVisible( true );
+		gameView.setFocusable( true );
+		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
+		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
 	public GameState getState(){

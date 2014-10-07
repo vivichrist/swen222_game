@@ -38,7 +38,7 @@ public class Packet02Data extends UDPPakcet {
 	}
 	public Packet02Data(byte[] data) {
 		super(02);
-    	System.out.println("packet02Data con 2: ");
+    	    System.out.println("packet02Data con 2: ");
 		// TODO Auto-generated constructor stub
 		//state.deserialize(data);
 		String[] dataArray = readData(data).split(",");
@@ -54,11 +54,14 @@ public class Packet02Data extends UDPPakcet {
 	@Override
     public void writeData(Client client) {
         client.sendData(getData());
+        System.out.println("packet02Data con 5: ");
     }
 
     @Override
     public void writeData(Server server) {
+    	System.out.println("packet02Data con 3: ");
         server.sendDataToAllClients(getData());
+        System.out.println("packet02Data con 4: ");
     }
 
     @Override
@@ -74,7 +77,6 @@ public class Packet02Data extends UDPPakcet {
 //    		count++;
 //    	}
 //        return newData;
-    	System.out.println("getData: ");
     	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
 
     }

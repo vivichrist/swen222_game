@@ -42,7 +42,6 @@ public class Packet00Login extends UDPPakcet {
 		//System.out.println("getdata().toString(): "+getData().length);
 		//client.start();
 		client.sendData(getData());
-		System.out.println("Packet00Login>writeData.>>client sendData...");
 
 	}
 
