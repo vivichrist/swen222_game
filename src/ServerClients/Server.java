@@ -10,6 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ServerClients.UDPpackets.Packet00Login;
@@ -38,7 +39,6 @@ public class Server extends Thread {
 
 
 	public Server(){
-		System.out.println("bbb5");
 		connectedPlayers = new ArrayList<MultyPlayer>();
 
 		//this.state = state;
@@ -54,10 +54,10 @@ public class Server extends Thread {
 
 	public void run(){
 
-
+System.out.println("Server Start>>>>>>>>>>");
 		while(true){
 			this.serverStart = 99;
-			byte[]data = new byte[20000];
+			byte[]data = new byte[85000];
 			//System.out.println("server >>run()--"+data.length);
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -74,9 +74,10 @@ public class Server extends Thread {
 				e.printStackTrace();
 			}
 			//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
+			String message = new String (packet.getData());
 			
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-			System.out.println("server class connected players size:  "+connectedPlayers.size());
+			System.out.println("server class connected players size:  "+connectedPlayers.size() + " " +message);
 		}
 
 
@@ -110,14 +111,14 @@ public class Server extends Thread {
 			this.removeConnection((Packet01Disconnect) packet);
 			break;
 		case DATA:
-			packet = new Packet02Data(data);
+			packet = new Packet02Data(state,data);
 			this.handleData(((Packet02Data) packet));
 
 		}
 	}
 
 	private void sendData(byte[]data, InetAddress ipAddress, int port){
-		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
+		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
@@ -151,12 +152,24 @@ public class Server extends Thread {
 		return index;
 	}
 	private void handleData(Packet02Data packet) {
-		if (getPlayerMP(packet.getUsername()) != null) {
-			int index = getPlayerMPIndex(packet.getUsername());
-			MultyPlayer player = this.connectedPlayers.get(index);
-			player.setPosition(packet.getPosition());
-			packet.writeData(this);
+//		if (getPlayerMP(packet.getUsername()) != null) {
+//			int index = getPlayerMPIndex(packet.getUsername());
+//			MultyPlayer player = this.connectedPlayers.get(index);
+//			player.setPosition(packet.getPosition());
+//			packet.writeData(this);
+//		}
+
+		byte[] realData = Arrays.copyOf( packet.getData(), 85000 );
+		
+		byte[]newData =new byte[realData.length-2];
+		
+		int count = 2;
+
+		for(byte b:newData){
+			b = realData[count];
+			count++;
 		}
+		state = state.deserialize(newData);
 	}
 	public void addConnection(MultyPlayer player, Packet00Login packet) {
 		boolean alreadyConnected = false;
@@ -170,13 +183,14 @@ public class Server extends Thread {
 				}
 				alreadyConnected = true;
 				System.out.println("allrady connected");
-			} else {
-				// relay to the current connected player that there is a new player
-				//sendData(packet.getData(), p.ipAddress, p.port);
+			}
+			 else {
+				 //relay to the current connected player that there is a new player
+				sendData(packet.getData(), p.ipAddress, p.port);
 
 				// relay to the new player that the currently connect player exists
-				packet = new Packet00Login(p.getName(), p.getPosition().x,p.getPosition().y);
-				//sendData(packet.getData(), player.ipAddress, player.port);
+				 packet = new Packet00Login(p.getName(), p.getPosition().x,p.getPosition().y);
+				sendData(packet.getData(), player.ipAddress, player.port);
 			}
 		}
 		if (!alreadyConnected) {
@@ -190,7 +204,14 @@ public class Server extends Thread {
 				System.out.println("new gamebuilder builded");
 				GameBuilder builder =new GameBuilder(names);
 				state = builder.getGameState();
-				Packet02Data pk = new Packet02Data(state);
+				byte[] temp =state.serialize(); 
+				byte[]newtemp = new byte[temp.length+2];
+				newtemp[0] = '0';
+				newtemp[1] = '2';
+				for(int i = 2; i<temp.length;i++){
+					newtemp[i] = temp[i-2];
+				}
+				Packet02Data pk = new Packet02Data(state,newtemp);
 				pk.writeData(this);
 				serverOpen  = true;
 				

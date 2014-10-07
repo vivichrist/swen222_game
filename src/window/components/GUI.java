@@ -276,31 +276,9 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					//chooseNamePanel();
-
-
-					GLProfile.initSingleton();
-					GLProfile glprofile = GLProfile.getDefault();
-					GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-
-					//Code added by Kalo
-					//GameState state = new GameBuilder(name).getGameState();
-					gameView = new GameView( glcapabilities, frame, null );
-
-					//player = state.getPlayer(name);
-					//gameView = new GameView( glcapabilities, frame );
-
-					gameView.setEnabled( true );
-					gameView.setVisible( true );
-					gameView.setFocusable( true );
-					layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
-					if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-					southPanel = new SouthPanel(null);
-					layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
-
-
-					test t = new test();
-					t.testServerPlayerListName();
+					chooseNamePanel();
+					//test t = new test();
+					//t.testServerPlayerListName();
 					frame.repaint();
 				}}});
 
