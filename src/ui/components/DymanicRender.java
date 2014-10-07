@@ -28,7 +28,7 @@ public class DymanicRender implements GraphicalObject
 		if ( type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 				&& type.ordinal() < CellType.CHEST.ordinal() )
 			this.position = new Point2D.Float(
-					  position.x * GameView.cellsize - (GameView.cellsize/2f)
+					  position.x * GameView.cellsize + (GameView.cellsize/2f)
 					, position.y * GameView.cellsize + (GameView.cellsize/2f) );
 		else
 			this.position = new Point2D.Float(
@@ -74,7 +74,7 @@ public class DymanicRender implements GraphicalObject
 
 	public boolean collide()
 	{
-		if ( anim == null ) return false;
+		if ( anim == null ) return true;
 		return anim.activate();
 	}
 

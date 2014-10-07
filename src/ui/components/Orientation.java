@@ -6,7 +6,7 @@ import javax.media.opengl.GL2;
 
 public class Orientation implements Behavior
 {
-	private int depth, width; //, count = 0;
+	private int depth, width;//, count = 0;
 	private boolean xaligned, reverse;
 
 	public Orientation(  int width, int depth, boolean xaligned, boolean reverse )
@@ -63,7 +63,7 @@ public class Orientation implements Behavior
 	@Override
 	public boolean activate()
 	{
-		return false;
+		return true;
 	}
 
 }
