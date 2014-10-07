@@ -76,6 +76,8 @@ public class Client extends Thread {
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
 		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0, 2));
+		System.out.println("client type: "+message.substring(0,2));
+
 		UDPPakcet packet = null;
 		switch (type) {
 		default:
