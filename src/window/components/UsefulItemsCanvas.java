@@ -17,13 +17,13 @@ public class UsefulItemsCanvas extends Canvas {
 	public UsefulItemsCanvas(Player player) {
 		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
-		this.setBounds(0, 600, 400, 70);
+		this.setBounds(0, 600, 750, 70);
 		//this.setSize(new Dimension(400, 70));
+		usefulItems = new ArrayList<ImageIcon>();
 		getUsefulItems();
 	}
 
 	private void getUsefulItems() {
-		usefulItems = new ArrayList<ImageIcon>();
 		usefulItems.add(new ImageIcon("Resource/11.png"));
 		usefulItems.add(new ImageIcon("Resource/22.png"));
 		usefulItems.add(new ImageIcon("Resource/33.png"));

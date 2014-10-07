@@ -133,6 +133,11 @@ public class GameState implements java.io.Serializable{
 			e.printStackTrace();
 		}
 	}
+	public GameState getState(){
+		return this;
+	}
+
+	
 	
 	
 }
