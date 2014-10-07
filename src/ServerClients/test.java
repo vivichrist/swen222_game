@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import ServerClients.UDPpackets.Packet00Login;
 import world.game.GameBuilder;
+import world.game.GameState;
 import world.game.MultyPlayer;
 import ServerClients.Server;
 import ServerClients.Client;
@@ -17,16 +18,16 @@ public class test {
 	public Client client;
 	public Server server;
 	private JFrame frame;
+	public GameState state;
 
 
 
 	public void testServerPlayerListName(){
 
-	
+		state = new GameState(null, null);
 		MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,20),
 				null,null, -1);
 
-		System.out.println("b "+ player1.getName());
 
 		checkConnection(player1);
 
@@ -37,34 +38,21 @@ public class test {
 			server = new Server();
 			server.start();
 		}
+		else{
+			client = new Client(state,"localhost");
+			client.start();
 
-		client = new Client("localhost");
+			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
 
-		client.start();
-		System.out.println("client started");
+			if (server.serverStart==99) {
+				server.addConnection(player1, loginPacket);
+				int size1 = server.getConnectedPlayers().size();
 
-		Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
-	//	System.out.println("loginPacket: "+loginPacket.getUsername());
+				System.out.println("size1: "+size1);
 
-
-
-	//	System.out.println("serverStart: "+server.serverStart);
-		if (server.serverStart==99) {
-			server.addConnection(player1, loginPacket);
-			int size1 = server.getConnectedPlayers().size();
-
-			System.out.println("size1: "+size1);
-
-		}else System.out.println("server== null");
-		loginPacket.writeData(client);
-
-//		if (server.getConnectedPlayers().size()==2) {
-//			ArrayList<String>names = new ArrayList<String>();
-//			names.add(player1.getName());
-//			GameBuilder builder =new GameBuilder(names);
-//			client.setState( builder.getGameState());
-//		}
-
+			}else System.out.println("server== null");
+			loginPacket.writeData(client);
+		}
 
 
 	}
