@@ -42,4 +42,21 @@ public class Inventory implements java.io.Serializable{
 		return inventory.remove(item);
 	}
 	
+	/**
+	 * Returns the MoveableObject at a given index
+	 * @param index the index to retrieve the MoveableObject from
+	 * @return the MoveableObject at index
+	 */
+	public MoveableObject get(int index){
+		return inventory.get(index);
+	}
+	
+	/**
+	 * Returns the size of this Inventory
+	 * @return the size of this Inventory
+	 */
+	public int size(){
+		return inventory.size();
+	}
+	
 }
