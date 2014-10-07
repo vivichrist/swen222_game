@@ -33,9 +33,9 @@ public class UsefulItemsCanvas extends Canvas {
 	}
 
 	public void paint(Graphics g) {
-		int gap = 70;
+		int gap = 65;
 		for(int i = 0; i < usefulItems.size(); i++){
-			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, null);
+			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
 	}
 
