@@ -111,5 +111,13 @@ public class Player implements java.io.Serializable{
 	public TokenType getType(){
 		return type;
 	}
+	
+	/**
+	 * Returns this Player's Inventory
+	 * @return this Player's Inventory
+	 */
+	public Inventory getInventory(){
+		return inventory;
+	}
 
 }
