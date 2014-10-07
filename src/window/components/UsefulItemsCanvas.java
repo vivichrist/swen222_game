@@ -24,18 +24,17 @@ public class UsefulItemsCanvas extends Canvas {
 	}
 
 	private void getUsefulItems() {
-		usefulItems.add(new ImageIcon("Resource/11.png"));
-		usefulItems.add(new ImageIcon("Resource/22.png"));
-		usefulItems.add(new ImageIcon("Resource/33.png"));
-		usefulItems.add(new ImageIcon("Resource/44.png"));
-		usefulItems.add(new ImageIcon("Resource/55.png"));
-
+		for (int i = 0; i < player.getInventory().size(); i++){
+				String resource = "Resource/inventory/" + player.getInventory().get(i).toString() + ".png";
+				usefulItems.add(new ImageIcon(resource));
+		}
 	}
 
 	public void paint(Graphics g) {
-		int gap = 70;
+		getUsefulItems();
+		int gap = 65;
 		for(int i = 0; i < usefulItems.size(); i++){
-			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, null);
+			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
 	}
 

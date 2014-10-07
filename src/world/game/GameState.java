@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import world.components.GameToken;
 import world.components.Map;
 
 /**
@@ -79,6 +80,22 @@ public class GameState implements java.io.Serializable{
 			p.getFloor().removePlayer(p);
 			floors[floorNumber].placePlayer(p.getPosition(), p);
 			p.setFloor(floors[floorNumber]);
+			return true;
+		}
+	}
+	
+	/**
+	 * Sets the status of a given Player's GameToken to found
+	 * @param p the Player whose GameToken has been found
+	 * @param token the GameToken that has been found
+	 * @return true if successfully set to found
+	 */
+	public boolean foundToken(Player p, GameToken token){
+		if(!players.contains(p)){
+			return false;
+		}
+		else{
+			p.getTokenList().get(token).setFound(true);
 			return true;
 		}
 	}
