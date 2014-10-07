@@ -31,7 +31,7 @@ public class Server extends Thread {
 	private DatagramSocket socket;
 	public Client client;
 	//private GameState state;
-	private List<MultyPlayer> connectedPlayers = new ArrayList<MultyPlayer>();
+	private List<MultyPlayer> connectedPlayers;
 	private GameState state;
 	private boolean serverOpen = false;
 	public static int serverStart = 0;
@@ -39,6 +39,7 @@ public class Server extends Thread {
 
 	public Server(){
 		System.out.println("bbb5");
+		connectedPlayers = new ArrayList<MultyPlayer>();
 
 		//this.state = state;
 		try {
@@ -72,7 +73,6 @@ public class Server extends Thread {
 
 				e.printStackTrace();
 			}
-			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 			//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
 			if(connectedPlayers.size()==2 && serverOpen==false) {
 				ArrayList<String>names = new ArrayList<String>();
@@ -85,6 +85,7 @@ public class Server extends Thread {
 				Packet02Data pk = new Packet02Data(state);
 				pk.writeData(this);
 				serverOpen  = true;
+				this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 
 			}
 			System.out.println("server class connected players size:  "+connectedPlayers.size());
@@ -165,8 +166,6 @@ public class Server extends Thread {
 			int index = getPlayerMPIndex(packet.getUsername());
 			MultyPlayer player = this.connectedPlayers.get(index);
 			player.setPosition(packet.getPosition());
-			player.setFloor(packet.getFloor());
-
 			packet.writeData(this);
 		}
 	}

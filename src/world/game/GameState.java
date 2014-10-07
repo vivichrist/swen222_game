@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import world.components.GameToken;
 import world.components.Map;
 
 /**
@@ -84,6 +85,22 @@ public class GameState implements java.io.Serializable{
 	}
 	
 	/**
+	 * Sets the status of a given Player's GameToken to found
+	 * @param p the Player whose GameToken has been found
+	 * @param token the GameToken that has been found
+	 * @return true if successfully set to found
+	 */
+	public boolean foundToken(Player p, GameToken token){
+		if(!players.contains(p)){
+			return false;
+		}
+		else{
+			p.getTokenList().get(token).setFound(true);
+			return true;
+		}
+	}
+	
+	/**
 	 * Returns a Player with a given name
 	 * @param name the name of the Player to return
 	 * @return the Player with the given name - returns null if the name is not found
@@ -113,8 +130,7 @@ public class GameState implements java.io.Serializable{
 		}
 		return bytes;
 	}
-	public void deserialize(byte[]bytes) {
-		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
+	public GameState deserialize(byte[]bytes) {
 
 		try{
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -128,10 +144,12 @@ public class GameState implements java.io.Serializable{
 			if(players.size() == 2){
 			System.out.println(players.get(0).getPosition().x);
 			System.out.println(players.get(1).getPosition().x);
+			return gameState;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	public GameState getState(){
 		return this;

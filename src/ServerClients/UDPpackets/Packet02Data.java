@@ -12,18 +12,21 @@ public class Packet02Data extends UDPPakcet {
 
     private String username;
     private GameState state;
-    private Map floor;
     private Point point;
-    private byte[] data;
+    private int x;
+    private int y;
 
 
-//    public Packet02Data( String username, int x, int y,Map floor) {
-//        super(02);
-//        this.username = username;
-//        this.floor = floor;
-//        this.point = new Point(x,y);
-//
-//    }
+    public Packet02Data( String username, int x, int y) {
+        super(02);
+    	System.out.println("packet02Data con 1: ");
+
+        this.username = username;
+        this.x = x;
+        this.y = y;
+        this.point = new Point(x,y);
+
+    }
 
 
 
@@ -35,9 +38,17 @@ public class Packet02Data extends UDPPakcet {
 	}
 	public Packet02Data(byte[] data) {
 		super(02);
+    	System.out.println("packet02Data con 2: ");
 		// TODO Auto-generated constructor stub
 		//state.deserialize(data);
-		this.data = data;
+		String[] dataArray = readData(data).split(",");
+        this.username = dataArray[0];
+        this.x = Integer.parseInt(dataArray[1]);
+        this.y = Integer.parseInt(dataArray[2]);
+        point = new Point(x,y);
+       
+		
+		
 	}
 
 	@Override
@@ -52,17 +63,19 @@ public class Packet02Data extends UDPPakcet {
 
     @Override
     public byte[] getData() {
-    	byte[]temp = state.serialize();
-    	byte[]newData =new byte[2+temp.length];
-    	newData[0] = '0';
-    	newData[1] = '2';
-    	int count = 2;
-
-    	for(byte b:temp){
-    		newData[count] = b;
-    		count++;
-    	}
-        return newData;
+//    	byte[]temp = state.serialize();
+//    	byte[]newData =new byte[2+temp.length];
+//    	newData[0] = '0';
+//    	newData[1] = '2';
+//    	int count = 2;
+//
+//    	for(byte b:temp){
+//    		newData[count] = b;
+//    		count++;
+//    	}
+//        return newData;
+    	System.out.println("getData: ");
+    	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
 
     }
 
@@ -77,13 +90,7 @@ public class Packet02Data extends UDPPakcet {
 	public Point getPosition(){
 		return point;
 	}
-	public Map getFloor() {
-		return floor;
-	}
 
-	public void setFloor(Map floor) {
-		this.floor = floor;
-	}
 
 
 

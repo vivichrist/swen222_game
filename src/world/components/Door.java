@@ -10,6 +10,7 @@ public class Door implements java.io.Serializable{
 	private boolean lockable;
 	private boolean locked = false;
 	private String description = null;
+	private boolean open;
 	
 	/**
 	 * Constructor - creates a Door (unlocked by default)
@@ -77,5 +78,17 @@ public class Door implements java.io.Serializable{
 		this.description = description;
 	}
 	
-
+	/**
+	 * Sets the state of this Door to open
+	 */
+	public void open(){
+		open = true;
+	}
+	
+	/**
+	 * Sets the state of this Door to closed
+	 */
+	public void close(){
+		open = false;
+	}
 }

@@ -43,9 +43,6 @@ public class CollectItemsCanvas extends Canvas {
 				collectItems.add(i, new ImageIcon(resource));
 			}
 		}
-
-		//collectItems.add(new ImageIcon("Resource/diamond/diamond grey.png"));
-
 	}
 
 	private String identifyColor(Color color) {
@@ -69,6 +66,7 @@ public class CollectItemsCanvas extends Canvas {
 		for(int i = 0; i < collectItems.size(); i++){
 			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
+		//g.drawRect(0, 600, 750, 70);
 	}
 
 }

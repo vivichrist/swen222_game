@@ -1,11 +1,6 @@
 package ServerClients.UDPpackets;
 
 import java.awt.Point;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
-import world.components.Map;
 import ServerClients.Client;
 import ServerClients.Server;
 
@@ -30,24 +25,6 @@ public class Packet00Login extends UDPPakcet {
 		System.out.println("y = "+ y);
 
 		point = new Point(x,y);
-//		byte[] temp = new byte [data.length-3];
-//		for(int i = 3; i<data.length; i++){
-//			temp[i-3] = data[i];
-//		}
-//		ByteArrayInputStream bi = new ByteArrayInputStream(temp);
-//		ObjectInputStream oi;
-//		try {
-//			oi = new ObjectInputStream(bi);
-//
-//			floor = (Map) oi.readObject();
-//		}
-//		catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//		catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
 
 	}
 
