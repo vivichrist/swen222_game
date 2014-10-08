@@ -208,8 +208,15 @@ System.out.println("Server Start>>>>>>>>>>");
 //				for(int i = 2; i<temp.length;i++){
 //					newtemp[i] = temp[i-2];
 //				}
+				
+				GameState s = state.deserialize(temp);
+				for(int i = 0; i< s.getPlayers.size();i++){
+					Mu
+					System.out.println(s.getPlayers().get(i).getName()+ "  "+ );
+
+				}
 				Packet02Data pk = new Packet02Data(state,temp);
-				pk.writeData(this);
+				//pk.writeData(this);
 				serverOpen  = true;
 				
 
