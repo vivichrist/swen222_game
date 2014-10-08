@@ -112,8 +112,12 @@ public class GameState implements java.io.Serializable{
 		}
 		else{
 			//p.getFloor().removeGameToken(p.getPosition(), token);
-			p.getTokenList().get(token).setFound(true);
+			p.getTokenList().tokenFound(token);
 			controller.refreshTokenPanel();
+			if(p.getTokenList().collectedAll()){
+				//TODO: update action here to go in to win state checking or something
+				System.out.println("All Tokens Collected!");
+			}
 			return true;
 		}
 	}
