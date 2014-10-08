@@ -72,7 +72,7 @@ public class Client extends Thread {
 				//System.out.println("client>>run()>>IOException catched");
 				e.printStackTrace();
 			}
-			System.out.println("receive data from Server >" +new String(packet.getData()));
+			System.out.println("receive data from Server >");
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 
 		}
@@ -82,7 +82,7 @@ public class Client extends Thread {
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
 		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0, 2));
-		System.out.println("client type: "+message.substring(0,2)+ "package size: " + message.length());
+		System.out.println("client type: "+message.substring(0,2)+ "  package size: " + message.length());
 
 		UDPPakcet packet = null;
 		switch (type) {

@@ -77,7 +77,7 @@ System.out.println("Server Start>>>>>>>>>>");
 			String message = new String (packet.getData());
 			
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-			System.out.println("server class connected players size:  "+connectedPlayers.size() + " " +message);
+			System.out.println("server class connected players size:  "+connectedPlayers.size());
 		}
 
 
@@ -208,7 +208,15 @@ System.out.println("Server Start>>>>>>>>>>");
 //				for(int i = 2; i<temp.length;i++){
 //					newtemp[i] = temp[i-2];
 //				}
+				
+//				GameState s = state.deserialize(temp);
+//				for(int i = 0; i< s.getPlayers().size();i++){
+//					Player m = s.getPlayers().get(i);
+//					System.out.println(m.getName()+ "  "+ m.getPosition().x+"  "+m.getPosition().y+"  "+ m.getFloor().toString() );
+//
+//				}
 				Packet02Data pk = new Packet02Data(state,temp);
+			
 				pk.writeData(this);
 				serverOpen  = true;
 				

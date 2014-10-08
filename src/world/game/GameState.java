@@ -80,6 +80,8 @@ public class GameState implements java.io.Serializable{
 		return players.get(0);
 	}
 	
+	
+	
 	/**
 	 * Teleports a Player from one floor to another.
 	 * @param p the Player to teleport
@@ -160,6 +162,7 @@ public class GameState implements java.io.Serializable{
 //			Map[] floors = new Map[game.getLevelsBuilding()];
 //			GameState gameState = new GameState(players, floors);
 			GameState gameState = (GameState) in.readObject();
+			System.out.println(gameState.getPlayers().get(1).getName());
 //			this.players = gameState.players;
 //			this.floors = gameState.floors;
 			if(players.size() == 2){

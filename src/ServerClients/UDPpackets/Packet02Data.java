@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 
 import world.components.Map;
 import world.game.GameState;
+import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
 
@@ -36,8 +37,10 @@ public class Packet02Data extends UDPPakcet {
 		super(02);
 		this.state = state;
 		this.data = data;
-		state = getState(data);
+		//state = getState(data);
+	
 		System.out.println("packet02Data con 2: ");
+		
 		// TODO Auto-generated constructor stub
 		//state.deserialize(data);
 		//		String[] dataArray = readData(data).split(",");
@@ -80,21 +83,36 @@ public class Packet02Data extends UDPPakcet {
 
 	@Override
 	public void writeData(Server server) {
+		
 		System.out.println("packet02Data con 3: ");
 		server.sendDataToAllClients(getData());
+//		GameState s = state.deserialize(getRealData());
+//		if(s.getPlayers().size()!=0){
+//		for(int i = 0; i< s.getPlayers().size();i++){
+//			Player m = s.getPlayers().get(i);
+//			System.out.println(m.getName()+ "  "+ m.getPosition().x+"  "+m.getPosition().y+"  "+ m.getFloor().toString() );
+//
+//		}
+//		}
 		System.out.println("packet02Data con 4: ");
 	}
 	public byte[] getRealData(){
-		byte[]newData =new byte[2+data.length];
-		byte[] realData = data;
+		//byte[]newData =new byte[data.length-2];
+		//byte[] realData = data;
 
-		byte[]newD =new byte[realData.length];
+		byte[]newD =new byte[getData().length-2];
 
-		for(int i = 2; i<realData.length;i++){
-			newD[i-2] = realData[i];
+		for(int i = 2; i<getData().length;i++){
+			newD[i-2] = getData()[i];
 		}
+//		GameState s = state.deserialize(newD);
+//		for(int i = 0; i< s.getPlayers().size();i++){
+//			Player m = s.getPlayers().get(i);
+//			System.out.println(m.getName()+ "  "+ m.getPosition().x+"  "+m.getPosition().y+"  "+ m.getFloor().toString() );
+//
+//		}
 			
-			return newData;
+			return newD;
 		}
 		@Override
 		public byte[] getData() {
@@ -104,7 +122,10 @@ public class Packet02Data extends UDPPakcet {
 			newData[1] = '2';
 			for(int i = 2; i<data.length;i++){
 				newData[i] = data[i-2];
+			//	System.out.print(newData[i]);
 			}
+			
+			
 			
 			return newData;
 			// 	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
