@@ -309,5 +309,12 @@ public class StaticRender implements GraphicalObject
 	{
 		return type;
 	}
+	
+	@Override
+	public Point getLocation()
+	{
+		return new Point( (int) (position.x / GameView.cellsize)
+						, (int) (position.y / GameView.cellsize) );
+	}
 
 }

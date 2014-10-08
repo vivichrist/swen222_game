@@ -37,17 +37,17 @@ public class GameView extends GLJPanel
 					DEG = 180.0f / (float) Math.PI;
 	public static GameView instance = null;
 	// actual direction before update
-	private float direction = 0.0f;
+	private float 				direction = 0.0f;
 	// actual position before update
-	private Point2D.Float position;
-	private GameViewData	data	= GameViewData.instance();
-	private GameScene		map;
+	private Point2D.Float 		position;
+	private GameViewData		data	= GameViewData.instance();
+	private GameScene			map;
 	// map boundaries in the positive x y directions
-	private Point extents;
+	private Point				extents;
 	// keyInput (keyboard) is also responsible for position and direction changes
-	private GameListener	keyInput;
-	private int	staticID = 0;
-	private GameState	state;
+	private GameListener		keyInput;
+	private int					staticID = 0;
+	private GameState			state;
 
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
@@ -104,16 +104,18 @@ public class GameView extends GLJPanel
                 gl2.glShadeModel(GL2.GL_SMOOTH);
             	map.addSurrounds();
             	gl2.glLineWidth( 2f );
+            	System.out.println( "Dynamic Scene Object count:" + data.getDynamicScene().size() );
             	for( GraphicalObject go: data.getDynamicScene() )
             	{
-            		if ( go.isDynamic() ) go.initialise( gl2 );
+            		go.initialise( gl2 );
             	}
             	staticID  = gl2.glGenLists( 1 );
             	gl2.glNewList(staticID, GL2.GL_COMPILE);
             	gl2.glLineWidth( 3.0f );
+            	System.out.println( "Static Scene Object count:" + data.getStaticScene().size() );
             	for( GraphicalObject go: data.getStaticScene() )
             	{
-            		if ( !go.isDynamic() ) go.initialise( gl2 );
+            		go.initialise( gl2 );
             	}
             	gl2.glEndList();
             }

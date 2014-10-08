@@ -21,10 +21,10 @@ public class DymanicRender implements GraphicalObject
 	private List<int[]>		indices;
 	private boolean			xaligned = false;
 
-	public static DymanicRender instanceDoor( Point position, boolean xaligned )
+	public static DymanicRender instanceDoor( Point position, Direction dir )
 	{
 		return new DymanicRender( CellType.DOOR, Behave.OPEN_CLOSE, position
-				, Direction.NORTH, Color.decode( "#008800" ) );
+				, dir, Color.decode( "#008800" ) );
 	}
 	
 	public static DymanicRender instanceTelePort( Point position )
@@ -90,7 +90,7 @@ public class DymanicRender implements GraphicalObject
 			this.position = new Point2D.Float(
 				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
-		this.xaligned = xaligned;
+		this.xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
 		switch ( act )
 		{
 		case ROTATE: anim = new Rotate( 0 ); break;
@@ -251,6 +251,13 @@ public class DymanicRender implements GraphicalObject
 	public CellType getType()
 	{
 		return type;
+	}
+
+	@Override
+	public Point getLocation()
+	{
+		return new Point( (int) (position.x / GameView.cellsize)
+						, (int) (position.y / GameView.cellsize) );
 	}
 
 }

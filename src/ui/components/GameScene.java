@@ -34,7 +34,12 @@ public class GameScene
 		ylimit = game.getMap().getYLimit();
 		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 		map = game.getMap().getCellTypeMap();
-		System.out.println( "map:\n" + map );
+		for ( CellType[] line: map )
+		{
+			for ( CellType c: line )
+				System.out.print( " " + c.ordinal() );
+			System.out.println();
+		}
 	}
 
 	/**
@@ -67,9 +72,7 @@ public class GameScene
 			{
 				game.foundToken( game.getPlayer(), (GameToken)game.getMap().objectAtPoint( p ) );
 				gdata.remove( p );
-			}
-			System.out.println("collide:" + map[x][y]);
-			return ((DymanicRender)gdata.getGameElements().get( p )).collide();
+			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
 		return map[x][y] == CellType.WALL;
 	}
@@ -77,7 +80,7 @@ public class GameScene
 	public void addSurrounds()
 	{
 		gdata.clear();
-		boolean xaligned;
+		Direction dir;
 		Point p;
 		DymanicRender dyn;
 		for ( int j = 0; j < ylimit; ++j )
@@ -86,25 +89,26 @@ public class GameScene
 			{
 				CellType[] nesw = findNeighbours( i, j );
 				p =  new Point( i, j );
-				xaligned = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY;
+				dir = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY 
+						? Direction.NORTH : Direction.EAST;
 				switch( map[i][j] )
 				{
 				case WALL :
-					gdata.getStaticScene().add( new StaticRender( map[i][j], nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( map[i][j], nesw, p ) );
 					break;
 				case DOOR :
-					dyn = DymanicRender.instanceDoor( p, xaligned );
+					dyn = DymanicRender.instanceDoor( p, dir );
 					StaticRender doorWay = new StaticRender( map[i][j], nesw, p );
-					gdata.getStaticScene().add( doorWay );
-					gdata.getDynamicScene().add( dyn );
-					gdata.getGameElements().put( p, dyn );
+					gdata.addStaticOnly( doorWay );
+					gdata.addGrapicalObject( dyn );
 					break;
 				case TELEPORT :
 					dyn = DymanicRender.instanceTelePort( p );
-					gdata.getDynamicScene().add( dyn );
-					gdata.getGameElements().put( p, dyn );
+					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
+					gdata.addGrapicalObject( dyn );
 					break;
 				default:
+					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
 					break;
 				}
 				GameObject go = game.getMap().objectAtPoint(p);
@@ -114,26 +118,22 @@ public class GameScene
 					if ( ((GameToken)go).getType() == TokenType.CONE )
 					{
 						dyn = DymanicRender.instanceCone( p, ((GameToken)go).getColor() );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.BALL )
 					{
 						dyn = DymanicRender.instanceBall( p, ((GameToken)go).getColor() );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.DIAMOND )
 					{
 						dyn = DymanicRender.instanceDiamond( p, ((GameToken)go).getColor() );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.CUBE )
 					{
 						dyn = DymanicRender.instanceCube( p, ((GameToken)go).getColor() );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 				}
 				else if ( go instanceof MoveableObject )
@@ -141,14 +141,12 @@ public class GameScene
 					if ( go instanceof Key )
 					{
 						dyn = DymanicRender.instanceKey( p, ((Key)go).getColor() );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 					else if ( go instanceof Torch )
 					{
 						dyn = DymanicRender.instanceTorch( p, Color.decode( "#880088" ) );
-						gdata.getDynamicScene().add( dyn );
-						gdata.getGameElements().put( p, dyn );
+						gdata.addGrapicalObject( dyn );
 					}
 				}
 				else if ( go instanceof StationaryObject )
@@ -162,7 +160,6 @@ public class GameScene
 						//gdata.addAllGameElements( ((Furniture)go)., dyn );
 					}
 				}
-				gdata.getStaticScene().add( new StaticRender( CellType.EMPTY, nesw, p ) );
 			}
 		}
 //		p =  new Point( 4, 16 );

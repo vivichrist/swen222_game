@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import world.components.CellType;
-import world.components.GameObject;
-
 public class GameViewData
 {
 	private final ArrayList<StaticRender>		staticScene;
@@ -19,11 +16,12 @@ public class GameViewData
 
 	public static GameViewData instance()
 	{
-		if ( instance == null ) return new GameViewData();
+		if ( instance == null ) 
+			instance = new GameViewData();
 		return instance;
 	}
 
-	public GameViewData()
+	private GameViewData()
 	{
 		staticScene = new ArrayList<StaticRender>();
 		dynamicScene = new ArrayList<DymanicRender>();
@@ -33,11 +31,6 @@ public class GameViewData
 	public Map<Point, GraphicalObject> getGameElements()
 	{
 		return Collections.unmodifiableMap( gameElements );
-	}
-
-	public void addGameElements( Point p, GraphicalObject element )
-	{
-		this.gameElements.put( p, element );
 	}
 	
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
@@ -49,6 +42,21 @@ public class GameViewData
 	public List<StaticRender> getStaticScene()
 	{
 		return Collections.unmodifiableList( staticScene );
+	}
+	
+	public boolean addStaticOnly( StaticRender sobject )
+	{
+		return staticScene.add( sobject );
+	}
+	
+	public boolean addGrapicalObject( GraphicalObject gobject )
+	{
+		gameElements.put( gobject.getLocation(), gobject );
+		if ( gobject instanceof StaticRender )
+		{
+			return staticScene.add( (StaticRender)gobject );
+		}
+		return dynamicScene.add( (DymanicRender)gobject );
 	}
 
 	public List<DymanicRender> getDynamicScene()

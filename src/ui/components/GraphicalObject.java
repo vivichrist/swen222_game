@@ -1,4 +1,6 @@
 package ui.components;
+import java.awt.Point;
+
 import javax.media.opengl.GL2;
 
 import world.components.CellType;
@@ -23,6 +25,7 @@ public interface GraphicalObject
 	 * @param gl - opengl drawing context
 	 * @return if successful
 	 */
+	public Point getLocation();
 	public boolean initialise( GL2 gl );
 	public boolean isDynamic();
 	public CellType getType();
