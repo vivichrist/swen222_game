@@ -159,17 +159,14 @@ System.out.println("Server Start>>>>>>>>>>");
 //			packet.writeData(this);
 //		}
 
-		byte[] realData = Arrays.copyOf( packet.getData(), 85000 );
+		byte[] realData = packet.getRealData();
 		
-		byte[]newData =new byte[realData.length-2];
+//		state = state.deserialize(realData);
 		
-		int count = 2;
-
-		for(byte b:newData){
-			b = realData[count];
-			count++;
-		}
-		state = state.deserialize(newData);
+//		byte[] temp = packet.getData();
+//		Packet02Data pk = new Packet02Data(state,temp);
+		packet.writeData(this);
+		
 	}
 	public void addConnection(MultyPlayer player, Packet00Login packet) {
 		boolean alreadyConnected = false;
@@ -205,13 +202,13 @@ System.out.println("Server Start>>>>>>>>>>");
 				GameBuilder builder =new GameBuilder(names);
 				state = builder.getGameState();
 				byte[] temp =state.serialize(); 
-				byte[]newtemp = new byte[temp.length+2];
-				newtemp[0] = '0';
-				newtemp[1] = '2';
-				for(int i = 2; i<temp.length;i++){
-					newtemp[i] = temp[i-2];
-				}
-				Packet02Data pk = new Packet02Data(state,newtemp);
+//				byte[]newtemp = new byte[temp.length+2];
+//				newtemp[0] = '0';
+//				newtemp[1] = '2';
+//				for(int i = 2; i<temp.length;i++){
+//					newtemp[i] = temp[i-2];
+//				}
+				Packet02Data pk = new Packet02Data(state,temp);
 				pk.writeData(this);
 				serverOpen  = true;
 				
