@@ -12,6 +12,6 @@ public interface StationaryObject extends GameObject {
 	 * Used by the renderer for determining furniture orientation for drawing
 	 * @return the Directino that this StationaryObject is facing
 	 */
-	public Direction facing(); 
+	public Direction getFacing(); 
 	
 }

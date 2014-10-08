@@ -40,6 +40,7 @@ public class GameBuilder {
 			placePlayers();
 			//TODO: place MoveableObjects
 			placePlayerTokens();
+			//placeFurniture();
 			state = new GameState(players, floors);
 		}
 	}
@@ -141,6 +142,13 @@ public class GameBuilder {
 				// Place the Token in a random cell on the floor
 				randomFloor.addGameToken(randomFloor.randomEmptyCell(), currentTokens.get(j));
 			}
+		}
+	}
+	
+	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
+	private void placeFurniture(){
+		for(int i = 0; i < floors.length; i++){
+
 		}
 	}
 
