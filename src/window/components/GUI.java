@@ -38,6 +38,7 @@ import ServerClients.test;
 
 import com.jogamp.graph.font.Font;
 
+import controllers.Controller;
 import ui.components.GameView;
 import world.components.Map;
 import world.game.GameBuilder;
@@ -60,6 +61,7 @@ public class GUI  {
 	private static int width = 800;
 	private static int height = 770;
 	private GameState gameState;//do not change this field for jacky only
+	private static Controller controller;
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
 	JFrame frame;
@@ -314,7 +316,10 @@ public class GUI  {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
+		controller = new Controller(state, this);
+		state.setController(controller);
 		gameView = new GameView( glcapabilities, frame, state );
+		
 
 		player = state.getPlayer(name);
 		//gameView = new GameView( glcapabilities, frame );
@@ -327,12 +332,23 @@ public class GUI  {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
-	public GameState getState(){
+	
+	public GameState getState(){ 
 		return gameState;
 	}
+	
+	public void redrawCollectItemCanvas(){
+		southPanel.getCollectItemsCanvas().repaint();
+	}
+	
+	public void redrawUsefulItemCanvas(){
+		southPanel.getUsefulItemsCanvas().repaint();
+	}
+	
 	public static void main(String[] args){
 		GUI gui = new GUI();
 	}
+	
 	public String getName(){
 		return name;
 	}

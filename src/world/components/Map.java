@@ -19,7 +19,7 @@ import world.game.Player;
  *
  */
 public class Map implements java.io.Serializable{
-	
+
 	private int xLimit, yLimit;
 	private CellType[][] map;
 	private List<Point> emptyCells;
@@ -28,7 +28,7 @@ public class Map implements java.io.Serializable{
 	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
 	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
 	private HashMap<Point, Player> players = new HashMap<Point, Player>();
-	
+
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
 	 * @param file the map file for this floor
@@ -36,19 +36,31 @@ public class Map implements java.io.Serializable{
 	public Map(File file){	
 		try{
 			Scanner scan = new Scanner(file);
-			
+
 			// First read header for map width and height
-			if(!scan.hasNextInt()) throw new Exception("Map format error: first header token should be an int");
+			if(!scan.hasNextInt()) 
+			{
+				scan.close();
+				throw new Exception("Map format error: first header token should be an int");
+			}
 			else xLimit = scan.nextInt();
-			if(!scan.hasNext("x")) throw new Exception("Map format error: second header toden should be 'x'");
+			if(!scan.hasNext("x"))
+			{
+				scan.close();
+				throw new Exception("Map format error: second header toden should be 'x'");
+			}
 			else scan.next();
-			if(!scan.hasNextInt()) throw new Exception("Map format error: third header token should be an int");
+			if(!scan.hasNextInt())
+			{
+				scan.close();
+				throw new Exception("Map format error: third header token should be an int");
+			}
 			else yLimit = scan.nextInt();
-			
+
 			// Initialise arrays
 			map = new CellType[xLimit][yLimit];
 			emptyCells = new ArrayList<Point>();
-			
+
 			// Read the map, populating the 2d map array, list of empty cells and hashmap of doors
 			for(int y = 0; y < yLimit; y++){
 				for(int x = 0; x < xLimit; x++){
@@ -72,7 +84,7 @@ public class Map implements java.io.Serializable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Returns the Point corresponding to a randomly selected empty cell on this floor.
 	 * This Point will now be seen as "occupied" by this floor.  If the Point has not been populated/occupied after being removed
@@ -88,7 +100,7 @@ public class Map implements java.io.Serializable{
 			return(emptyCells.remove(random.nextInt(emptyCells.size())));
 		}
 	}
-	
+
 	/**
 	 * Sets the empty cell on this floor corresponding to a given Point to "unoccupied". 
 	 * @param p the Point of the cell to be set to "unoccupied"
@@ -103,7 +115,7 @@ public class Map implements java.io.Serializable{
 			emptyCells.add(p);
 		}
 	}
-	
+
 	/**
 	 * Adds a StationaryObject to this floor.
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
@@ -120,7 +132,7 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Adds a MoveableObject to this floor
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
@@ -137,7 +149,7 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Adds a Token to this floor
 	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
@@ -154,7 +166,7 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Positions a Player on this floor.  Doesn't allow two Players to occupy the same cell
 	 * @param p the Point to position the Player at
@@ -170,7 +182,7 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Moves a Player on this Map.  A Player cannot be moved if their origin position doesn't match the Map's record of the Player's position
 	 * or the Player's destination is occupied by another Player.
@@ -187,7 +199,7 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Removes a given Player from this Map
 	 * @param player the Player to remove
@@ -203,7 +215,7 @@ public class Map implements java.io.Serializable{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns the xLimit for this Map
 	 * @return the xLimit for this Map
@@ -211,7 +223,7 @@ public class Map implements java.io.Serializable{
 	public int getXLimit(){
 		return xLimit;
 	}
-	
+
 	/**
 	 * Returns the yLimit for this Map
 	 * @return the yLimit for this Map
@@ -219,7 +231,7 @@ public class Map implements java.io.Serializable{
 	public int getYLimit(){
 		return yLimit;
 	}
-	
+
 	/**
 	 * Returns the CellType map for this Map
 	 * @return
@@ -227,7 +239,7 @@ public class Map implements java.io.Serializable{
 	public CellType[][] getCellTypeMap(){
 		return map;
 	}
-	
+
 	/**
 	 * Returns the GameObject at a given Point on this Map
 	 * @param p the Point to look for GameObjects
@@ -239,7 +251,13 @@ public class Map implements java.io.Serializable{
 		if(tokens.containsKey(p)) return tokens.get(p);
 		return null;
 	}
-	
+
+	/**
+	 * Removes a GameToken from a given Point on this Map
+	 * @param p the Point to remove the GameToken from
+	 * @param token the GameToken to remove
+	 * @return true if successfully removed
+	 */
 	public boolean removeGameToken(Point p, GameToken token){
 		System.out.println("Game Tokens in Map: " + tokens.size());
 		if(tokens.get(p).equals(token)){
@@ -249,4 +267,6 @@ public class Map implements java.io.Serializable{
 		}
 		return false;
 	}
+	
+	
 }
