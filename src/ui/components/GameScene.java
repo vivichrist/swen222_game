@@ -63,9 +63,9 @@ public class GameScene
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
 		Point p = new Point( x, y );
-		if ( map[x][y].ordinal() > CellType.WALL.ordinal()
+		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
 			|| gdata.getGameElements().get( p ) != null )
-		{
+		{	// collect it and remove from data to apear in items
 			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
 			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 					&& ct.ordinal() < CellType.CHEST.ordinal() )
@@ -94,11 +94,11 @@ public class GameScene
 				switch( map[i][j] )
 				{
 				case WALL :
-					gdata.addStaticOnly( new StaticRender( map[i][j], nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( CellType.WALL, nesw, p ) );
 					break;
 				case DOOR :
 					dyn = DymanicRender.instanceDoor( p, dir );
-					StaticRender doorWay = new StaticRender( map[i][j], nesw, p );
+					StaticRender doorWay = new StaticRender( CellType.DOOR, nesw, p );
 					gdata.addStaticOnly( doorWay );
 					gdata.addGrapicalObject( dyn );
 					break;

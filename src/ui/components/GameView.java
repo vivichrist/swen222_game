@@ -35,7 +35,6 @@ public class GameView extends GLJPanel
 					PI2 = Math.PI * 2;
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
-	public static GameView instance = null;
 	// actual direction before update
 	private float 				direction = 0.0f;
 	// actual position before update
@@ -43,10 +42,9 @@ public class GameView extends GLJPanel
 	private GameViewData		data	= GameViewData.instance();
 	private GameScene			map;
 	// map boundaries in the positive x y directions
-	private Point				extents;
+	// private Point				extents;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
-	private int					staticID = 0;
 	private GameState			state;
 
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
@@ -55,7 +53,7 @@ public class GameView extends GLJPanel
 
     	map = new GameScene(state);
 
-    	extents = map.mapsize();
+    	// extents = map.mapsize();
     	this.state = state;
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
@@ -109,15 +107,8 @@ public class GameView extends GLJPanel
             	{
             		go.initialise( gl2 );
             	}
-            	staticID  = gl2.glGenLists( 1 );
-            	gl2.glNewList(staticID, GL2.GL_COMPILE);
-            	gl2.glLineWidth( 3.0f );
-            	System.out.println( "Static Scene Object count:" + data.getStaticScene().size() );
-            	for( GraphicalObject go: data.getStaticScene() )
-            	{
-            		go.initialise( gl2 );
-            	}
-            	gl2.glEndList();
+            	StaticDisplayList staticDisplayList = StaticDisplayList.instance();
+            	staticDisplayList.createDisplaylist( gl2 );
             }
 
             /* (non-Javadoc)
@@ -126,7 +117,7 @@ public class GameView extends GLJPanel
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
             	GL2 gl = glautodrawable.getGL().getGL2();
-            	gl.glDeleteLists( staticID, 1 );
+            	StaticDisplayList.instance().destroy( gl );
             }
 
             /* (non-Javadoc)
@@ -158,7 +149,6 @@ public class GameView extends GLJPanel
             public void windowClosing( WindowEvent windowevent )
             {
                 dispose();
-                instance = null;
                 System.exit( 0 );
             }
         });
@@ -169,7 +159,6 @@ public class GameView extends GLJPanel
 
         setSize( 800, 600 );
         setVisible( true );
-        instance = this;
     }
 
     private void update()
@@ -202,11 +191,10 @@ public class GameView extends GLJPanel
 	 */
 	private void render( GL2 gl2 )
 	{
+		StaticDisplayList.instance().drawDisplayList( gl2 );
 		gl2.glLineWidth( 2f );
 		for( GraphicalObject go: data.getDynamicScene() )
         	go.draw( gl2 );
-		if ( staticID == 0 ) return;
-		gl2.glCallList(staticID );
     }
 
 	// Kalo commented out for rough integration
