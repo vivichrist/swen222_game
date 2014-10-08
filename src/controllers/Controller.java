@@ -8,7 +8,7 @@ import world.game.GameState;
  * @author Kalo Pilato - ID:300313803
  *
  */
-public class PlayerController {
+public class Controller {
 
 	private GameState state;
 	private GUI gui;
@@ -18,7 +18,7 @@ public class PlayerController {
 	 * @param state the GameState of this game
 	 * @param gui the GUI for this game
 	 */
-	public PlayerController(GameState state, GUI gui){
+	public Controller(GameState state, GUI gui){
 		this.state = state;
 		this.gui = gui;
 	}

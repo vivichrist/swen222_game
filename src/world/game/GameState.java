@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import controllers.Controller;
 import window.components.GUI;
 import world.components.GameToken;
 import world.components.Map;
@@ -24,9 +25,7 @@ public class GameState implements java.io.Serializable{
 	private  List<Player> players;
 	private  Map[] floors;
 	private GameBuilder game;
-	
-	//TODO: sanity check having this field - should really be in a controller?
-	private GUI gui;
+	private Controller controller;
 
 	
 	/**
@@ -37,6 +36,14 @@ public class GameState implements java.io.Serializable{
 	public GameState(List<Player> players, Map[] floors){
 		this.players = players;
 		this.floors = floors;
+	}
+	
+	/**
+	 * Sets the PlayerController for this game
+	 * @param controller the PlayerController to use for this game
+	 */
+	public void setController(Controller controller){
+		this.controller = controller;
 	}
 	
 	/**
@@ -104,9 +111,7 @@ public class GameState implements java.io.Serializable{
 		else{
 			//p.getFloor().removeGameToken(p.getPosition(), token);
 			p.getTokenList().get(token).setFound(true);
-			gui.redrawCollectItemCanvas();
-			System.out.println("Token picked up: " + p.getTokenList().get(token).getColor().toString());
-			System.out.println(token.getColor().toString() + " token state: " + p.getTokenList().get(token).isFound());
+			controller.refreshTokenPanel();
 			return true;
 		}
 	}
@@ -178,11 +183,6 @@ public class GameState implements java.io.Serializable{
 	 */
 	public List<Player> getPlayers(){
 		return players;
-	}
-	
-	//TODO: remove this method after testing pickup of tokens
-	public void setGui(GUI g){
-		gui = g;
 	}
 	
 }
