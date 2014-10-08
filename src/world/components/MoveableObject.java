@@ -7,5 +7,4 @@ package world.components;
  */
 public interface MoveableObject extends GameObject{
 	
-	
 }

@@ -7,4 +7,11 @@ package world.components;
  */
 public interface StationaryObject extends GameObject {
 
+	/**
+	 * Returns the Direction that this StationaryObject is facing
+	 * Used by the renderer for determining furniture orientation for drawing
+	 * @return the Directino that this StationaryObject is facing
+	 */
+	public Direction facing(); 
+	
 }
