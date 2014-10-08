@@ -328,12 +328,20 @@ public class GUI  {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
+	
 	public GameState getState(){
 		return gameState;
 	}
+	
+	public void redraw(){
+		southPanel.getCollectItemsCanvas().repaint();
+	}
+	
+	
 	public static void main(String[] args){
 		GUI gui = new GUI();
 	}
+	
 	public String getName(){
 		return name;
 	}
