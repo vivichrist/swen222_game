@@ -329,7 +329,7 @@ public class GUI  {
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
 	
-	public GameState getState(){
+	public GameState getState(){ 
 		return gameState;
 	}
 	
