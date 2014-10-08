@@ -21,6 +21,7 @@ public class TokenList implements java.io.Serializable{
 
 	// Defines the number of tokens to be collected by each Player
 	private final int tokenCount = 5;
+	private int totalFound = 0;
 
 	
 	/**
@@ -58,5 +59,27 @@ public class TokenList implements java.io.Serializable{
 	 */
 	public int size(){
 		return tokens.size();
+	}
+	
+	/**
+	 * Sets the found state of a GameToken in this TokenList to true. 
+	 * @param token the GameToken to set found
+	 * @return true if successfully set - returns false if the GameToken does not exist in this list
+	 */
+	public boolean tokenFound(GameToken token){
+		if(tokens.contains(token)){
+			token.setFound(true);
+			totalFound++;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Determines whether a Player has collected all of the GameTokens in their TokenList
+	 * @return true if the total collected is equal to the total to collect
+	 */
+	public boolean collectedAll(){
+		return totalFound == tokenCount;
 	}
 }
