@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import window.components.GUI;
 import world.components.GameToken;
 import world.components.Map;
 
@@ -23,6 +24,9 @@ public class GameState implements java.io.Serializable{
 	private  List<Player> players;
 	private  Map[] floors;
 	private GameBuilder game;
+	
+	//TODO: sanity check having this field - should really be in a controller?
+	private GUI gui;
 
 	
 	/**
@@ -91,12 +95,18 @@ public class GameState implements java.io.Serializable{
 	 * @param token the GameToken that has been found
 	 * @return true if successfully set to found
 	 */
-	public boolean foundToken(Player p, GameToken token){
+	public boolean foundMoveable(Player p, GameToken token){
+		
+		
 		if(!players.contains(p)){
 			return false;
 		}
 		else{
+			//p.getFloor().removeGameToken(p.getPosition(), token);
 			p.getTokenList().get(token).setFound(true);
+			gui.redrawSouthPanel();
+			System.out.println("Token picked up: " + p.getTokenList().get(token).getColor().toString());
+			System.out.println(token.getColor().toString() + " token state: " + p.getTokenList().get(token).isFound());
 			return true;
 		}
 	}
@@ -153,12 +163,26 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
+	/**\
+	 * Return the current GameState
+	 * @return the current GameState
+	 */
 	public GameState getState(){
 		return this;
 	}
-
-
 	
+	//TODO: return a clone here instead of the actual list
+	/**
+	 * Returns a List of the current Players in this game
+	 * @return a List of the current Players in this game
+	 */
+	public List<Player> getPlayers(){
+		return players;
+	}
 	
+	//TODO: remove this method after testing pickup of tokens
+	public void setGui(GUI g){
+		gui = g;
+	}
 	
 }

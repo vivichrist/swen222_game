@@ -314,6 +314,7 @@ public class GUI  {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
+		state.setGui(this);
 		gameView = new GameView( glcapabilities, frame, state );
 
 		player = state.getPlayer(name);
@@ -327,12 +328,20 @@ public class GUI  {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
+	
 	public GameState getState(){
 		return gameState;
 	}
+	
+	public void redrawSouthPanel(){
+		southPanel.getCollectItemsCanvas().repaint();
+	}
+	
+	
 	public static void main(String[] args){
 		GUI gui = new GUI();
 	}
+	
 	public String getName(){
 		return name;
 	}

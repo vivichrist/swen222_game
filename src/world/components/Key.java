@@ -30,6 +30,14 @@ public class Key implements MoveableObject {
 	public Color getColor() {
 		return color;
 	}
+	
+	/**
+	 * Returns the Name of this Key
+	 * @return the Name of this Key
+	 */
+	public String getName(){
+		return name;
+	}
 
 	@Override
 	public int hashCode() {

@@ -70,7 +70,7 @@ public class GameScene
 			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 					&& ct.ordinal() < CellType.CHEST.ordinal() )
 			{
-				game.foundToken( game.getPlayer(), (GameToken)game.getMap().objectAtPoint( p ) );
+				game.foundMoveable( game.getPlayer(), (GameToken)game.getMap().objectAtPoint( p ) );
 				gdata.remove( p );
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
