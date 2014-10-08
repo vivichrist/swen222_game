@@ -30,8 +30,6 @@ import java.util.ArrayList;
 @SuppressWarnings( "serial" )
 public class GameView extends GLJPanel
 {
-	private ArrayList<StaticRender> staticScene = new ArrayList<StaticRender>();
-	private ArrayList<DymanicRender> dynamicScene = new ArrayList<DymanicRender>();
 	public static final int		cellsize = 10;
 	public static final double
 					PI2 = Math.PI * 2;
@@ -42,7 +40,8 @@ public class GameView extends GLJPanel
 	private float direction = 0.0f;
 	// actual position before update
 	private Point2D.Float position;
-	private GameScene map;
+	private GameViewData	data	= GameViewData.instance();
+	private GameScene		map;
 	// map boundaries in the positive x y directions
 	private Point extents;
 	// keyInput (keyboard) is also responsible for position and direction changes
@@ -103,16 +102,16 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_DEPTH_TEST );
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
-            	map.addSurrounds( dynamicScene, staticScene );
+            	map.addSurrounds();
             	gl2.glLineWidth( 2f );
-            	for( GraphicalObject go: dynamicScene )
+            	for( GraphicalObject go: data.getDynamicScene() )
             	{
             		if ( go.isDynamic() ) go.initialise( gl2 );
             	}
             	staticID  = gl2.glGenLists( 1 );
             	gl2.glNewList(staticID, GL2.GL_COMPILE);
             	gl2.glLineWidth( 3.0f );
-            	for( GraphicalObject go: staticScene )
+            	for( GraphicalObject go: data.getStaticScene() )
             	{
             		if ( !go.isDynamic() ) go.initialise( gl2 );
             	}
@@ -125,8 +124,7 @@ public class GameView extends GLJPanel
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
             	GL2 gl = glautodrawable.getGL().getGL2();
-            	for ( GraphicalObject g: staticScene )
-            		g.clean( gl );
+            	gl.glDeleteLists( staticID, 1 );
             }
 
             /* (non-Javadoc)
@@ -158,6 +156,7 @@ public class GameView extends GLJPanel
             public void windowClosing( WindowEvent windowevent )
             {
                 dispose();
+                instance = null;
                 System.exit( 0 );
             }
         });
@@ -190,7 +189,7 @@ public class GameView extends GLJPanel
     		// tell the game server
     		state.movePlayer( state.getPlayer(), new Point( cellx, celly ) );
     	// do update
-    	position.setLocation( newx, keyInput.getNewY() );
+    	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
     }
@@ -202,8 +201,8 @@ public class GameView extends GLJPanel
 	private void render( GL2 gl2 )
 	{
 		gl2.glLineWidth( 2f );
-		for( GraphicalObject go: dynamicScene )
-        	if ( go.isDynamic() ) go.draw( gl2 );
+		for( GraphicalObject go: data.getDynamicScene() )
+        	go.draw( gl2 );
 		if ( staticID == 0 ) return;
 		gl2.glCallList(staticID );
     }

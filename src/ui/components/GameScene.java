@@ -20,16 +20,15 @@ import world.game.GameState;
  */
 public class GameScene
 {
-	private CellType[][] map;
-	private HashMap<Point, GraphicalObject> gameElements = new HashMap<Point, GraphicalObject>();
-	public final int xlimit, ylimit;
-	private GameState game;
+	private GameState		game;
+	private GameViewData gdata = GameViewData.instance();
+	private CellType[][]	map;
+	public final int		xlimit, ylimit;
 
 	public GameScene(GameState state)
 	{
 		//Kalo added
 		game = state;
-
 		// read in the map
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
@@ -37,7 +36,6 @@ public class GameScene
 		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
 		map = game.getMap().getCellTypeMap();
 		System.out.println( "map:\n" + map );
-		// map values, a 2D array labelling the viewable scene
 	}
 
 	/**
@@ -60,25 +58,28 @@ public class GameScene
 			return false;
 			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
-
+		Point p = new Point( x, y );
 		if ( map[x][y].ordinal() > CellType.WALL.ordinal()
-			|| gameElements.get( new Point( x, y ) ) != null )
+			|| gdata.getGameElements().get( p ) != null )
 		{
-			CellType ct =  gameElements.get( new Point( x, y ) ).getType();
-//			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
-//					&& ct.ordinal() < CellType.CHEST.ordinal() )
-//			TODO:game.getMap()...
-			// System.out.println("collide:" + map[x][y]);
-			return ((DymanicRender)gameElements.get( new Point( x, y ) )).collide();
+			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
+			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+					&& ct.ordinal() < CellType.CHEST.ordinal() )
+			{
+				game.foundToken( game.getPlayer(), (GameToken)game.getMap().objectAtPoint( p ) );
+				gdata.remove( p );
+			}
+			System.out.println("collide:" + map[x][y]);
+			return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
 		return map[x][y] == CellType.WALL;
 	}
 
-	public void addSurrounds( ArrayList<DymanicRender> dynamicScene, ArrayList<StaticRender> staticScene )
+	public void addSurrounds()
 	{
-		dynamicScene.clear();
-		staticScene.clear();
-		gameElements.clear();
+		gdata.getDynamicScene().clear();
+		gdata.getStaticScene().clear(); // must clear staticID from opengl
+		gdata.getGameElements().clear();
 		boolean xaligned;
 		Point p;
 		DymanicRender dyn;
@@ -86,82 +87,71 @@ public class GameScene
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
-				CellType[] nesw = {
-					  j - 1 < 0		  ? CellType.OUTOFBOUNDS : map[ i ]   [j - 1]
-					, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
-					, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
-					, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
+				CellType[] nesw = findNeighbours( i, j );
 				p =  new Point( i, j );
 				xaligned = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY;
 				switch( map[i][j] )
 				{
 				case WALL :
-					staticScene.add( new StaticRender( map[i][j], nesw, p ) );
+					gdata.getStaticScene().add( new StaticRender( map[i][j], nesw, p ) );
 					break;
 				case DOOR :
-					DymanicRender door = new DymanicRender( map[i][j], Behave.OPEN_CLOSE, p
-							, xaligned, false, Color.decode( "#008800" ) );
+					dyn = DymanicRender.instanceDoor( p, xaligned );
 					StaticRender doorWay = new StaticRender( map[i][j], nesw, p );
-					staticScene.add( doorWay );
-					dynamicScene.add( door );
-					gameElements.put( p, door );
+					gdata.getStaticScene().add( doorWay );
+					gdata.getDynamicScene().add( dyn );
+					gdata.getGameElements().put( p, dyn );
 					break;
-				case TELEPORT : // TODO: Teleporting behaviour
-					dyn = new DymanicRender( CellType.TELEPORT, Behave.NONE, p
-							, false, false, Color.ORANGE );
-					dynamicScene.add( dyn );
-					gameElements.put( p, dyn );
+				case TELEPORT :
+					dyn = DymanicRender.instanceTelePort( p );
+					gdata.getDynamicScene().add( dyn );
+					gdata.getGameElements().put( p, dyn );
 					break;
 				default:
 					break;
 				}
 				GameObject go = game.getMap().objectAtPoint(p);
+				if ( go == null ) continue;
 				if ( go instanceof GameToken )
 				{
 					if ( ((GameToken)go).getType() == TokenType.CONE )
 					{
-						dyn = new DymanicRender( CellType.CONE, Behave.ROTATE, p
-								, false, false, ((GameToken)go).getColor() );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceCone( p, ((GameToken)go).getColor() );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.BALL )
 					{
-						dyn = new DymanicRender( CellType.BALL, Behave.ROTATE, p
-								, false, false, ((GameToken)go).getColor() );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceBall( p, ((GameToken)go).getColor() );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.DIAMOND )
 					{
-						dyn = new DymanicRender( CellType.DIAMOND, Behave.ROTATE, p
-								, false, false, ((GameToken)go).getColor() );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceDiamond( p, ((GameToken)go).getColor() );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 					else if ( ((GameToken)go).getType() == TokenType.CUBE )
 					{
-						dyn = new DymanicRender( CellType.CUBE, Behave.ROTATE, p
-								, false, false, ((GameToken)go).getColor() );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceCube( p, ((GameToken)go).getColor() );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 				}
 				if ( go instanceof MoveableObject )
 				{
 					if ( ((MoveableObject)go) instanceof Key )
 					{
-						dyn = new DymanicRender( CellType.KEY, Behave.ROTATE, p
-								, false, false, ((Key)go).getColor() );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceKey( p, ((Key)go).getColor() );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 					else if ( ((MoveableObject)go) instanceof Torch )
 					{
-						dyn = new DymanicRender( CellType.TORCH, Behave.ROTATE, p
-								, false, false, Color.decode( "#880088" ) );
-						dynamicScene.add( dyn );
-						gameElements.put( p, dyn );
+						dyn = DymanicRender.instanceTorch( p, Color.decode( "#880088" ) );
+						gdata.getDynamicScene().add( dyn );
+						gdata.getGameElements().put( p, dyn );
 					}
 //					{
 //						if ( leastXYcorner( nesw, CellType.COUCH ) )
@@ -192,7 +182,7 @@ public class GameScene
 //						}
 //					}
 				}
-				staticScene.add( new StaticRender( CellType.EMPTY, nesw, p ) );
+				gdata.getStaticScene().add( new StaticRender( CellType.EMPTY, nesw, p ) );
 			}
 		}
 //		p =  new Point( 4, 16 );
@@ -216,6 +206,16 @@ public class GameScene
 //		dynamicScene.add( dyn );
 //		gameElements.put( p, dyn );
 	}
+	private CellType[] findNeighbours( int i, int j )
+	{
+		// TODO Auto-generated method stub
+		return new CellType[]{
+			  j - 1 < 0		  ? CellType.OUTOFBOUNDS : map[ i ]   [j - 1]
+			, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
+			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
+			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
+	}
+
 	// TODO: need to test this somehow...
 	private boolean[] findOrientation( Point p )
 	{
@@ -224,11 +224,11 @@ public class GameScene
 		int wallN = 0, wallS = 0, wallE = 0, wallW = 0;
 		Point scan = new Point( p.x, p.y );
 		CellType cell = map[p.x][p.y];
-		// scan right
+		// scan x+
 		while ( map[scan.x][scan.y] == cell )
 		{
 			++dimX; scan.translate( 1, 0 );
-		}// scan up
+		}// scan y+
 		scan = new Point( p.x, p.y );
 		while ( map[scan.x][scan.y] == cell )
 		{

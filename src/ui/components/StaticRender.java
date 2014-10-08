@@ -57,7 +57,7 @@ public class StaticRender implements GraphicalObject
 		{
 		case WALL : drawWall( gl ); break;
 		case DOOR : drawDoorArch( gl ); break;
-		case EMPTY : drawPlane( gl ); break;
+		case EMPTY : drawFloorCeiling( gl ); break;
 		default:
 			break;
 		}
@@ -276,7 +276,7 @@ public class StaticRender implements GraphicalObject
 		}
 	}
 
-	private void drawPlane( GL2 gl )
+	private void drawFloorCeiling( GL2 gl )
 	{
 		int pad = 2, height = GameView.cellsize * 2;
 		gl.glColor3fv( meshColor, 0 );
@@ -298,27 +298,12 @@ public class StaticRender implements GraphicalObject
 		gl.glEnd();
 	}
 
-	/* (non-Javadoc)
-	 * @see ui.components.GraphicalObject#clean(javax.media.opengl.GL2)
-	 */
-	@Override
-	public void clean( GL2 gl ){}
-
 	@Override
 	public boolean isDynamic()
 	{
 		return false;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main( String[] args )
-	{
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public CellType getType()
 	{
