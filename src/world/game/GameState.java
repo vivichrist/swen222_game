@@ -91,7 +91,9 @@ public class GameState implements java.io.Serializable{
 	 * @param token the GameToken that has been found
 	 * @return true if successfully set to found
 	 */
-	public boolean foundToken(Player p, GameToken token){
+	public boolean foundMoveable(Player p, GameToken token){
+		
+		
 		if(!players.contains(p)){
 			return false;
 		}
