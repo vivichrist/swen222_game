@@ -49,6 +49,14 @@ public class SouthPanel {
 		panel.repaint();
 	}
 	
+	public CollectItemsCanvas getCollectItemsCanvas() {
+		return collectItemsCanvas;
+	}
+
+	public UsefulItemsCanvas getUsefulItemsCanvas() {
+		return usefulItemsCanvas;
+	}
+
 	public JPanel getPanel() {
 		return panel;
 	}
