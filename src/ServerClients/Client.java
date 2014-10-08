@@ -48,6 +48,12 @@ public class Client extends Thread {
 	public void run(){
 
 		while(true){
+			try {
+				this.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//System.out.println("client>>run()");
 			byte[]data = new byte[85000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -57,6 +63,7 @@ public class Client extends Thread {
 				//System.out.println("client>>run()>>before socket receive packet");
 				System.out.println("2");
 				socket.receive(packet);
+				
 				System.out.println("3");
 
 				//	System.out.println("client>>run()>>after receive packet");
@@ -121,18 +128,9 @@ public class Client extends Thread {
 	}
 
 	private void handleData(Packet02Data packet) {
-
-		byte[] realData = Arrays.copyOf( packet.getData(), 85000 );
 		
-		byte[]newData =new byte[realData.length-2];
-		
-		int count = 2;
-
-		for(byte b:realData){
-			newData[count-2] = realData[count];
-			count++;
-		}
-		state.deserialize(newData);
+		byte[] realData = packet.getRealData();
+		state.deserialize(realData);
 
 	}
 	public void setState(GameState state){

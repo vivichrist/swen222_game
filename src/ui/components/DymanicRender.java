@@ -8,6 +8,7 @@ import java.util.List;
 import javax.media.opengl.GL2;
 
 import world.components.CellType;
+import world.components.GameToken;
 
 public class DymanicRender implements GraphicalObject
 {
@@ -19,7 +20,55 @@ public class DymanicRender implements GraphicalObject
 	private List<int[]>		indices;
 	private boolean			xaligned = false;
 
-	public DymanicRender( CellType type, Behave act, Point position
+	public static DymanicRender instanceDoor( Point position, boolean xaligned )
+	{
+		return new DymanicRender( CellType.DOOR, Behave.OPEN_CLOSE, position
+				, xaligned, false, Color.decode( "#008800" ) );
+	}
+	
+	public static DymanicRender instanceTelePort( Point position )
+	{	// TODO: Teleporting behaviour
+		return new DymanicRender( CellType.TELEPORT, Behave.NONE, position
+				, false, false, Color.ORANGE );
+	}
+	
+	public static DymanicRender instanceCone( Point position, Color col )
+	{
+		return new DymanicRender( CellType.CONE, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	public static DymanicRender instanceBall( Point position, Color col )
+	{
+		return new DymanicRender( CellType.BALL, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	public static DymanicRender instanceDiamond( Point position, Color col )
+	{
+		return new DymanicRender( CellType.DIAMOND, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	public static DymanicRender instanceCube( Point position, Color col )
+	{
+		return new DymanicRender( CellType.CUBE, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	public static DymanicRender instanceKey( Point position, Color col )
+	{
+		return new DymanicRender( CellType.KEY, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	public static DymanicRender instanceTorch( Point position, Color col )
+	{
+		return new DymanicRender( CellType.TORCH, Behave.ROTATE, position
+			, false, false, col );
+	}
+	
+	private DymanicRender( CellType type, Behave act, Point position
 			, boolean xaligned, boolean reversed, Color meshColor )
 	{
 		this.meshColor = meshColor.getRGBColorComponents( null );
@@ -41,7 +90,7 @@ public class DymanicRender implements GraphicalObject
 		case OPEN_CLOSE: anim = new OpenClose(); break;
 		case ORIENTATION:
 			if ( type == CellType.BED )
-				anim = new Orientation( 2, 3, xaligned, reversed );
+				anim = new Orientation( 3, 2, xaligned, reversed );
 			else if ( type == CellType.COUCH || type == CellType.TABLE )
 				anim = new Orientation( 2, 1, xaligned, reversed );
 			else anim = new Orientation( 1, 1, xaligned, reversed );
@@ -165,13 +214,6 @@ public class DymanicRender implements GraphicalObject
 				break;
 			}
 		}
-	}
-
-
-	@Override
-	public void clean( GL2 gl )
-	{
-
 	}
 
 //	public Color getSelectColor()

@@ -1,6 +1,7 @@
 package world.game;
 
 import java.awt.Point;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -115,32 +116,33 @@ public class GameState implements java.io.Serializable{
 	public byte[] serialize() {
 		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
 
-		byte[] bytes = new byte[1024];
+		byte[] bytes = new byte[85000];
 		try {
 			//object to bytearray
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(baos);
 			out.writeObject(this);
 			bytes = baos.toByteArray();
+			out.flush();
 			baos.close();
 			out.close();
+			return bytes;
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		return bytes;
 	}
 	public GameState deserialize(byte[]bytes) {
 
 		try{
-			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-			ObjectInputStream in = new ObjectInputStream(bais);
-			List<Player> players = new ArrayList<Player>();
-			Map[] floors = new Map[game.getLevelsBuilding()];
-			GameState gameState = new GameState(players, floors);
-			gameState = (GameState) in.readObject();
-			this.players = gameState.players;
-			this.floors = gameState.floors;
+			//ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+			ObjectInputStream in = new ObjectInputStream((new ByteArrayInputStream(bytes)));
+//			List<Player> players = new ArrayList<Player>();
+//			Map[] floors = new Map[game.getLevelsBuilding()];
+//			GameState gameState = new GameState(players, floors);
+			GameState gameState = (GameState) in.readObject();
+//			this.players = gameState.players;
+//			this.floors = gameState.floors;
 			if(players.size() == 2){
 			System.out.println(players.get(0).getPosition().x);
 			System.out.println(players.get(1).getPosition().x);
