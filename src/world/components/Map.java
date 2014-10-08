@@ -239,4 +239,14 @@ public class Map implements java.io.Serializable{
 		if(tokens.containsKey(p)) return tokens.get(p);
 		return null;
 	}
+	
+	public boolean removeGameToken(Point p, GameToken token){
+		System.out.println("Game Tokens in Map: " + tokens.size());
+		if(tokens.get(p).equals(token)){
+			tokens.remove(p);
+			System.out.println("Game Tokens in Map after removal: " + tokens.size());
+			return true;
+		}
+		return false;
+	}
 }
