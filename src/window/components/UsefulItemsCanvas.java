@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import world.game.Player;
 
 public class UsefulItemsCanvas extends Canvas {
-	
+
 	private Player player;
 	private ArrayList<ImageIcon> usefulItems;
 
@@ -25,8 +25,8 @@ public class UsefulItemsCanvas extends Canvas {
 
 	private void getUsefulItems() {
 		for (int i = 0; i < player.getInventory().size(); i++){
-				String resource = "Resource/inventory/" + player.getInventory().get(i).toString() + ".png";
-				usefulItems.add(new ImageIcon(resource));
+			String resource = "Resource/inventory/" + player.getInventory().get(i).toString() + ".png";
+			usefulItems.add(new ImageIcon(resource));
 		}
 	}
 

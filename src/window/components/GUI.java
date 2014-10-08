@@ -333,10 +333,13 @@ public class GUI  {
 		return gameState;
 	}
 	
-	public void redrawSouthPanel(){
+	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
 	}
 	
+	public void redrawUsefulItemCanvas(){
+		southPanel.getUsefulItemsCanvas().repaint();
+	}
 	
 	public static void main(String[] args){
 		GUI gui = new GUI();

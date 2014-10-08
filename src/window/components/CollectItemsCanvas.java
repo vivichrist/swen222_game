@@ -12,12 +12,12 @@ import world.components.TokenType;
 import world.game.Player;
 
 public class CollectItemsCanvas extends Canvas {
-	
+
 	private Player player;
 	private TokenType type;
 	private ArrayList<ImageIcon> collectItems;
 	private ArrayList<Boolean> isPaint;
-	
+
 	public CollectItemsCanvas(Player player) {
 		this.player = player;
 		type = player.getType();
@@ -27,14 +27,14 @@ public class CollectItemsCanvas extends Canvas {
 		initialiseItems();
 		getCollectItems();
 	}
-	
+
 	private void initialiseItems() {
 		collectItems = new ArrayList<ImageIcon>();
 		for(int i = 0; i < player.getTokenList().size(); i++){
 			String resource = "Resource/" + type.toString() + "/" + type.toString() + " grey" + ".png";
 			collectItems.add(i, new ImageIcon(resource));			
 		}
-		
+
 		isPaint = new ArrayList<Boolean>();
 		for (int j = 0; j < player.getTokenList().size(); j++){
 			isPaint.add(false);

@@ -27,13 +27,13 @@ public class PlayerController {
 	 * Redraws the GameToken panel in the GUI - use for updating the GUI when a Player collects a GameToken
 	 */
 	public void refreshTokenPanel(){
-		gui.redrawSouthPanel();
+		gui.redrawCollectItemCanvas();
 	}
 	
 	/**
 	 * Redraws the Inventory panel in the GUI - use for updating the GUI when a Player collects a MoveableObject
 	 */
 	public void refreshInventoryPanel(){
-		gui.redrawCollectItemsPanel();
+		gui.redrawUsefulItemCanvas();
 	}
 }
