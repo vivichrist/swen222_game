@@ -4,17 +4,19 @@ import java.awt.geom.Point2D.Float;
 
 import javax.media.opengl.GL2;
 
+import world.components.Direction;
+
 public class Orientation implements Behavior
 {
 	private int depth, width;//, count = 0;
 	private boolean xaligned, reverse;
 
-	public Orientation(  int width, int depth, boolean xaligned, boolean reverse )
+	public Orientation(  int width, int depth, Direction dir )
 	{
 		this.depth = depth * GameView.cellsize;
 		this.width = width * GameView.cellsize;
-		this.xaligned = xaligned;
-		this.reverse = reverse;
+		xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
+		reverse = dir == Direction.SOUTH || dir == Direction.WEST;
 	}
 
 	@Override

@@ -39,6 +39,12 @@ public class GameViewData
 	{
 		this.gameElements.put( p, element );
 	}
+	
+	public void addAllGameElements( List<Point> ps, GraphicalObject element )
+	{
+		for ( Point p: ps )
+			gameElements.put( p, element );
+	}
 
 	public List<StaticRender> getStaticScene()
 	{
@@ -55,5 +61,10 @@ public class GameViewData
 		GraphicalObject go = gameElements.remove( p );
 		dynamicScene.remove( (DymanicRender)go );
 	}
-
+	public void clear()
+	{
+		dynamicScene.clear();
+		staticScene.clear(); // must clear staticID from opengl
+		gameElements.clear();
+	}
 }
