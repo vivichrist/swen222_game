@@ -97,6 +97,8 @@ public class GameState implements java.io.Serializable{
 		}
 		else{
 			p.getTokenList().get(token).setFound(true);
+			System.out.println("Token picked up: " + p.getTokenList().get(token).getColor().toString());
+			System.out.println(token.getColor().toString() + " token state: " + p.getTokenList().get(token).isFound());
 			return true;
 		}
 	}
