@@ -12,4 +12,6 @@ public class PlayerController {
 		this.state = state;
 		this.gui = gui;
 	}
+	
+	public 
 }
