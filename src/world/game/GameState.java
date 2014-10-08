@@ -159,8 +159,21 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
+	/**\
+	 * Return the current GameState
+	 * @return the current GameState
+	 */
 	public GameState getState(){
 		return this;
+	}
+	
+	//TODO: return a clone here instead of the actual list
+	/**
+	 * Returns a List of the current Players in this game
+	 * @return a List of the current Players in this game
+	 */
+	public List<Player> getPlayers(){
+		return players;
 	}
 
 
