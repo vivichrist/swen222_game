@@ -61,6 +61,7 @@ public class CollectItemsCanvas extends Canvas {
 	}
 
 	public void paint(Graphics g) {
+		System.out.println("paint called");
 		getCollectItems();
 		int gap = 65;
 		for(int i = 0; i < collectItems.size(); i++){
