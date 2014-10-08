@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import window.components.GUI;
 import world.components.GameToken;
 import world.components.Map;
 
@@ -23,6 +24,9 @@ public class GameState implements java.io.Serializable{
 	private  List<Player> players;
 	private  Map[] floors;
 	private GameBuilder game;
+	
+	//TODO: sanity check having this field - should really be in a controller?
+	private GUI gui;
 
 	
 	/**
@@ -175,9 +179,10 @@ public class GameState implements java.io.Serializable{
 	public List<Player> getPlayers(){
 		return players;
 	}
-
-
 	
-	
+	//TODO: remove this method after testing pickup of tokens
+	public void setGui(GUI g){
+		gui = g;
+	}
 	
 }

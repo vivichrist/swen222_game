@@ -314,6 +314,7 @@ public class GUI  {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
+		state.setGui(this);
 		gameView = new GameView( glcapabilities, frame, state );
 
 		player = state.getPlayer(name);
