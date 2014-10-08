@@ -38,11 +38,23 @@ public class Map implements java.io.Serializable{
 			Scanner scan = new Scanner(file);
 
 			// First read header for map width and height
-			if(!scan.hasNextInt()) throw new Exception("Map format error: first header token should be an int");
+			if(!scan.hasNextInt()) 
+			{
+				scan.close();
+				throw new Exception("Map format error: first header token should be an int");
+			}
 			else xLimit = scan.nextInt();
-			if(!scan.hasNext("x")) throw new Exception("Map format error: second header toden should be 'x'");
+			if(!scan.hasNext("x"))
+			{
+				scan.close();
+				throw new Exception("Map format error: second header toden should be 'x'");
+			}
 			else scan.next();
-			if(!scan.hasNextInt()) throw new Exception("Map format error: third header token should be an int");
+			if(!scan.hasNextInt())
+			{
+				scan.close();
+				throw new Exception("Map format error: third header token should be an int");
+			}
 			else yLimit = scan.nextInt();
 
 			// Initialise arrays
