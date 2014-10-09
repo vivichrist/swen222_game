@@ -2,8 +2,10 @@ package ServerClients;
 
 import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -50,6 +52,7 @@ public class Client extends Thread {
 		while(true){
 			try {
 				this.sleep(1000);
+				checkState();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -63,7 +66,7 @@ public class Client extends Thread {
 				//System.out.println("client>>run()>>before socket receive packet");
 				System.out.println("2");
 				socket.receive(packet);
-				
+
 				System.out.println("3");
 
 				//	System.out.println("client>>run()>>after receive packet");
@@ -120,6 +123,16 @@ public class Client extends Thread {
 		}
 
 	}
+	private void checkState(){
+
+		if(state.isMoved()){
+			System.out.println("player moved==========");
+			byte[] data = state.serialize();
+			Packet02Data dataP = new Packet02Data(state,data);
+			dataP.writeData(this);
+		}
+
+	}
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
@@ -128,13 +141,15 @@ public class Client extends Thread {
 	}
 
 	private void handleData(Packet02Data packet) {
-		
-		byte[] realData = packet.getRealData();
-		state.deserialize(realData);
+		Packet02Data packet1 = packet;
+		byte[] realData = packet1.getRealData();
+
+	//	state.deserialize(realData);
 
 	}
 	public void setState(GameState state){
 		this.state = state;
 	}
+
 }
 

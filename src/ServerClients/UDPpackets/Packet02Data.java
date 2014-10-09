@@ -35,8 +35,8 @@ public class Packet02Data extends UDPPakcet {
 
 	public Packet02Data(GameState state,byte[] data) {
 		super(02);
-		this.state = state;
 		this.data = data;
+		this.state = state;
 		//state = getState(data);
 	
 		System.out.println("packet02Data con 2: ");
@@ -86,7 +86,7 @@ public class Packet02Data extends UDPPakcet {
 		
 		System.out.println("packet02Data con 3: ");
 		server.sendDataToAllClients(getData());
-//		GameState s = state.deserialize(getRealData());
+		//GameState s = state.deserialize(getRealData());
 //		if(s.getPlayers().size()!=0){
 //		for(int i = 0; i< s.getPlayers().size();i++){
 //			Player m = s.getPlayers().get(i);
@@ -122,7 +122,7 @@ public class Packet02Data extends UDPPakcet {
 			newData[1] = '2';
 			for(int i = 2; i<data.length;i++){
 				newData[i] = data[i-2];
-			//	System.out.print(newData[i]);
+				//System.out.print(newData[i]);
 			}
 			
 			

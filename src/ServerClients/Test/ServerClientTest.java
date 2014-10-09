@@ -35,21 +35,13 @@ public class ServerClientTest {
 
 		client = new Client(state,"localhost");
 		client.start();
+		client.sendData(("02ping").getBytes());
 		System.out.println("client started");
 	}
 
-	
-	@SuppressWarnings("deprecation")
 	@Test
-	public void testAddPlayers(){
-		System.out.println("aaa");
-		String playerName = "Jacky";
-		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
-				null,null, -1);
-		checkConnection(player1);
-		assertEquals(1,server.getConnectedPlayers().size());
-		server.stop();
-		client.stop();
+	public void testSendMessage(){
+		
 	}
 	
 	
@@ -66,18 +58,11 @@ public class ServerClientTest {
 		checkConnection(player1);
 		//System.out.println("Size array: "+server.getConnectedPlayers().size()+ "player Name: "+server.getConnectedPlayers().get(0).getName());
 		assertTrue(playerName.equals(server.getConnectedPlayers().get(0).getName()));
+		assertEquals(1,server.getConnectedPlayers().size());
+
 		server.stop();
 		client.stop();
 	}
-	
-	@Test
-	public void testSendUpdate(){
-		String playerName = "sisi";
-		MultyPlayer player1 = new MultyPlayer(playerName, new Point(18,23),
-				null,null, -1);
-		checkConnection(player1);
-	}
-	
 	
 	
 	
