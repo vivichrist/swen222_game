@@ -42,12 +42,23 @@ public class GameScene
 			System.out.println();
 		}
 	}
+	
 
+	/**
+	 * @param x - continuous x position value
+	 * @param y - continuous y position value
+	 * @return if the position is inside a collidable square
+	 */
 	public boolean isCollidable( float x, float y )
 	{
 		return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
 	}
 
+	/**
+	 * @param x - row select
+	 * @param y - column select
+	 * @return if this cell has a collidable object in it
+	 */
 	public boolean isCollidable( int x, int y )
 	{
 		if ( x >= xlimit || y >= ylimit )
@@ -80,7 +91,7 @@ public class GameScene
 
 	public void addSurrounds()
 	{
-		gdata.clear();
+		gdata.clear(); // need to destroy staticID too. for new floor
 		Direction dir;
 		Point p;
 		DymanicRender dyn;

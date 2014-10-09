@@ -23,6 +23,7 @@ public class StaticDisplayList
 	public boolean createDisplaylist( GL2 gl )
 	{
 		GameViewData data	= GameViewData.instance();
+		if ( staticID != 0 ) destroy( gl );
 		staticID  = gl.glGenLists( 1 );
 		if ( staticID == 0 ) return false;
     	gl.glNewList(staticID, GL2.GL_COMPILE);

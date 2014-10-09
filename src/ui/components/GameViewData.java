@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,7 @@ public class GameViewData
 	private final ArrayList<StaticRender>		staticScene;
 	private final ArrayList<DymanicRender>		dynamicScene;
 	private HashMap<Point, GraphicalObject>		gameElements;
+	private DymanicRender 						previousSelection	= null;
 	private static GameViewData					instance;
 
 	public static GameViewData instance()
@@ -74,8 +76,24 @@ public class GameViewData
 		GraphicalObject go = gameElements.remove( p );
 		dynamicScene.remove( (DymanicRender)go );
 	}
+	
+	public DymanicRender getPreviousSelection()
+	{
+		return previousSelection;
+	}
+
+	public void replacePreviousSelection( DymanicRender dyn )
+	{
+		if ( previousSelection != null )
+		{
+			previousSelection.setSelectColor( Color.BLACK );
+		}
+		previousSelection = dyn;
+	}
+	
 	public void clear()
 	{
+		previousSelection = null;
 		dynamicScene.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();

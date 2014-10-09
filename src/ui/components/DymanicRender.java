@@ -89,6 +89,7 @@ public class DymanicRender implements GraphicalObject
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
+		// tokens key and torch should be centered in the middle of the square
 		if ( type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 				&& type.ordinal() < CellType.CHEST.ordinal() )
 			this.position = new Point2D.Float(
@@ -101,6 +102,7 @@ public class DymanicRender implements GraphicalObject
 		System.out.println( "Actual Position:(" + this.position.x
 				+ "," + this.position.y + ")");
 		this.xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
+		// assign behaviours
 		switch ( act )
 		{
 		case ROTATE: anim = new Rotate( 0 ); break;
@@ -126,6 +128,7 @@ public class DymanicRender implements GraphicalObject
 		}
 		gl.glPushMatrix();
 		gl.glTranslatef( position.x, position.y, 0 );
+		// doors need manual orientation as they have open/close behaviour
 		if ( (type == CellType.DOOR || type == CellType.KEYDOOR) && !xaligned )
 		{
 			gl.glTranslatef( GameView.cellsize, 0f, 0f );
@@ -137,7 +140,7 @@ public class DymanicRender implements GraphicalObject
 		gl.glPopMatrix();
 		return true;
 	}
-
+	// behaviour defines collidability
 	public boolean collide()
 	{
 		if ( anim == null ) return true;

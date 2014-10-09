@@ -221,11 +221,13 @@ public class GameView extends GLJPanel
         	System.out.println("World coords at projected-z = " + posZ.get( 0 ) + " are ( "
                     + pos.get( 0 ) + ", " + pos.get( 1 ) + ", " + pos.get( 2 )
                     + ")");
-        	Point p = new Point( (int) (pos.get( 0 )/cellsize), (int) (pos.get( 1 )/cellsize) );
+        	Point p = new Point( (int) (pos.get( 0 )/cellsize)
+        					   , (int) (pos.get( 1 )/cellsize) );
         	GraphicalObject go = GameViewData.instance().getGameElements().get( p );
         	if ( go != null && go instanceof DymanicRender )
         	{
         		((DymanicRender)go).setSelectColor( Color.decode( "#11d0000" ) );
+        		GameViewData.instance().replacePreviousSelection( ((DymanicRender)go) );
         	}
 		}
     }
