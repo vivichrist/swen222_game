@@ -28,26 +28,19 @@ public class GameScene
 	{
 		//Kalo added
 		game = state;
-		// read in the map
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
 		ylimit = game.getMap().getYLimit();
 		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
+		// read in the map
 		map = game.getMap().getCellTypeMap();
+		// print out the map
 		for ( CellType[] line: map )
 		{
 			for ( CellType c: line )
 				System.out.print( " " + c.ordinal() );
 			System.out.println();
 		}
-	}
-
-	/**
-	 * @return the boundary of the static map
-	 */
-	public Point mapsize()
-	{
-		return new Point( xlimit, ylimit );
 	}
 
 	public boolean isCollidable( float x, float y )

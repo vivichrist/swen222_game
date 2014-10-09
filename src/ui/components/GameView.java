@@ -30,19 +30,21 @@ import java.util.ArrayList;
 @SuppressWarnings( "serial" )
 public class GameView extends GLJPanel
 {
+	// OpenGl size units
 	public static final int		cellsize = 10;
+	// radians
 	public static final double
 					PI2 = Math.PI * 2;
+	// conversion to degrees
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
 	// actual direction before update
 	private float 				direction = 0.0f;
 	// actual position before update
 	private Point2D.Float 		position;
+	// collections of drawable graphical objects
 	private GameViewData		data	= GameViewData.instance();
-	private GameScene			map;
-	// map boundaries in the positive x y directions
-	// private Point				extents;
+	private GameScene			scene;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
 	private GameState			state;
@@ -50,18 +52,20 @@ public class GameView extends GLJPanel
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
     	super( gc );
+    	// load game elements into the scene for rendering
+    	scene = new GameScene(state);
 
-    	map = new GameScene(state);
-
-    	// extents = map.mapsize();
     	this.state = state;
+    	// initial point of extraction (where the player starts)
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
 				p.x * cellsize, p.y * cellsize );
-        keyInput = new GameListener( position, direction, map );
+        // start receiving input
+        keyInput = new GameListener( position, direction, scene );
         addGLEventListener( new GLEventListener() {
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#reshape(javax.media.opengl.GLAutoDrawable, int, int, int, int)
+             * when the window size changes...
              */
         	@Override
             public void reshape( GLAutoDrawable glautodrawable
@@ -76,6 +80,7 @@ public class GameView extends GLJPanel
             }
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#init(javax.media.opengl.GLAutoDrawable)
+             * first time setup of OpenGL
              */
             @Override
             public void init( GLAutoDrawable glautodrawable ) {
@@ -100,7 +105,7 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_DEPTH_TEST );
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
-            	map.addSurrounds();
+            	scene.addSurrounds();
             	gl2.glLineWidth( 2f );
             	System.out.println( "Dynamic Scene Object count:" + data.getDynamicScene().size() );
             	for( GraphicalObject go: data.getDynamicScene() )
@@ -113,6 +118,7 @@ public class GameView extends GLJPanel
 
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#dispose(javax.media.opengl.GLAutoDrawable)
+             * called upon shutdown
              */
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
@@ -122,6 +128,7 @@ public class GameView extends GLJPanel
 
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#display(javax.media.opengl.GLAutoDrawable)
+             * called every frame
              */
             @Override
             public void display( GLAutoDrawable glautodrawable ) {
@@ -161,6 +168,9 @@ public class GameView extends GLJPanel
         setVisible( true );
     }
 
+    /**
+     * Various updates that are to be done before the rendering of each frame.
+     */
     private void update()
 	{
     	// keep moving and turning even if there are no key press or release events
@@ -186,7 +196,7 @@ public class GameView extends GLJPanel
     }
 
 	/**
-	 * All game objects to render themselves
+	 * All GraphicalObjects to render themselves, both static and dynamic.
 	 * @param gl2 - opengl rendering context
 	 */
 	private void render( GL2 gl2 )
