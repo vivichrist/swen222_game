@@ -132,8 +132,8 @@ public class GameView extends GLJPanel
              */
             @Override
             public void display( GLAutoDrawable glautodrawable ) {
-            	update();
             	GL2 gl2 = glautodrawable.getGL().getGL2();
+            	update( gl2 );
             	GLU glu = GLU.createGLU( gl2 );
             	gl2.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
                 // Draw some rotating stuff
@@ -171,14 +171,31 @@ public class GameView extends GLJPanel
     /**
      * Various updates that are to be done before the rendering of each frame.
      */
-    private void update()
+    private void update( GL2 gl )
 	{
     	// keep moving and turning even if there are no key press or release events
     	Point click = keyInput.update();
     	if ( click != null )
     	{
-    		// mouse selection
-    		// TODO: gl.glUnProject(...
+    		int viewport[] = new int[4];
+    	    double mvmatrix[] = new double[16];
+    	    double projmatrix[] = new double[16];
+    	    double wcoord[] = new double[4];// returned xyz coords
+    	    
+    	    gl.glGetIntegerv( GL.GL_VIEWPORT, viewport, 0);
+            gl.glGetDoublev( GL2.GL_MODELVIEW_MATRIX, mvmatrix, 0);
+            gl.glGetDoublev( GL2.GL_PROJECTION_MATRIX, projmatrix, 0);
+            /* note viewport[3] is height of window in pixels */
+            int realy = viewport[3] - (int) click.y - 1;
+            GLU glu = GLU.createGLU( gl );
+            for ( double f = 0.0f; f <= 1.0f; f+=0.001 )
+            {
+            	glu.gluUnProject((double) click.x, (double) realy, f,
+                    mvmatrix, 0,
+                    projmatrix, 0, 
+                    viewport, 0, 
+                    wcoord, 0);
+            }
     	}
     	direction = keyInput.getDirection() * DEG;
     	// new position
