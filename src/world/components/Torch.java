@@ -5,7 +5,7 @@ package world.components;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Torch implements MoveableObject {
+public class Torch implements MoveableObject, java.io.Serializable{
 
 	private boolean lit = false;
 	
