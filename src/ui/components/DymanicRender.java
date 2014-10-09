@@ -27,6 +27,12 @@ public class DymanicRender implements GraphicalObject
 				, dir, Color.decode( "#008800" ) );
 	}
 	
+	public static DymanicRender instanceKeyDoor( Point position, Direction dir )
+	{
+		return new DymanicRender( CellType.KEYDOOR, Behave.OPEN_CLOSE, position
+				, dir, Color.decode( "#008800" ) );
+	}
+	
 	public static DymanicRender instanceTelePort( Point position )
 	{	// TODO: Teleporting behaviour
 		return new DymanicRender( CellType.TELEPORT, Behave.NONE, position
@@ -78,18 +84,22 @@ public class DymanicRender implements GraphicalObject
 	private DymanicRender( CellType type, Behave act, Point position
 			, Direction dir, Color meshColor )
 	{
+		System.out.println( "Graphical Object: " + type
+				+ " added at (" + position.x + "," + position.y + ")" );
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
 		if ( type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 				&& type.ordinal() < CellType.CHEST.ordinal() )
 			this.position = new Point2D.Float(
-					  position.x * GameView.cellsize + (GameView.cellsize/2f)
-					, position.y * GameView.cellsize + (GameView.cellsize/2f) );
+					  (position.x * GameView.cellsize) + (GameView.cellsize/2f)
+					, (position.y * GameView.cellsize) + (GameView.cellsize/2f) );
 		else
 			this.position = new Point2D.Float(
 				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
+		System.out.println( "Actual Position:(" + this.position.x
+				+ "," + this.position.y + ")");
 		this.xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
 		switch ( act )
 		{
@@ -116,7 +126,7 @@ public class DymanicRender implements GraphicalObject
 		}
 		gl.glPushMatrix();
 		gl.glTranslatef( position.x, position.y, 0 );
-		if ( type == CellType.DOOR && !xaligned )
+		if ( (type == CellType.DOOR || type == CellType.KEYDOOR) && !xaligned )
 		{
 			gl.glTranslatef( GameView.cellsize, 0f, 0f );
 			gl.glRotatef( 90.0f, 0f, 0f, 1.f );

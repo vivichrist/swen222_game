@@ -24,7 +24,7 @@ public class UsefulItemsCanvas extends Canvas {
 	}
 
 	private void getUsefulItems() {
-		for (int i = 0; i < player.getInventory().size(); i++){
+		for (int i = usefulItems.size(); i < player.getInventory().size(); i++){
 			String resource = "Resource/inventory/" + player.getInventory().get(i).toString() + ".png";
 			usefulItems.add(new ImageIcon(resource));
 		}

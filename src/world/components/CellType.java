@@ -9,7 +9,7 @@ public enum CellType {
 	, WALL			// 1
 	, DOOR			// 2
 	, TELEPORT		// 3
-	, OPENDOOR		// 4
+	, KEYDOOR		// 4
 	, OUTOFBOUNDS	// 5
 	, CONE			// 6
 	, CUBE			// 7

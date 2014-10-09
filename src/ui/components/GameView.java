@@ -30,19 +30,21 @@ import java.util.ArrayList;
 @SuppressWarnings( "serial" )
 public class GameView extends GLJPanel
 {
+	// OpenGl size units
 	public static final int		cellsize = 10;
+	// radians
 	public static final double
 					PI2 = Math.PI * 2;
+	// conversion to degrees
 	public static final float
 					DEG = 180.0f / (float) Math.PI;
 	// actual direction before update
 	private float 				direction = 0.0f;
 	// actual position before update
 	private Point2D.Float 		position;
+	// collections of drawable graphical objects
 	private GameViewData		data	= GameViewData.instance();
-	private GameScene			map;
-	// map boundaries in the positive x y directions
-	// private Point				extents;
+	private GameScene			scene;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
 	private GameState			state;
@@ -50,18 +52,20 @@ public class GameView extends GLJPanel
     public GameView( GLCapabilities gc, JFrame frame, GameState state )
     {
     	super( gc );
+    	// load game elements into the scene for rendering
+    	scene = new GameScene(state);
 
-    	map = new GameScene(state);
-
-    	// extents = map.mapsize();
     	this.state = state;
+    	// initial point of extraction (where the player starts)
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
 				p.x * cellsize, p.y * cellsize );
-        keyInput = new GameListener( position, direction, map );
+        // start receiving input
+        keyInput = new GameListener( position, direction, scene );
         addGLEventListener( new GLEventListener() {
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#reshape(javax.media.opengl.GLAutoDrawable, int, int, int, int)
+             * when the window size changes...
              */
         	@Override
             public void reshape( GLAutoDrawable glautodrawable
@@ -76,6 +80,7 @@ public class GameView extends GLJPanel
             }
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#init(javax.media.opengl.GLAutoDrawable)
+             * first time setup of OpenGL
              */
             @Override
             public void init( GLAutoDrawable glautodrawable ) {
@@ -100,7 +105,7 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_DEPTH_TEST );
             	gl2.glDepthFunc(GL.GL_LEQUAL);
                 gl2.glShadeModel(GL2.GL_SMOOTH);
-            	map.addSurrounds();
+            	scene.addSurrounds();
             	gl2.glLineWidth( 2f );
             	System.out.println( "Dynamic Scene Object count:" + data.getDynamicScene().size() );
             	for( GraphicalObject go: data.getDynamicScene() )
@@ -113,6 +118,7 @@ public class GameView extends GLJPanel
 
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#dispose(javax.media.opengl.GLAutoDrawable)
+             * called upon shutdown
              */
             @Override
             public void dispose( GLAutoDrawable glautodrawable ) {
@@ -122,11 +128,12 @@ public class GameView extends GLJPanel
 
             /* (non-Javadoc)
              * @see javax.media.opengl.GLEventListener#display(javax.media.opengl.GLAutoDrawable)
+             * called every frame
              */
             @Override
             public void display( GLAutoDrawable glautodrawable ) {
-            	update();
             	GL2 gl2 = glautodrawable.getGL().getGL2();
+            	update( gl2 );
             	GLU glu = GLU.createGLU( gl2 );
             	gl2.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
                 // Draw some rotating stuff
@@ -161,14 +168,37 @@ public class GameView extends GLJPanel
         setVisible( true );
     }
 
-    private void update()
+    /**
+     * Various updates that are to be done before the rendering of each frame.
+     */
+    private void update( GL2 gl )
 	{
     	// keep moving and turning even if there are no key press or release events
     	Point click = keyInput.update();
     	if ( click != null )
     	{
-    		// mouse selection
-    		// TODO: gl.glUnProject(...
+    		int viewport[] = new int[4];
+    	    double mvmatrix[] = new double[16];
+    	    double projmatrix[] = new double[16];
+    	    double wcoord[] = new double[4];// returned xyz coords
+    	    
+    	    gl.glGetIntegerv( GL.GL_VIEWPORT, viewport, 0);
+            gl.glGetDoublev( GL2.GL_MODELVIEW_MATRIX, mvmatrix, 0);
+            gl.glGetDoublev( GL2.GL_PROJECTION_MATRIX, projmatrix, 0);
+            /* note viewport[3] is height of window in pixels */
+            int realy = viewport[3] - (int) click.y - 1;
+            GLU glu = GLU.createGLU( gl );
+            for ( double f = 0.0f; f <= 1.0f; f+=0.001 )
+            {
+            	glu.gluUnProject((double) click.x, (double) realy, f,
+                    mvmatrix, 0,
+                    projmatrix, 0, 
+                    viewport, 0, 
+                    wcoord, 0);
+            	System.out.println("World coords at z=" + f + " are ( "
+                        + wcoord[0] + ", " + wcoord[1] + ", " + wcoord[2]
+                        + ")");
+            }
     	}
     	direction = keyInput.getDirection() * DEG;
     	// new position
@@ -186,7 +216,7 @@ public class GameView extends GLJPanel
     }
 
 	/**
-	 * All game objects to render themselves
+	 * All GraphicalObjects to render themselves, both static and dynamic.
 	 * @param gl2 - opengl rendering context
 	 */
 	private void render( GL2 gl2 )

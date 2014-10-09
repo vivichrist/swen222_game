@@ -28,26 +28,19 @@ public class GameScene
 	{
 		//Kalo added
 		game = state;
-		// read in the map
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
 		ylimit = game.getMap().getYLimit();
 		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
+		// read in the map
 		map = game.getMap().getCellTypeMap();
+		// print out the map
 		for ( CellType[] line: map )
 		{
 			for ( CellType c: line )
 				System.out.print( " " + c.ordinal() );
 			System.out.println();
 		}
-	}
-
-	/**
-	 * @return the boundary of the static map
-	 */
-	public Point mapsize()
-	{
-		return new Point( xlimit, ylimit );
 	}
 
 	public boolean isCollidable( float x, float y )
@@ -66,11 +59,19 @@ public class GameScene
 		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
 			|| gdata.getGameElements().get( p ) != null )
 		{	// collect it and remove from data to apear in items
+			// System.out.println( "Collide (" + x + "," + y + ")" );
 			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
-			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+			if ( ct == CellType.TELEPORT )
+			{return false;}
+			if ( ct == CellType.KEYDOOR )
+			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
+					return ((DymanicRender)gdata.getGameElements().get( p )).collide();
+				return true;
+			}
+			else if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 					&& ct.ordinal() < CellType.CHEST.ordinal() )
 			{
-				game.foundMoveable( game.getPlayer(), (GameToken)game.getMap().objectAtPoint( p ) );
+				game.pickupObjectAtPoint( game.getPlayer(), p );
 				gdata.remove( p );
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
@@ -100,6 +101,12 @@ public class GameScene
 					dyn = DymanicRender.instanceDoor( p, dir );
 					StaticRender doorWay = new StaticRender( CellType.DOOR, nesw, p );
 					gdata.addStaticOnly( doorWay );
+					gdata.addGrapicalObject( dyn );
+					break;
+				case KEYDOOR :
+					dyn = DymanicRender.instanceKeyDoor( p, dir );
+					StaticRender keydoorWay = new StaticRender( CellType.KEYDOOR, nesw, p );
+					gdata.addStaticOnly( keydoorWay );
 					gdata.addGrapicalObject( dyn );
 					break;
 				case TELEPORT :
@@ -162,26 +169,6 @@ public class GameScene
 				}
 			}
 		}
-//		p =  new Point( 4, 16 );
-//		dyn = new DymanicRender( CellType.BED, Behave.ORIENTATION, p, true, true, Color.decode( "#667788" ) );
-//		dynamicScene.add( dyn );
-//		gameElements.put( p, dyn );
-//		p =  new Point( 4, 20 );
-//		dyn = new DymanicRender( CellType.TABLE, Behave.ORIENTATION, p, false, false, Color.decode( "#991155" ) );
-//		dynamicScene.add( dyn );
-//		gameElements.put( p, dyn );
-//		p =  new Point( 9, 20 );
-//		dyn = new DymanicRender( CellType.COUCH, Behave.ORIENTATION, p, true, true, Color.decode( "#112233" ) );
-//		dynamicScene.add( dyn );
-//		gameElements.put( p, dyn );
-//		p =  new Point( 12, 20 );
-//		dyn = new DymanicRender( CellType.DRAWERS, Behave.ORIENTATION, p, false, false, Color.decode( "#77ff33" ) );
-//		dynamicScene.add( dyn );
-//		gameElements.put( p, dyn );
-//		p =  new Point( 18, 20 );
-//		dyn = new DymanicRender( CellType.CHEST, Behave.ORIENTATION, p, false, false, Color.decode( "#dd6655" ) );
-//		dynamicScene.add( dyn );
-//		gameElements.put( p, dyn );
 	}
 	private CellType[] findNeighbours( int i, int j )
 	{

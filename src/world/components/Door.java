@@ -45,6 +45,15 @@ public class Door implements java.io.Serializable{
 	public void setKey(Key key) {
 		this.key = key;
 	}
+	
+	/**
+	 * Returns the Key for this Door
+	 * @return
+	 */
+	public Key getKey(){
+		if(key == null) System.out.println("Door does not have a key");
+		return key;
+	}
 
 	/**
 	 * Checks whether this Door is locked

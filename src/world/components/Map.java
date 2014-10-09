@@ -1,5 +1,6 @@
 package world.components;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
 import world.game.Player;
 
 /**
@@ -74,6 +76,13 @@ public class Map implements java.io.Serializable{
 					}
 					if(current == CellType.DOOR){
 						doors.put(new Point(x, y), new Door(false));
+					}
+					if(current == CellType.KEYDOOR){
+						Door door = new Door(true);
+						Key key = new Key("Key One", Color.WHITE);
+						door.setKey(key);
+						doors.put(new Point(x, y), door);
+						moveableObjects.put(randomEmptyCell(), key);
 					}
 					map[x][y] = current;
 				}
@@ -196,8 +205,19 @@ public class Map implements java.io.Serializable{
 		else{
 			players.remove(oldPos);
 			players.put(newPos, player);
+			System.out.println("number of moveable objects in map: " + moveableObjects.size());
 			return true;
 		}
+	}
+	
+	/**
+	 * Returns a Door at a given Point in this Map
+	 * @param p the Point of the Door
+	 * @return the Door at the given Point
+	 */
+	public Door getDoor(Point p){
+		if(!doors.containsKey(p)) return null;
+		return doors.get(p);
 	}
 
 	/**
@@ -259,10 +279,21 @@ public class Map implements java.io.Serializable{
 	 * @return true if successfully removed
 	 */
 	public boolean removeGameToken(Point p, GameToken token){
-		System.out.println("Game Tokens in Map: " + tokens.size());
 		if(tokens.get(p).equals(token)){
 			tokens.remove(p);
-			System.out.println("Game Tokens in Map after removal: " + tokens.size());
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Removes a MoveableObject from a given Point on this Map
+	 * @param p the Point to remove the MoveableObject from
+	 * @return true if successfully removed (specified point must contain a MoveableObject)
+	 */
+	public boolean removeMoveableObject(Point p){
+		if(moveableObjects.containsKey(p)){
+			moveableObjects.remove(p);
 			return true;
 		}
 		return false;

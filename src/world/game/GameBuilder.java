@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import world.components.Map;
 import world.components.TokenType;
+import world.components.Torch;
 
 
 public class GameBuilder {
@@ -40,6 +41,7 @@ public class GameBuilder {
 			placePlayers();
 			//TODO: place MoveableObjects
 			placePlayerTokens();
+			placeTorches();
 			//placeFurniture();
 			state = new GameState(players, floors);
 		}
@@ -61,6 +63,7 @@ public class GameBuilder {
 		placePlayers();
 		//TODO: place MoveableObjects
 		placePlayerTokens();
+		placeTorches();
 		state = new GameState(players, floors);
 	}
 	
@@ -142,6 +145,18 @@ public class GameBuilder {
 				// Place the Token in a random cell on the floor
 				randomFloor.addGameToken(randomFloor.randomEmptyCell(), currentTokens.get(j));
 			}
+		}
+	}
+	
+	/**
+	 * Distributes a torches (one per player) throughout the game world, choosing floors and Points at random
+	 */
+	private void placeTorches(){
+		for(int i = 0; i < players.size(); i ++){
+			Random random = new Random();
+			Map randomFloor = floors[random.nextInt(floors.length)];
+			randomFloor.addMoveable(randomFloor.randomEmptyCell(), new Torch());
+			System.out.println("Torch added");
 		}
 	}
 	

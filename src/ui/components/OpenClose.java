@@ -28,7 +28,7 @@ public class OpenClose implements Behavior
 	{
 		if ( open > threshhold ) return false;
 		if ( open > 0 ) return true;
-		openSpeed = 0.7f / GameView.cellsize;
+		openSpeed = 1.4f / GameView.cellsize;
 		return true;
 	}
 
