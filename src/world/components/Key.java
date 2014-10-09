@@ -7,7 +7,7 @@ import java.awt.Color;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Key implements MoveableObject {
+public class Key implements MoveableObject, java.io.Serializable{
 
 	//TODO: is the name field necessary for a key???
 	private final String name;
