@@ -205,18 +205,18 @@ System.out.println("Server Start>>>>>>>>>>");
 				GameBuilder builder =new GameBuilder(names);
 				state = builder.getGameState();
 				byte[] temp =state.serialize(); 
-//				byte[]newtemp = new byte[temp.length+2];
-//				newtemp[0] = '0';
-//				newtemp[1] = '2';
-//				for(int i = 2; i<temp.length;i++){
-//					newtemp[i] = temp[i-2];
-//				}
-				
+				byte[]newtemp = new byte[temp.length+2];
+				newtemp[0] = '0';
+				newtemp[1] = '2';
+				for(int i = 2; i<temp.length;i++){
+					newtemp[i] = temp[i-2];
+				}
+				sendDataToAllClients(newtemp);
 				
 			
-				Packet02Data pk = new Packet02Data(state,temp);
-			
-				pk.writeData(this);
+//				Packet02Data pk = new Packet02Data(state,temp);
+//			
+//				pk.writeData(this);
 				serverOpen  = true;
 				
 
