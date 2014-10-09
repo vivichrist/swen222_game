@@ -104,17 +104,17 @@ public class GameState implements java.io.Serializable{
 	 * @param token the GameToken that has been found
 	 * @return true if successfully set to found
 	 */
-	public boolean foundMoveable(Player p, GameToken token){
+	public boolean foundMoveable(Player player, Point point, GameToken token){
 		System.out.println("gs method called with: " + token.getType());
 		
-		if(!players.contains(p)){
+		if(!players.contains(player)){
 			return false;
 		}
 		else{
-			p.getFloor().removeGameToken(p.getPosition(), token);
-			p.getTokenList().tokenFound(token);
+			player.getFloor().removeGameToken(point, token);
+			player.getTokenList().tokenFound(token);
 			controller.refreshTokenPanel();
-			if(p.getTokenList().collectedAll()){
+			if(player.getTokenList().collectedAll()){
 				//TODO: update action here to go in to win state checking or something
 				System.out.println("All Tokens Collected!");
 			}
