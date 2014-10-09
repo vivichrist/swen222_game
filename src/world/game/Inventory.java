@@ -59,4 +59,13 @@ public class Inventory implements java.io.Serializable{
 		return inventory.size();
 	}
 	
+	/**
+	 * Checks if this Inventory contains a given MoveableObject
+	 * @param object the MoveableObject to check for
+	 * @return true if contained
+	 */
+	public boolean contains(MoveableObject object){
+		if(inventory.contains(object)) System.out.println("Inventory contains object");
+		return inventory.contains(object);
+	}
 }

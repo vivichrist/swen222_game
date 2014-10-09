@@ -209,6 +209,16 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 	}
+	
+	/**
+	 * Returns a Door at a given Point in this Map
+	 * @param p the Point of the Door
+	 * @return the Door at the given Point
+	 */
+	public Door getDoor(Point p){
+		if(!doors.containsKey(p)) return null;
+		return doors.get(p);
+	}
 
 	/**
 	 * Removes a given Player from this Map

@@ -11,6 +11,7 @@ import java.util.List;
 
 import controllers.Controller;
 import window.components.GUI;
+import world.components.Door;
 import world.components.GameObject;
 import world.components.GameToken;
 import world.components.Map;
@@ -135,9 +136,7 @@ public class GameState implements java.io.Serializable{
 			player.getFloor().removeMoveableObject(point);
 			return true;
 		}
-		
 		return false;
-		
 	}
 	
 	/**
@@ -150,6 +149,18 @@ public class GameState implements java.io.Serializable{
 			if(p.getName().equals(name)) return p;
 		}
 		return null;
+	}
+	
+	/**
+	 * Checks whether a Player can open a Door at a given Point
+	 * @param player the Player to open the Door
+	 * @param point the position of the Door in the map
+	 * @return true if the Player has the key to this Door
+	 */
+	public boolean canOpenDoor(Player player, Point point){
+		Door door = player.getFloor().getDoor(point);
+		if(player.getInventory().contains(door.getKey())) return true;
+		return false;
 	}
 	
 	public byte[] serialize() {
