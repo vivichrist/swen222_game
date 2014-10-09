@@ -11,8 +11,10 @@ import java.util.List;
 
 import controllers.Controller;
 import window.components.GUI;
+import world.components.GameObject;
 import world.components.GameToken;
 import world.components.Map;
+import world.components.MoveableObject;
 
 /**
  * Represents the state of the game.
@@ -104,21 +106,35 @@ public class GameState implements java.io.Serializable{
 	 * @param token the GameToken that has been found
 	 * @return true if successfully set to found
 	 */
-	public boolean foundMoveable(Player player, Point point, GameToken token){
+	public boolean pickupObjectAtPoint(Player player, Point point){
 		
-		if(!players.contains(player)){
-			return false;
-		}
-		else{
-			player.getFloor().removeGameToken(point, token);
-			player.getTokenList().tokenFound(token);
-			controller.refreshTokenPanel();
-			if(player.getTokenList().collectedAll()){
-				//TODO: update action here to go in to win state checking or something
-				System.out.println("All Tokens Collected!");
+		GameObject object = player.getFloor().objectAtPoint(point);
+		
+		if(object instanceof GameToken){
+			GameToken token = (GameToken) object;
+			if(!players.contains(player)){
+				return false;
 			}
+			else{
+				player.getFloor().removeGameToken(point, token);
+				player.getTokenList().tokenFound(token);
+				controller.refreshTokenPanel();
+				if(player.getTokenList().collectedAll()){
+					//TODO: update action here to go in to win state checking or something
+					System.out.println("All Tokens Collected!");
+				}
+				return true;
+			}
+		}
+		
+		if(object instanceof MoveableObject){
+			MoveableObject moveable = (MoveableObject) object;
+			player.getInventory().add(moveable);
+			player.getFloor().removeMoveableObject(point);
 			return true;
 		}
+		return false;
+		
 	}
 	
 	/**
