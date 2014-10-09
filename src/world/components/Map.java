@@ -137,9 +137,11 @@ public class Map implements java.io.Serializable{
 			return false;
 		}
 		else{
+			System.out.println("Couch points size: " + s.getPoints().size());
 			for(Point point: s.getPoints()){
 				stationaryObjects.put(point, s);
 			}
+			System.out.println("stat objects size" + stationaryObjects.size());
 			return true;
 		}
 	}

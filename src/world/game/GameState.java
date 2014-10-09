@@ -139,6 +139,7 @@ public class GameState implements java.io.Serializable{
 			MoveableObject moveable = (MoveableObject) object;
 			player.getInventory().add(moveable);
 			player.getFloor().removeMoveableObject(point);
+			controller.refreshInventoryPanel();
 			return true;
 		}
 		return false;

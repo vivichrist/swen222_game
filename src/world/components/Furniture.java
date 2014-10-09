@@ -46,11 +46,24 @@ public class Furniture implements StationaryObject {
 			case COUCH:{
 				points.add(origin);
 				switch(facing){
-					case NORTH:	points.add(new Point(origin.x + 1, origin.y));
-					case EAST: points.add(new Point(origin.x, origin.y + 1));
-					case SOUTH: points.add(new Point(origin.x - 1, origin.y));
-					case WEST: points.add(new Point(origin.x, origin.y - 1));
+					case NORTH:	{
+						points.add(new Point(origin.x + 1, origin.y));
+						break;
+					}
+					case EAST: {
+						points.add(new Point(origin.x, origin.y + 1));
+						break;
+					}
+					case SOUTH: {
+						points.add(new Point(origin.x - 1, origin.y));
+						break;
+					}
+					case WEST: {
+						points.add(new Point(origin.x, origin.y - 1));
+						break;
+					}
 				}
+				break;
 			}
 			case BED:{
 				switch(facing){
@@ -60,24 +73,28 @@ public class Furniture implements StationaryObject {
 								points.add(new Point(origin.x + x, origin.y + y));
 							}
 						}
+						break;
 					case EAST: 
 						for(int y = 0; y < 3; y++){
 							for(int x = 0; x < 2; x++){
 								points.add(new Point(origin.x - x, origin.y + y));
 							}
 						}
+						break;
 					case SOUTH: 
 						for(int y = 0; y < 2; y++){
 							for(int x = 0; x < 3; x++){
 								points.add(new Point(origin.x - x, origin.y - y));
 							}
 						}
+						break;
 					case WEST: 
 						for(int y = 0; y < 3; y++){
 							for(int x = 0; x < 2; x++){
 								points.add(new Point(origin.x + x, origin.y - y));
 							}
 						}
+						break;
 				}
 			}
 			case TABLE:{

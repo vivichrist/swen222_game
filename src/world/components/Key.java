@@ -70,5 +70,9 @@ public class Key implements MoveableObject, java.io.Serializable{
 		return true;
 	}
 	
+	public String toString(){
+		return "key";
+	}
+	
 	
 }

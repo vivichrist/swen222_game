@@ -28,4 +28,8 @@ public class Torch implements MoveableObject, java.io.Serializable{
 	public void turnOff(){
 		lit = false;
 	}
+	
+	public String toString(){
+		return "torch";
+	}
 }
