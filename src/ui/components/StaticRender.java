@@ -25,10 +25,10 @@ public class StaticRender implements GraphicalObject
 	public StaticRender( CellType type, CellType[] nesw
 			, Point position )
 	{	// walls connect with other walls or doors
-		north = nesw[0] == CellType.WALL || nesw[0] == CellType.DOOR;
-		east = nesw[1] == CellType.WALL || nesw[1] == CellType.DOOR;
-		west = nesw[3] == CellType.WALL || nesw[3] == CellType.DOOR;
-		south = nesw[2] == CellType.WALL || nesw[2] == CellType.DOOR;
+		north = nesw[0] == CellType.WALL || nesw[0] == CellType.DOOR || nesw[0] == CellType.KEYDOOR;
+		east = nesw[1] == CellType.WALL || nesw[1] == CellType.DOOR || nesw[1] == CellType.KEYDOOR;
+		west = nesw[3] == CellType.WALL || nesw[3] == CellType.DOOR || nesw[3] == CellType.KEYDOOR;
+		south = nesw[2] == CellType.WALL || nesw[2] == CellType.DOOR || nesw[2] == CellType.KEYDOOR;
 		this.type = type;
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
@@ -57,6 +57,7 @@ public class StaticRender implements GraphicalObject
 		{
 		case WALL : drawWall( gl ); break;
 		case DOOR : drawDoorArch( gl ); break;
+		case KEYDOOR : drawDoorArch( gl ); break;
 		case EMPTY : drawFloorCeiling( gl ); break;
 		default:
 			break;

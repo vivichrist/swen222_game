@@ -27,6 +27,12 @@ public class DymanicRender implements GraphicalObject
 				, dir, Color.decode( "#008800" ) );
 	}
 	
+	public static DymanicRender instanceKeyDoor( Point position, Direction dir )
+	{
+		return new DymanicRender( CellType.KEYDOOR, Behave.OPEN_CLOSE, position
+				, dir, Color.decode( "#008800" ) );
+	}
+	
 	public static DymanicRender instanceTelePort( Point position )
 	{	// TODO: Teleporting behaviour
 		return new DymanicRender( CellType.TELEPORT, Behave.NONE, position
@@ -120,7 +126,7 @@ public class DymanicRender implements GraphicalObject
 		}
 		gl.glPushMatrix();
 		gl.glTranslatef( position.x, position.y, 0 );
-		if ( type == CellType.DOOR && !xaligned )
+		if ( (type == CellType.DOOR || type == CellType.KEYDOOR) && !xaligned )
 		{
 			gl.glTranslatef( GameView.cellsize, 0f, 0f );
 			gl.glRotatef( 90.0f, 0f, 0f, 1.f );

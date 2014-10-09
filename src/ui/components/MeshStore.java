@@ -14,6 +14,7 @@ public class MeshStore
 		{// add new meshes to load here...
 			put( CellType.KEY, "key.obj" );
 			put( CellType.DOOR, "door.obj" );
+			put( CellType.KEYDOOR, "door.obj" );
 			put( CellType.CONE, "cone.obj" );
 			put( CellType.CUBE, "cube.obj" );
 			put( CellType.BALL, "ball.obj" );

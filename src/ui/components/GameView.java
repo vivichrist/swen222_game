@@ -195,6 +195,9 @@ public class GameView extends GLJPanel
                     projmatrix, 0, 
                     viewport, 0, 
                     wcoord, 0);
+            	System.out.println("World coords at z=" + f + " are ( "
+                        + wcoord[0] + ", " + wcoord[1] + ", " + wcoord[2]
+                        + ")");
             }
     	}
     	direction = keyInput.getDirection() * DEG;
