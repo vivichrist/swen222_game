@@ -101,15 +101,16 @@ public class GameState implements java.io.Serializable{
 	}
 	
 	/**
-	 * Sets the status of a given Player's GameToken to found
-	 * @param p the Player whose GameToken has been found
-	 * @param token the GameToken that has been found
-	 * @return true if successfully set to found
+	 * Picks up a MoveableObject or GameToken from the game world and adds it to the Player's Inventory or TokenList
+	 * @param p the Player to add the item to
+	 * @param point the Point to retrieve the object from
+	 * @return true if successfully picked up
 	 */
 	public boolean pickupObjectAtPoint(Player player, Point point){
 		
 		GameObject object = player.getFloor().objectAtPoint(point);
 		
+		// Handle the case that the object is a GameToken
 		if(object instanceof GameToken){
 			GameToken token = (GameToken) object;
 			if(!players.contains(player)){
@@ -127,12 +128,14 @@ public class GameState implements java.io.Serializable{
 			}
 		}
 		
+		// Handle the normal case that the object is a MoveableObject
 		if(object instanceof MoveableObject){
 			MoveableObject moveable = (MoveableObject) object;
 			player.getInventory().add(moveable);
 			player.getFloor().removeMoveableObject(point);
 			return true;
 		}
+		
 		return false;
 		
 	}

@@ -66,7 +66,7 @@ public class GameScene
 			else if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 					&& ct.ordinal() < CellType.CHEST.ordinal() )
 			{
-				game.foundMoveable( game.getPlayer(), p, (MoveableObject)game.getMap().objectAtPoint( p ) );
+				game.pickupObjectAtPoint( game.getPlayer(), p);
 				gdata.remove( p );
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
