@@ -1,5 +1,6 @@
 package world.components;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
 import world.game.Player;
 
 /**
@@ -74,6 +76,13 @@ public class Map implements java.io.Serializable{
 					}
 					if(current == CellType.DOOR){
 						doors.put(new Point(x, y), new Door(false));
+					}
+					if(current == CellType.KEYDOOR){
+						Door door = new Door(true);
+						Key key = new Key("Key One", Color.WHITE);
+						door.setKey(key);
+						doors.put(new Point(x, y), door);
+						moveableObjects.put(randomEmptyCell(), key);
 					}
 					map[x][y] = current;
 				}
