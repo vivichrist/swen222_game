@@ -233,15 +233,15 @@ public class DymanicRender implements GraphicalObject
 		}
 	}
 
-//	public Color getSelectColor()
-//	{
-//		return new Color( selectColor.getRGB() );
-//	}
-//
-//	public void setSelectColor( Color selectColor )
-//	{
-//		this.selectColor = new Color( selectColor.getRGB() );
-//	}
+	public Color getSelectColor()
+	{
+		return new Color( selectColor[0], selectColor[1], selectColor[2] );
+	}
+
+	public void setSelectColor( Color selectColor )
+	{
+		this.selectColor = selectColor.getColorComponents( null );
+	}
 
 	@Override
 	public boolean isDynamic()

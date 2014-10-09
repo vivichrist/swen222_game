@@ -15,11 +15,14 @@ import world.game.GameState;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Point2D;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 /**
@@ -145,8 +148,8 @@ public class GameView extends GLJPanel
             				 , 0.0f, 0.0f, 1.0f );// up
             	gl2.glRotatef( direction, 0 ,0 ,1.0f );
             	gl2.glTranslatef( -position.x, -position.y, -10.0f );
-            	mouseSelect( gl2 );
                 render( gl2 );
+                mouseSelect( gl2 );
             }
 
         });
@@ -197,28 +200,33 @@ public class GameView extends GLJPanel
     	Point click = keyInput.getClick();
 		if ( click != null )
 		{
-			int viewport[] = new int[4];
-		    double mvmatrix[] = new double[16];
-		    double projmatrix[] = new double[16];
-		    double wcoord[] = new double[4];// returned xyz coords
+			IntBuffer viewport= IntBuffer.allocate(4);
+			FloatBuffer modelview = FloatBuffer.allocate(16);
+			FloatBuffer projection = FloatBuffer.allocate(16);
+			FloatBuffer pos = FloatBuffer.allocate(4);// returned xyz coords
 		    
-		    gl.glGetIntegerv( GL.GL_VIEWPORT, viewport, 0);
-	        gl.glGetDoublev( GL2.GL_MODELVIEW_MATRIX, mvmatrix, 0);
-	        gl.glGetDoublev( GL2.GL_PROJECTION_MATRIX, projmatrix, 0);
-	        /* note viewport[3] is height of window in pixels */
-	        int realy = viewport[3] - (int) click.y - 1;
+		    gl.glGetIntegerv( GL.GL_VIEWPORT, viewport );
+	        gl.glGetFloatv( GL2.GL_MODELVIEW_MATRIX, modelview );
+	        gl.glGetFloatv( GL2.GL_PROJECTION_MATRIX, projection );
+
+	        int realy = viewport.get( 3 ) - click.y - 1;
+	        FloatBuffer posZ = FloatBuffer.allocate(1);
 	        GLU glu = GLU.createGLU( gl );
-	        for ( double f = 0f; f <= 1f; f+=0.1 )
-	        {
-	        	glu.gluUnProject((double) click.x, (double) realy, f,
-	                mvmatrix, 0,
-	                projmatrix, 0, 
-	                viewport, 0, 
-	                wcoord, 0);
-	        	System.out.println("World coords at z=" + f + " are ( "
-	                    + wcoord[0] + ", " + wcoord[1] + ", " + wcoord[2]
-	                    + ")");
-	        }
+	        gl.glReadPixels( click.x, realy, 1, 1, GL2.GL_DEPTH_COMPONENT, GL.GL_FLOAT, posZ );
+        	glu.gluUnProject((float) click.x, (float) realy, (float)posZ.get( 0 ),
+                modelview,
+                projection,
+                viewport,
+                pos );
+        	System.out.println("World coords at projected-z = " + posZ.get( 0 ) + " are ( "
+                    + pos.get( 0 ) + ", " + pos.get( 1 ) + ", " + pos.get( 2 )
+                    + ")");
+        	Point p = new Point( (int) (pos.get( 0 )/cellsize), (int) (pos.get( 1 )/cellsize) );
+        	GraphicalObject go = GameViewData.instance().getGameElements().get( p );
+        	if ( go != null && go instanceof DymanicRender )
+        	{
+        		((DymanicRender)go).setSelectColor( Color.decode( "#11d0000" ) );
+        	}
 		}
     }
 
