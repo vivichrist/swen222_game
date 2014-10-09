@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +34,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import ServerClients.Client;
 import ServerClients.Server;
 import ServerClients.test;
+import ServerClients.UDPpackets.Packet00Login;
 
 import com.jogamp.graph.font.Font;
 
@@ -43,6 +46,7 @@ import ui.components.GameView;
 import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
+import world.game.MultyPlayer;
 import world.game.Player;
 
 import javax.swing.*;
@@ -245,6 +249,31 @@ public class GUI  {
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
 	}
+	public void chooseNamePanel2(){
+		int chooseNamePanelLeft = 325;
+		int chooseNamePanelTop = 200;
+		int chooseNamePanelWidth = 150;
+		int chooseNamePanelHeight = 120;
+
+		chooseNamePanel = new JPanel();
+		chooseNamePanel.setBounds(chooseNamePanelLeft, chooseNamePanelTop, chooseNamePanelWidth, chooseNamePanelHeight);
+
+		JLabel chooseName = new JLabel("Name:   ");
+		textFieldName = new JTextField(8);
+		jbStart = new JButton("Start");
+
+		jbStart.setOpaque(false);
+		jbStart.setContentAreaFilled(false);
+		jbStart.setBorderPainted(false);
+
+		chooseNamePanel.add(chooseName);
+		chooseNamePanel.add(textFieldName);
+		chooseNamePanel.add(jbStart);
+
+		chooseNamePanel.setOpaque(false);
+		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
+		addListennerChooseName2();
+	}
 
 	public void addListennerStart(){
 		jbNewGame.addActionListener(new ActionListener() {
@@ -278,7 +307,7 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					chooseNamePanel();
+					chooseNamePanel2();
 					//test t = new test();
 					//t.testServerPlayerListName();
 					frame.repaint();
@@ -298,6 +327,28 @@ public class GUI  {
 						System.out.println(name);
 						layeredPane.remove(backgroundPanel);
 						startGame();
+						frame.repaint();
+						//textFieldRealName.setText("");
+					}}}});
+
+		textFieldName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				name = textFieldName.getText();
+			}
+		});
+	}
+	public void addListennerChooseName2(){
+		jbStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbStart){
+					if(!textFieldName.getText().equals("")){
+						name = textFieldName.getText();
+						System.out.println("Player name: " + name);
+						layeredPane.remove(chooseNamePanel);
+						System.out.println(name);
+						layeredPane.remove(backgroundPanel);
+						startGame2();
 						frame.repaint();
 						//textFieldRealName.setText("");
 					}}}});
@@ -332,6 +383,54 @@ public class GUI  {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
+	protected void startGame2() {
+		GLProfile.initSingleton();
+		GLProfile glprofile = GLProfile.getDefault();
+		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+
+		//Code added by Kalo
+		Server server = null;
+		GameState state = null;
+		MultyPlayer player1 = null;
+		if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
+			server = new Server();
+			server.start();
+		}
+		else{
+			 state = new GameState(null, null);
+			 player1 = new MultyPlayer(name, new Point(18,20),null,null, -1);
+
+			Client client = new Client(state,"localhost");
+			client.start();
+			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
+			if (server.serverStart==99) {
+				server.addConnection(player1, loginPacket);
+				int size1 = server.getConnectedPlayers().size();
+				
+				System.out.println("size1: "+size1);
+
+			}else System.out.println("server== null");
+			loginPacket.writeData(client);
+			
+		}
+		//GameState state = new GameBuilder(name).getGameState();
+		controller = new Controller(state, this);
+		state.setController(controller);
+		gameView = new GameView( glcapabilities, frame, state );
+		
+
+		//String playerName = state.getPlayer(name);
+		//gameView = new GameView( glcapabilities, frame );
+
+		gameView.setEnabled( true );
+		gameView.setVisible( true );
+		gameView.setFocusable( true );
+		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
+		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+		southPanel = new SouthPanel(player1);
+		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+	}
+	
 	
 	public GameState getState(){ 
 		return gameState;
