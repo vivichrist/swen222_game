@@ -29,6 +29,7 @@ public class GameState implements java.io.Serializable{
 	private  Map[] floors;
 	private GameBuilder game;
 	private Controller controller;
+	private boolean isMoved;
 
 	
 	/**
@@ -56,6 +57,10 @@ public class GameState implements java.io.Serializable{
 	 */
 	public void movePlayer(Player player, Point point){
 		player.move(point);
+		isMoved = true;
+	}
+	public boolean isMoved(){
+		return isMoved;
 	}
 	
 	/*

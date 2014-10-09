@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import ServerClients.UDPpackets.Packet00Login;
+import ServerClients.UDPpackets.Packet02Data;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -35,7 +36,7 @@ public class test {
 
 			client = new Client(state,"localhost");
 			client.start();
-
+			
 			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
 
 			if (server.serverStart==99) {
@@ -46,6 +47,7 @@ public class test {
 
 			}else System.out.println("server== null");
 			loginPacket.writeData(client);
+			
 		}
 
 
