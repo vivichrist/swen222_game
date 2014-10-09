@@ -259,13 +259,8 @@ public class Map implements java.io.Serializable{
 	 * @return true if successfully removed
 	 */
 	public boolean removeGameToken(Point p, GameToken token){
-		System.out.println("tokens: " + tokens.keySet().toString());
-		System.out.println("Position: " + p.toString());
-		System.out.println("Game Tokens in Map: " + tokens.size());
-		System.out.println("retrieved token is null: " + (tokens.get(p) == null));
 		if(tokens.get(p).equals(token)){
 			tokens.remove(p);
-			System.out.println("Game Tokens in Map after removal: " + tokens.size());
 			return true;
 		}
 		return false;

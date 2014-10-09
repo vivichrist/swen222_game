@@ -105,7 +105,6 @@ public class GameState implements java.io.Serializable{
 	 * @return true if successfully set to found
 	 */
 	public boolean foundMoveable(Player player, Point point, GameToken token){
-		System.out.println("gs method called with: " + token.getType());
 		
 		if(!players.contains(player)){
 			return false;
