@@ -49,6 +49,11 @@ public class GameViewData
 		return staticScene.add( sobject );
 	}
 	
+	public boolean addDynamicOnly( DymanicRender sobject )
+	{
+		return dynamicScene.add( sobject );
+	}
+	
 	public boolean addGrapicalObject( GraphicalObject gobject )
 	{
 		gameElements.put( gobject.getLocation(), gobject );

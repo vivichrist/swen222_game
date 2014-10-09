@@ -163,8 +163,8 @@ public class GameScene
 						dyn = DymanicRender.instanceFurnature( 
 								((Furniture)go).getType(), Behave.ORIENTATION, p
 								, ((Furniture)go).getFacing(), Color.GRAY );
-						gdata.addGrapicalObject( dyn );
-						//gdata.addAllGameElements( ((Furniture)go)., dyn );
+						gdata.addDynamicOnly( dyn );
+						gdata.addAllGameElements( ((Furniture)go).getPoints(), dyn );
 					}
 				}
 			}
@@ -178,66 +178,4 @@ public class GameScene
 			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
 			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
 	}
-
-//	private boolean[] findOrientation( Point p )
-//	{
-//		int dimX = 0, dimY = 0;
-//		boolean[] result = { false, false };
-//		int wallN = 0, wallS = 0, wallE = 0, wallW = 0;
-//		Point scan = new Point( p.x, p.y );
-//		CellType cell = map[p.x][p.y];
-//		// scan x+
-//		while ( map[scan.x][scan.y] == cell )
-//		{
-//			++dimX; scan.translate( 1, 0 );
-//		}// scan y+
-//		scan = new Point( p.x, p.y );
-//		while ( map[scan.x][scan.y] == cell )
-//		{
-//			++dimY; scan.translate( 0, 1 );
-//		}
-//		if ( dimX >= dimY )
-//		{	// assuming that walls totally encase the map
-//			scan = new Point( p.x, p.y );
-//			while ( map[scan.x][scan.y] == CellType.EMPTY
-//					|| map[scan.x][scan.y].ordinal() > CellType.OUTOFBOUNDS.ordinal() )
-//			{
-//				if (map[scan.x][scan.y] != cell) ++wallE;
-//				scan.translate( 1, 0 );
-//			}
-//			scan = new Point( p );
-//			while ( map[scan.x][scan.y] == CellType.EMPTY
-//					|| map[scan.x][scan.y].ordinal() > CellType.OUTOFBOUNDS.ordinal() )
-//			{
-//				if (map[scan.x][scan.y] != cell) ++wallW;
-//				scan.translate( -1, 0 );
-//			}
-//			result[1] = wallE > wallW;
-//		}
-//		if ( dimX <= dimY )
-//		{
-//			scan = new Point( p.x, p.y );
-//			while ( map[scan.x][scan.y] == CellType.EMPTY
-//					|| map[scan.x][scan.y].ordinal() > CellType.OUTOFBOUNDS.ordinal() )
-//			{
-//				if (map[scan.x][scan.y] != cell) ++wallN;
-//				scan.translate( 0, 1 );
-//			}
-//			scan = new Point( p );
-//			while ( map[scan.x][scan.y] == CellType.EMPTY
-//					|| map[scan.x][scan.y].ordinal() > CellType.OUTOFBOUNDS.ordinal() )
-//			{
-//				if (map[scan.x][scan.y] != cell) ++wallS;
-//				scan.translate( 0, -1 );
-//			}
-//			result[0] = true;
-//			result[1] = wallN > wallS;
-//		}
-//		return result;
-//	}
-	// don't actually need this as, if the gameElements point is already there
-//	private boolean leastXYcorner( CellType[] nesw, CellType type )
-//	{
-//		return nesw[0] != type && nesw[3] != type;
-//	}
 }
