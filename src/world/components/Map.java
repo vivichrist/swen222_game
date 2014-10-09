@@ -196,6 +196,7 @@ public class Map implements java.io.Serializable{
 		else{
 			players.remove(oldPos);
 			players.put(newPos, player);
+			System.out.println("number of moveable objects in map: " + moveableObjects.size());
 			return true;
 		}
 	}
@@ -261,6 +262,19 @@ public class Map implements java.io.Serializable{
 	public boolean removeGameToken(Point p, GameToken token){
 		if(tokens.get(p).equals(token)){
 			tokens.remove(p);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Removes a MoveableObject from a given Point on this Map
+	 * @param p the Point to remove the MoveableObject from
+	 * @return true if successfully removed (specified point must contain a MoveableObject)
+	 */
+	public boolean removeMoveableObject(Point p){
+		if(moveableObjects.containsKey(p)){
+			moveableObjects.remove(p);
 			return true;
 		}
 		return false;

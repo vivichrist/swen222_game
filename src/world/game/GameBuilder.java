@@ -63,6 +63,7 @@ public class GameBuilder {
 		placePlayers();
 		//TODO: place MoveableObjects
 		placePlayerTokens();
+		placeTorches();
 		state = new GameState(players, floors);
 	}
 	
@@ -155,6 +156,7 @@ public class GameBuilder {
 			Random random = new Random();
 			Map randomFloor = floors[random.nextInt(floors.length)];
 			randomFloor.addMoveable(randomFloor.randomEmptyCell(), new Torch());
+			System.out.println("Torch added");
 		}
 	}
 	
