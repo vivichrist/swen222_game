@@ -163,7 +163,7 @@ public class GameScene
 						dyn = DymanicRender.instanceFurnature( 
 								((Furniture)go).getType(), Behave.ORIENTATION, p
 								, ((Furniture)go).getFacing(), Color.GRAY );
-						gdata.getDynamicScene().add( dyn );
+						gdata.addGrapicalObject( dyn );
 						//gdata.addAllGameElements( ((Furniture)go)., dyn );
 					}
 				}
