@@ -54,11 +54,11 @@ public class ObjReader
 			sc.close();
 			return;
 		}
-		else 
-		{
-			System.out.println(
-					"Unsupported parameter:" + lineNumber + " -> " + line );
-		}
+//		else 
+//		{
+//			System.out.println(
+//					"Unsupported parameter:" + lineNumber + " -> " + line );
+//		}
 		sc.close();
 	}
 
