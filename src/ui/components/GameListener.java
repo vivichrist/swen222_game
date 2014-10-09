@@ -124,7 +124,7 @@ public class GameListener implements KeyListener, MouseListener
  * but only if keys have not been released and there has not been a recent
  * update.
  */
-	public Point update()
+	public void update()
 	{
 		if ( !keyUpdate )
     	{
@@ -148,6 +148,10 @@ public class GameListener implements KeyListener, MouseListener
 				else addToDirection( turnSpeed );
 			}
 		}
+	}
+	
+	public Point getClick()
+	{
 		Point p = click;
 		click = null;
 		return p;
@@ -183,6 +187,7 @@ public class GameListener implements KeyListener, MouseListener
 	@Override
 	public void mouseClicked( MouseEvent e )
 	{
+		System.out.println("Mouse Clicked");
 		click = e.getPoint();
 	}
 

@@ -137,7 +137,9 @@ public class Map implements java.io.Serializable{
 			return false;
 		}
 		else{
-			stationaryObjects.put(p, s);
+			for(Point point: s.getPoints()){
+				stationaryObjects.put(point, s);
+			}
 			return true;
 		}
 	}

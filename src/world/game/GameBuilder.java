@@ -11,6 +11,9 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
+import world.components.CellType;
+import world.components.Direction;
+import world.components.Furniture;
 import world.components.Map;
 import world.components.TokenType;
 import world.components.Torch;
@@ -61,7 +64,7 @@ public class GameBuilder {
 		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
 		//TODO: place StationaryObjects
 		placePlayers();
-		//TODO: place MoveableObjects
+		placeFurniture();
 		placePlayerTokens();
 		placeTorches();
 		state = new GameState(players, floors);
@@ -163,7 +166,8 @@ public class GameBuilder {
 	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
 	private void placeFurniture(){
 		for(int i = 0; i < floors.length; i++){
-
+			Point position = new Point(1, 16);
+			floors[i].addStationary(position, new Furniture(CellType.COUCH, position, Direction.EAST));
 		}
 	}
 

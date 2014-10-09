@@ -1,5 +1,8 @@
 package world.components;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 /**
  * The interface for stationary objects in this game world
  * @author Kalo Pilato - ID: 300313803
@@ -14,4 +17,5 @@ public interface StationaryObject extends GameObject {
 	 */
 	public Direction getFacing(); 
 	
+	public ArrayList<Point> getPoints();
 }

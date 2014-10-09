@@ -29,6 +29,14 @@ public class Furniture implements StationaryObject {
 	public CellType getType(){
 		return type;
 	}
+	
+	/**
+	 * Returns an ArrayList of the Points occupied by this piece of Furniture
+	 * @return an ArrayList of the Poinst occupied by this piece of Furniture
+	 */
+	public ArrayList<Point> getPoints(){
+		return points;
+	}
 
 	/**
 	 * Generates and stores the points that this Furniture object occupies on the map
