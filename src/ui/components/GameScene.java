@@ -61,10 +61,12 @@ public class GameScene
 		{	// collect it and remove from data to apear in items
 			// System.out.println( "Collide (" + x + "," + y + ")" );
 			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
-			if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+			if ( ct == CellType.TELEPORT )
+			{return false;}
+			else if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 					&& ct.ordinal() < CellType.CHEST.ordinal() )
 			{
-				game.foundMoveable( game.getPlayer(), p, (GameToken)game.getMap().objectAtPoint( p ) );
+				game.foundMoveable( game.getPlayer(), p, (MoveableObject)game.getMap().objectAtPoint( p ) );
 				gdata.remove( p );
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
