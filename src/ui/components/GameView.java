@@ -200,6 +200,7 @@ public class GameView extends GLJPanel
     	Point click = keyInput.getClick();
 		if ( click != null )
 		{
+			this.grabFocus();
 			IntBuffer viewport= IntBuffer.allocate(4);
 			FloatBuffer modelview = FloatBuffer.allocate(16);
 			FloatBuffer projection = FloatBuffer.allocate(16);
@@ -227,7 +228,7 @@ public class GameView extends GLJPanel
         	if ( go != null && go instanceof DymanicRender )
         	{
         		DymanicRender dr = (DymanicRender)go;
-        		dr.setSelectColor( Color.decode( "#11d0000" ) );
+        		dr.setSelectColor( Color.decode( "#110000" ) );
         		GameViewData.instance().replacePreviousSelection( dr );
         	}
 		}
