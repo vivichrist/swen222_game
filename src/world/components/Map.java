@@ -26,6 +26,7 @@ public class Map implements java.io.Serializable{
 	private CellType[][] map;
 	private List<Point> emptyCells;
 	private HashMap<Point, MoveableObject> moveableObjects = new HashMap<Point, MoveableObject>();
+	private HashMap<Point, Furniture> furnitureOrigins = new HashMap<Point, Furniture>();
 	private HashMap<Point, StationaryObject> stationaryObjects = new HashMap<Point, StationaryObject>();
 	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
 	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
@@ -132,12 +133,12 @@ public class Map implements java.io.Serializable{
 	 * @param s the StationaryObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addStationary(Point p, StationaryObject s){
-		if(moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
+	public boolean addFurniture(Point p, Furniture s){
+		if(moveableObjects.containsKey(p) | furnitureOrigins.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
 			return false;
 		}
 		else{
-			stationaryObjects.put(p,  s);
+			furnitureOrigins.put(p,  s);
 			//for(Point point: s.getPoints()){
 			//	stationaryObjects.put(point, s);
 			//}
@@ -153,7 +154,7 @@ public class Map implements java.io.Serializable{
 	 * @return true if successfully added
 	 */
 	public boolean addMoveable(Point p, MoveableObject m){
-		if(stationaryObjects.containsKey(p) | moveableObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+		if(furnitureOrigins.containsKey(p) | moveableObjects.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
@@ -170,7 +171,7 @@ public class Map implements java.io.Serializable{
 	 * @return true if successfully added
 	 */
 	public boolean addGameToken(Point p, GameToken t){
-		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | stationaryObjects.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
+		if(tokens.containsKey(p) | moveableObjects.containsKey(p) | furnitureOrigins.containsKey(p) | map[p.x][p.y]!= CellType.EMPTY){
 			return false;
 		}
 		else{
@@ -271,6 +272,11 @@ public class Map implements java.io.Serializable{
 		if(stationaryObjects.containsKey(p)) return stationaryObjects.get(p);
 		if(moveableObjects.containsKey(p)) return moveableObjects.get(p);
 		if(tokens.containsKey(p)) return tokens.get(p);
+		return null;
+	}
+	
+	public Furniture furnitureAtPoint(Point p){
+		if(furnitureOrigins.containsKey(p)) return furnitureOrigins.get(p);
 		return null;
 	}
 
