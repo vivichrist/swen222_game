@@ -137,11 +137,10 @@ public class Map implements java.io.Serializable{
 			return false;
 		}
 		else{
-			System.out.println("Couch points size: " + s.getPoints().size());
-			for(Point point: s.getPoints()){
-				stationaryObjects.put(point, s);
-			}
-			System.out.println("stat objects size" + stationaryObjects.size());
+			stationaryObjects.put(p,  s);
+			//for(Point point: s.getPoints()){
+			//	stationaryObjects.put(point, s);
+			//}
 			return true;
 		}
 	}
@@ -209,7 +208,6 @@ public class Map implements java.io.Serializable{
 		else{
 			players.remove(oldPos);
 			players.put(newPos, player);
-			System.out.println("number of moveable objects in map: " + moveableObjects.size());
 			return true;
 		}
 	}
