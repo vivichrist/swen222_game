@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Font;
+
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,7 +41,6 @@ import ServerClients.Server;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 
-import com.jogamp.graph.font.Font;
 
 import controllers.Controller;
 import ui.components.GameView;
@@ -141,12 +142,12 @@ public class GUI  {
 	private void startPanel() {
 		int startPanelLeft = 325;
 		int startPanelTop = 180;
-		int startPanelWidth = 150;
-		int startPanelHeight = 160;
+		int startPanelWidth = 200;  //150
+		int startPanelHeight = 600;
 
 		startPanel = new JPanel();
 		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
-		//		startPanel.setLayout(null);
+		//startPanel.setLayout(null);
 		//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
 		//		startPanel.setLayout(null);
 
@@ -156,9 +157,9 @@ public class GUI  {
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 
-		jbNewGame.setOpaque(false);
-		jbNewGame.setContentAreaFilled(false);
-		jbNewGame.setBorderPainted(false);
+		//jbNewGame.setOpaque(false);
+		//jbNewGame.setContentAreaFilled(false);
+		//jbNewGame.setBorderPainted(false);
 
 		jbLoad.setOpaque(false);
 		jbLoad.setContentAreaFilled(false);
@@ -171,12 +172,27 @@ public class GUI  {
 		jbExit.setOpaque(false);
 		jbExit.setContentAreaFilled(false);
 		jbExit.setBorderPainted(false);
-		//		jbNewGame.setPreferredSize(new Dimension(100, 40));
-		//		jbNewGame.setFont((java.awt.Font) new Font("Arial", Font.PLAIN, 40));
-
-
-		//		jbNewGame.setLayout(null);
-		//		jbNewGame.setBounds(350, 200, 30, 30);
+				jbNewGame.setPreferredSize(new Dimension(200, 60));
+				jbLoad.setPreferredSize(new Dimension(200, 60));
+				jbInfo.setPreferredSize(new Dimension(200, 60));
+				jbExit.setPreferredSize(new Dimension(200, 60));
+				
+				jbNewGame.setFont(new Font("Arial", Font.PLAIN, 30));
+				jbLoad.setFont(new Font("Arial", Font.PLAIN, 30));
+				jbInfo.setFont(new Font("Arial", Font.PLAIN, 30));
+				jbExit.setFont(new Font("Arial", Font.PLAIN, 30));
+				
+				
+				
+				jbNewGame.setForeground(new Color(0, 135, 200).brighter());
+				jbNewGame.setHorizontalTextPosition(SwingConstants.CENTER);
+				jbNewGame.setBorder(null);
+				jbNewGame.setBackground(new Color(3, 59, 90).brighter());
+				
+				//jbNewGame.setBackground(new Color(100, 100, 100));
+				//jbNewGame.set
+		//jbNewGame.setLayout(null);
+		//jbNewGame.setBounds(350, 200, 100, 400);
 		//		jbLoad.setLayout(null);
 		//		jbLoad.setBounds(350, 200, 30, 30);
 
