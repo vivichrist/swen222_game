@@ -18,7 +18,7 @@ public class GameViewData
 
 	public static GameViewData instance()
 	{
-		if ( instance == null ) 
+		if ( instance == null )
 			instance = new GameViewData();
 		return instance;
 	}
@@ -34,7 +34,7 @@ public class GameViewData
 	{
 		return Collections.unmodifiableMap( gameElements );
 	}
-	
+
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
 	{
 		for ( Point p: ps )
@@ -45,17 +45,17 @@ public class GameViewData
 	{
 		return Collections.unmodifiableList( staticScene );
 	}
-	
+
 	public boolean addStaticOnly( StaticRender sobject )
 	{
 		return staticScene.add( sobject );
 	}
-	
+
 	public boolean addDynamicOnly( DymanicRender sobject )
 	{
 		return dynamicScene.add( sobject );
 	}
-	
+
 	public boolean addGrapicalObject( GraphicalObject gobject )
 	{
 		gameElements.put( gobject.getLocation(), gobject );
@@ -76,7 +76,7 @@ public class GameViewData
 		GraphicalObject go = gameElements.remove( p );
 		dynamicScene.remove( (DymanicRender)go );
 	}
-	
+
 	public DymanicRender getPreviousSelection()
 	{
 		return previousSelection;
@@ -84,13 +84,14 @@ public class GameViewData
 
 	public void replacePreviousSelection( DymanicRender dyn )
 	{
+		if ( previousSelection == dyn ) return;
 		if ( previousSelection != null )
 		{
 			previousSelection.setSelectColor( Color.BLACK );
 		}
 		previousSelection = dyn;
 	}
-	
+
 	public void clear()
 	{
 		previousSelection = null;
