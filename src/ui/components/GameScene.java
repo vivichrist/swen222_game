@@ -1,6 +1,9 @@
 package ui.components;
 import java.awt.Color;
 import java.awt.Point;
+import java.util.List;
+import java.util.Map.Entry;
+
 import world.components.CellType;
 import world.components.Direction;
 import world.components.Furniture;
@@ -31,7 +34,7 @@ public class GameScene
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
 		ylimit = game.getMap().getYLimit();
-		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
+		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
 		map = game.getMap().getCellTypeMap();
 		// print out the map
@@ -42,7 +45,7 @@ public class GameScene
 			System.out.println();
 		}
 	}
-	
+
 
 	/**
 	 * @param x - continuous x position value
@@ -89,19 +92,24 @@ public class GameScene
 		return map[x][y] == CellType.WALL;
 	}
 
+	/**
+	 * Setup Scene with all the GraphicalObjects, Static and Dynamic
+	 */
 	public void addSurrounds()
 	{
 		gdata.clear(); // need to destroy staticID too. for new floor
 		Direction dir;
 		Point p;
 		DymanicRender dyn;
+		GameObject go;
+		Furniture furn;
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
 				CellType[] nesw = findNeighbours( i, j );
 				p =  new Point( i, j );
-				dir = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY 
+				dir = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY
 						? Direction.NORTH : Direction.EAST;
 				switch( map[i][j] )
 				{
@@ -129,7 +137,7 @@ public class GameScene
 					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
 					break;
 				}
-				GameObject go = game.getMap().objectAtPoint(p);
+				go = game.getMap().objectAtPoint(p);
 				if ( go == null ) continue;
 				if ( go instanceof GameToken )
 				{
@@ -166,27 +174,36 @@ public class GameScene
 						dyn = DymanicRender.instanceTorch( p, Color.decode( "#880088" ) );
 						gdata.addGrapicalObject( dyn );
 					}
-				}
-				else if ( go instanceof StationaryObject )
+				} else
 				{
-					if ( go instanceof Furniture )
+					furn = game.getMap().furnitureAtPoint(p);
+					if ( furn != null )
 					{
-						dyn = DymanicRender.instanceFurnature( 
-								((Furniture)go).getType(), Behave.ORIENTATION, p
-								, ((Furniture)go).getFacing(), Color.GRAY );
+						dyn = DymanicRender.instanceFurnature(
+								furn.getType(), Behave.ORIENTATION, p
+								, furn.getFacing(), Color.GRAY );
 						gdata.addDynamicOnly( dyn );
-						gdata.addAllGameElements( ((Furniture)go).getPoints(), dyn );
+						List<Point> lp = furn.getPoints();
+						System.out.println( "Number of points in Furature:" + lp.size() );
+						for ( Point pt: lp )
+							System.out.println( "Point:" + pt.toString() );
+						gdata.addAllGameElements( furn.getPoints(), dyn );
 					}
 				}
+
 			}
 		}
+		for ( Entry<Point, GraphicalObject> kv: gdata.getGameElements().entrySet() )
+			System.out.println( "GameElement at:" + kv.getKey().toString()
+					+ " -> " + kv.getValue().getType().toString() );
 	}
 	private CellType[] findNeighbours( int i, int j )
 	{
-		return new CellType[]{
+		return new CellType[] {
 			  j - 1 < 0		  ? CellType.OUTOFBOUNDS : map[ i ]   [j - 1]
 			, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
 			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
-			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ] };
+			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ]
+		};
 	}
 }

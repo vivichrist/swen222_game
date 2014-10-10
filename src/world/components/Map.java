@@ -144,7 +144,10 @@ public class Map implements java.io.Serializable{
 					System.out.println("Failed to add furniture, cell is not empty");
 					return false;
 				}
-				stationaryObjects.put(point, s);
+				else{
+					stationaryObjects.put(point, s);
+					emptyCells.remove(emptyCells.indexOf(p));
+				}
 			}
 			return true;
 		}

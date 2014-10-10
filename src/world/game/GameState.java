@@ -84,10 +84,12 @@ public class GameState implements java.io.Serializable{
 	 * @param index the index of the Player
 	 * @return the Player at the given index
 	 */
+	public Player getPlayer(int index){
+		return players.get(index);
+	}
 	public Player getPlayer(){
 		return players.get(0);
 	}
-	
 	
 	
 	/**
@@ -172,7 +174,7 @@ public class GameState implements java.io.Serializable{
 	public byte[] serialize() {
 		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
 
-		byte[] bytes = new byte[85000];
+		byte[] bytes = new byte[60000];
 		try {
 			//object to bytearray
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -188,23 +190,29 @@ public class GameState implements java.io.Serializable{
 			return null;
 		}
 	}
-	public GameState deserialize(byte[]bytes) {
+	public Object deserialize(byte[]bytes) {
 
 		try{
-			//ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-			ObjectInputStream in = new ObjectInputStream((new ByteArrayInputStream(bytes)));
+			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+			ObjectInputStream in = new ObjectInputStream(bais);
 //			List<Player> players = new ArrayList<Player>();
 //			Map[] floors = new Map[game.getLevelsBuilding()];
 //			GameState gameState = new GameState(players, floors);
-			GameState gameState = (GameState) in.readObject();
-			System.out.println(gameState.getPlayers().get(1).getName());
+			Object obj = new Object();
+			obj = in.readObject();
+	
+			//GameState gameState = (GameState) in.readObject();
+			//System.out.println(gameState.getPlayers().get(1).getName());
 //			this.players = gameState.players;
 //			this.floors = gameState.floors;
-			if(players.size() == 2){
+			//if(players.size() == 2){
 			System.out.println(players.get(0).getPosition().x);
 			System.out.println(players.get(1).getPosition().x);
-			return gameState;
-			}
+			//return gameState;
+			//}
+			bais.close();
+			in.close();
+			return obj;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -225,6 +233,11 @@ public class GameState implements java.io.Serializable{
 	 */
 	public List<Player> getPlayers(){
 		return players;
+	}
+
+	public void addPlayer(MultyPlayer player) {
+		// TODO Auto-generated method stub
+		players.add(player);
 	}
 	
 }

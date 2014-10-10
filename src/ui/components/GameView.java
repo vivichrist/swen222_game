@@ -194,17 +194,18 @@ public class GameView extends GLJPanel
     	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
     }
-    
+
     private void mouseSelect( GL2 gl )
     {
     	Point click = keyInput.getClick();
 		if ( click != null )
 		{
+			this.grabFocus();
 			IntBuffer viewport= IntBuffer.allocate(4);
 			FloatBuffer modelview = FloatBuffer.allocate(16);
 			FloatBuffer projection = FloatBuffer.allocate(16);
 			FloatBuffer pos = FloatBuffer.allocate(4);// returned xyz coords
-		    
+
 		    gl.glGetIntegerv( GL.GL_VIEWPORT, viewport );
 	        gl.glGetFloatv( GL2.GL_MODELVIEW_MATRIX, modelview );
 	        gl.glGetFloatv( GL2.GL_PROJECTION_MATRIX, projection );
@@ -226,8 +227,9 @@ public class GameView extends GLJPanel
         	GraphicalObject go = GameViewData.instance().getGameElements().get( p );
         	if ( go != null && go instanceof DymanicRender )
         	{
-        		((DymanicRender)go).setSelectColor( Color.decode( "#11d0000" ) );
-        		GameViewData.instance().replacePreviousSelection( ((DymanicRender)go) );
+        		DymanicRender dr = (DymanicRender)go;
+        		dr.setSelectColor( Color.decode( "#110000" ) );
+        		GameViewData.instance().replacePreviousSelection( dr );
         	}
 		}
     }
