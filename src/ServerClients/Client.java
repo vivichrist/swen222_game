@@ -34,6 +34,7 @@ public class Client extends Thread {
 	private DatagramSocket socket;
 	private static final int SERVER_PORT = 4768;
 	private GameState state;
+	private byte[] data;
 	//public Client(GameState state, String ipAddress){
 	public Client(GameState state,String ipAddress){
 		this.state = state;
@@ -52,13 +53,13 @@ public class Client extends Thread {
 		while(true){
 			try {
 				this.sleep(1000);
-				checkState();
+				//checkState();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			//System.out.println("client>>run()");
-			byte[]data = new byte[85000];
+			byte[]data = new byte[60000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			///System.out.println("client>>run()>>new packet created");
 
@@ -77,6 +78,7 @@ public class Client extends Thread {
 			}
 			System.out.println("receive data from Server >");
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+			
 
 		}
 
@@ -103,6 +105,7 @@ public class Client extends Thread {
 					+ ((Packet01Disconnect) packet).getUsername() + " has left the game...");
 			break;
 		case DATA:
+			this.data = data;
 			packet = new Packet02Data(state,data);
 			handleData((Packet02Data) packet);
 
@@ -123,7 +126,7 @@ public class Client extends Thread {
 		}
 
 	}
-	private void checkState(){
+	public void checkState(){
 
 		if(state.isMoved()){
 			System.out.println("player moved==========");
@@ -136,16 +139,28 @@ public class Client extends Thread {
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
-		new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port);
+		MultyPlayer player = new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port);
+		player.setFloor(state.getMap());
+		state.addPlayer(player);
 
 	}
 
 	private void handleData(Packet02Data packet) {
-		Packet02Data packet1 = packet;
-		byte[] realData = packet1.getRealData();
+		//Packet02Data packet1 = packet;
+	//	byte[] realData = packet1.getRealData();
+		byte[]oldD = data;
+		byte[]newD =new byte[oldD.length];
+		
 
-	//	state.deserialize(realData);
-
+		for(int i = 2; i<oldD.length;i++){
+			newD[i-2] = oldD[i];
+		}
+		System.out.println("size old: "+ oldD.length+" size new: "+ newD.length);
+		state.deserialize(newD);
+		for(int i = 0; i<state.getPlayers().size(); i++){
+			System.out.println("player name: "+ state.getPlayers().get(i).getName());
+		}
+		
 	}
 	public void setState(GameState state){
 		this.state = state;

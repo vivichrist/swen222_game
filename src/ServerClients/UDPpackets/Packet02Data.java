@@ -38,9 +38,9 @@ public class Packet02Data extends UDPPakcet {
 		this.data = data;
 		this.state = state;
 		//state = getState(data);
-	
+
 		System.out.println("packet02Data con 2: ");
-		
+
 		// TODO Auto-generated constructor stub
 		//state.deserialize(data);
 		//		String[] dataArray = readData(data).split(",");
@@ -53,28 +53,7 @@ public class Packet02Data extends UDPPakcet {
 
 	}
 
-	private GameState getState(byte[] data) {
-		// TODO Auto-generated method stub
-		byte[]newData =new byte[data.length-2];
-
-		for(int i = 2; i<data.length;i++){
-			newData[i-2] = data[i];
-		}
-		GameState obj = null;
-		try {
-			ByteArrayInputStream bis = new ByteArrayInputStream (newData);
-			ObjectInputStream ois = new ObjectInputStream (bis);
-			obj = (GameState) ois.readObject();
-		}
-		catch (IOException ex) {
-			//TODO: Handle the exception
-		}
-		catch (ClassNotFoundException ex) {
-			//TODO: Handle the exception
-		}
-		return obj;
-	}
-
+	
 	@Override
 	public void writeData(Client client) {
 		client.sendData(getData());
@@ -83,68 +62,60 @@ public class Packet02Data extends UDPPakcet {
 
 	@Override
 	public void writeData(Server server) {
-		
+
 		System.out.println("packet02Data con 3: ");
 		server.sendDataToAllClients(getData());
-		//GameState s = state.deserialize(getRealData());
-//		if(s.getPlayers().size()!=0){
-//		for(int i = 0; i< s.getPlayers().size();i++){
-//			Player m = s.getPlayers().get(i);
-//			System.out.println(m.getName()+ "  "+ m.getPosition().x+"  "+m.getPosition().y+"  "+ m.getFloor().toString() );
-//
-//		}
-//		}
+		
 		System.out.println("packet02Data con 4: ");
 	}
 	public byte[] getRealData(){
-		//byte[]newData =new byte[data.length-2];
-		//byte[] realData = data;
+		byte[]oldD = getData();
+		byte[]newD =new byte[oldD.length];
+		
 
-		byte[]newD =new byte[getData().length-2];
-
-		for(int i = 2; i<getData().length;i++){
-			newD[i-2] = getData()[i];
+		for(int i = 2; i<oldD.length;i++){
+			newD[i-2] = oldD[i];
 		}
-//		GameState s = state.deserialize(newD);
-//		for(int i = 0; i< s.getPlayers().size();i++){
-//			Player m = s.getPlayers().get(i);
-//			System.out.println(m.getName()+ "  "+ m.getPosition().x+"  "+m.getPosition().y+"  "+ m.getFloor().toString() );
-//
+		//if(data!=newD)System.out.println("Packet02Data: not equals");
+
+		return newD;
+	}
+	@Override
+	public byte[] getData() {
+
+		byte[]newData =new byte[data.length];
+		byte[] a = "02".getBytes();
+		System.out.println("size of a byte array: "+ a.length);
+//		for(int i = 0; i< a.length; i++){
+//			newData[i] = a[i];
 //		}
-			
-			return newD;
-		}
-		@Override
-		public byte[] getData() {
-
-			byte[]newData =new byte[2+data.length];
-			newData[0] = '0';
-			newData[1] = '2';
-			for(int i = 2; i<data.length;i++){
-				newData[i] = data[i-2];
-				//System.out.print(newData[i]);
-			}
-			
-			
-			
-			return newData;
-			// 	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
-
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public Point getPosition(){
-			return point;
+		newData[0] = a[0];
+		newData[1] = a[1];
+		for(int i = 2; i<data.length;i++){
+			newData[i] = data[i-2];
+			//System.out.print(newData[i]);
 		}
 
 
 
+		return newData;
+		// 	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
 
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Point getPosition(){
+		return point;
+	}
+
+
+
+
+}

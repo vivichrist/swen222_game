@@ -57,7 +57,7 @@ public class Server extends Thread {
 System.out.println("Server Start>>>>>>>>>>");
 		while(true){
 			this.serverStart = 99;
-			byte[]data = new byte[85000];
+			byte[]data = new byte[60000];
 			//System.out.println("server >>run()--"+data.length);
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -99,7 +99,7 @@ System.out.println("Server Start>>>>>>>>>>");
 			packet = new Packet00Login(data);
 			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
 					+ ((Packet00Login) packet).getUsername() + " has connected...");
-			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),new Point(18,20), null, address, port);
+			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),((Packet00Login) packet).getPoint(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			break;
@@ -159,10 +159,7 @@ System.out.println("Server Start>>>>>>>>>>");
 //		}
 
 		byte[] realData = packet.getRealData();
-		if(realData.toString().equals("ping")){
-			String message = "pong";
-			sendDataToAllClients(message.getBytes());
-			}
+		
 		
 //		state = state.deserialize(realData);
 		
@@ -195,23 +192,27 @@ System.out.println("Server Start>>>>>>>>>>");
 		}
 		if (!alreadyConnected) {
 			this.connectedPlayers.add(player);
+			System.out.println("palyer: "+ player.getName());
 			if(connectedPlayers.size()==2 && serverOpen==false) {
 				System.out.println("serverOpen = "+ serverOpen);
 				ArrayList<String>names = new ArrayList<String>();
 				for(MultyPlayer p:connectedPlayers ){
 					names.add(p.getName());
 				}
+				for(String name: names){
+					System.out.println("names: "+ name);
+				}
 				System.out.println("new gamebuilder builded");
 				GameBuilder builder =new GameBuilder(names);
 				state = builder.getGameState();
-				byte[] temp =state.serialize(); 
-				byte[]newtemp = new byte[temp.length+2];
-				newtemp[0] = '0';
-				newtemp[1] = '2';
-				for(int i = 2; i<temp.length;i++){
-					newtemp[i] = temp[i-2];
+				for(int i = 0; i<state.getPlayers().size(); i++){
+					System.out.println("Deserialize state1: "+state.getPlayer(i).getName());
 				}
-				sendDataToAllClients(newtemp);
+				byte[] temp =state.serialize(); 
+				Packet02Data p = new Packet02Data(state, temp);
+				p.writeData(this);
+//				System.out.println();
+//				sendDataToAllClients(p.getRealData());
 				
 			
 //				Packet02Data pk = new Packet02Data(state,temp);
