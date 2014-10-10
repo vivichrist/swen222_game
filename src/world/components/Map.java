@@ -139,9 +139,13 @@ public class Map implements java.io.Serializable{
 		}
 		else{
 			furnitureOrigins.put(p,  s);
-			//for(Point point: s.getPoints()){
-			//	stationaryObjects.put(point, s);
-			//}
+			for(Point point: s.getPoints()){
+				if(!emptyCells.contains(p)){
+					System.out.println("Failed to add furniture, cell is not empty");
+					return false;
+				}
+				stationaryObjects.put(point, s);
+			}
 			return true;
 		}
 	}
@@ -275,6 +279,11 @@ public class Map implements java.io.Serializable{
 		return null;
 	}
 	
+	/**
+	 * Returns the Furniture origin at a given Point on this Map
+	 * @param p the Point to look for Furniture origins
+	 * @return the Furniture origin at the given Point, returns null if does not contain 
+	 */
 	public Furniture furnitureAtPoint(Point p){
 		if(furnitureOrigins.containsKey(p)) return furnitureOrigins.get(p);
 		return null;

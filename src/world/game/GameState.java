@@ -28,7 +28,7 @@ public class GameState implements java.io.Serializable{
 	private  List<Player> players;
 	private  Map[] floors;
 	private GameBuilder game;
-	private Controller controller;
+	//private Controller controller;
 	private boolean isMoved;
 
 	
@@ -46,10 +46,10 @@ public class GameState implements java.io.Serializable{
 	 * Sets the PlayerController for this game
 	 * @param controller the PlayerController to use for this game
 	 */
-	public void setController(Controller controller){
-		this.controller = controller;
-	}
-	
+//	public void setController(Controller controller){
+//		this.controller = controller;
+//	}
+//	
 	/**
 	 * Moves a Player in the game
 	 * @param player the Player to move 
@@ -125,7 +125,7 @@ public class GameState implements java.io.Serializable{
 			else{
 				player.getFloor().removeGameToken(point, token);
 				player.getTokenList().tokenFound(token);
-				controller.refreshTokenPanel();
+				Controller.refreshTokenPanel();
 				if(player.getTokenList().collectedAll()){
 					//TODO: update action here to go in to win state checking or something
 					System.out.println("All Tokens Collected!");
@@ -139,7 +139,7 @@ public class GameState implements java.io.Serializable{
 			MoveableObject moveable = (MoveableObject) object;
 			player.getInventory().add(moveable);
 			player.getFloor().removeMoveableObject(point);
-			controller.refreshInventoryPanel();
+			Controller.refreshInventoryPanel();
 			return true;
 		}
 		return false;

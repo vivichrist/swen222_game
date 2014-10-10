@@ -10,8 +10,8 @@ import world.game.GameState;
  */
 public class Controller {
 
-	private GameState state;
-	private GUI gui;
+	private static GameState state;
+	private static GUI gui;
 	
 	/**
 	 * Constructor - creates a Controller for GameState/GUI interaction in this game
@@ -26,14 +26,14 @@ public class Controller {
 	/**
 	 * Redraws the GameToken panel in the GUI - use for updating the GUI when a Player collects a GameToken
 	 */
-	public void refreshTokenPanel(){
+	public static void refreshTokenPanel(){
 		gui.redrawCollectItemCanvas();
 	}
 	
 	/**
 	 * Redraws the Inventory panel in the GUI - use for updating the GUI when a Player collects a MoveableObject
 	 */
-	public void refreshInventoryPanel(){
+	public static void refreshInventoryPanel(){
 		gui.redrawUsefulItemCanvas();
 	}
 }
