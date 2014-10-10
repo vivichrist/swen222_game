@@ -1,6 +1,9 @@
 package ui.components;
 import java.awt.Color;
 import java.awt.Point;
+import java.util.List;
+import java.util.Map.Entry;
+
 import world.components.CellType;
 import world.components.Direction;
 import world.components.Furniture;
@@ -31,7 +34,7 @@ public class GameScene
 		// size of map is in the header
 		xlimit = game.getMap().getXLimit();
 		ylimit = game.getMap().getYLimit();
-		System.out.println( "columnss rows:" +xlimit+ ","+ylimit);
+		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
 		map = game.getMap().getCellTypeMap();
 		// print out the map
@@ -90,7 +93,7 @@ public class GameScene
 	}
 
 	/**
-	 * Setup Scene with all the GraphicalObjects, Static and Dynamic  
+	 * Setup Scene with all the GraphicalObjects, Static and Dynamic
 	 */
 	public void addSurrounds()
 	{
@@ -180,12 +183,19 @@ public class GameScene
 								furn.getType(), Behave.ORIENTATION, p
 								, furn.getFacing(), Color.GRAY );
 						gdata.addDynamicOnly( dyn );
+						List<Point> lp = furn.getPoints();
+						System.out.println( "Number of points in Furature:" + lp.size() );
+						for ( Point pt: lp )
+							System.out.println( "Point:" + pt.toString() );
 						gdata.addAllGameElements( furn.getPoints(), dyn );
 					}
 				}
 
 			}
 		}
+		for ( Entry<Point, GraphicalObject> kv: gdata.getGameElements().entrySet() )
+			System.out.println( "GameElement at:" + kv.getKey().toString()
+					+ " -> " + kv.getValue().getType().toString() );
 	}
 	private CellType[] findNeighbours( int i, int j )
 	{
