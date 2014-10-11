@@ -177,7 +177,7 @@ public class GameBuilder {
 	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
 	private void placeFurniture(){
 		
-		for(int i = 0; i < floors.length; i++){
+		for(int i = 0; i < 1; i++){
 			try{
 				Scanner scan = new Scanner(new File("furniture1.txt"));
 	
