@@ -15,7 +15,7 @@ public class Orientation implements Behavior
 	{
 		this.depth = depth * GameView.cellsize;
 		this.width = width * GameView.cellsize;
-		xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
+		xaligned = dir == Direction.EAST || dir == Direction.WEST;
 		reverse = dir == Direction.SOUTH || dir == Direction.WEST;
 	}
 

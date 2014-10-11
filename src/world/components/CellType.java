@@ -19,10 +19,11 @@ public enum CellType {
 	, TICKET		// 11
 	, TORCH			// 12
 	, CHEST			// 13
-	, BREIFCASE		// 14
-	, DRAWERS		// 15
-	, TABLE			// 16
-	, BED			// 17
-	, COUCH			// 18
-	, PLAYER;		// 19
+	, RINGS			// 14
+	, BREIFCASE		// 15
+	, DRAWERS		// 16
+	, TABLE			// 17
+	, BED			// 18
+	, COUCH			// 19
+	, PLAYER;		// 20
 }
