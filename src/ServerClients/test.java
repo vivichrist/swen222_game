@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet02Data;
 import world.game.GameBuilder;
@@ -20,6 +21,7 @@ public class test {
 	public Server server;
 	private JFrame frame;
 	public GameState state;
+	public NetworkController controller;
 
 
 
@@ -34,20 +36,20 @@ public class test {
 					null,null, -1);
 
 
-			client = new Client(state,"localhost");
+			client = new Client(state,"localhost",controller);
 			client.start();
-			
+
 			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
 
 			if (server.serverStart==99) {
 				server.addConnection(player1, loginPacket);
 				int size1 = server.getConnectedPlayers().size();
-				
+
 				System.out.println("size1: "+size1);
 
 			}else System.out.println("server== null");
 			loginPacket.writeData(client);
-			
+
 		}
 
 
