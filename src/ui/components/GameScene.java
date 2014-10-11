@@ -14,6 +14,7 @@ import world.components.MoveableObject;
 import world.components.TokenType;
 import world.components.Torch;
 import world.game.GameState;
+import world.game.Player;
 
 /**
  * @author Vivian Stewart
@@ -73,7 +74,7 @@ public class GameScene
 			|| gdata.getGameElements().get( p ) != null )
 		{	// collect it and remove from data to apear in items
 			// System.out.println( "Collide (" + x + "," + y + ")" );
-			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
+			CellType ct =  gdata.getGameElements().get( p ).getType();
 			if ( ct == CellType.RINGS )
 			{return false;}
 			if ( ct == CellType.KEYDOOR )
@@ -81,11 +82,12 @@ public class GameScene
 					return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 				return true;
 			}
-			else if ( ct.ordinal() > CellType.OUTOFBOUNDS.ordinal()
-					&& ct.ordinal() < CellType.CHEST.ordinal() )
+			else if ( ct.toString() == game.getPlayer().getType().toString()
+					|| ct == CellType.KEY || ct == CellType.TORCH )
 			{
 				game.pickupObjectAtPoint( game.getPlayer(), p );
 				gdata.remove( p );
+				
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
 		return map[x][y] == CellType.WALL;
@@ -139,7 +141,7 @@ public class GameScene
 				go = game.getMap().objectAtPoint(p);
 				if ( go == null ) continue;
 				if ( go instanceof GameToken )
-				{
+				{ // Tokens to be collected
 					if ( ((GameToken)go).getType() == TokenType.CONE )
 					{
 						dyn = DymanicRender.instanceCone( p, ((GameToken)go).getColor() );
@@ -160,7 +162,7 @@ public class GameScene
 						dyn = DymanicRender.instanceCube( p, ((GameToken)go).getColor() );
 						gdata.addGrapicalObject( dyn );
 					}
-				}
+				} // items that enable other items to be collected or triggered
 				else if ( go instanceof MoveableObject )
 				{
 					if ( go instanceof Key )
@@ -174,7 +176,7 @@ public class GameScene
 						gdata.addGrapicalObject( dyn );
 					}
 				} else
-				{
+				{ // load furnature int the scene
 					furn = game.getMap().furnitureAtPoint(p);
 					if ( furn != null )
 					{
@@ -189,9 +191,18 @@ public class GameScene
 						gdata.addAllGameElements( furn.getPoints(), dyn );
 					}
 				}
-
 			}
 		}
+		// load other players into the scene
+		List<Player> players = game.getPlayers();
+		for ( Player pl: players )
+		{
+			if ( game.getPlayer() != pl )
+				dyn = DymanicRender.instancePlayer( Behave.CONTROLLED
+					, pl.getPosition(), pl.getFacing(), Color.darkGray );
+		}
+		
+		// testing 
 		for ( Entry<Point, GraphicalObject> kv: gdata.getGameElements().entrySet() )
 			System.out.println( "GameElement at:" + kv.getKey().toString()
 					+ " -> " + kv.getValue().getType().toString() );

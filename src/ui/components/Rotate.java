@@ -28,7 +28,7 @@ public class Rotate implements Behaviour
 	@Override
 	public boolean activate()
 	{
-		return true;
+		return false;
 	}
 
 }
