@@ -1,7 +1,10 @@
 package controllers;
 
+import java.awt.Point;
+
 import window.components.GUI;
 import world.game.GameState;
+import world.game.Player;
 
 /**
  * A Controller to handle interactions between the GameState and the GUI
@@ -35,5 +38,12 @@ public class Controller {
 	 */
 	public static void refreshInventoryPanel(){
 		gui.redrawUsefulItemCanvas();
+	}
+
+	public void moveOtherPlayer(Player player, Point point) {
+		System.out.println("waiting for vivian === move other player");
+	}
+	public void movePlayer(Player player, Point point){
+		state.movePlayer(player, point);
 	}
 }
