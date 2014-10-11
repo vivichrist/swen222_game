@@ -20,7 +20,7 @@ public enum CellType {
 	, TORCH			// 12
 	, CHEST			// 13
 	, RINGS			// 14
-	, BREIFCASE		// 15
+	, BRIEFCASE		// 15
 	, DRAWERS		// 16
 	, TABLE			// 17
 	, BED			// 18

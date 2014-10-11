@@ -23,7 +23,7 @@ public class MeshStore
 			put( CellType.DIAMOND, "diamond.obj" );
 			put( CellType.RINGS, "rings.obj" );
 			put( CellType.CHEST, "chest.obj" );
-			put( CellType.BREIFCASE, "breifcase.obj" );
+			put( CellType.BRIEFCASE, "breifcase.obj" );
 			put( CellType.DRAWERS, "drawers.obj" );
 			put( CellType.TABLE, "table.obj" );
 			put( CellType.DRAWERS, "drawers.obj" );
