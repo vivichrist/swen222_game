@@ -68,10 +68,6 @@ public class GameBuilder {
 		
 		//getPlayers();
 		buildFloors(players.size());
-		System.out.println("Number of players: " + players.size());
-		System.out.println("Number of floors: " + floors.length);
-		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
-		//TODO: place StationaryObjects
 		placePlayers();
 		placeFurniture();
 		placePlayerTokens();
@@ -179,15 +175,14 @@ public class GameBuilder {
 		
 		for(int i = 0; i < floors.length; i++){
 			try{
-				Scanner scan = new Scanner(new File("furniture" + (i + 1) + ".txt"));
+				
+				Scanner scan = new Scanner(new File("furniture" + i + ".txt"));
 	
 				while(scan.hasNextLine()){
 					String[] tokens = scan.nextLine().split(" ");
 					
 					// Process first token (should be furniture type)
 					CellType furnitureType = furnitureType(tokens[0]);
-					System.out.println("furniture string: " + tokens[0]);
-					System.out.println("furnitureType: " + furnitureType);
 					if(furnitureType == null) throw new Exception("Invalid Furniture type in furniture file: " + tokens[0]);
 					
 					// Process second token (should be direction)
@@ -229,7 +224,6 @@ public class GameBuilder {
 	 */
 	private CellType furnitureType(String furniture){
 		for(int i = 13; i < 20; i++){
-			System.out.println("CellType: " + CellType.values()[i].toString());
 			if(furniture.equals(CellType.values()[i].toString())) return CellType.values()[i];
 		}
 		return null;
