@@ -11,7 +11,6 @@ import world.components.GameObject;
 import world.components.GameToken;
 import world.components.Key;
 import world.components.MoveableObject;
-import world.components.StationaryObject;
 import world.components.TokenType;
 import world.components.Torch;
 import world.game.GameState;
@@ -75,7 +74,7 @@ public class GameScene
 		{	// collect it and remove from data to apear in items
 			// System.out.println( "Collide (" + x + "," + y + ")" );
 			CellType ct =  gdata.getGameElements().get( new Point( x, y ) ).getType();
-			if ( ct == CellType.TELEPORT )
+			if ( ct == CellType.RINGS )
 			{return false;}
 			if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
@@ -130,7 +129,7 @@ public class GameScene
 					break;
 				case TELEPORT :
 					dyn = DymanicRender.instanceTelePort( p );
-					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( CellType.TELEPORT, nesw, p ) );
 					gdata.addGrapicalObject( dyn );
 					break;
 				default:
