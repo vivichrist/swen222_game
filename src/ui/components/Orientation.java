@@ -37,29 +37,6 @@ public class Orientation implements Behavior
 			gl.glRotatef( 180f, 0f, 0f, 1f );
 			gl.glTranslatef( -width, -depth, 0f );
 		}
-		// test code to see all orientations
-//		int next = count / 120;
-//		++count;
-//		if ( next == 0 )
-//		{
-//			xaligned = false;
-//			reverse = false;
-//		}
-//		else if ( next == 1 )
-//		{
-//			reverse = true;
-//		}
-//		else if ( next == 2 )
-//		{
-//			xaligned = true;
-//			reverse = false;
-//		}	
-//		else if ( next == 3 )
-//		{
-//			reverse = true;
-//			
-//		}
-//		else count = 0;
 	}
 
 	@Override
