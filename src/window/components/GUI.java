@@ -114,17 +114,11 @@ public class GUI  {
 		//		frame.setResizable(false);
 
 		layeredPane = new JLayeredPane();
-		ImageIcon background = new ImageIcon("Resource/latticeWork3.png");
+		ImageIcon background = new ImageIcon("Resource/background.png");
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBounds(0, 0, width, height);
-
 		
-		JLabel jl = new JLabel(new ImageIcon(background.getImage().getScaledInstance(width, height, background.getImage().SCALE_SMOOTH)));
-		
-		
-		
-		
-		//JLabel jl = new JLabel(background);
+		JLabel jl = new JLabel(background);
 		backgroundPanel.add(jl);
 
 		//backgroundPanel=new JButton("AAA");
