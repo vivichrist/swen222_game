@@ -83,7 +83,7 @@ public class GUI  {
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
 
-	JButton jbNewGame;
+	JButton jbNew;
 	JButton jbLoad;
 	JButton jbInfo;
 	JButton jbExit;
@@ -103,7 +103,7 @@ public class GUI  {
 	public void setUp(){
 		//canvas.repaint();
 		frame = new JFrame("Adventure Game");
-		frame.setBackground(Color.LIGHT_GRAY);
+		frame.setBackground(Color.BLACK);
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
@@ -124,7 +124,7 @@ public class GUI  {
 		//backgroundPanel=new JButton("AAA");
 		//jb.setBounds(100,100,100,100);
 
-		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
+		//layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
 		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);
 		frame.setLayeredPane(layeredPane);
 
@@ -141,9 +141,9 @@ public class GUI  {
 	}
 
 	private void startPanel() {
-		int startPanelLeft = 325;
+		int startPanelLeft = 350;
 		int startPanelTop = 180;
-		int startPanelWidth = 200;  //150
+		int startPanelWidth = 90;  //150
 		int startPanelHeight = 600;
 
 		startPanel = new JPanel();
@@ -152,62 +152,38 @@ public class GUI  {
 		//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
 		//		startPanel.setLayout(null);
 
-
-		jbNewGame = new JButton("New Game");
+		jbNew = new JButton("New");
 		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 
-		//jbNewGame.setOpaque(false);
-		//jbNewGame.setContentAreaFilled(false);
-		//jbNewGame.setBorderPainted(false);
-
+/*		jbNewGame.setOpaque(false);
+		jbNewGame.setContentAreaFilled(false);
+		jbNewGame.setBorderPainted(false);
 		jbLoad.setOpaque(false);
 		jbLoad.setContentAreaFilled(false);
 		jbLoad.setBorderPainted(false);
-
 		jbInfo.setOpaque(false);
 		jbInfo.setContentAreaFilled(false);
 		jbInfo.setBorderPainted(false);
-
 		jbExit.setOpaque(false);
 		jbExit.setContentAreaFilled(false);
 		jbExit.setBorderPainted(false);
-				jbNewGame.setPreferredSize(new Dimension(200, 60));
-				jbLoad.setPreferredSize(new Dimension(200, 60));
-				jbInfo.setPreferredSize(new Dimension(200, 60));
-				jbExit.setPreferredSize(new Dimension(200, 60));
-				
-				jbNewGame.setFont(new Font("Arial", Font.PLAIN, 30));
-				jbLoad.setFont(new Font("Arial", Font.PLAIN, 30));
-				jbInfo.setFont(new Font("Arial", Font.PLAIN, 30));
-				jbExit.setFont(new Font("Arial", Font.PLAIN, 30));
-				
-				
-				
-				jbNewGame.setForeground(new Color(0, 135, 200).brighter());
-				jbNewGame.setHorizontalTextPosition(SwingConstants.CENTER);
-				jbNewGame.setBorder(null);
-				jbNewGame.setBackground(new Color(3, 59, 90).brighter());
-				
-				//jbNewGame.setBackground(new Color(100, 100, 100));
-				//jbNewGame.set
-		//jbNewGame.setLayout(null);
-		//jbNewGame.setBounds(350, 200, 100, 400);
-		//		jbLoad.setLayout(null);
-		//		jbLoad.setBounds(350, 200, 30, 30);
+	
+		jbNewGame.setBackground(new Color(100, 100, 100));
+		jbNewGame.set
+		jbNewGame.setLayout(null);
+		jbNewGame.setBounds(350, 200, 100, 400);
+		jbLoad.setLayout(null);
+		jbLoad.setBounds(350, 200, 30, 30);
+*/
 
-
-
-
-		startPanel.add(jbNewGame);
-		startPanel.add(jbLoad);
-		startPanel.add(jbInfo);
-		startPanel.add(jbExit);
-
-
-		jbNewGame.setOpaque(false);
-		startPanel.setOpaque(false);
+		setButtonStyle(jbNew, 75, startPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbLoad, 80, startPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbInfo, 65, startPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbExit, 65, startPanel, new Color(100, 100, 100).brighter());
+		
+//		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
 
@@ -225,18 +201,10 @@ public class GUI  {
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
 
-		jbSingle.setOpaque(false);
-		jbSingle.setContentAreaFilled(false);
-		jbSingle.setBorderPainted(false);
-
-		jbMultiple.setOpaque(false);
-		jbMultiple.setContentAreaFilled(false);
-		jbMultiple.setBorderPainted(false);
-
-		choosePlayerPanel.add(jbSingle);
-		choosePlayerPanel.add(jbMultiple);
-
-		choosePlayerPanel.setOpaque(false);
+		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(100, 100, 100).brighter());
+		
+		//choosePlayerPanel.setOpaque(false);
 		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChoosePlayer();
 	}
@@ -245,27 +213,38 @@ public class GUI  {
 		int chooseNamePanelLeft = 325;
 		int chooseNamePanelTop = 200;
 		int chooseNamePanelWidth = 150;
-		int chooseNamePanelHeight = 120;
+		int chooseNamePanelHeight = 600;
 
 		chooseNamePanel = new JPanel();
 		chooseNamePanel.setBounds(chooseNamePanelLeft, chooseNamePanelTop, chooseNamePanelWidth, chooseNamePanelHeight);
 
-		JLabel chooseName = new JLabel("Name:   ");
-		textFieldName = new JTextField(8);
-		jbStart = new JButton("Start");
+		JLabel chooseName = new JLabel("Name:");
+		textFieldName = new JTextField(6);
+		jbStart = new JButton("START");
 
-		jbStart.setOpaque(false);
-		jbStart.setContentAreaFilled(false);
-		jbStart.setBorderPainted(false);
-
+		chooseName.setPreferredSize(new Dimension(100, 60));
+		chooseName.setFont(new Font("Arial", Font.PLAIN, 30));
+		chooseName.setForeground(new Color(100, 100, 100).brighter());
+		
+		textFieldName.setPreferredSize(new Dimension(130, 40));
+		textFieldName.setFont(new Font("Arial", Font.PLAIN, 30));
+		textFieldName.setForeground(new Color(30, 30, 30));
+				
+		JLabel space = new JLabel("");
+		space.setPreferredSize(new Dimension(100, 20));
+		
 		chooseNamePanel.add(chooseName);
 		chooseNamePanel.add(textFieldName);
-		chooseNamePanel.add(jbStart);
-
-		chooseNamePanel.setOpaque(false);
+		chooseNamePanel.add(space);
+		setButtonStyle(jbStart, 110, chooseNamePanel, new Color(100, 200, 100));
+		
+//		chooseNamePanel.setOpaque(false);
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
 	}
+	
+	
+	
 	public void chooseNamePanel2(){
 		int chooseNamePanelLeft = 325;
 		int chooseNamePanelTop = 200;
@@ -292,11 +271,51 @@ public class GUI  {
 		addListennerChooseName2();
 	}
 
+	
+	
+	
+	
+	private void setButtonStyle(final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
+		button.setPreferredSize(new Dimension(buttonWidth, 60));
+		button.setFont(new Font("Arial", Font.PLAIN, 30));
+		button.setForeground(defaultColor);
+		button.setHorizontalTextPosition(SwingConstants.CENTER);
+		button.setBorder(null);
+		
+		button.addMouseListener(new MouseListener() {
+			@Override 
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				button.setForeground(defaultColor);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				button.setForeground(new Color(0, 135, 200).brighter());
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+		});
+
+		panel.add(button);
+	}
+	
+	
+	
+	
+	
+	
 	public void addListennerStart(){
-		jbNewGame.addActionListener(new ActionListener() {
+		jbNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbNewGame){
+				if(button == jbNew){
 					layeredPane.remove(startPanel);
 					choosePlayerPanel();
 					frame.repaint();
@@ -324,7 +343,7 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					
+
 					GameState state = null;
 					MultyPlayer player1 = null;
 					if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
@@ -431,10 +450,10 @@ public class GUI  {
 		loginPacket.writeData(client);
 		System.out.println("state.getPlayers().size(): "+ state.getPlayers().size());
 
-		
+
 		//client.
 		controller = new Controller(state, this);
-		
+
 		if(state.getPlayers().size()>1){
 			System.out.println("state.getPlayers().size()>=2"+ state.getPlayers().size());
 			gameView = new GameView( glcapabilities, frame, state );
