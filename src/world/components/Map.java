@@ -136,20 +136,20 @@ public class Map implements java.io.Serializable{
 	 * @param s the StationaryObject to add
 	 * @return true if successfully added
 	 */
-	public boolean addFurniture(Point p, Furniture s){
+	public boolean addFurniture(Point p, Furniture f){
 		if(moveableObjects.containsKey(p) | furnitureOrigins.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
 			return false;
 		}
 		else{
-			furnitureOrigins.put(p,  s);
-			for(Point point: s.getPoints()){
-				if(!emptyCells.contains(p)){
-					System.out.println("Failed to add furniture, cell is not empty: " + p.toString());
+			furnitureOrigins.put(p,  f);
+			for(Point point: f.getPoints()){
+				if(!emptyCells.contains(point)){
+					System.out.println("Failed to add furniture, cell is not empty: " + point.toString());
 					return false;
 				}
 				else{
-					stationaryObjects.put(point, s);
-					emptyCells.remove(emptyCells.indexOf(p));
+					stationaryObjects.put(point, f);
+					emptyCells.remove(emptyCells.indexOf(point));
 				}
 			}
 			return true;
