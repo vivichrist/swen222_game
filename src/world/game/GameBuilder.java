@@ -68,6 +68,8 @@ public class GameBuilder {
 		
 		//getPlayers();
 		buildFloors(players.size());
+		System.out.println("Number of players: " + players.size());
+		System.out.println("Number of floors: " + floors.length);
 		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
 		//TODO: place StationaryObjects
 		placePlayers();
@@ -175,62 +177,74 @@ public class GameBuilder {
 	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
 	private void placeFurniture(){
 		
-		try{
-			Scanner scan = new Scanner(new File("furniture1.txt"));
-			
-			while(scan.hasNextLine()){
-				String[] tokens = scan.nextLine().split(" ");
-				
-				// Process first token (should be furniture type)
-				
-				System.out.println("Tokens size: " + tokens.length);
-				for(int i = 0; i < tokens.length; i++){
-					System.out.println(tokens[i]);
-				}
-			}
-			
-			
-			
-//			// First token should be a String corresponding to a furniture type
-//			if(!scan.hasNext()) 
-//			{
-//				scan.close();
-//				throw new Exception("Map format error: first header token should be an int");
-//			}
-//			else xLimit = scan.nextInt();
-//			if(!scan.hasNext("x"))
-//			{
-//				scan.close();
-//				throw new Exception("Map format error: second header toden should be 'x'");
-//			}
-//			else scan.next();
-//			if(!scan.hasNextInt())
-//			{
-//				scan.close();
-//				throw new Exception("Map format error: third header token should be an int");
-//			}
-//			else yLimit = scan.nextInt();
-
-			
-			scan.close();
-		} catch ( Exception e )
-		{
-			e.printStackTrace();
-		}
-		
-		
-		
-		
 		for(int i = 0; i < floors.length; i++){
-			Point position = new Point(1, 16);
-			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));
-			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.SOUTH));
+			try{
+				Scanner scan = new Scanner(new File("furniture1.txt"));
+	
+				while(scan.hasNextLine()){
+					String[] tokens = scan.nextLine().split(" ");
+					
+					// Process first token (should be furniture type)
+					CellType furnitureType = furnitureType(tokens[0]);
+					System.out.println("furniture string: " + tokens[0]);
+					System.out.println("furnitureType: " + furnitureType);
+					if(furnitureType == null) throw new Exception("Invalid Furniture type in furniture file: " + tokens[0]);
+					
+					// Process second token (should be direction)
+					Direction furnitureDir = furnitureDirection(tokens[1]);
+					if(furnitureDir == null) throw new Exception("Invalid Furniture direction in furniture file: " + tokens[1]);
+					
+					// Process third and fourth tokens (should be x/y coordinates)
+					Point position = new Point(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
+	
+					floors[i].addFurniture(position, new Furniture(furnitureType, position, furnitureDir));			
+				}
+				
+				scan.close();
+			} catch ( Exception e )
+			{
+				e.printStackTrace();
+			}
 		}
+		
+		
+		
+		
+//		for(int i = 0; i < floors.length; i++){
+//			Point position = new Point(1, 16);
+//			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));
+//			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.SOUTH));
+//		}
 	}
 
 	public int getLevelsBuilding() {
 		// TODO Auto-generated method stub
 		return floors.length;
+	}
+	
+	/**
+	 * Returns a Furniture CellType given a String name - uses a range of values from the CellType enum; not a good solution but it works
+	 * @param furniture the name of the Furniture type
+	 * @return the CellType of the furniture, returns null if not found
+	 */
+	private CellType furnitureType(String furniture){
+		for(int i = 13; i < 20; i++){
+			System.out.println("CellType: " + CellType.values()[i].toString());
+			if(furniture.equals(CellType.values()[i].toString())) return CellType.values()[i];
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a Direction given a String direction
+	 * @param direction the String describing the direction
+	 * @return the Direction matching the String
+	 */
+	private Direction furnitureDirection(String direction){
+		for(int i = 0; i < 4; i++){
+			if(direction.equals(Direction.values()[i].toString())) return Direction.values()[i];
+		}
+		return null;
 	}
 	
 }

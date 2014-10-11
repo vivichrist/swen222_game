@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -31,6 +32,7 @@ public class Map implements java.io.Serializable{
 	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
 	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
 	private HashMap<Point, Player> players = new HashMap<Point, Player>();
+
 
 	/**
 	 * Constructor - scans in the floor layout from a given map file.
@@ -327,6 +329,5 @@ public class Map implements java.io.Serializable{
 	private void placeKey(Key key){
 		moveableObjects.put(randomEmptyCell(), key);
 	}
-	
 	
 }
