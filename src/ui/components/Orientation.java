@@ -6,7 +6,7 @@ import javax.media.opengl.GL2;
 
 import world.components.Direction;
 
-public class Orientation implements Behavior
+public class Orientation implements Behaviour
 {
 	private int depth, width;//, count = 0;
 	private boolean xaligned, reverse;

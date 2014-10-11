@@ -3,7 +3,7 @@ package ui.components;
 import java.awt.geom.Point2D;
 import javax.media.opengl.GL2;
 
-public class OpenClose implements Behavior
+public class OpenClose implements Behaviour
 {
 	private float open = 0f, openSpeed = 0f;
 	private float	threshhold = GameView.cellsize * 0.9f;

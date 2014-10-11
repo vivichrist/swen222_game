@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import javax.media.opengl.GL2;
 
-public class Rotate implements Behavior
+public class Rotate implements Behaviour
 {
 	private int rotate = 0;
 	

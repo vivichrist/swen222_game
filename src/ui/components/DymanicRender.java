@@ -3,6 +3,7 @@ package ui.components;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.media.opengl.GL2;
@@ -15,7 +16,7 @@ public class DymanicRender implements GraphicalObject
 	private Point2D.Float	position;
 	private float[]			meshColor, selectColor;
 	private CellType		type;
-	private Behavior		anim;
+	private List<Behaviour>		anim;
 	private List<float[]>	vertices;
 	private List<int[]>		indices;
 	private boolean			xaligned = false;
@@ -80,17 +81,24 @@ public class DymanicRender implements GraphicalObject
 		return new DymanicRender( type, act, position, dir, meshColor );
 	}
 	
+	public static DymanicRender instancePlayer( Behave act, Point position
+			, Direction dir, Color meshColor )
+	{
+		return new DymanicRender( CellType.PLAYER, act, position, dir, meshColor );
+	}
+	
 	private DymanicRender( CellType type, Behave act, Point position
 			, Direction dir, Color meshColor )
 	{
-		System.out.println( "Graphical Object: " + type
-				+ " added at (" + position.x + "," + position.y + ")" );
+		// System.out.println( "Graphical Object: " + type
+		//		+ " added at (" + position.x + "," + position.y + ")" );
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
 		// tokens key and torch should be centered in the middle of the square
-		if ( type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
-				&& type.ordinal() < CellType.CHEST.ordinal() )
+		if ( (type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
+				&& type.ordinal() < CellType.CHEST.ordinal())
+					|| type == CellType.PLAYER )
 			this.position = new Point2D.Float(
 					  (position.x * GameView.cellsize) + (GameView.cellsize/2f)
 					, (position.y * GameView.cellsize) + (GameView.cellsize/2f) );
@@ -98,23 +106,30 @@ public class DymanicRender implements GraphicalObject
 			this.position = new Point2D.Float(
 				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
-		System.out.println( "Actual Position:(" + this.position.x
-				+ "," + this.position.y + ")");
+		// System.out.println( "Actual Position:(" + this.position.x
+		//		+ "," + this.position.y + ")");
 		this.xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
 		// assign behaviours
+		anim = new LinkedList<Behaviour>();
 		switch ( act )
 		{
-		case ROTATE: anim = new Rotate( 0 ); break;
-		case OPEN_CLOSE: anim = new OpenClose(); break;
-		case RINGS: anim = new Rings(); break;
+		case ROTATE: anim.add( new Rotate( 0 ) ); break;
+		case OPEN_CLOSE: anim.add( new OpenClose() ); break;
+		case RINGS: 
+			anim.add( new Rings( false ) );
+			anim.add( new Rings( true ) );
+			break;
 		case ORIENTATION:
 			if ( type == CellType.BED )
-				anim = new Orientation( 3, 2, dir );
+				anim.add( new Orientation( 3, 2, dir ) );
 			else if ( type == CellType.COUCH || type == CellType.TABLE )
-				anim = new Orientation( 2, 1, dir );
-			else anim = new Orientation( 1, 1, dir );
+				anim.add( new Orientation( 2, 1, dir ) );
+			else anim.add( new Orientation( 1, 1, dir ) );
 			break;
-		default: anim = null; break;
+		case CONTROLLED:
+			anim.add( new Controlled() );
+			break;
+		default: break;
 		}
 	}
 
@@ -126,25 +141,40 @@ public class DymanicRender implements GraphicalObject
 			System.out.println( "Empty Vertices and Indices:" + type );
 			System.exit( 1 );
 		}
-		gl.glPushMatrix();
-		gl.glTranslatef( position.x, position.y, 0 );
-		// doors need manual orientation as they have open/close behaviour
-		if ( (type == CellType.DOOR || type == CellType.KEYDOOR) && !xaligned )
+		if ( anim.isEmpty() )
 		{
-			gl.glTranslatef( GameView.cellsize, 0f, 0f );
-			gl.glRotatef( 90.0f, 0f, 0f, 1.f );
+			gl.glPushMatrix();
+			gl.glTranslatef( position.x, position.y, 0 );
+			gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
+			renderMesh( gl );
+			gl.glPopMatrix();
+			return true;
 		}
-		if ( anim != null ) anim.modify( gl, position );
-		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
-		renderMesh( gl );
-		gl.glPopMatrix();
+		for ( Behaviour behave: anim )
+		{
+			gl.glPushMatrix();
+			gl.glTranslatef( position.x, position.y, 0 );
+			// doors need manual orientation as they have open/close behaviour
+			if ( (type == CellType.DOOR || type == CellType.KEYDOOR) && !xaligned )
+			{
+				gl.glTranslatef( GameView.cellsize, 0f, 0f );
+				gl.glRotatef( 90.0f, 0f, 0f, 1.f );
+			}
+			behave.modify( gl, position );
+			gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
+			renderMesh( gl );
+			gl.glPopMatrix();
+		}
 		return true;
 	}
 	// behaviour defines collidability
 	public boolean collide()
 	{
-		if ( anim == null ) return true;
-		return anim.activate();
+		if ( anim.isEmpty() ) return true;
+		boolean result = true;
+		for ( Behaviour b: anim )
+			result &= b.activate();
+		return result;
 	}
 
 	@Override
