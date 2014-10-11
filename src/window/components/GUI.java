@@ -410,6 +410,7 @@ public class GUI  {
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
+		controller = new Controller(state, this);
 		gameView = new GameView( glcapabilities, frame, state );
 
 

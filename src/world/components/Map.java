@@ -141,7 +141,7 @@ public class Map implements java.io.Serializable{
 			furnitureOrigins.put(p,  s);
 			for(Point point: s.getPoints()){
 				if(!emptyCells.contains(p)){
-					System.out.println("Failed to add furniture, cell is not empty");
+					System.out.println("Failed to add furniture, cell is not empty: " + p.toString());
 					return false;
 				}
 				else{
