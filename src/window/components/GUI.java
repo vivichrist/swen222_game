@@ -114,17 +114,23 @@ public class GUI  {
 		//		frame.setResizable(false);
 
 		layeredPane = new JLayeredPane();
-		ImageIcon background = new ImageIcon("Resource/Background.png");
+		ImageIcon background = new ImageIcon("Resource/latticeWork3.png");
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBounds(0, 0, width, height);
 
-		JLabel jl = new JLabel(background);
+		
+		JLabel jl = new JLabel(new ImageIcon(background.getImage().getScaledInstance(width, height, background.getImage().SCALE_SMOOTH)));
+		
+		
+		
+		
+		//JLabel jl = new JLabel(background);
 		backgroundPanel.add(jl);
 
 		//backgroundPanel=new JButton("AAA");
 		//jb.setBounds(100,100,100,100);
 
-		//layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
+		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
 		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);
 		frame.setLayeredPane(layeredPane);
 
@@ -178,12 +184,12 @@ public class GUI  {
 		jbLoad.setBounds(350, 200, 30, 30);
 */
 
-		setButtonStyle(jbNew, 75, startPanel, new Color(100, 100, 100).brighter());
-		setButtonStyle(jbLoad, 80, startPanel, new Color(100, 100, 100).brighter());
-		setButtonStyle(jbInfo, 65, startPanel, new Color(100, 100, 100).brighter());
-		setButtonStyle(jbExit, 65, startPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbNew, 75, startPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbLoad, 80, startPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
 		
-//		startPanel.setOpaque(false);
+		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
 
@@ -201,10 +207,10 @@ public class GUI  {
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
 
-		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(100, 100, 100).brighter());
-		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(100, 100, 100).brighter());
+		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(0, 135, 200).brighter());
 		
-		//choosePlayerPanel.setOpaque(false);
+		choosePlayerPanel.setOpaque(false);
 		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChoosePlayer();
 	}
@@ -224,7 +230,7 @@ public class GUI  {
 
 		chooseName.setPreferredSize(new Dimension(100, 60));
 		chooseName.setFont(new Font("Arial", Font.PLAIN, 30));
-		chooseName.setForeground(new Color(100, 100, 100).brighter());
+		chooseName.setForeground(new Color(0, 135, 200).brighter());
 		
 		textFieldName.setPreferredSize(new Dimension(130, 40));
 		textFieldName.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -236,9 +242,9 @@ public class GUI  {
 		chooseNamePanel.add(chooseName);
 		chooseNamePanel.add(textFieldName);
 		chooseNamePanel.add(space);
-		setButtonStyle(jbStart, 110, chooseNamePanel, new Color(100, 200, 100));
+		setButtonStyle(jbStart, 110, chooseNamePanel, Color.MAGENTA);
 		
-//		chooseNamePanel.setOpaque(false);
+		chooseNamePanel.setOpaque(false);
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
 	}
@@ -282,6 +288,10 @@ public class GUI  {
 		button.setHorizontalTextPosition(SwingConstants.CENTER);
 		button.setBorder(null);
 		
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		
 		button.addMouseListener(new MouseListener() {
 			@Override 
 			public void mouseReleased(MouseEvent e) {}
@@ -296,7 +306,7 @@ public class GUI  {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				button.setForeground(new Color(0, 135, 200).brighter());
+				button.setForeground(new Color(100, 200, 100).brighter());
 			}
 
 			@Override
