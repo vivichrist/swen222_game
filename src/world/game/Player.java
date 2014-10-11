@@ -136,14 +136,5 @@ public class Player implements java.io.Serializable{
 	public Inventory getInventory(){
 		return inventory;
 	}
-	
-	/**
-	 * Checks whether a Player can collect the given token type
-	 * @param type the type of the Token to check
-	 * @return true if the given type matches this Player's toke types
-	 */
-	public boolean canCollectToken(TokenType type){
-		return type == this.type;
-	}
 
 }
