@@ -114,6 +114,7 @@ public class Player implements java.io.Serializable{
 	 * @return true if successfully moved
 	 */
 	public boolean move(Point p){
+		System.out.println(floor.getXLimit()+ " " +floor.getYLimit());
 		if(floor.movePlayer(this, position, p)){
 			position = p;
 			return true;

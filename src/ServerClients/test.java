@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet02Data;
+import ServerClients.UDPpackets.Packet03Move;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -32,23 +33,28 @@ public class test {
 		}
 		else{
 			state = new GameState(null, null);
-			MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,20),
-					null,null, -1);
+			//MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,20),
+			//		null,null, -1);
 
 
 			client = new Client("localhost",controller);
 			client.start();
 
-			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
+//			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
+			Packet00Login loginPacket = new Packet00Login("Jacky",1,1);
 
-			if (server.serverStart==99) {
-				server.addConnection(player1, loginPacket);
-				int size1 = server.getConnectedPlayers().size();
-
-				System.out.println("size1: "+size1);
-
-			}else System.out.println("server== null");
 			loginPacket.writeData(client);
+
+			Packet03Move move = new Packet03Move("Jacky",new Point(10,20));
+
+//			if (server.serverStart==99) {
+//				server.addConnection(player1, loginPacket);
+//				int size1 = server.getConnectedPlayers().size();
+//
+//				System.out.println("size1: "+size1);
+//
+//			}else System.out.println("server== null");
+			move.writeData(client);
 
 		}
 

@@ -3,6 +3,7 @@
  */
 package ServerClients;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -20,6 +21,7 @@ import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
+import world.game.Player;
 
 /**
  * @author  Zhaojiang Chang
@@ -96,7 +98,7 @@ public class Server extends Thread {
 			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),((Packet00Login) packet).getPoint(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
-			if(connectedPlayers.size()==2 && serverOpen==false){
+			if(connectedPlayers.size()==1 && serverOpen==false){
 				sentStateToAllClients();
 			}
 			break;
@@ -132,7 +134,11 @@ private void sentStateToAllClients() {
 	System.out.println("new gamebuilder builded");
 	GameBuilder builder =new GameBuilder(names);
 	state = builder.getGameState();
+	System.out.println(state.getPlayers().get(0).getFloor().getXLimit()+"  "+state.getPlayers().get(0).getFloor().getXLimit()+ "  "+state.getPlayers().get(0).getFloor());
+	System.out.println(state.getPlayers().get(0).getPosition().x+"  "+state.getPlayer().getPosition().y);
 
+	state.getPlayers().get(0).getFloor().movePlayer(state.getPlayer(), state.getPlayer().getPosition(), new Point(30,40));
+	System.out.println(state.getPlayers().get(0).getPosition().x+"  "+state.getPlayer().getPosition().y);
 	byte[] temp =state.serialize();
 
 	byte[]newData =new byte[temp.length+2];
@@ -195,7 +201,10 @@ private void handleMove(Packet03Move packet) {
 	if(getPlayer(packet.getUsername())!=null){
 		int index = getPlayerIndex(packet.getUsername());
 		MultyPlayer player = this.connectedPlayers.get(index);
-		state.movePlayer(player, packet.getPoint());
+		if(player==null)System.out.println("player null");
+		System.out.println(player.getName()+ "  "+ packet.getPoint());
+		System.out.println(state.getPlayers().get(0).getName());
+		state.movePlayer((Player)player, packet.getPoint());
 		packet.writeData(this);
 	}
 
