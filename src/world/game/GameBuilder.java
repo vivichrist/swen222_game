@@ -133,6 +133,13 @@ public class GameBuilder {
 			currentPlayer.setFloor(floors[i]);
 			floors[i].placePlayer(startPoint, currentPlayer);
 		}
+		//TODO: remove this testing code
+		Player secondPlayer = new Player("aaa", TokenType.values()[1]);
+		players.add(secondPlayer);
+		Point start = new Point(3, 15);
+		secondPlayer.setPosition(start);
+		secondPlayer.setFloor(floors[0]);
+		floors[0].placePlayer(start, secondPlayer);
 	}
 	
 	/**
