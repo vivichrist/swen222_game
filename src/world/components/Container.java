@@ -1,5 +1,7 @@
 package world.components;
 
+import java.util.ArrayList;
+
 import world.components.MoveableObject;
 
 /**
@@ -7,16 +9,29 @@ import world.components.MoveableObject;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public abstract class Container implements GameObject{
+public class Container implements GameObject{
 
-	protected String name;
-	protected MoveableObject contents;
+	private ArrayList<MoveableObject> contents;
+	private CellType type;
+	private int maxSize;
 	
-	public Container(String name){
-		this.name = name;
+	public Container(CellType type){
+		contents = new ArrayList<MoveableObject>();
+		this.type = type;
+		if(type == CellType.BRIEFCASE || type == CellType.CHEST) maxSize = 1;
+		if(type == CellType.DRAWERS) maxSize = 3;
 	}
 	
-	public abstract boolean setContents(MoveableObject contents);
+	public boolean setContents(MoveableObject object){
+		if(contents.size() < maxSize){
+			contents.add(object);
+			return true;
+		}
+		return false;
+	}
 	
-	public abstract MoveableObject getContents();
+	public MoveableObject getContents(){
+		if(!contents.isEmpty()) return contents.remove(0);
+		else return null;
+	}
 }

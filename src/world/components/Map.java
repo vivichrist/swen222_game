@@ -28,6 +28,7 @@ public class Map implements java.io.Serializable{
 	private List<Point> emptyCells;
 	private HashMap<Point, MoveableObject> moveableObjects = new HashMap<Point, MoveableObject>();
 	private HashMap<Point, Furniture> furnitureOrigins = new HashMap<Point, Furniture>();
+	private HashMap<Point, Container> containers = new HashMap<Point, Container>();
 	private HashMap<Point, StationaryObject> stationaryObjects = new HashMap<Point, StationaryObject>();
 	private HashMap<Point, Door> doors = new HashMap<Point, Door>();
 	private HashMap<Point, GameToken> tokens = new HashMap<Point, GameToken>();
@@ -151,6 +152,24 @@ public class Map implements java.io.Serializable{
 					emptyCells.remove(emptyCells.indexOf(p));
 				}
 			}
+			return true;
+		}
+	}
+	
+	/**
+	 * Adds a Container to this floor
+	 * This is only allowed if the cell type is EMPTY and it is not occupied by another game world object
+	 * @param p the Point to add this Stationary Object to
+	 * @param c the Container to add
+	 * @return true if successfully added
+	 */
+	public boolean addContainer(Point p, Container c){
+		if(moveableObjects.containsKey(p) | furnitureOrigins.containsKey(p) | tokens.containsKey(p) | map[p.x][p.y] != CellType.EMPTY){
+			return false;
+		}
+		else{
+			containers.put(p,  c);
+			emptyCells.remove(emptyCells.indexOf(p));
 			return true;
 		}
 	}
@@ -292,6 +311,16 @@ public class Map implements java.io.Serializable{
 	 */
 	public Furniture furnitureAtPoint(Point p){
 		if(furnitureOrigins.containsKey(p)) return furnitureOrigins.get(p);
+		return null;
+	}
+	
+	/**
+	 * Returns the Container at a given Point on this Map
+	 * @param p the Point to look for the Container
+	 * @return the Container at the given Point, returns null if does not contain
+	 */
+	public Container containerAtPoint(Point p){
+		if(containers.containsKey(p)) return containers.get(p);
 		return null;
 	}
 

@@ -14,6 +14,7 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 import world.components.CellType;
+import world.components.Container;
 import world.components.Direction;
 import world.components.Door;
 import world.components.Furniture;
@@ -191,25 +192,22 @@ public class GameBuilder {
 					
 					// Process third and fourth tokens (should be x/y coordinates)
 					Point position = new Point(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
-	
-					floors[i].addFurniture(position, new Furniture(furnitureType, position, furnitureDir));			
+					
+					// Check whether the item to add is furniture or a container and add it to the world
+					if(furnitureType == CellType.BRIEFCASE || furnitureType == CellType.CHEST || furnitureType == CellType.DRAWERS){
+						floors[i].addContainer(position, new Container(furnitureType));
+					}
+					else{
+						floors[i].addFurniture(position, new Furniture(furnitureType, position, furnitureDir));
+					}
+					
 				}
-				
 				scan.close();
 			} catch ( Exception e )
 			{
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
-		
-//		for(int i = 0; i < floors.length; i++){
-//			Point position = new Point(1, 16);
-//			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));
-//			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.SOUTH));
-//		}
 	}
 
 	public int getLevelsBuilding() {
