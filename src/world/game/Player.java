@@ -2,6 +2,7 @@ package world.game;
 
 import java.awt.Point;
 
+import world.components.Direction;
 import world.components.Map;
 import world.components.TokenType;
 
@@ -18,6 +19,7 @@ public class Player implements java.io.Serializable{
 	private final TokenList toCollect;
 	private final TokenType type;
 	private final Inventory inventory;
+	private Direction facing = Direction.NORTH;
 	//TODO: should Players maintain their position? or should the game state? or both?
 	private Map floor;
 	private Point position;
@@ -65,6 +67,22 @@ public class Player implements java.io.Serializable{
 		return position;
 	}
 	
+	/**
+	 * Returns the Direction that this Player is facing
+	 * @return the Direction this Player is facing
+	 */
+	public Direction getFacing() {
+		return facing;
+	}
+
+	/**
+	 * Sets the Direction that this Player is facing
+	 * @param facing the Direction to set this Player to facing
+	 */
+	public void setFacing(Direction facing) {
+		this.facing = facing;
+	}
+
 	/**
 	 * Sets the Map that this Player is currently on
 	 * @param floor the Map to set for this Player
