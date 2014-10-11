@@ -10,6 +10,7 @@ import world.components.Furniture;
 import world.components.GameObject;
 import world.components.GameToken;
 import world.components.Key;
+import world.components.Map;
 import world.components.MoveableObject;
 import world.components.TokenType;
 import world.components.Torch;
@@ -34,11 +35,11 @@ public class GameScene
 		//Kalo added
 		game = state;
 		// size of map is in the header
-		xlimit = game.getMap().getXLimit();
-		ylimit = game.getMap().getYLimit();
+		xlimit = game.getPlayer().getFloor().getXLimit();
+		ylimit = game.getPlayer().getFloor().getYLimit();
 		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
-		map = game.getMap().getCellTypeMap();
+		map = game.getPlayer().getFloor().getCellTypeMap();
 		// print out the map
 		for ( CellType[] line: map )
 		{
@@ -117,6 +118,7 @@ public class GameScene
 		DymanicRender dyn;
 		GameObject go;
 		Furniture furn;
+		Map fmap = game.getPlayer().getFloor();
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
@@ -151,7 +153,7 @@ public class GameScene
 					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
 					break;
 				}
-				go = game.getMap().objectAtPoint(p);
+				go = fmap.objectAtPoint(p);
 				if ( go == null ) continue;
 				if ( go instanceof GameToken )
 				{ // Tokens to be collected
@@ -190,7 +192,7 @@ public class GameScene
 					}
 				} else
 				{ // load furnature int the scene
-					furn = game.getMap().furnitureAtPoint(p);
+					furn = fmap.furnitureAtPoint(p);
 					if ( furn != null )
 					{
 						dyn = DymanicRender.instanceFurnature(
@@ -210,7 +212,7 @@ public class GameScene
 		List<Player> players = game.getPlayers();
 		for ( Player pl: players )
 		{
-			if ( game.getPlayer() != pl && pl.getFloor() == game.getPlayer().getFloor() )
+			if ( game.getPlayer() != pl && pl.getFloor() == fmap )
 			{
 				dyn = DymanicRender.instancePlayer( Behave.CONTROLLED
 					, pl.getPosition(), pl.getFacing(), Color.darkGray );
