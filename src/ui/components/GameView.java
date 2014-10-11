@@ -190,6 +190,7 @@ public class GameView extends GLJPanel
     	keyInput.setKeyUpdate( false );
     	if ( scene.loadNewLevel() )
     	{
+    		System.out.println("Teleporrting to Floor:" + 1 );
     		state.teleport( state.getPlayer(), 1 );
 			scene = new GameScene( state );
 			gl.glLoadIdentity();

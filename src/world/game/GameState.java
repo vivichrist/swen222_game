@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class GameState implements java.io.Serializable{
 	//private Controller controller;
 	private boolean isMoved;
 
-	
+
 	/**
 	 * Constructor - creates the starting game state
 	 * @param players the list of Players in this game
@@ -41,7 +42,7 @@ public class GameState implements java.io.Serializable{
 		this.players = players;
 		this.floors = floors;
 	}
-	
+
 	/**
 	 * Sets the PlayerController for this game
 	 * @param controller the PlayerController to use for this game
@@ -49,10 +50,10 @@ public class GameState implements java.io.Serializable{
 //	public void setController(Controller controller){
 //		this.controller = controller;
 //	}
-//	
+//
 	/**
 	 * Moves a Player in the game
-	 * @param player the Player to move 
+	 * @param player the Player to move
 	 * @param point the Point to move the Player to
 	 */
 	public void movePlayer(Player player, Point point){
@@ -62,13 +63,13 @@ public class GameState implements java.io.Serializable{
 	public boolean isMoved(){
 		return isMoved;
 	}
-	
+
 	/*
 	public boolean addPlayer(String name){
 		players.add(new Player(name, TokenType[players.size()]));
 	}
 	*/
-	
+
 	//TODO: replace with better accessor methods to get Maps for given players - may not need to be in this class at all
 	/**
 	 * Returns the Map representing the first floor in this game world
@@ -77,7 +78,7 @@ public class GameState implements java.io.Serializable{
 	public Map getMap(){
 		return floors[0];
 	}
-	
+
 	//TODO: assign Players to clients as appropriate - this method is purely for integration testing of a single player game state
 	/**
 	 * Returns the first Player in this Players collection
@@ -90,8 +91,8 @@ public class GameState implements java.io.Serializable{
 	public Player getPlayer(){
 		return players.get(0);
 	}
-	
-	
+
+
 	/**
 	 * Teleports a Player from one floor to another.
 	 * @param p the Player to teleport
@@ -107,7 +108,7 @@ public class GameState implements java.io.Serializable{
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Picks up a MoveableObject or GameToken from the game world and adds it to the Player's Inventory or TokenList
 	 * @param p the Player to add the item to
@@ -115,9 +116,9 @@ public class GameState implements java.io.Serializable{
 	 * @return true if successfully picked up
 	 */
 	public boolean pickupObjectAtPoint(Player player, Point point){
-		
+
 		GameObject object = player.getFloor().objectAtPoint(point);
-		
+
 		// Handle the case that the object is a GameToken
 		if(object instanceof GameToken){
 			GameToken token = (GameToken) object;
@@ -135,7 +136,7 @@ public class GameState implements java.io.Serializable{
 				return true;
 			}
 		}
-		
+
 		// Handle the normal case that the object is a MoveableObject
 		if(object instanceof MoveableObject){
 			MoveableObject moveable = (MoveableObject) object;
@@ -146,7 +147,7 @@ public class GameState implements java.io.Serializable{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns a Player with a given name
 	 * @param name the name of the Player to return
@@ -158,7 +159,7 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Checks whether a Player can open a Door at a given Point
 	 * @param player the Player to open the Door
@@ -170,7 +171,7 @@ public class GameState implements java.io.Serializable{
 		if(player.getInventory().contains(door.getKey())) return true;
 		return false;
 	}
-	
+
 	public byte[] serialize() {
 		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
 
@@ -190,31 +191,32 @@ public class GameState implements java.io.Serializable{
 			return null;
 		}
 	}
-	public Object deserialize(byte[]bytes) {
+	public GameState deserialize(byte[]bytes) {
 
+		ByteArrayInputStream bais = null;
+		ObjectInputStream in = null;
 		try{
-			ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-			ObjectInputStream in = new ObjectInputStream(bais);
-//			List<Player> players = new ArrayList<Player>();
-//			Map[] floors = new Map[game.getLevelsBuilding()];
-//			GameState gameState = new GameState(players, floors);
-			Object obj = new Object();
-			obj = in.readObject();
-	
-			//GameState gameState = (GameState) in.readObject();
-			//System.out.println(gameState.getPlayers().get(1).getName());
-//			this.players = gameState.players;
-//			this.floors = gameState.floors;
-			//if(players.size() == 2){
-			System.out.println(players.get(0).getPosition().x);
-			System.out.println(players.get(1).getPosition().x);
-			//return gameState;
-			//}
-			bais.close();
-			in.close();
-			return obj;
+			bais = new ByteArrayInputStream(bytes);
+			in = new ObjectInputStream(bais);
+
+			GameState s = (GameState) in.readObject();
+
+
+
+
+			return s;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally{
+			try {
+				bais.close();
+				in.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		return null;
 	}
@@ -225,7 +227,7 @@ public class GameState implements java.io.Serializable{
 	public GameState getState(){
 		return this;
 	}
-	
+
 	//TODO: return a clone here instead of the actual list
 	/**
 	 * Returns a List of the current Players in this game
@@ -239,5 +241,15 @@ public class GameState implements java.io.Serializable{
 		// TODO Auto-generated method stub
 		players.add(player);
 	}
-	
+
+	public void setState(GameState st) {
+		// TODO Auto-generated method stub
+		this.players = st.getPlayers();
+		this.floors = st.floors;
+		if(players.size() == 2){
+			System.out.println(players.get(0).getPosition().x);
+			System.out.println(players.get(1).getPosition().x);
+			}
+	}
+
 }

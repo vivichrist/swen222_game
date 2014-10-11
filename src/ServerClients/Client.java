@@ -17,11 +17,14 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
+import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
+import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
+import window.components.GUI;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -35,9 +38,14 @@ public class Client extends Thread {
 	private static final int SERVER_PORT = 4768;
 	private GameState state;
 	private byte[] data;
+	private GUI gui;
+	private NetworkController controller;
+	public static boolean isConnectToServer = false;
 	//public Client(GameState state, String ipAddress){
-	public Client(GameState state,String ipAddress){
+	public Client(GameState state,String ipAddress, NetworkController controller){
 		this.state = state;
+		this.gui = gui;
+		this.controller = controller;
 
 		try {
 			this.socket = new DatagramSocket();
@@ -51,14 +59,15 @@ public class Client extends Thread {
 	public void run(){
 
 		while(true){
-			try {
-				this.sleep(1000);
-				//checkState();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if(Server.socket.isConnected()){
+				isConnectToServer=true;
+				System.out.println("connect to server? "+isConnectToServer);
 			}
-			//System.out.println("client>>run()");
+			else{
+				isConnectToServer=false;
+				System.out.println("connect to server? "+isConnectToServer);
+
+			}
 			byte[]data = new byte[60000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			///System.out.println("client>>run()>>new packet created");
@@ -78,7 +87,7 @@ public class Client extends Thread {
 			}
 			System.out.println("receive data from Server >");
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-			
+
 
 		}
 
@@ -108,10 +117,15 @@ public class Client extends Thread {
 			this.data = data;
 			packet = new Packet02Data(state,data);
 			handleData((Packet02Data) packet);
+			break;
 
-
+		case MOVE:
+			packet = new Packet03Move(state,data);
+			handleMove((Packet03Move) packet);
+			break;
 		}
 	}
+
 	public void sendData(byte[]data){
 		//System.out.println("Client>>sendData");
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
@@ -140,31 +154,39 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
 		MultyPlayer player = new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port);
-		player.setFloor(state.getMap());
-		state.addPlayer(player);
+		//player.setFloor(state.getMap());
+		//state.addPlayer(player);
 
 	}
 
 	private void handleData(Packet02Data packet) {
-		//Packet02Data packet1 = packet;
-	//	byte[] realData = packet1.getRealData();
-		byte[]oldD = data;
-		byte[]newD =new byte[oldD.length];
-		
 
-		for(int i = 2; i<oldD.length;i++){
-			newD[i-2] = oldD[i];
+		byte[] realData = new byte[packet.getData().length];
+		realData = packet.getRealData();
+		GameState st = state.deserialize(realData);
+		state.setState(st);
+		System.out.println(state.getPlayers().get(1).getName());
+
+	}
+
+	private void handleMove(Packet03Move packet) {
+
+		MultyPlayer p = (MultyPlayer) state.getPlayer(packet.getUsername());
+		if(p!=null){
+			if(GUI.name.equalsIgnoreCase(p.getName())){
+				controller.movePlayer(p, packet.getPoint());
+			}else{
+				controller.moveOtherPlayer(p, packet.getPoint());
+			}
+		}else{
+			System.out.println("Client --->  player name not exist in the system");
 		}
-		System.out.println("size old: "+ oldD.length+" size new: "+ newD.length);
-		state.deserialize(newD);
-		for(int i = 0; i<state.getPlayers().size(); i++){
-			System.out.println("player name: "+ state.getPlayers().get(i).getName());
-		}
-		
 	}
 	public void setState(GameState state){
 		this.state = state;
 	}
+
+
 
 }
 

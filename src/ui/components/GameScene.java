@@ -23,7 +23,8 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
-	private boolean 		loadNewLevel = false;
+	private boolean 		loadNewLevel = false
+							, teleport = false; 
 	private GameViewData gdata = GameViewData.instance();
 	private CellType[][]	map;
 	public final int		xlimit, ylimit;
@@ -78,7 +79,16 @@ public class GameScene
 			CellType ct =  gdata.getGameElements().get( p ).getType();
 			if ( ct == CellType.RINGS )
 			{
-				loadNewLevel = true;
+				if ( !teleport )
+				{
+					loadNewLevel = true;
+					teleport = true;
+					return false;
+				} else
+				{
+					teleport = false;
+					return teleport;
+				}
 			}
 			if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
@@ -200,7 +210,7 @@ public class GameScene
 		List<Player> players = game.getPlayers();
 		for ( Player pl: players )
 		{
-			if ( game.getPlayer() != pl )
+			if ( game.getPlayer() != pl && pl.getFloor() == game.getPlayer().getFloor() )
 			{
 				dyn = DymanicRender.instancePlayer( Behave.CONTROLLED
 					, pl.getPosition(), pl.getFacing(), Color.darkGray );
@@ -226,6 +236,8 @@ public class GameScene
 
 	public boolean loadNewLevel()
 	{
-		return loadNewLevel;
+		boolean result = loadNewLevel;
+		loadNewLevel = false;
+		return result;
 	}
 }

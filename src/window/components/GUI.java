@@ -79,7 +79,7 @@ public class GUI  {
 	JPanel chooseNamePanel;
 
 	private Player player;
-	public  String name;
+	public static  String name;
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
 
@@ -117,7 +117,7 @@ public class GUI  {
 		ImageIcon background = new ImageIcon("Resource/background.png");
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBounds(0, 0, width, height);
-		
+
 		JLabel jl = new JLabel(background);
 		backgroundPanel.add(jl);
 
@@ -169,7 +169,7 @@ public class GUI  {
 		jbExit.setOpaque(false);
 		jbExit.setContentAreaFilled(false);
 		jbExit.setBorderPainted(false);
-	
+
 		jbNewGame.setBackground(new Color(100, 100, 100));
 		jbNewGame.set
 		jbNewGame.setLayout(null);
@@ -182,7 +182,7 @@ public class GUI  {
 		setButtonStyle(jbLoad, 80, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
-		
+
 		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
@@ -203,7 +203,7 @@ public class GUI  {
 
 		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(0, 135, 200).brighter());
-		
+
 		choosePlayerPanel.setOpaque(false);
 		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChoosePlayer();
@@ -225,26 +225,26 @@ public class GUI  {
 		chooseName.setPreferredSize(new Dimension(100, 60));
 		chooseName.setFont(new Font("Arial", Font.PLAIN, 30));
 		chooseName.setForeground(new Color(0, 135, 200).brighter());
-		
+
 		textFieldName.setPreferredSize(new Dimension(130, 40));
 		textFieldName.setFont(new Font("Arial", Font.PLAIN, 30));
 		textFieldName.setForeground(new Color(30, 30, 30));
-				
+
 		JLabel space = new JLabel("");
 		space.setPreferredSize(new Dimension(100, 20));
-		
+
 		chooseNamePanel.add(chooseName);
 		chooseNamePanel.add(textFieldName);
 		chooseNamePanel.add(space);
 		setButtonStyle(jbStart, 110, chooseNamePanel, Color.MAGENTA);
-		
+
 		chooseNamePanel.setOpaque(false);
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
 	}
-	
-	
-	
+
+
+
 	public void chooseNamePanel2(){
 		int chooseNamePanelLeft = 325;
 		int chooseNamePanelTop = 200;
@@ -271,25 +271,25 @@ public class GUI  {
 		addListennerChooseName2();
 	}
 
-	
-	
-	
-	
+
+
+
+
 	private void setButtonStyle(final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
 		button.setPreferredSize(new Dimension(buttonWidth, 60));
 		button.setFont(new Font("Arial", Font.PLAIN, 30));
 		button.setForeground(defaultColor);
 		button.setHorizontalTextPosition(SwingConstants.CENTER);
 		button.setBorder(null);
-		
+
 		button.setOpaque(false);
 		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
-		
+
 		button.addMouseListener(new MouseListener() {
-			@Override 
+			@Override
 			public void mouseReleased(MouseEvent e) {}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {}
 
@@ -309,12 +309,12 @@ public class GUI  {
 
 		panel.add(button);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public void addListennerStart(){
 		jbNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -476,7 +476,7 @@ public class GUI  {
 	}
 
 
-	public GameState getState(){ 
+	public GameState getState(){
 		return gameState;
 	}
 
