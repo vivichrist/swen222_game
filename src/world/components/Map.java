@@ -83,7 +83,7 @@ public class Map implements java.io.Serializable{
 						Key key = new Key("Key One", Color.WHITE);
 						door.setKey(key);
 						doors.put(new Point(x, y), door);
-						moveableObjects.put(randomEmptyCell(), key);
+						placeKey(key);
 					}
 					map[x][y] = current;
 				}
@@ -317,6 +317,14 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Helper method to randomly place a Key in the game world. 
+	 * @param key the Key to place
+	 */
+	private void placeKey(Key key){
+		moveableObjects.put(randomEmptyCell(), key);
 	}
 	
 	
