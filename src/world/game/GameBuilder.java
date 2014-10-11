@@ -180,7 +180,10 @@ public class GameBuilder {
 		
 //		try{
 //			Scanner scan = new Scanner(new File("furniture1.txt"));
-//
+//			
+//			while(scan.hasNextLine()){
+//				
+//			}
 //			// First token should be a String corresponding to a furniture type
 //			if(!scan.hasNext()) 
 //			{
