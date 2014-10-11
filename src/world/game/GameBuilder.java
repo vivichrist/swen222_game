@@ -167,8 +167,8 @@ public class GameBuilder {
 	private void placeFurniture(){
 		for(int i = 0; i < floors.length; i++){
 			Point position = new Point(1, 16);
-			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.SOUTH));
-			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.EAST));
+			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));
+			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.NORTH));
 		}
 	}
 
