@@ -60,19 +60,11 @@ public class Client extends Thread {
 //			}
 			byte[]data = new byte[60000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
-			///System.out.println("client>>run()>>new packet created");
 
 			try{
-				//System.out.println("client>>run()>>before socket receive packet");
-				System.out.println("2");
 				socket.receive(packet);
 
-				System.out.println("3");
-
-				//	System.out.println("client>>run()>>after receive packet");
-
 			}catch(IOException e){
-				//System.out.println("client>>run()>>IOException catched");
 				e.printStackTrace();
 			}
 			System.out.println("receive data from Server >");
@@ -117,15 +109,10 @@ public class Client extends Thread {
 	}
 
 	public void sendData(byte[]data){
-		//System.out.println("Client>>sendData");
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
-		//System.out.println("Client>>sendData>> new packet created"+ packet.getSocketAddress());
 		try {
-			//System.out.println("Client>>sendData>>in try block");
 			socket.send(packet);
-			//System.out.println("Client>>sendData>>in try>>socket send packet");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -151,9 +138,7 @@ public class Client extends Thread {
 
 	private void handleData(Packet02Data packet) {
 
-		byte[] realData = new byte[packet.getData().length];
-		realData = packet.getRealData();
-		GameState st = state.deserialize(realData);
+		GameState st = state.deserialize(packet.getRealData());
 		state.setState(st);
 		System.out.println(state.getPlayers().get(1).getName());
 

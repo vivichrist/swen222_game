@@ -3,14 +3,12 @@
  */
 package ServerClients;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ServerClients.UDPpackets.Packet00Login;
@@ -22,7 +20,6 @@ import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
-import world.game.Player;
 
 /**
  * @author  Zhaojiang Chang
@@ -60,22 +57,17 @@ public class Server extends Thread {
 			System.out.println("Server Start>>>>>>>>>>"+ serverStart);
 
 			byte[]data = new byte[60000];
-			//System.out.println("server >>run()--"+data.length);
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try{
-				//System.out.println("server >>run()>>before socket receive packet");
 
 				socket.receive(packet);
 
-				//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
 
 			}catch(IOException e){
-				//System.out.println("server >>run()>>socket did not receive packet IOException catched");
 
 				e.printStackTrace();
 			}
-			//System.out.println("server >>run()>>after socket receive packet"+packet.getSocketAddress()+packet.getPort());
 
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 			System.out.println("server class connected players size:  "+connectedPlayers.size());
@@ -117,9 +109,11 @@ public class Server extends Thread {
 		case DATA:
 			packet = new Packet02Data(state,data);
 			this.handleData(((Packet02Data) packet));
+			break;
 		case MOVE:
 			packet = new Packet03Move(state, data);
 			handleMove((Packet03Move) packet);
+			break;
 
 		}
 	}
@@ -138,24 +132,16 @@ private void sentStateToAllClients() {
 	System.out.println("new gamebuilder builded");
 	GameBuilder builder =new GameBuilder(names);
 	state = builder.getGameState();
-	//			for(int i = 0; i<state.getPlayers().size(); i++){
-	//				System.out.println("Deserialize state1: "+state.getPlayer(i).getName());
-	//			}
+
 	byte[] temp =state.serialize();
-	//			GameState state = (GameState) this.state.deserialize(temp);
-	//			for(int i =0; i<state.getPlayers().size(); i++){
-	//				System.out.println("Name: "+ state.getPlayers().get(i).getName());
-	//			}
+
 	byte[]newData =new byte[temp.length+2];
 	byte[] b = "02".getBytes();
-	//System.out.println("size of a byte array: "+ b.length);
 	newData[0] = b[0];
 	newData[1] = b[1];
 	System.out.println();
 	for(int i = 0; i<temp.length;i++){
 		newData[i+2] = temp[i];
-		//System.out.println(newData[i+2]+ "  "+ temp[i]);
-		//	if(newData[i+2]!=data[i])System.out.println("================================================");
 	}
 	Packet02Data p = new Packet02Data(state, newData);
 	p.writeData(this);

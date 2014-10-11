@@ -39,7 +39,7 @@ public class Packet03Move extends UDPPakcet {
 		this.state = state;
 		String[]dataArray = readData(data).split(",");
 		for(int i = 0; i<dataArray.length; i++){
-		System.out.println(dataArray[1]);
+		System.out.println(dataArray[i]);
 		}
 		this.username = dataArray[1];
 

@@ -62,6 +62,7 @@ public class Packet02Data extends UDPPakcet {
 
 		for(int i = 2; i<oldD.length;i++){
 			newD[i-2] = oldD[i];
+			
 		}
 		//if(data!=newD)System.out.println("Packet02Data: not equals");
 
@@ -72,21 +73,16 @@ public class Packet02Data extends UDPPakcet {
 
 		byte[]newData =new byte[data.length];
 		byte[] a = "02".getBytes();
-//		for(int i = 0; i< a.length; i++){
-//			newData[i] = a[i];
-//		}
+
 		newData[0] = a[0];
 		newData[1] = a[1];
 		for(int i = 2; i<data.length;i++){
-			newData[i] = data[i-2];
-			//System.out.print(newData[i]);
+			newData[i] = data[i];
+			if(newData[i] != data[i]){
+				System.out.println("aa");
+			}
 		}
-
-
-
 		return newData;
-		// 	return ("02" + this.username + "," + this.x + "," + this.y).getBytes();
-
 	}
 
 	public String getUsername() {
