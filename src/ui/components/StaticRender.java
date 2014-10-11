@@ -3,6 +3,7 @@ package ui.components;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import javax.media.opengl.GL2;
 
@@ -57,6 +58,7 @@ public class StaticRender implements GraphicalObject
 		{
 		case WALL : drawWall( gl ); break;
 		case DOOR : drawDoorArch( gl ); break;
+		case TELEPORT : drawTeleport( gl ); break;
 		case KEYDOOR : drawDoorArch( gl ); break;
 		case EMPTY : drawFloorCeiling( gl ); break;
 		default:
@@ -188,6 +190,87 @@ public class StaticRender implements GraphicalObject
 			gl.glVertex3f( 2 * wallwidth + 0.1f, 2 * wallwidth + 0.1f, 0 );
 		}
 		gl.glEnd();
+	}
+	
+	public void drawTeleport( GL2 gl )
+	{
+		MeshStore m = MeshStore.instance();
+		Mesh mesh = m.getMesh( CellType.TELEPORT );
+		List<float[]>	vertices = mesh.getVertices();
+		List<int[]>		indices = mesh.getIndices();
+		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
+		renderMesh( gl, vertices, indices );
+	}
+	
+	private void renderMesh( GL2 gl, List<float[]> vertices, List<int[]> indices )
+	{
+		for ( int[] i: indices )
+		{
+			switch ( i.length )
+			{
+			case 4:
+				gl.glBegin( GL2.GL_QUADS );
+				gl.glColor3fv( surfaceColor, 0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3fv( meshColor ,0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glVertex3fv( vertices.get( i[3] ), 0 );
+				gl.glEnd();
+				break;
+			case 3:
+				gl.glBegin( GL2.GL_TRIANGLES );
+				gl.glColor3fv( surfaceColor, 0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3fv( meshColor ,0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glVertex3fv( vertices.get( i[2] ), 0 );
+				gl.glEnd();
+				break;
+			case 2:
+				gl.glBegin( GL2.GL_LINES );
+				gl.glColor3fv( meshColor ,0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glVertex3fv( vertices.get( i[1] ), 0 );
+				gl.glEnd();
+				break;
+			case 1:
+				gl.glBegin( GL2.GL_POINTS );
+				gl.glColor3fv( meshColor ,0 );
+				gl.glVertex3fv( vertices.get( i[0] ), 0 );
+				gl.glEnd();
+				break;
+			default: // n-gons
+				gl.glBegin( GL2.GL_TRIANGLES );
+				gl.glColor3fv( surfaceColor, 0 );
+				// make triangle fan out of polygon
+				int end = i.length - 1;
+				for ( int j = 0; j < end - 1; ++j )
+				{
+					gl.glVertex3fv( vertices.get( end ), 0 );
+					gl.glVertex3fv( vertices.get( i[j] ), 0 );
+					gl.glVertex3fv( vertices.get( i[j + 1] ), 0 );
+				}
+				gl.glEnd();
+				gl.glBegin( GL2.GL_LINE_LOOP );
+				gl.glColor3fv( meshColor ,0 );
+				for ( int j: i )
+					gl.glVertex3fv( vertices.get( j ), 0 );
+				gl.glEnd();
+				break;
+			}
+		}
 	}
 
 	public void drawDoorArch( GL2 gl )

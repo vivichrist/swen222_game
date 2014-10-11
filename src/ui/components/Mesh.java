@@ -58,7 +58,6 @@ public class Mesh
 	public IntBuffer getIndBuffer( int glType )
 	{
 		List<Integer> prebuf = new LinkedList<Integer>();
-		int j = 0;
 		int n = glType == GL2.GL_QUADS ? 4 : 
 				glType == GL2.GL_TRIANGLES ? 3 :
 				glType == GL2.GL_LINES ? 2 :
@@ -72,7 +71,6 @@ public class Mesh
 			for ( int i: idxs )
 			{ // then pack each integer into a temporary list
 				prebuf.add( i ); // this mite also be from 0 instead of 1
-				++j;
 			}
 		}
 		// now we know how may elements
@@ -83,14 +81,12 @@ public class Mesh
 	public FloatBuffer getVertexBuffer()
 	{
 		LinkedList<Float> prebuf = new LinkedList<Float>();
-		int j = 0;
 		// pack all vertices into the buffer
 		for ( Float[] flts: vertices )
 		{
 			for ( float f: flts )
 			{
 				prebuf.add( f );
-				++j;
 			}
 		}
 		// now we know how may elements
@@ -129,6 +125,7 @@ public class Mesh
 		    return result;
 	}
 	/**
+	 * test mesh loading
 	 * @param args
 	 */
 	public static void main( String[] args )

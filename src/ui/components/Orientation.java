@@ -15,7 +15,7 @@ public class Orientation implements Behavior
 	{
 		this.depth = depth * GameView.cellsize;
 		this.width = width * GameView.cellsize;
-		xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
+		xaligned = dir == Direction.EAST || dir == Direction.WEST;
 		reverse = dir == Direction.SOUTH || dir == Direction.WEST;
 	}
 
@@ -37,29 +37,6 @@ public class Orientation implements Behavior
 			gl.glRotatef( 180f, 0f, 0f, 1f );
 			gl.glTranslatef( -width, -depth, 0f );
 		}
-		// test code to see all orientations
-//		int next = count / 120;
-//		++count;
-//		if ( next == 0 )
-//		{
-//			xaligned = false;
-//			reverse = false;
-//		}
-//		else if ( next == 1 )
-//		{
-//			reverse = true;
-//		}
-//		else if ( next == 2 )
-//		{
-//			xaligned = true;
-//			reverse = false;
-//		}	
-//		else if ( next == 3 )
-//		{
-//			reverse = true;
-//			
-//		}
-//		else count = 0;
 	}
 
 	@Override

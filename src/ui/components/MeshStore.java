@@ -21,6 +21,7 @@ public class MeshStore
 			put( CellType.BED, "bed.obj" );
 			put( CellType.COUCH, "couch.obj" );
 			put( CellType.DIAMOND, "diamond.obj" );
+			put( CellType.RINGS, "rings.obj" );
 			put( CellType.CHEST, "chest.obj" );
 			put( CellType.BREIFCASE, "breifcase.obj" );
 			put( CellType.DRAWERS, "drawers.obj" );

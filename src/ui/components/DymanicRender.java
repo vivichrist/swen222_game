@@ -9,7 +9,6 @@ import javax.media.opengl.GL2;
 
 import world.components.CellType;
 import world.components.Direction;
-import world.components.GameToken;
 
 public class DymanicRender implements GraphicalObject
 {
@@ -35,7 +34,7 @@ public class DymanicRender implements GraphicalObject
 	
 	public static DymanicRender instanceTelePort( Point position )
 	{	// TODO: Teleporting behaviour
-		return new DymanicRender( CellType.TELEPORT, Behave.NONE, position
+		return new DymanicRender( CellType.RINGS, Behave.RINGS, position
 				, Direction.NORTH, Color.ORANGE );
 	}
 	
@@ -107,6 +106,7 @@ public class DymanicRender implements GraphicalObject
 		{
 		case ROTATE: anim = new Rotate( 0 ); break;
 		case OPEN_CLOSE: anim = new OpenClose(); break;
+		case RINGS: anim = new Rings(); break;
 		case ORIENTATION:
 			if ( type == CellType.BED )
 				anim = new Orientation( 3, 2, dir );
@@ -166,7 +166,6 @@ public class DymanicRender implements GraphicalObject
 			case 4:
 				gl.glBegin( GL2.GL_QUADS );
 				gl.glColor3fv( selectColor, 0 );
-				//gl.glColor3f( .0f, .0f, .0f );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
@@ -174,7 +173,6 @@ public class DymanicRender implements GraphicalObject
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
 				gl.glColor3fv( meshColor ,0 );
-				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
@@ -183,14 +181,12 @@ public class DymanicRender implements GraphicalObject
 				break;
 			case 3:
 				gl.glBegin( GL2.GL_TRIANGLES );
-				// gl.glColor3f( .0f, .0f, .0f );
 				gl.glColor3fv( selectColor, 0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
 				gl.glVertex3fv( vertices.get( i[2] ), 0 );
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
-				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
@@ -199,7 +195,6 @@ public class DymanicRender implements GraphicalObject
 				break;
 			case 2:
 				gl.glBegin( GL2.GL_LINES );
-				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glVertex3fv( vertices.get( i[1] ), 0 );
@@ -207,7 +202,6 @@ public class DymanicRender implements GraphicalObject
 				break;
 			case 1:
 				gl.glBegin( GL2.GL_POINTS );
-				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glColor3fv( meshColor ,0 );
 				gl.glVertex3fv( vertices.get( i[0] ), 0 );
 				gl.glEnd();
@@ -215,7 +209,6 @@ public class DymanicRender implements GraphicalObject
 			default: // n-gons
 				gl.glBegin( GL2.GL_TRIANGLES );
 				gl.glColor3fv( selectColor, 0 );
-				// gl.glColor3f( .0f, .0f, .0f );
 				// make triangle fan out of polygon
 				int end = i.length - 1;
 				for ( int j = 0; j < end - 1; ++j )
@@ -226,7 +219,6 @@ public class DymanicRender implements GraphicalObject
 				}
 				gl.glEnd();
 				gl.glBegin( GL2.GL_LINE_LOOP );
-				// gl.glColor3f( 1.0f, 1.0f, 1.0f );
 				gl.glColor3fv( meshColor ,0 );
 				for ( int j: i )
 					gl.glVertex3fv( vertices.get( j ), 0 );
@@ -250,14 +242,6 @@ public class DymanicRender implements GraphicalObject
 	public boolean isDynamic()
 	{
 		return true;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main( String[] args )
-	{
-
 	}
 
 	@Override
