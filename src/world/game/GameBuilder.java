@@ -128,9 +128,10 @@ public class GameBuilder {
 	private void placePlayers(){
 		for(int i = 0; i < players.size(); i++){
 			Player currentPlayer = players.get(i);
-			currentPlayer.setPosition(18,  20);
+			Point startPoint = new Point(3, 20);
+			currentPlayer.setPosition(startPoint);
 			currentPlayer.setFloor(floors[i]);
-			floors[i].placePlayer(new Point(18, 20), currentPlayer);
+			floors[i].placePlayer(startPoint, currentPlayer);
 		}
 	}
 	
@@ -168,7 +169,7 @@ public class GameBuilder {
 		for(int i = 0; i < floors.length; i++){
 			Point position = new Point(1, 16);
 			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));
-			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.NORTH));
+			floors[i].addFurniture(new Point(2, 1), new Furniture(CellType.COUCH, new Point(2, 1), Direction.SOUTH));
 		}
 	}
 
