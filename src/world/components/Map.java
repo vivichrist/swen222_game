@@ -66,7 +66,7 @@ public class Map implements java.io.Serializable{
 
 			// Read the map, populating the 2d map array, list of empty cells and hashmap of doors
 			for(int y = 0; y < yLimit; y++){
-				for(int x = 0; x < xLimit; x++){
+				for(int x = xLimit - 1; x >= 0; x--){
 					if(!scan.hasNextInt()){
 						scan.close();
 						throw new Exception("Map format error, not enough data");
