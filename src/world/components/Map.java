@@ -199,6 +199,7 @@ public class Map implements java.io.Serializable{
 		}
 		else{
 			players.put(p,  player);
+			emptyCells.remove(p);
 			return true;
 		}
 	}
