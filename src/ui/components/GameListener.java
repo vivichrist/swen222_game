@@ -166,12 +166,17 @@ public class GameListener implements KeyListener, MouseListener
 				+ Math.sin( dir ) * speed );
 		float newy = (float) ( position.y
 				+ Math.cos( dir ) * speed );
+		boolean xcross = (int)(newx / GameView.cellsize)
+				!= (int)(position.x / GameView.cellsize);
+		boolean ycross = (int)(newy / GameView.cellsize) 
+				!= (int)(position.y / GameView.cellsize);
 		// collision detection
-		if ( map.isCollidable( newx, newy ) )
+		if ( ( xcross || ycross )
+				&& map.isCollidable( newx, newy )  )
 		{
 			if ( !map.isCollidable( position.x, newy ) )
 				position.setLocation( position.x, newy );
-			if ( !map.isCollidable( newx, position.y ) )
+			else if ( !map.isCollidable( newx, position.y ) )
 				position.setLocation( newx, position.y );
 		}
 		else position.setLocation( newx, newy );
