@@ -1,21 +1,13 @@
 package ServerClients;
 
-import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 
-import javax.swing.JOptionPane;
+import javax.media.opengl.awt.GLJPanel;
 
 import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
@@ -24,8 +16,8 @@ import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
+import ui.components.GameView;
 import window.components.GUI;
-import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
 /**
@@ -39,14 +31,12 @@ public class Client extends Thread {
 	private GameState state;
 	private byte[] data;
 	private GUI gui;
-	private NetworkController controller;
+	private NetworkController networkController;
+	private GameView gameView;
 	public static boolean isConnectToServer = false;
 	//public Client(GameState state, String ipAddress){
-	public Client(GameState state,String ipAddress, NetworkController controller){
-		this.state = state;
-		this.gui = gui;
-		this.controller = controller;
-
+	public Client(String ipAddress,NetworkController networkController){
+		this.networkController = networkController;
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -59,15 +49,15 @@ public class Client extends Thread {
 	public void run(){
 
 		while(true){
-			if(Server.socket.isConnected()){
-				isConnectToServer=true;
-				System.out.println("connect to server? "+isConnectToServer);
-			}
-			else{
-				isConnectToServer=false;
-				System.out.println("connect to server? "+isConnectToServer);
-
-			}
+//			if(Server.socket.isConnected()){
+//				isConnectToServer=true;
+//				System.out.println("connect to server? "+isConnectToServer);
+//			}
+//			else{
+//				isConnectToServer=false;
+//				System.out.println("connect to server? "+isConnectToServer);
+//
+//			}
 			byte[]data = new byte[60000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			///System.out.println("client>>run()>>new packet created");
@@ -174,9 +164,9 @@ public class Client extends Thread {
 		MultyPlayer p = (MultyPlayer) state.getPlayer(packet.getUsername());
 		if(p!=null){
 			if(GUI.name.equalsIgnoreCase(p.getName())){
-				controller.movePlayer(p, packet.getPoint());
+				networkController.movePlayer(p, packet.getPoint());
 			}else{
-				controller.moveOtherPlayer(p, packet.getPoint());
+				networkController.moveOtherPlayer(p, packet.getPoint());
 			}
 		}else{
 			System.out.println("Client --->  player name not exist in the system");
@@ -185,7 +175,11 @@ public class Client extends Thread {
 	public void setState(GameState state){
 		this.state = state;
 	}
-
+	public void setGameView(GLJPanel gameView){
+		this.gameView = (GameView) gameView;
+		
+	}
+	
 
 
 }

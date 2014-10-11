@@ -37,20 +37,7 @@ public class Packet02Data extends UDPPakcet {
 		super(02);
 		this.data = data;
 		this.state = state;
-		//state = getState(data);
-
 		System.out.println("packet02Data con 2: ");
-
-		// TODO Auto-generated constructor stub
-		//state.deserialize(data);
-		//		String[] dataArray = readData(data).split(",");
-		//		this.username = dataArray[0];
-		//		this.x = Integer.parseInt(dataArray[1]);
-		//		this.y = Integer.parseInt(dataArray[2]);
-		//		point = new Point(x,y);
-
-
-
 	}
 
 	
@@ -70,7 +57,7 @@ public class Packet02Data extends UDPPakcet {
 	}
 	public byte[] getRealData(){
 		byte[]oldD = getData();
-		byte[]newD =new byte[oldD.length];
+		byte[]newD =new byte[oldD.length-2];
 		
 
 		for(int i = 2; i<oldD.length;i++){
@@ -85,7 +72,6 @@ public class Packet02Data extends UDPPakcet {
 
 		byte[]newData =new byte[data.length];
 		byte[] a = "02".getBytes();
-		System.out.println("size of a byte array: "+ a.length);
 //		for(int i = 0; i< a.length; i++){
 //			newData[i] = a[i];
 //		}

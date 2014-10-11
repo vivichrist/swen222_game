@@ -31,7 +31,7 @@ public class NetworkController {
 	 * Redraws the GameToken panel in the GUI - use for updating the GUI when a Player collects a GameToken
 	 */
 	public void movePlayer(Player player, Point point){
-		state.movePlayer(player, point);
+		controller.movePlayer(player, point);
 		Packet03Move move = new Packet03Move(player.getName(),point);
 		move.writeData(client);
 	}

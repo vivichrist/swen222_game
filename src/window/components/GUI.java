@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Font;
-
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -40,9 +39,8 @@ import ServerClients.Client;
 import ServerClients.Server;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
-
-
 import controllers.Controller;
+import controllers.NetworkController;
 import ui.components.GameView;
 import world.components.Map;
 import world.game.GameBuilder;
@@ -67,6 +65,7 @@ public class GUI  {
 	private static int height = 770;
 	private GameState gameState;//do not change this field for jacky only
 	private static Controller controller;
+	private NetworkController networkController;
 	Server server = null;
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
@@ -430,6 +429,8 @@ public class GUI  {
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
 	protected void startGame2() {
+		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
+
 		GLProfile.initSingleton();
 		GLProfile glprofile = GLProfile.getDefault();
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
@@ -442,22 +443,24 @@ public class GUI  {
 		floors[0] = new Map(new File("map1.txt"));
 		player1 = new MultyPlayer(name, new Point(18,20),null,null, -1);
 		state = new GameState(players,floors);
-		Client client = new Client(state,"localhost");
+		controller = new Controller(state, this);
+		NetworkController networkController = new NetworkController(controller);
+		Client client = new Client("localhost",networkController );
 		client.start();
+		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
-		if (server.serverStart==99) {
-			server.addConnection(player1, loginPacket);
-			int size1 = server.getConnectedPlayers().size();
-
-			System.out.println("size1: "+size1);
-
-		}else System.out.println("server== null");
+//		if (Server.) {
+//			server.addConnection(player1, loginPacket);
+//			int size1 = server.getConnectedPlayers().size();
+//			System.out.println("size1: "+size1);
+//
+//		}else System.out.println("server== null");
 		loginPacket.writeData(client);
 		System.out.println("state.getPlayers().size(): "+ state.getPlayers().size());
 
 
 		//client.
-		controller = new Controller(state, this);
+
 
 		if(state.getPlayers().size()>1){
 			System.out.println("state.getPlayers().size()>=2"+ state.getPlayers().size());
@@ -469,10 +472,11 @@ public class GUI  {
 			if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 			southPanel = new SouthPanel(player1);
 			layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
-			while(state.isMoved()){
-				client.checkState();
-			}
+
+
 		}
+		networkController.setGameView(gameView);
+
 	}
 
 

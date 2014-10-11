@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import org.junit.Test;
 
+import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
 import world.game.GameBuilder;
 import world.game.GameState;
@@ -24,6 +25,7 @@ public class ServerClientTest {
 	private Server server;
 	private Component frame;
 	private GameState state;
+	private NetworkController networkController;
 	
 	
 	public ServerClientTest(){
@@ -33,7 +35,7 @@ public class ServerClientTest {
 		}
 		state = new GameState(null,null);
 
-		client = new Client(state,"localhost");
+		client = new Client("localhost",networkController);
 		client.start();
 		client.sendData(("02ping").getBytes());
 		System.out.println("client started");

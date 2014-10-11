@@ -36,7 +36,7 @@ public class test {
 					null,null, -1);
 
 
-			client = new Client(state,"localhost",controller);
+			client = new Client("localhost",controller);
 			client.start();
 
 			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
