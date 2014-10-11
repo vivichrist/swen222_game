@@ -14,7 +14,7 @@ public class Rings implements Behaviour
 
 	public Rings( boolean start )
 	{
-		move = start ? ground : ceiling + 1f;
+		move = start ? ground : ceiling + .1f;
 	}
 
 	@Override

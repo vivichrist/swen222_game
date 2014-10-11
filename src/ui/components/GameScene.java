@@ -198,8 +198,11 @@ public class GameScene
 		for ( Player pl: players )
 		{
 			if ( game.getPlayer() != pl )
+			{
 				dyn = DymanicRender.instancePlayer( Behave.CONTROLLED
 					, pl.getPosition(), pl.getFacing(), Color.darkGray );
+				gdata.addGrapicalObject( dyn );
+			}
 		}
 		
 		// testing 
