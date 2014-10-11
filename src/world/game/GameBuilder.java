@@ -63,6 +63,9 @@ public class GameBuilder {
 		players = new ArrayList<Player>();
 		players.add(new Player(playerName, TokenType.values()[0]));
 		
+		//Temporary testing code - adding a second player to the game
+		players.add(new Player("aaa", TokenType.values()[1]));
+		
 		//getPlayers();
 		buildFloors(players.size());
 		//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
@@ -137,13 +140,6 @@ public class GameBuilder {
 			currentPlayer.setFloor(floors[i]);
 			floors[i].placePlayer(startPoint, currentPlayer);
 		}
-		//TODO: remove this testing code
-		Player secondPlayer = new Player("aaa", TokenType.values()[1]);
-		players.add(secondPlayer);
-		Point start = new Point(3, 15);
-		secondPlayer.setPosition(start);
-		secondPlayer.setFloor(floors[0]);
-		floors[0].placePlayer(start, secondPlayer);
 	}
 	
 	/**
@@ -169,21 +165,32 @@ public class GameBuilder {
 	private void placeTorches(){
 		for(int i = 0; i < players.size(); i ++){
 			Random random = new Random();
+			// Select a random floor
 			Map randomFloor = floors[random.nextInt(floors.length)];
+			// Place the Torch in a random cell
 			randomFloor.addMoveable(randomFloor.randomEmptyCell(), new Torch());
-			System.out.println("Torch added");
 		}
 	}
 	
 	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
 	private void placeFurniture(){
 		
-//		try{
-//			Scanner scan = new Scanner(new File("furniture1.txt"));
-//			
-//			while(scan.hasNextLine()){
-//				
-//			}
+		try{
+			Scanner scan = new Scanner(new File("furniture1.txt"));
+			
+			while(scan.hasNextLine()){
+				String[] tokens = scan.nextLine().split(" ");
+				
+				// Process first token (should be furniture type)
+				
+				System.out.println("Tokens size: " + tokens.length);
+				for(int i = 0; i < tokens.length; i++){
+					System.out.println(tokens[i]);
+				}
+			}
+			
+			
+			
 //			// First token should be a String corresponding to a furniture type
 //			if(!scan.hasNext()) 
 //			{
@@ -203,13 +210,13 @@ public class GameBuilder {
 //				throw new Exception("Map format error: third header token should be an int");
 //			}
 //			else yLimit = scan.nextInt();
-//
-//			
-//			scan.close();
-//		} catch ( Exception e )
-//		{
-//			e.printStackTrace();
-//		}
+
+			
+			scan.close();
+		} catch ( Exception e )
+		{
+			e.printStackTrace();
+		}
 		
 		
 		
