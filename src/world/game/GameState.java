@@ -260,8 +260,8 @@ public class GameState implements java.io.Serializable{
 		this.players = st.getPlayers();
 		this.floors = st.floors;
 		if(players.size() == 2){
-			System.out.println(players.get(0).getPosition().x);
-			System.out.println(players.get(1).getPosition().x);
+			System.out.println("x: "+players.get(0).getPosition().x);
+			System.out.println("x: "+players.get(1).getPosition().x);
 			}
 	}
 

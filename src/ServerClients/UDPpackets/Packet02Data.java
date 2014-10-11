@@ -62,6 +62,9 @@ public class Packet02Data extends UDPPakcet {
 
 		for(int i = 2; i<oldD.length;i++){
 			newD[i-2] = oldD[i];
+			if(newD[i-2] != oldD[i]){
+				System.out.println("aa");
+			}
 			
 		}
 		//if(data!=newD)System.out.println("Packet02Data: not equals");
