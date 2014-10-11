@@ -1,5 +1,6 @@
 package world.game;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,12 +9,15 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import world.components.CellType;
 import world.components.Direction;
+import world.components.Door;
 import world.components.Furniture;
+import world.components.Key;
 import world.components.Map;
 import world.components.TokenType;
 import world.components.Torch;
@@ -173,6 +177,40 @@ public class GameBuilder {
 	
 	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
 	private void placeFurniture(){
+		
+//		try{
+//			Scanner scan = new Scanner(new File("furniture1.txt"));
+//
+//			// First token should be a String corresponding to a furniture type
+//			if(!scan.hasNext()) 
+//			{
+//				scan.close();
+//				throw new Exception("Map format error: first header token should be an int");
+//			}
+//			else xLimit = scan.nextInt();
+//			if(!scan.hasNext("x"))
+//			{
+//				scan.close();
+//				throw new Exception("Map format error: second header toden should be 'x'");
+//			}
+//			else scan.next();
+//			if(!scan.hasNextInt())
+//			{
+//				scan.close();
+//				throw new Exception("Map format error: third header token should be an int");
+//			}
+//			else yLimit = scan.nextInt();
+//
+//			
+//			scan.close();
+//		} catch ( Exception e )
+//		{
+//			e.printStackTrace();
+//		}
+		
+		
+		
+		
 		for(int i = 0; i < floors.length; i++){
 			Point position = new Point(1, 16);
 			floors[i].addFurniture(position, new Furniture(CellType.COUCH, position, Direction.WEST));

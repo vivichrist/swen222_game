@@ -47,7 +47,7 @@ public class Furniture implements StationaryObject {
 				points.add(origin);
 				switch(facing){
 					case NORTH:	{
-						points.add(new Point(origin.x + 1, origin.y));
+						points.add(new Point(origin.x - 1, origin.y));
 						break;
 					}
 					case EAST: {
@@ -55,7 +55,7 @@ public class Furniture implements StationaryObject {
 						break;
 					}
 					case SOUTH: {
-						points.add(new Point(origin.x - 1, origin.y));
+						points.add(new Point(origin.x + 1, origin.y));
 						break;
 					}
 					case WEST: {
