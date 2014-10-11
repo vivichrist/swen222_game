@@ -23,6 +23,7 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
+	private boolean 		loadNewLevel = false;
 	private GameViewData gdata = GameViewData.instance();
 	private CellType[][]	map;
 	public final int		xlimit, ylimit;
@@ -76,7 +77,9 @@ public class GameScene
 			// System.out.println( "Collide (" + x + "," + y + ")" );
 			CellType ct =  gdata.getGameElements().get( p ).getType();
 			if ( ct == CellType.RINGS )
-			{return false;}
+			{
+				loadNewLevel = true;
+			}
 			if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
 					return ((DymanicRender)gdata.getGameElements().get( p )).collide();
@@ -218,5 +221,11 @@ public class GameScene
 			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
 			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ]
 		};
+	}
+
+
+	public boolean loadNewLevel()
+	{
+		return loadNewLevel;
 	}
 }

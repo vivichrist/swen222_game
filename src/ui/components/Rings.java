@@ -1,8 +1,6 @@
 package ui.components;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
-
 import javax.media.opengl.GL2;
 
 public class Rings implements Behaviour

@@ -7,6 +7,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
+
 import world.game.GameState;
 
 import com.jogamp.opengl.util.FPSAnimator;
@@ -130,7 +131,7 @@ public class GameView extends GLJPanel
             @Override
             public void display( GLAutoDrawable glautodrawable ) {
             	GL2 gl2 = glautodrawable.getGL().getGL2();
-            	update();
+            	update( gl2 );
             	GLU glu = GLU.createGLU( gl2 );
             	gl2.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
                 // Draw some rotating stuff
@@ -170,7 +171,7 @@ public class GameView extends GLJPanel
     /**
      * Various updates that are to be done before the rendering of each frame.
      */
-    private void update()
+    private void update( GL2 gl )
 	{
     	// keep moving and turning even if there are no key press or release events
     	keyInput.update();
@@ -187,6 +188,20 @@ public class GameView extends GLJPanel
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
+    	if ( scene.loadNewLevel() )
+    	{
+    		state.teleport( state.getPlayer(), 1 );
+			scene = new GameScene( state );
+			gl.glLoadIdentity();
+			scene.addSurrounds();
+        	gl.glLineWidth( 2f );
+			for( GraphicalObject go: data.getDynamicScene() )
+        	{
+        		go.initialise( gl );
+        	}
+        	StaticDisplayList staticDisplayList = StaticDisplayList.instance();
+        	staticDisplayList.createDisplaylist( gl );
+    	}
     }
 
     private void mouseSelect( GL2 gl )
