@@ -29,10 +29,7 @@ public class Client extends Thread {
 	private DatagramSocket socket;
 	private static final int SERVER_PORT = 4768;
 	private GameState state;
-	private byte[] data;
-	private GUI gui;
 	private NetworkController networkController;
-	private GameView gameView;
 	public static boolean isConnectToServer = false;
 	//public Client(GameState state, String ipAddress){
 	public Client(String ipAddress,NetworkController networkController){
@@ -49,15 +46,7 @@ public class Client extends Thread {
 	public void run(){
 
 		while(true){
-//			if(Server.socket.isConnected()){
-//				isConnectToServer=true;
-//				System.out.println("connect to server? "+isConnectToServer);
-//			}
-//			else{
-//				isConnectToServer=false;
-//				System.out.println("connect to server? "+isConnectToServer);
-//
-//			}
+
 			byte[]data = new byte[60000];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 
@@ -96,7 +85,6 @@ public class Client extends Thread {
 					+ ((Packet01Disconnect) packet).getUsername() + " has left the game...");
 			break;
 		case DATA:
-			this.data = data;
 			packet = new Packet02Data(state,data);
 			handleData((Packet02Data) packet);
 			break;
@@ -117,55 +105,36 @@ public class Client extends Thread {
 		}
 
 	}
-	public void checkState(){
 
-		if(state.isMoved()){
-			System.out.println("player moved==========");
-			byte[] data = state.serialize();
-			Packet02Data dataP = new Packet02Data(state,data);
-			dataP.writeData(this);
-		}
-
-	}
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
-		MultyPlayer player = new MultyPlayer( packet.getUsername(), packet.getPoint(),null,address, port);
-		//player.setFloor(state.getMap());
-		//state.addPlayer(player);
+		new MultyPlayer( packet.getUsername(),null,address, port);
 
 	}
 
 	private void handleData(Packet02Data packet) {
 
-		GameState st = state.deserialize(packet.getRealData());
-		state.setState(st);
-		System.out.println(state.getPlayers().get(1).getName());
+		GameState st = networkController.deserialize(packet.getRealData());
+		networkController.setState(st);
 
 	}
 
 	private void handleMove(Packet03Move packet) {
 
-		MultyPlayer p = (MultyPlayer) state.getPlayer(packet.getUsername());
+		MultyPlayer p = (MultyPlayer) networkController.getPlayer(packet.getUsername());
 		if(p!=null){
-			if(GUI.name.equalsIgnoreCase(p.getName())){
-				networkController.movePlayer(p, packet.getPoint());
-			}else{
+			if(!GUI.name.equalsIgnoreCase(p.getName())){
 				networkController.moveOtherPlayer(p, packet.getPoint());
+			}else{
+				System.out.println("local player should not move by server");
 			}
-		}else{
-			System.out.println("Client --->  player name not exist in the system");
 		}
-	}
-	public void setState(GameState state){
-		this.state = state;
-	}
-	public void setGameView(GLJPanel gameView){
-		this.gameView = (GameView) gameView;
-		
-	}
-	
 
+	}
+//	public void setState(GameState state){
+//		this.state = state;
+//	}
 
 }
 
