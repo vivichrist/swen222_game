@@ -31,7 +31,7 @@ public class CollectItemsCanvas extends Canvas {
 	private void initialiseItems() {
 		collectItems = new ArrayList<ImageIcon>();
 		for(int i = 0; i < player.getTokenList().size(); i++){
-			String resource = "Resource/" + type.toString() + "/" + type.toString() + " grey" + ".png";
+			String resource = "Resource/" + type.toString().toLowerCase() + "/" + type.toString().toLowerCase() + " grey" + ".png";
 			collectItems.add(i, new ImageIcon(resource));			
 		}
 
@@ -45,7 +45,7 @@ public class CollectItemsCanvas extends Canvas {
 		for (int i = 0; i < player.getTokenList().size(); i++){
 			if (player.getTokenList().get(i).isFound() && !isPaint.get(i)){
 				String color = identifyColor(player.getTokenList().get(i).getColor());
-				String resource = "Resource/" + type.toString() + "/" + type.toString() + " " + color + ".png";
+				String resource = "Resource/" + type.toString().toLowerCase() + "/" + type.toString().toLowerCase() + " " + color + ".png";
 				collectItems.set(i, new ImageIcon(resource));
 				isPaint.set(i, true);
 			}

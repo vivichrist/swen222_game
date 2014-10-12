@@ -464,13 +464,13 @@ public class GUI implements WindowListener {
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 
 		//Code added by Kalo
-//		GameState state = null;
-//		MultyPlayer player1 = null;
-//		ArrayList<Player>players = new ArrayList<Player>();
-//		Map[]floors =new Map[1];
-//		floors[0] = new Map(new File("map1.txt"));
-//		player1 = new MultyPlayer(name, null,null, -1);
-//		state = new GameState(players,floors);
+		//		GameState state = null;
+		//		MultyPlayer player1 = null;
+		//		ArrayList<Player>players = new ArrayList<Player>();
+		//		Map[]floors =new Map[1];
+		//		floors[0] = new Map(new File("map1.txt"));
+		//		player1 = new MultyPlayer(name, null,null, -1);
+		//		state = new GameState(players,floors);
 		player1 = new MultyPlayer(name, null,null, -1);
 
 		controller = new Controller(state, this);
@@ -502,8 +502,34 @@ public class GUI implements WindowListener {
 
 	}
 
-	public int getFloor(int floors){
-		return 1;
+	public int getFloor(int number){
+
+		String[] floorsName = new String[]{"Ground", "First", "Second",
+				"Third", "Fourth"};
+
+		String[] floors = new String[number];
+		for(int i = 0; i < number; i++){
+			floors[i] = floorsName[i] + " Floor";
+		}
+
+		String s = (String)JOptionPane.showInputDialog(
+				frame,
+				"Which floor you want to go to?",
+				"Floor Chooser",
+				JOptionPane.PLAIN_MESSAGE,
+				null, floors,
+				"Ground Floor");
+
+		if (s == null){
+			System.exit(0);
+		}
+
+		for (int j = 0; j < floors.length; j++){
+			if (s.equalsIgnoreCase(floors[j])){
+				return j;
+			}
+		}
+		return -1;
 	}
 
 	public GameState getState(){

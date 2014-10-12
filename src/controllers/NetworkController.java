@@ -75,6 +75,7 @@ public class NetworkController {
 	 * @return the user selected floor
 	 */
 	public static boolean teleport(Player p){
+		System.out.println("teleport called");
 		return controller.teleport(p);
 	}
 
