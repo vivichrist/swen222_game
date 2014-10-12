@@ -25,17 +25,17 @@ public class Orientation implements Behaviour
 		if ( xaligned && reverse )
 		{
 			gl.glRotatef( 270f, 0f, 0f, 1f );
-			gl.glTranslatef( -width, 0f, 0f );
+			gl.glTranslatef( -1f, 0f, 0f );
 		}
 		else if ( xaligned )
 		{
 			gl.glRotatef( 90f, 0f, 0f, 1f );
-			gl.glTranslatef( 0f, -depth, 0f );
+			gl.glTranslatef( 0f, -1f, 0f );
 		}
 		else if ( reverse )
 		{
 			gl.glRotatef( 180f, 0f, 0f, 1f );
-			gl.glTranslatef( -width, -depth, 0f );
+			gl.glTranslatef( -1f, -1f, 0f );
 		}
 	}
 
