@@ -78,15 +78,12 @@ public class GameScene
 		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
 			|| gdata.getGameElements().get( p ) != null )
 		{	// collect it and remove from data to apear in items
-			// System.out.println( "Collide (" + x + "," + y + ")" );
 			CellType ct =  gdata.getGameElements().get( p ).getType();
+			System.out.println( "Collide (" + x + "," + y + ") type: " + ct );
 			if ( ct == CellType.RINGS )
 			{
-				if ( !teleport )
-				{
-					teleport = true;
-					System.out.println("Teleporting to Floor:" + teleport );
-				}
+				teleport = true;
+				System.out.println("Teleporting to Floor:" + teleport );
 				return false;
 			}
 			if ( ct == CellType.KEYDOOR )

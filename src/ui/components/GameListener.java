@@ -155,6 +155,17 @@ public class GameListener implements KeyListener, MouseListener
 		click = null;
 		return p;
 	}
+	
+	public void reset( GameScene map )
+	{
+		this.map = map;
+		keyUpdate = false;
+		wKey = false;
+		aKey = false;
+		sKey = false;
+		dKey = false;
+		ctrl = false;
+	}
 
 /**
  * Buffer a new player position to be updated when display() is called.
