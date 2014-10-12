@@ -29,6 +29,9 @@ public class Torch implements MoveableObject, java.io.Serializable{
 		lit = false;
 	}
 	
+	/**
+	 * Returns a String representation of this Torch
+	 */
 	public String toString(){
 		return "torch";
 	}

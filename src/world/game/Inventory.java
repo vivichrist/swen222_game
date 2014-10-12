@@ -28,7 +28,6 @@ public class Inventory implements java.io.Serializable{
 	 * @return true if added
 	 */
 	public boolean add(MoveableObject item){
-		//TODO: Should this throw an exception???
 		if(inventory.size() == maxSize) return false;
 		else return inventory.add(item);
 	}

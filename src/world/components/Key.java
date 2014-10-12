@@ -9,7 +9,6 @@ import java.awt.Color;
  */
 public class Key implements MoveableObject, java.io.Serializable{
 
-	//TODO: is the name field necessary for a key???
 	private final String name;
 	private final Color color;
 	
@@ -70,6 +69,10 @@ public class Key implements MoveableObject, java.io.Serializable{
 		return true;
 	}
 	
+	/**
+	 * Returns a String representation of this Key
+	 * @return the name of this Key
+	 */
 	public String toString(){
 		return name;
 	}
