@@ -29,6 +29,8 @@ public class GameBuilder {
 	private List<Player> players;
 	private Map[] floors;
 	private GameState state;
+	private ArrayList<Key> keys = new ArrayList<Key>();
+	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.RED};
 	
 	/**
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
@@ -72,6 +74,7 @@ public class GameBuilder {
 		placePlayers();
 		placeFurniture();
 		placePlayerTokens();
+		placeKeys();
 		placeTorches();
 		state = new GameState(players, floors);
 	}
@@ -122,6 +125,17 @@ public class GameBuilder {
 		floors = new Map[floorCount];
 		for(int i = 0; i < floorCount; i++){
 			floors[i] = new Map(new File("map1.txt"));
+			
+			// Check the doors in the new Map, if they're lockable create keys for each door
+			for(Door door: floors[i].getDoors().values()){
+				if(door.isLockable()){
+					Color color = COLORS[keys.size()];
+					Key key = new Key(color.toString() + " key", color);
+					door.setKey(key);
+					keys.add(key);
+					System.out.println(key.toString());
+				}
+			}
 		}
 	}
 	
@@ -167,6 +181,25 @@ public class GameBuilder {
 			Map randomFloor = floors[random.nextInt(floors.length)];
 			// Place the Torch in a random cell
 			randomFloor.addMoveable(randomFloor.randomEmptyCell(), new Torch());
+		}
+	}
+	
+	/**
+	 * Distributes keys throughout the game world, choosing floors and Points at random
+	 */
+	private void placeKeys(){
+		for(Key key: keys){
+			Random random = new Random();
+			// Select a random floor
+			Map randomFloor = floors[random.nextInt(floors.length)];
+			
+			// Select a random point to add the key at - must ensure it's not added in a locked room
+			Point point = randomFloor.randomEmptyCell();
+			while(point.x > 5 && point.x < 14 && point.y > 5 && point.y < 14){
+				randomFloor.setEmpty(point);
+				point = randomFloor.randomEmptyCell();
+			}
+			randomFloor.addMoveable(point, key);
 		}
 	}
 	

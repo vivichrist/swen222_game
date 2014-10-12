@@ -54,6 +54,14 @@ public class Door implements java.io.Serializable{
 		if(key == null) System.out.println("Door does not have a key");
 		return key;
 	}
+	
+	/**
+	 * Returns whether this Door is lockable 
+	 * @return true if this Door is lockable
+	 */
+	public boolean isLockable(){
+		return lockable;
+	}
 
 	/**
 	 * Checks whether this Door is locked

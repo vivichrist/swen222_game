@@ -71,7 +71,7 @@ public class Key implements MoveableObject, java.io.Serializable{
 	}
 	
 	public String toString(){
-		return "key";
+		return name + " " + color.toString();
 	}
 	
 	
