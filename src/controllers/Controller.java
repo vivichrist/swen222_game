@@ -49,6 +49,10 @@ public class Controller {
 	public GameState deserialize(byte[] realData) {
 		return state.deserialize(realData);
 	}
+	
+	public boolean teleport(Player p, int floor){
+		return state.teleport(p, floor);
+	}
 
 	public void setState(GameState st) {
 		state.setState(st);
@@ -56,6 +60,11 @@ public class Controller {
 
 	public Player getPlayer(String username) {
 		return state.getPlayer(username);
+	}
+
+	public void setConnection(boolean connection) {
+		// TODO Auto-generated method stub
+		state.setConnection(connection);
 	}
 
 

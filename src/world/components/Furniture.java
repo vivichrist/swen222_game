@@ -47,7 +47,7 @@ public class Furniture implements StationaryObject {
 				points.add(origin);
 				switch(facing){
 					case NORTH:	{
-						points.add(new Point(origin.x - 1, origin.y));
+						points.add(new Point(origin.x + 1, origin.y));
 						break;
 					}
 					case EAST: {
@@ -59,7 +59,7 @@ public class Furniture implements StationaryObject {
 						break;
 					}
 					case WEST: {
-						points.add(new Point(origin.x, origin.y - 1));
+						points.add(new Point(origin.x, origin.y + 1));
 						break;
 					}
 				}
@@ -70,28 +70,28 @@ public class Furniture implements StationaryObject {
 					case NORTH:	
 						for(int y = 0; y < 2; y++){
 							for(int x = 0; x < 3; x++){
-								points.add(new Point(origin.x + x, origin.y + y));
+								points.add(new Point(origin.x + x, origin.y - y));
 							}
 						}
 						break;
 					case EAST: 
 						for(int y = 0; y < 3; y++){
 							for(int x = 0; x < 2; x++){
-								points.add(new Point(origin.x + x, origin.y - y));
+								points.add(new Point(origin.x + x, origin.y + y));
 							}
 						}
 						break;
 					case SOUTH: 
 						for(int y = 0; y < 2; y++){
 							for(int x = 0; x < 3; x++){
-								points.add(new Point(origin.x - x, origin.y - y));
+								points.add(new Point(origin.x + x, origin.y - y));
 							}
 						}
 						break;
 					case WEST: 
 						for(int y = 0; y < 3; y++){
 							for(int x = 0; x < 2; x++){
-								points.add(new Point(origin.x - x, origin.y + y));
+								points.add(new Point(origin.x + x, origin.y + y));
 							}
 						}
 						break;
@@ -102,7 +102,7 @@ public class Furniture implements StationaryObject {
 				points.add(origin);
 				switch(facing){
 					case NORTH:	{
-						points.add(new Point(origin.x - 1, origin.y));
+						points.add(new Point(origin.x + 1, origin.y));
 						break;
 					}
 					case EAST: {
@@ -114,7 +114,7 @@ public class Furniture implements StationaryObject {
 						break;
 					}
 					case WEST: {
-						points.add(new Point(origin.x, origin.y - 1));
+						points.add(new Point(origin.x, origin.y + 1));
 						break;
 					}
 				}

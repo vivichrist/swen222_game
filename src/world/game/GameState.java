@@ -31,6 +31,7 @@ public class GameState implements java.io.Serializable{
 	private GameBuilder game;
 	//private Controller controller;
 	private boolean isMoved;
+	private boolean serverConnection= false;
 
 
 	/**
@@ -227,6 +228,14 @@ public class GameState implements java.io.Serializable{
 	public GameState getState(){
 		return this;
 	}
+	
+	/**
+	 * Returns the number of floors in this game world
+	 * @return the number of floors in this game world
+	 */ 
+	public int floorCount(){
+		return floors.length;
+	}
 
 	//TODO: return a clone here instead of the actual list
 	/**
@@ -251,5 +260,15 @@ public class GameState implements java.io.Serializable{
 			System.out.println("x: "+players.get(1).getPosition().x);
 			}
 	}
+
+	public void setConnection(boolean connection) {
+		// TODO Auto-generated method stub
+		this.serverConnection = connection;
+	}
+
+	public boolean ServerConnection() {
+		return serverConnection;
+	}
+	
 
 }
