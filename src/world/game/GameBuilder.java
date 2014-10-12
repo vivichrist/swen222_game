@@ -69,6 +69,8 @@ public class GameBuilder {
 		
 		//Temporary testing code - adding a second player to the game
 		players.add(new Player("aaa", TokenType.values()[1]));
+		players.add(new Player("bbb", TokenType.values()[2]));
+		players.add(new Player("ccc", TokenType.values()[3]));
 		
 		//getPlayers();
 		buildFloors(players.size());
