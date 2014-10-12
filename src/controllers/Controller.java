@@ -46,4 +46,17 @@ public class Controller {
 	public void movePlayer(Player player, Point point){
 		state.movePlayer(player, point);
 	}
+	public GameState deserialize(byte[] realData) {
+		return state.deserialize(realData);
+	}
+
+	public void setState(GameState st) {
+		state.setState(st);
+	}
+
+	public Player getPlayer(String username) {
+		return state.getPlayer(username);
+	}
+
+
 }
