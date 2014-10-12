@@ -33,19 +33,18 @@ public class test {
 		}
 		else{
 			state = new GameState(null, null);
-			//MultyPlayer player1 = new MultyPlayer(JOptionPane.showInputDialog(this, "Please enter a username"), new Point(18,20),
-			//		null,null, -1);
+			MultyPlayer player1 = new MultyPlayer("Jacky",
+					null,null, -1);
+
+			MultyPlayer player2 = new MultyPlayer("Sisi",
+					null,null, -1);
 
 
 			client = new Client("localhost",controller);
 			client.start();
 
-//			Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
-			Packet00Login loginPacket = new Packet00Login("Jacky",1,1);
-
-			loginPacket.writeData(client);
-
-			Packet03Move move = new Packet03Move("Jacky",new Point(10,20));
+			Packet00Login loginPacket = new Packet00Login(player1.getName());
+			Packet00Login loginPacket2 = new Packet00Login(player2.getName());
 
 //			if (server.serverStart==99) {
 //				server.addConnection(player1, loginPacket);
@@ -54,7 +53,14 @@ public class test {
 //				System.out.println("size1: "+size1);
 //
 //			}else System.out.println("server== null");
+			loginPacket.writeData(client);
+			loginPacket2.writeData(client);
+			Packet03Move move = new Packet03Move(player1.getName(),new Point(6,6));
 			move.writeData(client);
+			Packet03Move move2 = new Packet03Move(player2.getName(),new Point(8,8));
+			move2.writeData(client);
+
+
 
 		}
 
@@ -65,3 +71,6 @@ public class test {
 		t.startGame();
 	}
 }
+
+
+
