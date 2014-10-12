@@ -204,6 +204,7 @@ public class GameView extends GLJPanel
         	}
         	StaticDisplayList staticDisplayList = StaticDisplayList.instance();
         	staticDisplayList.createDisplaylist( gl );
+        	keyInput.reset();
         	scene.resetTeleport();
     	}
     }
