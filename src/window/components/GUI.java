@@ -85,7 +85,7 @@ public class GUI implements WindowListener {
 	private JPanel joinServerPanel;
 
 	private Player player;
-	public String name;
+	public static String name;
 	public String nameC;
 
 	public String strServerName;
