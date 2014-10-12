@@ -9,38 +9,24 @@ import ServerClients.Server;
 public class Packet00Login extends UDPPakcet {
 
 	private String username;
-	private int x, y;
-	private Point point;
-	//private Map floor;
+
 
 	public Packet00Login(byte[] data) {
 		super(00);
 		String[] dataArray = readData(data).split(",");
 		this.username = dataArray[0];
 		System.out.println("username = "+ username);
-		this.x = Integer.parseInt(dataArray[1]);
-		System.out.println("x = "+ x);
-
-		this.y = Integer.parseInt(dataArray[2]);
-		System.out.println("y = "+ y);
-
-		point = new Point(x,y);
-
 	}
 
-	public Packet00Login(String username, int x, int y) {
+	public Packet00Login(String username) {
 		super(00);
 		this.username = username;
-		this.point = new Point(x,y);
 
 	}
 
 	@Override
 	public void writeData(Client client) {
-		//System.out.println("Packet00Login>writeData....");
 		if(client==null)System.out.println("null client");
-		//System.out.println("getdata().toString(): "+getData().length);
-		//client.start();
 		client.sendData(getData());
 
 	}
@@ -53,18 +39,14 @@ public class Packet00Login extends UDPPakcet {
 	@Override
 	public byte[] getData() {
 		//System.out.println("packet00Login>>getData..."+username+"  "+point.x+" "+point.y+ "  "+floor);
-		return ("00" + this.username + "," + point.x + "," + point.y).getBytes();
+		return ("00" + this.username).getBytes();
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public Point getPoint(){
-		return point;
-	}
-//	public Map getFloor(){
-//		return floor;
-//	}
+
+
 
 }

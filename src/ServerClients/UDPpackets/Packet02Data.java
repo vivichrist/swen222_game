@@ -16,27 +16,21 @@ public class Packet02Data extends UDPPakcet {
 
 	private String username;
 	private GameState state;
-	private Point point;
-	private int x;
-	private int y;
+
 	private byte[] data;
 
 
-	public Packet02Data( String username, int x, int y) {
+	public Packet02Data( String username) {
 		super(02);
 		System.out.println("packet02Data con 1: ");
-
 		this.username = username;
-		this.x = x;
-		this.y = y;
-		this.point = new Point(x,y);
+
 
 	}
 
-	public Packet02Data(GameState state,byte[] data) {
+	public Packet02Data(byte[] data) {
 		super(02);
 		this.data = data;
-		this.state = state;
 		System.out.println("packet02Data con 2: ");
 	}
 
@@ -63,12 +57,9 @@ public class Packet02Data extends UDPPakcet {
 		for(int i = 2; i<oldD.length;i++){
 			newD[i-2] = oldD[i];
 			if(newD[i-2] != oldD[i]){
-				System.out.println("aa");
 			}
 			
 		}
-		//if(data!=newD)System.out.println("Packet02Data: not equals");
-
 		return newD;
 	}
 	@Override
@@ -79,11 +70,9 @@ public class Packet02Data extends UDPPakcet {
 
 		newData[0] = a[0];
 		newData[1] = a[1];
-		for(int i = 2; i<data.length;i++){
+		for(int i = 0; i<data.length;i++){
 			newData[i] = data[i];
-			if(newData[i] != data[i]){
-				System.out.println("aa");
-			}
+			
 		}
 		return newData;
 	}
@@ -94,10 +83,6 @@ public class Packet02Data extends UDPPakcet {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public Point getPosition(){
-		return point;
 	}
 
 
