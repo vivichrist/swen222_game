@@ -73,31 +73,46 @@ public class GUI implements WindowListener {
 	Server server = null;
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
-	JFrame frame;
-	JLayeredPane layeredPane;
-	JPanel backgroundPanel;
-	SouthPanel southPanel;
-	JPanel startPanel;
-	JPanel choosePlayerPanel;
-	JPanel chooseNamePanel;
-	JPanel serverStartsPanel;
+	private JFrame frame;
+	private JLayeredPane layeredPane;
+	private JPanel backgroundPanel;
+	private SouthPanel southPanel;
+	private JPanel startPanel;
+	private JPanel choosePlayerPanel;
+	private JPanel chooseNamePanel;
+	private JPanel chooseServerPanel;
+	private JPanel serverStartsPanel;
+	private JPanel joinServerPanel;
 
 	private Player player;
-	public static  String name;
+	public String name;
+	public String nameC;
+
+	public String strServerName;
+	public String strPortNum;
+	public String strServerNameC;
+	public String strPortNumC;
 	//private final BoardCanvasNorth canvas;
 	//private final BoardCanvasSouth cardCanvas;
 
-	JButton jbNew;
-	JButton jbLoad;
-	JButton jbInfo;
-	JButton jbExit;
-	JButton jbSingle;
-	JButton jbMultiple;
-	JButton jbStart;
+	private JButton jbNew;
+	private JButton jbLoad;
+	private JButton jbInfo;
+	private JButton jbExit;
+	private JButton jbSingle;
+	private JButton jbMultiple;
+	private JButton jbStartServer;
+	private JButton jbJoinServer;
+	private JButton jbStart;
+	private JButton jbClientStart;
 
-	JTextField textFieldName;
+	private JTextField serverName;
+	private JTextField portNum;
+	private JTextField serverNameC;
+	private JTextField portNumC;
+	private JTextField textFieldNameC;
+	private JTextField textFieldName;
 	private Client client;
-
 
 	public GUI(){
 		setUp();
@@ -227,7 +242,7 @@ public class GUI implements WindowListener {
 	 * set up the frame that let player enter the character's name
 	 * and starts the game.
 	 */
-	public void chooseNamePanel(String number){
+	public void chooseNamePanel(){
 		int chooseNamePanelLeft = 325;
 		int chooseNamePanelTop = 200;
 		int chooseNamePanelWidth = 150;
@@ -265,31 +280,181 @@ public class GUI implements WindowListener {
 
 		chooseNamePanel.setOpaque(false);
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
-		addListennerChooseName(number);
+		addListennerChooseName();
 	}
+
+	/**
+	 * set up the frame that let player choose either starts a
+	 * server of the game or join the server of the game
+	 */
+	public void chooseServerPanel(){
+		int chooseServerPanelLeft = 300;
+		int chooseServerPanelTop = 200;
+		int chooseServerPanelWidth = 200;
+		int chooseServerPanelHeight = 120;
+
+		chooseServerPanel = new JPanel();
+		chooseServerPanel.setBounds(chooseServerPanelLeft, chooseServerPanelTop, chooseServerPanelWidth, chooseServerPanelHeight);
+
+		jbStartServer = new JButton("Start Server");
+		jbJoinServer = new JButton("Join Server");
+
+		setButtonStyle(jbStartServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbJoinServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
+
+		chooseServerPanel.setOpaque(false);
+		layeredPane.add(chooseServerPanel, JLayeredPane.MODAL_LAYER);
+		addListennerChooseServer();
+	}
+
+
+
+
+
+
 
 	/**
 	 * set up the frame that shows server has been started
 	 */
 	public void serverStartsPanel(){
-		int serverStartsPanellLeft = 200;
-		int serverStartsPanelTop = 200;
+		int serverStartsPanellLeft = 150;
+		int serverStartsPanelTop = 180;
 		int serverStartsPanelWidth = 500;
-		int serverStartsPanelHeight = 200;
+		int serverStartsPanelHeight = 500;
 
 		serverStartsPanel = new JPanel();
 		serverStartsPanel.setBounds(serverStartsPanellLeft, serverStartsPanelTop, serverStartsPanelWidth, serverStartsPanelHeight);
 
 		JLabel serverStarts = new JLabel("SERVER STARTS!");
-
-		serverStarts.setPreferredSize(new Dimension(500, 200));
+		serverStarts.setPreferredSize(new Dimension(450, 100));
 		serverStarts.setFont(new Font("Arial", Font.BOLD, 50));
 		serverStarts.setForeground(new Color(100, 200, 100).brighter());
 
+		JLabel information = new JLabel("The following information is for client to join server");
+		information.setPreferredSize(new Dimension(500, 40));
+		information.setFont(new Font("Arial", Font.BOLD, 20));
+		information.setForeground(new Color(0, 135, 200).brighter());
+
+		JLabel name = new JLabel("Server Name : ");
+		serverName = new JTextField(15);
+
+		name.setPreferredSize(new Dimension(150, 60));
+		name.setFont(new Font("Arial", Font.PLAIN, 20));
+		name.setForeground(new Color(0, 135, 200).brighter());
+
+		serverName.setPreferredSize(new Dimension(250, 40));
+		serverName.setFont(new Font("Arial", Font.PLAIN, 20));
+		serverName.setForeground(new Color(30, 30, 30));
+		serverName.setText(strServerName);
+		serverName.setEditable(false);
+		
+		JLabel port = new JLabel("Port Number : ");
+		portNum = new JTextField(15);
+
+		port.setPreferredSize(new Dimension(150, 60));
+		port.setFont(new Font("Arial", Font.PLAIN, 20));
+		port.setForeground(new Color(0, 135, 200).brighter());
+
+		portNum.setPreferredSize(new Dimension(130, 40));
+		portNum.setFont(new Font("Arial", Font.PLAIN, 20));
+		portNum.setForeground(new Color(30, 30, 30));
+		portNum.setText(strPortNum);
+		portNum.setEditable(false);
+
 		serverStartsPanel.add(serverStarts);
+		serverStartsPanel.add(information);
+		serverStartsPanel.add(name);
+		serverStartsPanel.add(serverName);
+		serverStartsPanel.add(port);
+		serverStartsPanel.add(portNum);
 		serverStartsPanel.setOpaque(false);
 		layeredPane.add(serverStartsPanel, JLayeredPane.MODAL_LAYER);
+		//addListennerServerStarts();
 	}
+
+
+	public void joinServerPanel(){
+		int joinServerPanellLeft = 200;
+		int joinServerPanelTop = 200;
+		int joinServerPanelWidth = 450;
+		int joinServerPanelHeight = 500;
+
+		joinServerPanel = new JPanel();
+		joinServerPanel.setBounds(joinServerPanellLeft, joinServerPanelTop, joinServerPanelWidth, joinServerPanelHeight);
+
+		JLabel nameP = new JLabel("Player Name : ");
+		textFieldNameC = new JTextField(15);
+
+		nameP.setPreferredSize(new Dimension(150, 60));
+		nameP.setFont(new Font("Arial", Font.PLAIN, 20));
+		nameP.setForeground(new Color(0, 135, 200).brighter());
+
+		textFieldNameC.setPreferredSize(new Dimension(250, 40));
+		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
+		textFieldNameC.setForeground(new Color(30, 30, 30));
+
+		JLabel name = new JLabel("Server Name : ");
+		serverNameC = new JTextField(15);
+
+		name.setPreferredSize(new Dimension(150, 60));
+		name.setFont(new Font("Arial", Font.PLAIN, 20));
+		name.setForeground(new Color(0, 135, 200).brighter());
+
+		serverNameC.setPreferredSize(new Dimension(250, 40));
+		serverNameC.setFont(new Font("Arial", Font.PLAIN, 20));
+		serverNameC.setForeground(new Color(30, 30, 30));
+
+		JLabel port = new JLabel("Port Number : ");
+		portNumC = new JTextField(15);
+
+		port.setPreferredSize(new Dimension(150, 60));
+		port.setFont(new Font("Arial", Font.PLAIN, 20));
+		port.setForeground(new Color(0, 135, 200).brighter());
+
+		portNumC.setPreferredSize(new Dimension(130, 40));
+		portNumC.setFont(new Font("Arial", Font.PLAIN, 20));
+		portNumC.setForeground(new Color(30, 30, 30));
+
+		jbClientStart = new JButton("START");
+
+		joinServerPanel.add(nameP);
+		joinServerPanel.add(textFieldNameC);
+		joinServerPanel.add(name);
+		joinServerPanel.add(serverNameC);
+		joinServerPanel.add(port);
+		joinServerPanel.add(portNumC);
+		setButtonStyle(jbClientStart, 110, joinServerPanel, Color.MAGENTA);
+		joinServerPanel.setOpaque(false);
+		layeredPane.add(joinServerPanel, JLayeredPane.MODAL_LAYER);
+		addListennerJoinServer();
+	}
+
+
+
+
+
+	/**
+	 * set up the frame that shows server has been started
+	 */
+	//	public void serverStartsPanel(){
+	//		int serverStartsPanellLeft = 200;
+	//		int serverStartsPanelTop = 200;
+	//		int serverStartsPanelWidth = 500;
+	//		int serverStartsPanelHeight = 200;
+	//
+	//		serverStartsPanel = new JPanel();
+	//		serverStartsPanel.setBounds(serverStartsPanellLeft, serverStartsPanelTop, serverStartsPanelWidth, serverStartsPanelHeight);
+	//
+	//		JLabel serverStarts = new JLabel("SERVER STARTS!");
+	//
+	//		serverStarts.setPreferredSize(new Dimension(500, 200));
+	//		serverStarts.setFont(new Font("Arial", Font.BOLD, 50));
+	//		serverStarts.setForeground(new Color(100, 200, 100).brighter());
+	//
+	//		serverStartsPanel.add(serverStarts);
+	//		serverStartsPanel.setOpaque(false);
+	//		layeredPane.add(serverStartsPanel, JLayeredPane.MODAL_LAYER);
+	//	}
 
 	/**
 	 * set the button style by the given characteristics, add the button
@@ -364,7 +529,7 @@ public class GUI implements WindowListener {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbSingle){
 					layeredPane.remove(choosePlayerPanel);
-					chooseNamePanel("single");
+					chooseNamePanel();
 					frame.repaint();
 				}}});
 
@@ -377,20 +542,7 @@ public class GUI implements WindowListener {
 					Map[]floors =new Map[1];
 					floors[0] = new Map(new File("map1.txt"));
 					state = new GameState(players,floors);
-
-					if(!state.ServerConnection()){
-						//if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
-						serverStartsPanel();
-
-						server = new Server();
-						server.start();
-					}
-					else {
-						chooseNamePanel("multiple");
-						//chooseNamePanel2();
-					}
-					//test t = new test();
-					//t.testServerPlayerListName();
+					chooseServerPanel();
 					frame.repaint();
 				}}});
 
@@ -399,7 +551,7 @@ public class GUI implements WindowListener {
 	/**
 	 * add action listener onto buttons on chooseNamePanel
 	 */
-	public void addListennerChooseName(final String number){
+	public void addListennerChooseName(){
 		jbStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
@@ -410,11 +562,7 @@ public class GUI implements WindowListener {
 						layeredPane.remove(chooseNamePanel);
 						System.out.println(name);
 						layeredPane.remove(backgroundPanel);
-						if (number.equalsIgnoreCase("single")){
-							startGame();
-						} else if (number.equalsIgnoreCase("multiple")){
-							startGame2();
-						}
+						startGame();
 						frame.repaint();
 						//textFieldRealName.setText("");
 					}}}});
@@ -422,6 +570,93 @@ public class GUI implements WindowListener {
 		textFieldName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				name = textFieldName.getText();
+			}
+		});
+	}
+
+	/**
+	 * add action listener onto buttons on chooseServerPanel
+	 */
+	public void addListennerChooseServer(){
+		jbStartServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbStartServer){
+					layeredPane.remove(chooseServerPanel);
+					strServerName = getSeverName();
+					strPortNum = "4768";
+					serverStartsPanel();
+					frame.repaint();
+				}}});
+
+		jbJoinServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbJoinServer){
+					layeredPane.remove(chooseServerPanel);
+					joinServerPanel();
+					frame.repaint();
+				}}});
+
+	}
+
+	public void addListennerServerStarts(){
+		jbStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbStart){
+					if(!textFieldName.getText().equals("")){
+						name = textFieldName.getText();
+						System.out.println("Player name: " + name);
+						layeredPane.remove(chooseNamePanel);
+						System.out.println(name);
+						layeredPane.remove(backgroundPanel);
+						startGame();
+						frame.repaint();
+						//textFieldRealName.setText("");
+					}}}});
+
+		textFieldName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				name = textFieldName.getText();
+			}
+		});
+	}
+
+	public void addListennerJoinServer(){
+		jbClientStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbClientStart){
+					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
+						nameC = textFieldNameC.getText();
+						strServerNameC = serverNameC.getText();
+						strPortNumC = portNumC.getText();
+						System.out.println("Player name: " + nameC);
+						System.out.println("Server name: " + strServerNameC);
+						System.out.println("Port number: " + strPortNumC);
+						layeredPane.remove(joinServerPanel);
+						layeredPane.remove(backgroundPanel);
+						startGame2();
+						frame.repaint();
+						//textFieldRealName.setText("");
+					}}}});
+
+		textFieldNameC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nameC = textFieldNameC.getText();
+			}
+		});
+
+		serverNameC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				strServerNameC = serverNameC.getText();
+			}
+		});
+
+		portNumC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				strPortNumC = portNumC.getText();
 			}
 		});
 	}
@@ -585,7 +820,7 @@ public class GUI implements WindowListener {
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubs
 
 	}
 
@@ -593,6 +828,10 @@ public class GUI implements WindowListener {
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	private String getSeverName() {
+		// TODO for Jacky
+		return "Here's the server name";
 	}
 
 }
