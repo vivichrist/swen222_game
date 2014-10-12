@@ -499,7 +499,9 @@ public class GUI implements WindowListener {
 
 	}
 
-
+	public int getFloor(int floors){
+		return 1;
+	}
 
 	public GameState getState(){
 		return gameState;
