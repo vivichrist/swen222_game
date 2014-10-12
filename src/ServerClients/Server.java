@@ -97,7 +97,7 @@ public class Server extends Thread {
 			name = ((Packet00Login) packet).getUsername();
 			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
 					+ ((Packet00Login) packet).getUsername() + " has connected...");
-			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),((Packet00Login) packet).getPoint(), null, address, port);
+			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==1 && serverOpen==false){
@@ -111,12 +111,12 @@ public class Server extends Thread {
 			this.removeConnection((Packet01Disconnect) packet);
 			break;
 		case DATA:
-			packet = new Packet02Data(state,data);
+			packet = new Packet02Data(data);
 			name = ((Packet02Data) packet).getUsername();
 			this.handleData(((Packet02Data) packet));
 			break;
 		case MOVE:
-			packet = new Packet03Move(state, data);
+			packet = new Packet03Move(data);
 			name = ((Packet03Move) packet).getUsername();
 			handleMove((Packet03Move) packet);
 			break;
@@ -149,7 +149,7 @@ private void sentStateToAllClients() {
 	for(int i = 0; i<temp.length;i++){
 		newData[i+2] = temp[i];
 	}
-	Packet02Data p = new Packet02Data(state, newData);
+	Packet02Data p = new Packet02Data(newData);
 	p.writeData(this);
 	serverOpen  = true;
 	
@@ -229,7 +229,7 @@ public void addConnection(MultyPlayer player, Packet00Login packet) {
 			sendData(packet.getData(), p.ipAddress, p.port);
 
 			// relay to the new player that the currently connect player exists
-			packet = new Packet00Login(p.getName(), p.getPosition().x,p.getPosition().y);
+			packet = new Packet00Login(p.getName());
 			sendData(packet.getData(), player.ipAddress, player.port);
 		}
 	}

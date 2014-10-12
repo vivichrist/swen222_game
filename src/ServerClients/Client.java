@@ -85,12 +85,12 @@ public class Client extends Thread {
 					+ ((Packet01Disconnect) packet).getUsername() + " has left the game...");
 			break;
 		case DATA:
-			packet = new Packet02Data(state,data);
+			packet = new Packet02Data(data);
 			handleData((Packet02Data) packet);
 			break;
 
 		case MOVE:
-			packet = new Packet03Move(state,data);
+			packet = new Packet03Move(data);
 			handleMove((Packet03Move) packet);
 			break;
 		}
