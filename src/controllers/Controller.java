@@ -42,7 +42,9 @@ public class Controller {
 
 	public void moveOtherPlayer(Player player, Point point) {
 		System.out.println("waiting for vivian === move other player");
+		state.movePlayer(player, point);
 	}
+	
 	public void movePlayer(Player player, Point point){
 		state.movePlayer(player, point);
 	}
