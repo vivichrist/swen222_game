@@ -156,8 +156,9 @@ public class GameListener implements KeyListener, MouseListener
 		return p;
 	}
 	
-	public void reset()
+	public void reset( GameScene map )
 	{
+		this.map = map;
 		keyUpdate = false;
 		wKey = false;
 		aKey = false;
