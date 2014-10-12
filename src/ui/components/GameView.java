@@ -12,6 +12,9 @@ import world.game.GameState;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
+import controllers.Controller;
+import controllers.NetworkController;
+
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
@@ -191,7 +194,7 @@ public class GameView extends GLJPanel
     	if ( scene.loadNewLevel() )
     	{
     		System.out.println("Teleporrting to Floor:" + 1 );
-    		state.teleport( state.getPlayer(), 1 );
+    		state.teleport( state.getPlayer(), NetworkController.teleport( state.getPlayer() ) );
 			scene = new GameScene( state );
 			gl.glLoadIdentity();
 			scene.addSurrounds();

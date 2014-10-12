@@ -24,13 +24,13 @@ public class DymanicRender implements GraphicalObject
 	public static DymanicRender instanceDoor( Point position, Direction dir )
 	{
 		return new DymanicRender( CellType.DOOR, Behave.OPEN_CLOSE, position
-				, dir, Color.decode( "#008800" ) );
+				, dir, Color.decode( "#338833" ) );
 	}
 	
 	public static DymanicRender instanceKeyDoor( Point position, Direction dir )
 	{
 		return new DymanicRender( CellType.KEYDOOR, Behave.OPEN_CLOSE, position
-				, dir, Color.decode( "#008800" ) );
+				, dir, Color.decode( "#0088AA" ) );
 	}
 	
 	public static DymanicRender instanceTelePort( Point position )
@@ -141,7 +141,7 @@ public class DymanicRender implements GraphicalObject
 			System.out.println( "Empty Vertices and Indices:" + type );
 			System.exit( 1 );
 		}
-		if ( anim.isEmpty() )
+		if ( anim.isEmpty() ) // no modifications 
 		{
 			gl.glPushMatrix();
 			gl.glTranslatef( position.x, position.y, 0 );
@@ -150,7 +150,7 @@ public class DymanicRender implements GraphicalObject
 			gl.glPopMatrix();
 			return true;
 		}
-		for ( Behaviour behave: anim )
+		for ( Behaviour behave: anim ) // 1 or more modifications
 		{
 			gl.glPushMatrix();
 			gl.glTranslatef( position.x, position.y, 0 );

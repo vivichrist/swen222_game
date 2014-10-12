@@ -3,6 +3,10 @@ package ui.components;
 import java.awt.geom.Point2D;
 import javax.media.opengl.GL2;
 
+/**
+ * @author Vivian Stewart
+ * Animation that moves teleport rings continuously up and down
+ */
 public class Rings implements Behaviour
 {
 
@@ -19,7 +23,7 @@ public class Rings implements Behaviour
 	public void modify( GL2 gl, Point2D.Float pos )
 	{
 		if ( move > ceiling || move < ground )
-			moveSpeed = -moveSpeed;
+			moveSpeed = (moveSpeed > 0 ? -1 : 1) * (float)Math.random() + 0.5f ;
 		gl.glTranslated( 0f, 0f, move );
 		move += moveSpeed;
 	}
