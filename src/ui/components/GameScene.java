@@ -26,7 +26,7 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
-	private int				teleport = -1; 
+	private boolean			teleport = false; 
 	private GameViewData gdata = GameViewData.instance();
 	private CellType[][]	map;
 	public final int		xlimit, ylimit;
@@ -81,13 +81,10 @@ public class GameScene
 			CellType ct =  gdata.getGameElements().get( p ).getType();
 			if ( ct == CellType.RINGS )
 			{
-				if ( teleport > 0 )
+				if ( !teleport )
 				{
-					teleport = NetworkController.teleport( game.getPlayer() );
-					System.out.println("Teleporrting to Floor:" + teleport );
-				} else
-				{
-					teleport = -1;
+					teleport = true;
+					System.out.println("Teleporting to Floor:" + teleport );
 				}
 				return false;
 			}
@@ -236,8 +233,13 @@ public class GameScene
 	}
 
 
-	public int loadNewLevel()
+	public boolean isTeleport()
 	{
 		return teleport;
+	}
+	
+	public void resetTeleport()
+	{
+		teleport = false;
 	}
 }
