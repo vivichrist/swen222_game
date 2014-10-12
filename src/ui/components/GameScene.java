@@ -8,6 +8,7 @@ import controllers.NetworkController;
 
 import world.components.CellType;
 import world.components.Direction;
+import world.components.Door;
 import world.components.Furniture;
 import world.components.GameObject;
 import world.components.GameToken;
@@ -136,7 +137,8 @@ public class GameScene
 					gdata.addGrapicalObject( dyn );
 					break;
 				case KEYDOOR :
-					dyn = DymanicRender.instanceKeyDoor( p, dir );
+					dyn = DymanicRender.instanceKeyDoor( p, dir
+							, fmap.getDoor( p ).getKey().getColor() );
 					StaticRender keydoorWay = new StaticRender( CellType.KEYDOOR, nesw, p );
 					gdata.addStaticOnly( keydoorWay );
 					gdata.addGrapicalObject( dyn );

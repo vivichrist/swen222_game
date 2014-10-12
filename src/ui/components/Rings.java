@@ -22,8 +22,16 @@ public class Rings implements Behaviour
 	@Override
 	public void modify( GL2 gl, Point2D.Float pos )
 	{
-		if ( move > ceiling || move < ground )
-			moveSpeed = (moveSpeed > 0 ? -1 : 1) * (float)Math.random() + 0.5f ;
+		if ( move > ceiling )
+		{
+			moveSpeed = -0.05f * ((float)Math.random() + .9f);
+			move = ceiling;
+		}
+		else if ( move < ground )
+		{
+			moveSpeed = 0.05f * ((float)Math.random() + .9f);
+			move = ground;
+		}
 		gl.glTranslated( 0f, 0f, move );
 		move += moveSpeed;
 	}
