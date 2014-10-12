@@ -27,10 +27,10 @@ public class DymanicRender implements GraphicalObject
 				, dir, Color.decode( "#338833" ) );
 	}
 	
-	public static DymanicRender instanceKeyDoor( Point position, Direction dir )
+	public static DymanicRender instanceKeyDoor( Point position, Direction dir, Color col )
 	{
 		return new DymanicRender( CellType.KEYDOOR, Behave.OPEN_CLOSE, position
-				, dir, Color.decode( "#0088AA" ) );
+				, dir, col );
 	}
 	
 	public static DymanicRender instanceTelePort( Point position )
