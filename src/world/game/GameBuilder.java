@@ -133,7 +133,7 @@ public class GameBuilder {
 			for(Door door: floors[i].getDoors().values()){
 				if(door.isLockable()){
 					Color color = ColourPalette.get(keys.size());
-					Key key = new Key(color.toString() + " key", color);
+					Key key = new Key(ColourPalette.getName(keys.size()) + " key", color);
 					door.setKey(key);
 					keys.add(key);
 					System.out.println(key.toString());
