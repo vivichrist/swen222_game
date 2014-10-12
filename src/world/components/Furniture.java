@@ -70,7 +70,7 @@ public class Furniture implements StationaryObject {
 					case NORTH:	
 						for(int y = 0; y < 2; y++){
 							for(int x = 0; x < 3; x++){
-								points.add(new Point(origin.x + x, origin.y - y));
+								points.add(new Point(origin.x + x, origin.y + y));
 							}
 						}
 						break;
@@ -84,7 +84,7 @@ public class Furniture implements StationaryObject {
 					case SOUTH: 
 						for(int y = 0; y < 2; y++){
 							for(int x = 0; x < 3; x++){
-								points.add(new Point(origin.x + x, origin.y - y));
+								points.add(new Point(origin.x + x, origin.y + y));
 							}
 						}
 						break;
