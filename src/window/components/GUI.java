@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +40,9 @@ import ServerClients.Client;
 import ServerClients.Server;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
+import ServerClients.UDPpackets.Packet01Disconnect;
 import controllers.Controller;
 import controllers.NetworkController;
-
 import ui.components.GameView;
 import world.components.Map;
 import world.game.GameBuilder;
@@ -61,12 +62,14 @@ import java.awt.event.*;
  *
  */
 
-public class GUI  {
+public class GUI implements WindowListener {
 
 	private static int width = 800;
 	private static int height = 770;
 	private GameState gameState;//do not change this field for jacky only
 	private static Controller controller;
+	GameState state;
+	MultyPlayer player1;
 	Server server = null;
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
@@ -93,6 +96,7 @@ public class GUI  {
 	JButton jbStart;
 
 	JTextField textFieldName;
+	private Client client;
 
 
 	public GUI(){
@@ -369,20 +373,19 @@ public class GUI  {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
+					ArrayList<Player>players = new ArrayList<Player>();
+					Map[]floors =new Map[1];
+					floors[0] = new Map(new File("map1.txt"));
+					state = new GameState(players,floors);
 
-					GameState state = null;
-					MultyPlayer player1 = null;
-					if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
+					if(!state.ServerConnection()){
+						//if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
 						serverStartsPanel();
-
-
-
-
-
 
 						server = new Server();
 						server.start();
-					}else {
+					}
+					else {
 						chooseNamePanel("multiple");
 						//chooseNamePanel2();
 					}
@@ -458,25 +461,22 @@ public class GUI  {
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 
 		//Code added by Kalo
-		GameState state = null;
-		MultyPlayer player1 = null;
-		ArrayList<Player>players = new ArrayList<Player>();
-		Map[]floors =new Map[1];
-		floors[0] = new Map(new File("map1.txt"));
+//		GameState state = null;
+//		MultyPlayer player1 = null;
+//		ArrayList<Player>players = new ArrayList<Player>();
+//		Map[]floors =new Map[1];
+//		floors[0] = new Map(new File("map1.txt"));
+//		player1 = new MultyPlayer(name, null,null, -1);
+//		state = new GameState(players,floors);
 		player1 = new MultyPlayer(name, null,null, -1);
-		state = new GameState(players,floors);
+
 		controller = new Controller(state, this);
 		NetworkController networkController = new NetworkController(controller);
-		Client client = new Client("localhost",networkController );
+		client = new Client("localhost",networkController );
 		client.start();
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(player1.getName());
-		//		if (Server.) {
-		//			server.addConnection(player1, loginPacket);
-		//			int size1 = server.getConnectedPlayers().size();
-		//			System.out.println("size1: "+size1);
-		//
-		//		}else System.out.println("server== null");
+
 		loginPacket.writeData(client);
 		System.out.println("state.getPlayers().size(): "+ state.getPlayers().size());
 
@@ -519,6 +519,49 @@ public class GUI  {
 
 	public String getName(){
 		return name;
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		Packet01Disconnect packet = new Packet01Disconnect(name);
+		packet.writeData(client);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

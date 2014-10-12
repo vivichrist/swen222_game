@@ -31,6 +31,7 @@ public class GameState implements java.io.Serializable{
 	private GameBuilder game;
 	//private Controller controller;
 	private boolean isMoved;
+	private boolean serverConnection= false;
 
 
 	/**
@@ -251,5 +252,15 @@ public class GameState implements java.io.Serializable{
 			System.out.println("x: "+players.get(1).getPosition().x);
 			}
 	}
+
+	public void setConnection(boolean connection) {
+		// TODO Auto-generated method stub
+		this.serverConnection = connection;
+	}
+
+	public boolean ServerConnection() {
+		return serverConnection;
+	}
+	
 
 }

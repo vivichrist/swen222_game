@@ -14,6 +14,7 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet04Connection;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import ui.components.GameView;
@@ -30,6 +31,7 @@ public class Client extends Thread {
 	private static final int SERVER_PORT = 4768;
 	private GameState state;
 	private NetworkController networkController;
+	public boolean connection;
 	public static boolean isConnectToServer = false;
 	//public Client(GameState state, String ipAddress){
 	public Client(String ipAddress,NetworkController networkController){
@@ -93,9 +95,15 @@ public class Client extends Thread {
 			packet = new Packet03Move(data);
 			handleMove((Packet03Move) packet);
 			break;
+		
+		case CONNECTION:
+			packet = new Packet04Connection(data);
+			handleConnection((Packet04Connection) packet);
+		
 		}
 	}
 
+	
 	public void sendData(byte[]data){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
 		try {
@@ -132,9 +140,11 @@ public class Client extends Thread {
 		}
 
 	}
-//	public void setState(GameState state){
-//		this.state = state;
-//	}
+	private void handleConnection(Packet04Connection packet) {
+		
+		this.connection = packet.isConnection();
+		networkController.setConnection(connection);
+	}
 
 }
 

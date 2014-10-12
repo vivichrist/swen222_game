@@ -16,6 +16,7 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet04Connection;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
@@ -63,6 +64,15 @@ public class Server extends Thread {
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try{
+				if(connectedPlayers.size()<1){
+					
+					Packet04Connection pack = new Packet04Connection("false");
+					pack.writeData(this);
+				}else{
+					Packet04Connection pack = new Packet04Connection("true");
+					pack.writeData(this);
+					
+				}
 
 				socket.receive(packet);
 
