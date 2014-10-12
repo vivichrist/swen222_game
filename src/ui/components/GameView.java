@@ -191,10 +191,10 @@ public class GameView extends GLJPanel
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
-    	if ( scene.loadNewLevel() )
+    	if ( scene.loadNewLevel() 
+    			&& state.teleport( state.getPlayer()
+    					, NetworkController.teleport( state.getPlayer() ) ) )
     	{
-    		System.out.println("Teleporrting to Floor:" + 1 );
-    		state.teleport( state.getPlayer(), NetworkController.teleport( state.getPlayer() ) );
 			scene = new GameScene( state );
 			gl.glLoadIdentity();
 			scene.addSurrounds();

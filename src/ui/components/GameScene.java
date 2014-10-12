@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map.Entry;
 
+import controllers.NetworkController;
+
 import world.components.CellType;
 import world.components.Direction;
 import world.components.Furniture;
@@ -24,8 +26,7 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
-	private boolean 		loadNewLevel = false
-							, teleport = false; 
+	private int				teleport = -1; 
 	private GameViewData gdata = GameViewData.instance();
 	private CellType[][]	map;
 	public final int		xlimit, ylimit;
@@ -80,16 +81,15 @@ public class GameScene
 			CellType ct =  gdata.getGameElements().get( p ).getType();
 			if ( ct == CellType.RINGS )
 			{
-				if ( !teleport )
+				if ( teleport > 0 )
 				{
-					loadNewLevel = true;
-					teleport = true;
-					return false;
+					teleport = NetworkController.teleport( game.getPlayer() );
+					System.out.println("Teleporrting to Floor:" + teleport );
 				} else
 				{
-					teleport = false;
-					return teleport;
+					teleport = -1;
 				}
+				return false;
 			}
 			if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
@@ -236,10 +236,8 @@ public class GameScene
 	}
 
 
-	public boolean loadNewLevel()
+	public int loadNewLevel()
 	{
-		boolean result = loadNewLevel;
-		loadNewLevel = false;
-		return result;
+		return teleport;
 	}
 }
