@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import world.ColourPalette;
 import world.components.GameToken;
 import world.components.TokenType;
 
@@ -13,9 +14,6 @@ import world.components.TokenType;
  *
  */
 public class TokenList implements java.io.Serializable{
-
-	// Defines the Color palette to use for every TokenList
-	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.RED};
 	
 	private final List<GameToken> tokens;
 
@@ -31,7 +29,7 @@ public class TokenList implements java.io.Serializable{
 	public TokenList(TokenType type){
 		tokens = new ArrayList<GameToken>();
 		for(int i = 0; i < tokenCount; i++){
-			tokens.add(new GameToken(type, COLORS[i]));
+			tokens.add(new GameToken(type, ColourPalette.get(i)));
 		}
 	}
 	

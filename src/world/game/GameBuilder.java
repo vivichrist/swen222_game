@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import world.ColourPalette;
 import world.components.CellType;
 import world.components.Container;
 import world.components.Direction;
@@ -30,7 +31,6 @@ public class GameBuilder {
 	private Map[] floors;
 	private GameState state;
 	private ArrayList<Key> keys = new ArrayList<Key>();
-	private static final Color COLORS[] = {Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.RED};
 	
 	/**
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
@@ -64,6 +64,7 @@ public class GameBuilder {
 	 */
 	public GameBuilder(String playerName){
 		players = new ArrayList<Player>();
+		new ColourPalette();
 		players.add(new Player(playerName, TokenType.values()[0]));
 		
 		//Temporary testing code - adding a second player to the game
@@ -118,7 +119,9 @@ public class GameBuilder {
 	}
 	
 	/**
-	 * Builds the collection of "floors" for this game.  Each floor has an identical layout but contains different objects
+	 * Builds the collection of "floors" for this game.  Each floor has an identical layout but contains different objects.
+	 * Keys are also created for Lockable Doors in the floor and distributed throughout the game world.  There is a restriction here:
+	 * the number of keys in any given world must be no bigger than the number of Colors in ColourPalette
 	 * @param floorCount the number of floors to use in this game.
 	 */
 	public void buildFloors(int floorCount){
@@ -129,7 +132,7 @@ public class GameBuilder {
 			// Check the doors in the new Map, if they're lockable create keys for each door
 			for(Door door: floors[i].getDoors().values()){
 				if(door.isLockable()){
-					Color color = COLORS[keys.size()];
+					Color color = ColourPalette.get(keys.size());
 					Key key = new Key(color.toString() + " key", color);
 					door.setKey(key);
 					keys.add(key);
