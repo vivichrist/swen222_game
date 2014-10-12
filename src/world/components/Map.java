@@ -82,11 +82,7 @@ public class Map implements java.io.Serializable{
 						doors.put(new Point(x, y), new Door(false));
 					}
 					if(current == CellType.KEYDOOR){
-						Door door = new Door(true);
-						Key key = new Key("Key One", Color.WHITE);
-						door.setKey(key);
-						doors.put(new Point(x, y), door);
-						placeKey(key);
+						doors.put(new Point(x, y), new Door(true));
 					}
 					map[x][y] = current;
 				}
@@ -250,6 +246,10 @@ public class Map implements java.io.Serializable{
 	public Door getDoor(Point p){
 		if(!doors.containsKey(p)) return null;
 		return doors.get(p);
+	}
+	
+	public HashMap<Point, Door> getDoors(){
+		return doors;
 	}
 
 	/**

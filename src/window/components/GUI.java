@@ -463,14 +463,14 @@ public class GUI  {
 		ArrayList<Player>players = new ArrayList<Player>();
 		Map[]floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"));
-		player1 = new MultyPlayer(name, new Point(18,20),null,null, -1);
+		player1 = new MultyPlayer(name, null,null, -1);
 		state = new GameState(players,floors);
 		controller = new Controller(state, this);
 		NetworkController networkController = new NetworkController(controller);
 		Client client = new Client("localhost",networkController );
 		client.start();
 		networkController.setClient(client);
-		Packet00Login loginPacket = new Packet00Login(player1.getName(), player1.getPosition().x,player1.getPosition().y);
+		Packet00Login loginPacket = new Packet00Login(player1.getName());
 		//		if (Server.) {
 		//			server.addConnection(player1, loginPacket);
 		//			int size1 = server.getConnectedPlayers().size();

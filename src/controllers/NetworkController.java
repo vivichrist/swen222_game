@@ -42,16 +42,26 @@ public class NetworkController {
 	}
 
 	public void setGameView(GLJPanel gameView) {
-		// TODO Auto-generated method stub
 		this.gameView = (GameView)gameView;
 
 
 	}
 
 	public void setClient(Client client) {
-		// TODO Auto-generated method stub
 		this.client = client;
+	}
+	public GameState deserialize(byte[] realData) {
+		return controller.deserialize(realData);
+	}
+
+	public void setState(GameState st) {
+		controller.setState(st);
 
 	}
+
+	public Player getPlayer(String username) {
+		return controller.getPlayer(username);
+	}
+
 
 }

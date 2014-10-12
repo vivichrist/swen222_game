@@ -35,6 +35,7 @@ public class Server extends Thread {
 	private List<MultyPlayer> connectedPlayers;
 	private GameState state;
 	private boolean serverOpen = false;
+	private String name;
 	public static int serverStart = 0;
 
 
@@ -93,9 +94,10 @@ public class Server extends Thread {
 		case LOGIN:
 			//System.out.println("Server>parsePacket>LOGIN....");
 			packet = new Packet00Login(data);
+			name = ((Packet00Login) packet).getUsername();
 			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
 					+ ((Packet00Login) packet).getUsername() + " has connected...");
-			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(),((Packet00Login) packet).getPoint(), null, address, port);
+			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==1 && serverOpen==false){
@@ -109,11 +111,13 @@ public class Server extends Thread {
 			this.removeConnection((Packet01Disconnect) packet);
 			break;
 		case DATA:
-			packet = new Packet02Data(state,data);
+			packet = new Packet02Data(data);
+			name = ((Packet02Data) packet).getUsername();
 			this.handleData(((Packet02Data) packet));
 			break;
 		case MOVE:
-			packet = new Packet03Move(state, data);
+			packet = new Packet03Move(data);
+			name = ((Packet03Move) packet).getUsername();
 			handleMove((Packet03Move) packet);
 			break;
 
@@ -134,24 +138,21 @@ private void sentStateToAllClients() {
 	System.out.println("new gamebuilder builded");
 	GameBuilder builder =new GameBuilder(names);
 	state = builder.getGameState();
-	System.out.println(state.getPlayers().get(0).getFloor().getXLimit()+"  "+state.getPlayers().get(0).getFloor().getXLimit()+ "  "+state.getPlayers().get(0).getFloor());
-	System.out.println(state.getPlayers().get(0).getPosition().x+"  "+state.getPlayer().getPosition().y);
-
-	state.getPlayers().get(0).getFloor().movePlayer(state.getPlayer(), state.getPlayer().getPosition(), new Point(30,40));
-	System.out.println(state.getPlayers().get(0).getPosition().x+"  "+state.getPlayer().getPosition().y);
+	
 	byte[] temp =state.serialize();
 
 	byte[]newData =new byte[temp.length+2];
 	byte[] b = "02".getBytes();
 	newData[0] = b[0];
 	newData[1] = b[1];
-	System.out.println();
+	
 	for(int i = 0; i<temp.length;i++){
 		newData[i+2] = temp[i];
 	}
-	Packet02Data p = new Packet02Data(state, newData);
+	Packet02Data p = new Packet02Data(newData);
 	p.writeData(this);
 	serverOpen  = true;
+	
 
 }
 
@@ -166,14 +167,18 @@ private void sendData(byte[]data, InetAddress ipAddress, int port){
 }
 public void sendDataToAllClients(byte[] data) {
 	for (MultyPlayer p : connectedPlayers) {
+		System.out.println(name+"  "+ p.getName());
+		if(!name.equals(p.getName())){
 		sendData(data, p.ipAddress, p.port);
 		System.out.println(p.ipAddress+ "  "+p.port);
+		}
 	}
+
 }
 public MultyPlayer getPlayer(String username) {
 	for (MultyPlayer player : this.connectedPlayers) {
 		if (player.getName().equals(username)) {
-			System.out.println(player.getPosition().x+"   "+player.getPosition().y);
+			//System.out.println(player.getPosition().x+"   "+player.getPosition().y);
 			return player;
 		}
 	}
@@ -192,7 +197,7 @@ public int getPlayerIndex(String username) {
 private void handleData(Packet02Data packet) {
 
 	byte[] temp = packet.getData();
-	Packet02Data pk = new Packet02Data(state,temp);
+	Packet02Data pk = new Packet02Data(temp);
 	packet.writeData(this);
 
 }
@@ -201,9 +206,6 @@ private void handleMove(Packet03Move packet) {
 	if(getPlayer(packet.getUsername())!=null){
 		int index = getPlayerIndex(packet.getUsername());
 		MultyPlayer player = this.connectedPlayers.get(index);
-		if(player==null)System.out.println("player null");
-		System.out.println(player.getName()+ "  "+ packet.getPoint());
-		System.out.println(state.getPlayers().get(0).getName());
 		state.movePlayer((Player)player, packet.getPoint());
 		packet.writeData(this);
 	}
@@ -227,7 +229,7 @@ public void addConnection(MultyPlayer player, Packet00Login packet) {
 			sendData(packet.getData(), p.ipAddress, p.port);
 
 			// relay to the new player that the currently connect player exists
-			packet = new Packet00Login(p.getName(), p.getPosition().x,p.getPosition().y);
+			packet = new Packet00Login(p.getName());
 			sendData(packet.getData(), player.ipAddress, player.port);
 		}
 	}

@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import world.ColourPalette;
 import world.components.CellType;
 import world.components.Container;
 import world.components.Direction;
@@ -29,6 +30,7 @@ public class GameBuilder {
 	private List<Player> players;
 	private Map[] floors;
 	private GameState state;
+	private ArrayList<Key> keys = new ArrayList<Key>();
 	
 	/**
 	 * Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
@@ -62,6 +64,7 @@ public class GameBuilder {
 	 */
 	public GameBuilder(String playerName){
 		players = new ArrayList<Player>();
+		new ColourPalette();
 		players.add(new Player(playerName, TokenType.values()[0]));
 		
 		//Temporary testing code - adding a second player to the game
@@ -72,6 +75,7 @@ public class GameBuilder {
 		placePlayers();
 		placeFurniture();
 		placePlayerTokens();
+		placeKeys();
 		placeTorches();
 		state = new GameState(players, floors);
 	}
@@ -115,13 +119,26 @@ public class GameBuilder {
 	}
 	
 	/**
-	 * Builds the collection of "floors" for this game.  Each floor has an identical layout but contains different objects
+	 * Builds the collection of "floors" for this game.  Each floor has an identical layout but contains different objects.
+	 * Keys are also created for Lockable Doors in the floor and distributed throughout the game world.  There is a restriction here:
+	 * the number of keys in any given world must be no bigger than the number of Colors in ColourPalette
 	 * @param floorCount the number of floors to use in this game.
 	 */
 	public void buildFloors(int floorCount){
 		floors = new Map[floorCount];
 		for(int i = 0; i < floorCount; i++){
 			floors[i] = new Map(new File("map1.txt"));
+			
+			// Check the doors in the new Map, if they're lockable create keys for each door
+			for(Door door: floors[i].getDoors().values()){
+				if(door.isLockable()){
+					Color color = ColourPalette.get(keys.size());
+					Key key = new Key(color.toString() + " key", color);
+					door.setKey(key);
+					keys.add(key);
+					System.out.println(key.toString());
+				}
+			}
 		}
 	}
 	
@@ -167,6 +184,25 @@ public class GameBuilder {
 			Map randomFloor = floors[random.nextInt(floors.length)];
 			// Place the Torch in a random cell
 			randomFloor.addMoveable(randomFloor.randomEmptyCell(), new Torch());
+		}
+	}
+	
+	/**
+	 * Distributes keys throughout the game world, choosing floors and Points at random
+	 */
+	private void placeKeys(){
+		for(Key key: keys){
+			Random random = new Random();
+			// Select a random floor
+			Map randomFloor = floors[random.nextInt(floors.length)];
+			
+			// Select a random point to add the key at - must ensure it's not added in a locked room
+			Point point = randomFloor.randomEmptyCell();
+			while(point.x > 5 && point.x < 14 && point.y > 5 && point.y < 14){
+				randomFloor.setEmpty(point);
+				point = randomFloor.randomEmptyCell();
+			}
+			randomFloor.addMoveable(point, key);
 		}
 	}
 	

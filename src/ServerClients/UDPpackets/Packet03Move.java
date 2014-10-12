@@ -18,7 +18,6 @@ public class Packet03Move extends UDPPakcet {
 	private String username;
 	private Point point;
 	private byte[] data;
-	private GameState state;
 	private int x;
 	private int y;
 
@@ -33,13 +32,12 @@ public class Packet03Move extends UDPPakcet {
 			System.out.println(getData()[i]);
 		}
 	}
-	public Packet03Move(GameState state,byte[] data) {
+	public Packet03Move(byte[] data) {
 		super(03);
 		this.data = data;
-		this.state = state;
 		String[]dataArray = readData(data).split(",");
 		for(int i = 0; i<dataArray.length; i++){
-		System.out.println(dataArray[i]);
+			System.out.println(dataArray[i]);
 		}
 		this.username = dataArray[1];
 
@@ -88,7 +86,6 @@ public class Packet03Move extends UDPPakcet {
 	public String getUsername() {
 		return username;
 	}
-
 	public Point getPoint() {
 		return point;
 	}
