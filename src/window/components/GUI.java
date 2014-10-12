@@ -438,6 +438,7 @@ public class GUI implements WindowListener {
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
 		controller = new Controller(state, this);
+		new NetworkController(controller);
 		gameView = new GameView( glcapabilities, frame, state );
 
 
