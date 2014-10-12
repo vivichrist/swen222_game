@@ -39,6 +39,9 @@ public class Packet04Connection extends UDPPakcet {
     public byte[] getData() {
         return ("04" + this.connections).getBytes();
     }
+	public boolean isConnection() {
+		return connection;
+	}
 
    
 }

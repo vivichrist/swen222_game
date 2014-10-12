@@ -58,5 +58,10 @@ public class Controller {
 		return state.getPlayer(username);
 	}
 
+	public void setConnection(boolean connection) {
+		// TODO Auto-generated method stub
+		state.setConnection(connection);
+	}
+
 
 }
