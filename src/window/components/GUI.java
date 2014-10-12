@@ -80,6 +80,7 @@ public class GUI implements WindowListener {
 	JPanel startPanel;
 	JPanel choosePlayerPanel;
 	JPanel chooseNamePanel;
+	JPanel chooseServerPanel;
 	JPanel serverStartsPanel;
 
 	private Player player;
@@ -93,6 +94,8 @@ public class GUI implements WindowListener {
 	JButton jbExit;
 	JButton jbSingle;
 	JButton jbMultiple;
+	JButton jbStartServer;
+	JButton jbJoinServer;
 	JButton jbStart;
 
 	JTextField textFieldName;
@@ -269,6 +272,30 @@ public class GUI implements WindowListener {
 	}
 
 	/**
+	 * set up the frame that let player choose either starts a
+	 * server of the game or join the server of the game
+	 */
+	public void chooseServerPanel(){
+		int chooseServerPanelLeft = 300;
+		int chooseServerPanelTop = 200;
+		int chooseServerPanelWidth = 200;
+		int chooseServerPanelHeight = 120;
+
+		chooseServerPanel = new JPanel();
+		chooseServerPanel.setBounds(chooseServerPanelLeft, chooseServerPanelTop, chooseServerPanelWidth, chooseServerPanelHeight);
+
+		jbStartServer = new JButton("Start Server");
+		jbJoinServer = new JButton("Join Server");
+
+		setButtonStyle(jbStartServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
+		setButtonStyle(jbJoinServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
+
+		chooseServerPanel.setOpaque(false);
+		layeredPane.add(chooseServerPanel, JLayeredPane.MODAL_LAYER);
+		addListennerChooseServer();
+	}
+	
+	/**
 	 * set up the frame that shows server has been started
 	 */
 	public void serverStartsPanel(){
@@ -377,25 +404,53 @@ public class GUI implements WindowListener {
 					Map[]floors =new Map[1];
 					floors[0] = new Map(new File("map1.txt"));
 					state = new GameState(players,floors);
+					
+					chooseServerPanel();
+					
+					
 
-					if(!state.ServerConnection()){
-						//if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
-						serverStartsPanel();
-
-						server = new Server();
-						server.start();
-					}
-					else {
-						chooseNamePanel("multiple");
-						//chooseNamePanel2();
-					}
-					//test t = new test();
-					//t.testServerPlayerListName();
+//					if(!state.ServerConnection()){
+//						//if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
+//						serverStartsPanel();
+//
+//						server = new Server();
+//						server.start();
+//					}
+//					else {
+//						chooseNamePanel("multiple");
+//						//chooseNamePanel2();
+//					}
+//					//test t = new test();
+//					//t.testServerPlayerListName();
 					frame.repaint();
 				}}});
 
 	}
 
+	/**
+	 * add action listener onto buttons on choosePlayerPanel
+	 */
+	public void addListennerChooseServer(){
+		jbStartServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbStartServer){
+					layeredPane.remove(chooseServerPanel);
+					serverStartsPanel();
+					frame.repaint();
+				}}});
+
+		jbJoinServer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JButton button = (JButton) ae.getSource();
+				if(button == jbJoinServer){
+					layeredPane.remove(chooseServerPanel);
+					chooseNamePanel("multiple");
+					frame.repaint();
+				}}});
+
+	}
+	
 	/**
 	 * add action listener onto buttons on chooseNamePanel
 	 */
