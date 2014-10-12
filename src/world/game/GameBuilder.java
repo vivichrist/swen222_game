@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 import world.ColourPalette;
 import world.components.CellType;
 import world.components.Container;
@@ -57,7 +55,7 @@ public class GameBuilder {
 		}
 	}
 	
-	//TODO: remove this constructor once integration testing is complete
+	//TODO: remove this constructor once integration testing is complete - or at least modify for single player
 	/**
 	 * Temporary Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
 	 * @param players the list of Players in this game.
@@ -106,20 +104,6 @@ public class GameBuilder {
 	      }
 	}
 	
-	//TODO: replace this method with a Player entry point in the UI - GameBuilder constructor will need to be updated to take a list of Players
-	/**
-	 * Prompts users to input names and builds Players with the corresponding names
-	 */
-	private void getPlayers(){
-		//TODO: Specify/check a player count when starting a game, currently hardcoded to 3.  Should be minimum 2? or 1?  Maximum should equal the number of TokenTypes
-		int playerCount = 3;
-		for(int i = 0; i < playerCount; i++){
-			String playerName = JOptionPane.showInputDialog("Enter Player Name:", null);
-			System.out.println("TokenType: " + i + " - " + TokenType.values()[i]);
-			players.add(new Player(playerName, TokenType.values()[i]));
-		}
-	}
-	
 	/**
 	 * Builds the collection of "floors" for this game.  Each floor has an identical layout but contains different objects.
 	 * Keys are also created for Lockable Doors in the floor and distributed throughout the game world.  There is a restriction here:
@@ -138,13 +122,11 @@ public class GameBuilder {
 					Key key = new Key(ColourPalette.getName(keys.size()) + " key", color);
 					door.setKey(key);
 					keys.add(key);
-					System.out.println(key.toString());
 				}
 			}
 		}
 	}
 	
-	//TODO: do we randomise start positions of players? or hard code?  this method currently places each player in the same position on different floors
 	/**
 	 * Places each Player in the game world, setting their start position to a hard coded floor and x/y coordinate.
 	 * Players are placed at the same Point on different floors.  
@@ -208,7 +190,9 @@ public class GameBuilder {
 		}
 	}
 	
-	//TODO: write a real method for placing furniture in the game - this is for testing purposes only
+	/**
+	 * Places Furniture in the game world by reading furniture placement files for each floor
+	 */
 	private void placeFurniture(){
 		
 		for(int i = 0; i < floors.length; i++){
@@ -245,11 +229,6 @@ public class GameBuilder {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public int getLevelsBuilding() {
-		// TODO Auto-generated method stub
-		return floors.length;
 	}
 	
 	/**

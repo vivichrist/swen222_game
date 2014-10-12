@@ -29,7 +29,6 @@ public class GameState implements java.io.Serializable{
 	private  List<Player> players;
 	private  Map[] floors;
 	private GameBuilder game;
-	//private Controller controller;
 	private boolean isMoved;
 	private boolean serverConnection= false;
 
@@ -45,14 +44,6 @@ public class GameState implements java.io.Serializable{
 	}
 
 	/**
-	 * Sets the PlayerController for this game
-	 * @param controller the PlayerController to use for this game
-	 */
-//	public void setController(Controller controller){
-//		this.controller = controller;
-//	}
-//
-	/**
 	 * Moves a Player in the game
 	 * @param player the Player to move
 	 * @param point the Point to move the Player to
@@ -65,33 +56,19 @@ public class GameState implements java.io.Serializable{
 		return isMoved;
 	}
 
-	/*
-	public boolean addPlayer(String name){
-		players.add(new Player(name, TokenType[players.size()]));
-	}
-	*/
-
-	//TODO: replace with better accessor methods to get Maps for given players - may not need to be in this class at all
-	/**
-	 * Returns the Map representing the first floor in this game world
-	 * @return
-	 */
-	public Map getMap(){
-		return floors[0];
-	}
-
 	//TODO: assign Players to clients as appropriate - this method is purely for integration testing of a single player game state
 	/**
-	 * Returns the first Player in this Players collection
+	 * Returns the Player at a given index in this Players collection
 	 * @param index the index of the Player
 	 * @return the Player at the given index
 	 */
 	public Player getPlayer(int index){
 		return players.get(index);
 	}
-	public Player getPlayer(){
-		return players.get(0);
-	}
+	
+//	public Player getPlayer(){
+//		return players.get(0);
+//	}
 
 
 	/**
@@ -160,6 +137,10 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
+	
+	public Player getPlayer(){
+		return players.get(0);
+	}
 
 	/**
 	 * Checks whether a Player can open a Door at a given Point
@@ -199,12 +180,7 @@ public class GameState implements java.io.Serializable{
 		try{
 			bais = new ByteArrayInputStream(bytes);
 			in = new ObjectInputStream(bais);
-
 			GameState s = (GameState) in.readObject();
-
-
-
-
 			return s;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,7 +197,8 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
-	/**\
+	
+	/**
 	 * Return the current GameState
 	 * @return the current GameState
 	 */

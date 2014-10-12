@@ -17,5 +17,9 @@ public interface StationaryObject extends GameObject {
 	 */
 	public Direction getFacing(); 
 	
+	/**
+	 * Returns an ArrayList of the Points occupied by this StationaryObject
+	 * @return an ArrayList of the Points occupied by this StationaryObject
+	 */
 	public ArrayList<Point> getPoints();
 }
