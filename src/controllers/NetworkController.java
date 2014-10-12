@@ -69,5 +69,14 @@ public class NetworkController {
 		
 	}
 
+	/**
+	 * Teleports a given Player to a user selected floor
+	 * @param p the Player to Teleport
+	 * @return the user selected floor
+	 */
+	public static int teleport(Player p){
+		int newFloor = gui.getFloor(state.floorCount());
+		if(controller.teleport(p, newFloor)) return newFloor;
+	}
 
 }

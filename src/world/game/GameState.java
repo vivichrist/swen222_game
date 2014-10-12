@@ -228,6 +228,14 @@ public class GameState implements java.io.Serializable{
 	public GameState getState(){
 		return this;
 	}
+	
+	/**
+	 * Returns the number of floors in this game world
+	 * @return the number of floors in this game world
+	 */ 
+	public int floorCount(){
+		return floors.length;
+	}
 
 	//TODO: return a clone here instead of the actual list
 	/**
