@@ -44,7 +44,6 @@ public class GameBuilder {
 			
 			//getPlayers();
 			buildFloors(players.size());
-			//TODO: generate collections of StationaryObjects and MoveableObjects somehow???
 			//TODO: place StationaryObjects
 			placePlayers();
 			//TODO: place MoveableObjects

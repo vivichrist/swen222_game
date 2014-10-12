@@ -12,7 +12,6 @@ import world.game.GameState;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
-import controllers.Controller;
 import controllers.NetworkController;
 
 import java.awt.Color;

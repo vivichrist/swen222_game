@@ -190,7 +190,6 @@ public class GameState implements java.io.Serializable{
 				bais.close();
 				in.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

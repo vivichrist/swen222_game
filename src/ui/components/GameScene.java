@@ -4,11 +4,8 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map.Entry;
 
-import controllers.NetworkController;
-
 import world.components.CellType;
 import world.components.Direction;
-import world.components.Door;
 import world.components.Furniture;
 import world.components.GameObject;
 import world.components.GameToken;

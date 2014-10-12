@@ -66,7 +66,6 @@ public class Controller {
 	}
 
 	public void setConnection(boolean connection) {
-		// TODO Auto-generated method stub
 		state.setConnection(connection);
 	}
 

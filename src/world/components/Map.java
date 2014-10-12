@@ -351,12 +351,4 @@ public class Map implements java.io.Serializable{
 		return false;
 	}
 	
-	/**
-	 * Helper method to randomly place a Key in the game world. 
-	 * @param key the Key to place
-	 */
-	private void placeKey(Key key){
-		moveableObjects.put(randomEmptyCell(), key);
-	}
-	
 }
