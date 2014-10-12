@@ -17,6 +17,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -309,10 +311,6 @@ public class GUI implements WindowListener {
 
 
 
-
-
-
-
 	/**
 	 * set up the frame that shows server has been started
 	 */
@@ -347,7 +345,7 @@ public class GUI implements WindowListener {
 		serverName.setForeground(new Color(30, 30, 30));
 		serverName.setText(strServerName);
 		serverName.setEditable(false);
-		
+
 		JLabel port = new JLabel("Port Number : ");
 		portNum = new JTextField(15);
 
@@ -538,10 +536,6 @@ public class GUI implements WindowListener {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					ArrayList<Player>players = new ArrayList<Player>();
-					Map[]floors =new Map[1];
-					floors[0] = new Map(new File("map1.txt"));
-					state = new GameState(players,floors);
 					chooseServerPanel();
 					frame.repaint();
 				}}});
@@ -583,9 +577,17 @@ public class GUI implements WindowListener {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){
 					layeredPane.remove(chooseServerPanel);
-					strServerName = getSeverName();
+					try {
+						strServerName = getSeverName();
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					strPortNum = "4768";
+					Server server = new Server();
+					server.start();
 					serverStartsPanel();
+
 					frame.repaint();
 				}}});
 
@@ -699,18 +701,17 @@ public class GUI implements WindowListener {
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 
 		//Code added by Kalo
-		//		GameState state = null;
-		//		MultyPlayer player1 = null;
-		//		ArrayList<Player>players = new ArrayList<Player>();
-		//		Map[]floors =new Map[1];
-		//		floors[0] = new Map(new File("map1.txt"));
-		//		player1 = new MultyPlayer(name, null,null, -1);
-		//		state = new GameState(players,floors);
+		GameState state = null;
+		MultyPlayer player1 = null;
+		ArrayList<Player>players = new ArrayList<Player>();
+		Map[]floors =new Map[1];
+		floors[0] = new Map(new File("map1.txt"));
+		state = new GameState(players,floors);
 		player1 = new MultyPlayer(name, null,null, -1);
 
 		controller = new Controller(state, this);
 		NetworkController networkController = new NetworkController(controller);
-		client = new Client("localhost",networkController );
+		client = new Client(strServerName,networkController );
 		client.start();
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(player1.getName());
@@ -829,9 +830,9 @@ public class GUI implements WindowListener {
 		// TODO Auto-generated method stub
 
 	}
-	private String getSeverName() {
+	private String getSeverName() throws UnknownHostException {
 		// TODO for Jacky
-		return "Here's the server name";
+		return InetAddress.getLocalHost().toString();
 	}
 
 }
