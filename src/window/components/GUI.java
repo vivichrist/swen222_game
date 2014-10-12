@@ -1,15 +1,27 @@
 package window.components;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
@@ -18,12 +30,17 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import ServerClients.Client;
 import ServerClients.Server;
+import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import controllers.Controller;
@@ -37,6 +54,7 @@ import world.game.Player;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.awt.event.*;
 
 
@@ -293,10 +311,6 @@ public class GUI implements WindowListener {
 
 
 
-
-
-
-
 	/**
 	 * set up the frame that shows server has been started
 	 */
@@ -331,7 +345,7 @@ public class GUI implements WindowListener {
 		serverName.setForeground(new Color(30, 30, 30));
 		serverName.setText(strServerName);
 		serverName.setEditable(false);
-		
+
 		JLabel port = new JLabel("Port Number : ");
 		portNum = new JTextField(15);
 
@@ -522,10 +536,6 @@ public class GUI implements WindowListener {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){
 					layeredPane.remove(choosePlayerPanel);
-					ArrayList<Player>players = new ArrayList<Player>();
-					Map[]floors =new Map[1];
-					floors[0] = new Map(new File("map1.txt"));
-					state = new GameState(players,floors);
 					chooseServerPanel();
 					frame.repaint();
 				}}});
@@ -567,9 +577,17 @@ public class GUI implements WindowListener {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){
 					layeredPane.remove(chooseServerPanel);
-					strServerName = getSeverName();
+					try {
+						strServerName = getSeverName();
+					} catch (UnknownHostException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					strPortNum = "4768";
+					Server server = new Server();
+					server.start();
 					serverStartsPanel();
+
 					frame.repaint();
 				}}});
 
@@ -683,18 +701,17 @@ public class GUI implements WindowListener {
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 
 		//Code added by Kalo
-		//		GameState state = null;
-		//		MultyPlayer player1 = null;
-		//		ArrayList<Player>players = new ArrayList<Player>();
-		//		Map[]floors =new Map[1];
-		//		floors[0] = new Map(new File("map1.txt"));
-		//		player1 = new MultyPlayer(name, null,null, -1);
-		//		state = new GameState(players,floors);
+		GameState state = null;
+		MultyPlayer player1 = null;
+		ArrayList<Player>players = new ArrayList<Player>();
+		Map[]floors =new Map[1];
+		floors[0] = new Map(new File("map1.txt"));
+		state = new GameState(players,floors);
 		player1 = new MultyPlayer(name, null,null, -1);
 
 		controller = new Controller(state, this);
 		NetworkController networkController = new NetworkController(controller);
-		client = new Client("localhost",networkController );
+		client = new Client(strServerName,networkController );
 		client.start();
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(player1.getName());
@@ -813,9 +830,9 @@ public class GUI implements WindowListener {
 		// TODO Auto-generated method stub
 
 	}
-	private String getSeverName() {
+	private String getSeverName() throws UnknownHostException {
 		// TODO for Jacky
-		return "Here's the server name";
+		return InetAddress.getLocalHost().toString();
 	}
 
 }
