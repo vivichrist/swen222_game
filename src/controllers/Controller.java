@@ -50,7 +50,8 @@ public class Controller {
 		return state.deserialize(realData);
 	}
 	
-	public boolean teleport(Player p, int floor){
+	public boolean teleport(Player p){
+		int floor = gui.getFloor(state.floorCount());
 		return state.teleport(p, floor);
 	}
 
@@ -66,6 +67,7 @@ public class Controller {
 		// TODO Auto-generated method stub
 		state.setConnection(connection);
 	}
+
 
 
 }
