@@ -42,7 +42,7 @@ public class CollectItemsCanvas extends Canvas {
 	public CollectItemsCanvas(Player player) {
 		this.player = player;
 		type = player.getType();
-		this.setBackground(Color.LIGHT_GRAY);
+		this.setBackground(Color.BLACK);
 		this.setBounds(0, 600, 750, 70);
 		initialiseItems();
 		getCollectItems();
