@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -850,15 +851,39 @@ public class GUI implements WindowListener {
 		// TODO for Jacky
 		return InetAddress.getLocalHost().toString();
 	}
-//	public void setState(GameState st) {
-//		// TODO Auto-generated method stub
-//		this.players = (ArrayList<Player>) st.getPlayers();
-//		this.floors = st.floors;
-//		if(players.size() == 2){
-//			System.out.println("GUI setState player1 x: "+players.get(0).getPosition().x);
-//			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
-//			}
-//	}
+	private static boolean available(int port) {
+	    System.out.println("--------------Testing port " + port);
+	    DatagramSocket s = null;
+	    try {
+	        s = new DatagramSocket(port);
+
+	        // If the code makes it this far without an exception it means
+	        // something is using the port and has responded.
+	        System.out.println("--------------Port " + port + " is not available");
+	        return false;
+	    } catch (IOException e) {
+	        System.out.println("--------------Port " + port + " is available");
+
+	        try {
+	        	if(s!=null)
+				s.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	        return true;
+	    } //finally {
+	       // if( s != null){
+	          //  try {
+	               // s.close();
+	          //  } catch (IOException e) {
+	          //      throw new RuntimeException("You should handle this error." , e);
+	          //  }
+	       // }
+	   // }
+	}
+
+
 
 	public void addWindowListener(WindowListeners windowListeners) {
 		// TODO Auto-generated method stub
