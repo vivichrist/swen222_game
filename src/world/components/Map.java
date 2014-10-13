@@ -166,6 +166,7 @@ public class Map implements java.io.Serializable{
 		else{
 			containers.put(p,  c);
 			emptyCells.remove(emptyCells.indexOf(p));
+			System.out.println("Added Container at: " + p.toString());
 			return true;
 		}
 	}
@@ -320,7 +321,9 @@ public class Map implements java.io.Serializable{
 	 * @return the Container at the given Point, returns null if does not contain
 	 */
 	public Container containerAtPoint(Point p){
-		if(containers.containsKey(p)) return containers.get(p);
+		if(containers.containsKey(p)){
+			return containers.get(p);
+		}
 		return null;
 	}
 

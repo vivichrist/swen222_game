@@ -66,4 +66,11 @@ public class Container implements GameObject{
 	public Direction getFacing(){
 		return facing;
 	}
+	
+	/**
+	 * Returns a String representation of this Container
+	 */
+	public String toString(){
+		return type.toString();
+	}
 }
