@@ -708,15 +708,15 @@ public class GUI implements WindowListener {
 
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
-	 * he wants to go to when the player enters teleporter
+	 * he wants to go to when the player enters teleport
 	 * @param number	how many floors the game current holds
 	 * @return	the floor player chose 
 	 */
 	public int getFloor(int number){
 		int currentFloor = player.getFloor().floorNumber();
 		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
-
 		String[] floors = new String[number - 1];
+		
 		int count = 0;
 		for(int i = 0; i < number; i++){
 			if (i != currentFloor){
@@ -724,7 +724,7 @@ public class GUI implements WindowListener {
 				count++;
 			}
 		}
-		
+
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
 				"Which floor you want to go to?",
@@ -732,13 +732,13 @@ public class GUI implements WindowListener {
 				JOptionPane.PLAIN_MESSAGE,
 				null, floors,
 				"Ground Floor");
-		
+
 		if (s == null){
 			return -1;
 		}
 		
-		for (int j = 0; j < floors.length; j++){
-			if (s.equalsIgnoreCase(floors[j])){
+		for (int j = 0; j < floorsName.length; j++){
+			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
 				return j;
 			}
 		}
