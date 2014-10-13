@@ -34,7 +34,10 @@ public class UsefulItemsCanvas extends Canvas {
 		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 750, 65);
-		usefulItems = new ArrayList<ImageIcon>();
+		
+		// Kalo bugfix:
+		//usefulItems = new ArrayList<ImageIcon>();
+		
 		getUsefulItems();
 	}
 
@@ -43,6 +46,9 @@ public class UsefulItemsCanvas extends Canvas {
 	 * corresponding images to the images list.
 	 */
 	private void getUsefulItems() {
+		//Kalo bugfix:
+		usefulItems = new ArrayList<ImageIcon>();
+		
 		for (int i = usefulItems.size(); i < player.getInventory().size(); i++){	// go through the player's inventory, add images to collectItems
 			String resource = "Resource/inventory/" + player.getInventory().get(i).toString().toLowerCase() + ".png";
 			usefulItems.add(new ImageIcon(resource));
