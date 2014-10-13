@@ -46,6 +46,7 @@ import ServerClients.UDPpackets.Packet01Disconnect;
 import controllers.Controller;
 import controllers.NetworkController;
 import ui.components.GameView;
+import world.ColourPalette;
 import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
@@ -119,6 +120,7 @@ public class GUI implements WindowListener {
 	private Client client;
 
 	public GUI(){
+		new ColourPalette();
 		setUp();
 	}
 
@@ -126,6 +128,7 @@ public class GUI implements WindowListener {
 	 * The following method sets up a frame to start the game entry
 	 */
 	public void setUp(){
+		
 		frame = new JFrame("Adventure Game");
 		frame.setBackground(Color.BLACK);
 		frame.setSize(width, height);
@@ -566,6 +569,7 @@ public class GUI implements WindowListener {
 					strPortNum = "4768";
 					Server server = new Server();
 					server.start();
+					
 					serverStartsPanel();
 
 					frame.repaint();
@@ -658,7 +662,7 @@ public class GUI implements WindowListener {
 	 */
 	protected void startGame2() {
 		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
-
+		
 		GLProfile.initSingleton();
 		GLProfile glprofile = GLProfile.getDefault();
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
@@ -673,26 +677,27 @@ public class GUI implements WindowListener {
 		player1 = new MultyPlayer(name, null,null, -1);
 
 		controller = new Controller(state, this);
+		//TODO: need check user input ip address is equals server ip address
 		NetworkController networkController = new NetworkController(controller);
-		client = new Client(strServerName,networkController );
+		client = new Client(strServerNameC,networkController );
 		client.start();
 		networkController.setClient(client);
-		Packet00Login loginPacket = new Packet00Login(player1.getName());
+		Packet00Login loginPacket = new Packet00Login(nameC);
 
 		loginPacket.writeData(client);
-		System.out.println("state.getPlayers().size(): "+ state.getPlayers().size());
-
-
+		
+		
+		
 		//client.
 		if(state.getPlayers().size()>1){
-			System.out.println("state.getPlayers().size()>=2"+ state.getPlayers().size());
+			System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
 			gameView = new GameView( glcapabilities, frame, state );
 			gameView.setEnabled( true );
 			gameView.setVisible( true );
 			gameView.setFocusable( true );
 			layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 			if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-			southPanel = new SouthPanel(player1);
+			southPanel = new SouthPanel(controller.getPlayer(nameC));
 			layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 
 

@@ -247,7 +247,7 @@ public void addConnection(MultyPlayer player, Packet00Login packet) {
 		System.out.println("palyer: "+ player.getName());
 
 		for(MultyPlayer p: connectedPlayers){
-			System.out.println(p.getName()+" "+p.getFloor()+"  "+p.getPosition().x+"  "+p.getPosition().y+ " "+p.ipAddress+ "  "+ p.port);
+			System.out.println(p.getName()+" "+" "+p.ipAddress+ "  "+ p.port);
 		}
 	}
 }
