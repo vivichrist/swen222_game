@@ -581,7 +581,7 @@ public class GUI implements WindowListener {
 				}}});
 
 	}
-	
+
 	/**
 	 * The following method adds action listener onto buttons on joinServerPanel
 	 */
@@ -708,9 +708,7 @@ public class GUI implements WindowListener {
 	 * @return	the floor player chose 
 	 */
 	public int getFloor(int number){
-
-		String[] floorsName = new String[]{"Ground", "First", "Second",
-				"Third", "Fourth"};
+		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 
 		String[] floors = new String[number];
 		for(int i = 0; i < number; i++){
@@ -725,8 +723,12 @@ public class GUI implements WindowListener {
 				null, floors,
 				"Ground Floor");
 
+		//		if (s == null){
+		//			System.exit(0);
+		//		}
+
 		if (s == null){
-			System.exit(0);
+			return -1;
 		}
 
 		for (int j = 0; j < floors.length; j++){
