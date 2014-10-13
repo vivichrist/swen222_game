@@ -730,9 +730,11 @@ public class GUI {
 			return -1;
 		}
 		
-		// change the string s back to corresponding integer
+		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
+				southPanel.getCollectItemsCanvas().setFloorNum(j);
+				southPanel.getCollectItemsCanvas().repaint();
 				return j;
 			}
 		}
