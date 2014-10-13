@@ -653,6 +653,7 @@ public class GUI {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
+		waitClientsPanel();
 		players = new ArrayList<Player>();
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
