@@ -10,6 +10,7 @@ import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
+import window.components.GUI;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -39,8 +40,8 @@ public class test {
 			MultyPlayer player2 = new MultyPlayer("Sisi",
 					null,null, -1);
 
-
-			client = new Client("localhost",controller);
+			GUI gui = null;
+			client = new Client(gui,"Jacky","localhost",controller);
 			client.start();
 
 			Packet00Login loginPacket = new Packet00Login(player1.getName());

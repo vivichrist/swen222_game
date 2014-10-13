@@ -825,14 +825,14 @@ public class GUI implements WindowListener {
 		// TODO for Jacky
 		return InetAddress.getLocalHost().toString();
 	}
-	public void setState(GameState st) {
-		// TODO Auto-generated method stub
-		this.players = (ArrayList<Player>) st.getPlayers();
-		this.floors = st.floors;
-		if(players.size() == 2){
-			System.out.println("GUI setState player1 x: "+players.get(0).getPosition().x);
-			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
-			}
-	}
+//	public void setState(GameState st) {
+//		// TODO Auto-generated method stub
+//		this.players = (ArrayList<Player>) st.getPlayers();
+//		this.floors = st.floors;
+//		if(players.size() == 2){
+//			System.out.println("GUI setState player1 x: "+players.get(0).getPosition().x);
+//			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
+//			}
+//	}
 }
 

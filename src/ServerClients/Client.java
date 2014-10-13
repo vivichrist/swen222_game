@@ -33,9 +33,13 @@ public class Client extends Thread {
 	private NetworkController networkController;
 	public boolean connection;
 	public static boolean isConnectToServer = false;
+	public String name;
+	public GUI gui;
 	//public Client(GameState state, String ipAddress){
-	public Client(String ipAddress,NetworkController networkController){
+	public Client(GUI gui,String name,String ipAddress,NetworkController networkController){
+		this.gui = gui;
 		this.networkController = networkController;
+		this.name = name;
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -99,7 +103,7 @@ public class Client extends Thread {
 		case CONNECTION:
 			packet = new Packet04Connection(data);
 			handleConnection((Packet04Connection) packet);
-		
+			break;
 		}
 	}
 
@@ -125,6 +129,9 @@ public class Client extends Thread {
 
 		GameState st = networkController.deserialize(packet.getRealData());
 		networkController.setState(st);
+		if(st.getPlayers().size()>1){
+			gui.startClientWindows(name,st);
+		}
 
 	}
 
