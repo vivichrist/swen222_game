@@ -128,7 +128,7 @@ public class GUI implements WindowListener {
 	 * The following method sets up a frame to start the game entry
 	 */
 	public void setUp(){
-		
+
 		frame = new JFrame("Adventure Game");
 		frame.setBackground(Color.BLACK);
 		frame.setSize(width, height);
@@ -569,7 +569,7 @@ public class GUI implements WindowListener {
 					strPortNum = "4768";
 					Server server = new Server();
 					server.start();
-					
+
 					serverStartsPanel();
 
 					frame.repaint();
@@ -585,7 +585,7 @@ public class GUI implements WindowListener {
 				}}});
 
 	}
-	
+
 	/**
 	 * The following method adds action listener onto buttons on joinServerPanel
 	 */
@@ -662,7 +662,7 @@ public class GUI implements WindowListener {
 	 */
 	protected void startGame2() {
 		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
-		
+
 		GLProfile.initSingleton();
 		GLProfile glprofile = GLProfile.getDefault();
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
@@ -685,9 +685,9 @@ public class GUI implements WindowListener {
 		Packet00Login loginPacket = new Packet00Login(nameC);
 
 		loginPacket.writeData(client);
-		
-		
-		
+
+
+
 		//client.
 		if(state.getPlayers().size()>1){
 			System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
@@ -713,15 +713,13 @@ public class GUI implements WindowListener {
 	 * @return	the floor player chose 
 	 */
 	public int getFloor(int number){
-
-		String[] floorsName = new String[]{"Ground", "First", "Second",
-				"Third", "Fourth"};
+		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 
 		String[] floors = new String[number];
 		for(int i = 0; i < number; i++){
 			floors[i] = floorsName[i] + " Floor";
 		}
-
+		
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
 				"Which floor you want to go to?",
@@ -729,11 +727,11 @@ public class GUI implements WindowListener {
 				JOptionPane.PLAIN_MESSAGE,
 				null, floors,
 				"Ground Floor");
-
+		
 		if (s == null){
-			System.exit(0);
+			return -1;
 		}
-
+		
 		for (int j = 0; j < floors.length; j++){
 			if (s.equalsIgnoreCase(floors[j])){
 				return j;
