@@ -24,7 +24,7 @@ public class StaticRender implements GraphicalObject
 	 * @param GameView.cellsize
 	 */
 	public StaticRender( CellType type, CellType[] nesw
-			, Point position )
+			, Point position, Color meshColour )
 	{	// walls connect with other walls or doors
 		north = nesw[0] == CellType.WALL || nesw[0] == CellType.DOOR || nesw[0] == CellType.KEYDOOR;
 		east = nesw[1] == CellType.WALL || nesw[1] == CellType.DOOR || nesw[1] == CellType.KEYDOOR;
@@ -33,7 +33,7 @@ public class StaticRender implements GraphicalObject
 		this.type = type;
 		this.position = new Point2D.Float( position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
-		this.meshColor = Color.GRAY.getRGBColorComponents( null );
+		this.meshColor = meshColour.getRGBColorComponents( null );
 		this.surfaceColor = Color.BLACK.getRGBColorComponents( null );
 	}
 
@@ -191,7 +191,7 @@ public class StaticRender implements GraphicalObject
 		}
 		gl.glEnd();
 	}
-	
+
 	public void drawTeleport( GL2 gl )
 	{
 		MeshStore m = MeshStore.instance();
@@ -201,7 +201,7 @@ public class StaticRender implements GraphicalObject
 		gl.glScalef( GameView.cellsize, GameView.cellsize, GameView.cellsize );
 		renderMesh( gl, vertices, indices );
 	}
-	
+
 	private void renderMesh( GL2 gl, List<float[]> vertices, List<int[]> indices )
 	{
 		for ( int[] i: indices )
@@ -387,13 +387,13 @@ public class StaticRender implements GraphicalObject
 	{
 		return false;
 	}
-	
+
 	@Override
 	public CellType getType()
 	{
 		return type;
 	}
-	
+
 	@Override
 	public Point getLocation()
 	{

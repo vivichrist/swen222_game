@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map.Entry;
 
+import world.ColourPalette;
 import world.components.CellType;
 import world.components.Direction;
 import world.components.Furniture;
@@ -24,7 +25,7 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
-	private boolean			teleport = false; 
+	private boolean			teleport = false;
 	private GameViewData gdata = GameViewData.instance();
 	private CellType[][]	map;
 	public final int		xlimit, ylimit;
@@ -93,7 +94,7 @@ public class GameScene
 			{
 				game.pickupObjectAtPoint( game.getPlayer(), p );
 				gdata.remove( p );
-				
+
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
 		return map[x][y] == CellType.WALL;
@@ -122,28 +123,28 @@ public class GameScene
 				switch( map[i][j] )
 				{
 				case WALL :
-					gdata.addStaticOnly( new StaticRender( CellType.WALL, nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( CellType.WALL, nesw, p, ColourPalette.TAN ) );
 					break;
 				case DOOR :
 					dyn = DymanicRender.instanceDoor( p, dir );
-					StaticRender doorWay = new StaticRender( CellType.DOOR, nesw, p );
+					StaticRender doorWay = new StaticRender( CellType.DOOR, nesw, p, ColourPalette.BAIGE );
 					gdata.addStaticOnly( doorWay );
 					gdata.addGrapicalObject( dyn );
 					break;
 				case KEYDOOR :
 					dyn = DymanicRender.instanceKeyDoor( p, dir
 							, fmap.getDoor( p ).getKey().getColor() );
-					StaticRender keydoorWay = new StaticRender( CellType.KEYDOOR, nesw, p );
+					StaticRender keydoorWay = new StaticRender( CellType.KEYDOOR, nesw, p, ColourPalette.BAIGE );
 					gdata.addStaticOnly( keydoorWay );
 					gdata.addGrapicalObject( dyn );
 					break;
 				case TELEPORT :
 					dyn = DymanicRender.instanceTelePort( p );
-					gdata.addStaticOnly( new StaticRender( CellType.TELEPORT, nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( CellType.TELEPORT, nesw, p, ColourPalette.GREYPURPLE ) );
 					gdata.addGrapicalObject( dyn );
 					break;
 				default:
-					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p ) );
+					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p, ColourPalette.LIGHTOCEANBLUE ) );
 					break;
 				}
 				go = fmap.objectAtPoint(p);
@@ -180,7 +181,7 @@ public class GameScene
 					}
 					else if ( go instanceof Torch )
 					{
-						dyn = DymanicRender.instanceTorch( p, Color.decode( "#880088" ) );
+						dyn = DymanicRender.instanceTorch( p, ColourPalette.GREYPURPLE2 );
 						gdata.addGrapicalObject( dyn );
 					}
 				} else
@@ -190,7 +191,7 @@ public class GameScene
 					{
 						dyn = DymanicRender.instanceFurnature(
 								furn.getType(), Behave.ORIENTATION, p
-								, furn.getFacing(), Color.GRAY );
+								, furn.getFacing(), ColourPalette.MAROON );
 						gdata.addDynamicOnly( dyn );
 						List<Point> lp = furn.getPoints();
 						System.out.println( "Number of points in Furature:" + lp.size() );
@@ -212,8 +213,8 @@ public class GameScene
 				gdata.addGrapicalObject( dyn );
 			}
 		}
-		
-		// testing 
+
+		// testing
 		for ( Entry<Point, GraphicalObject> kv: gdata.getGameElements().entrySet() )
 			System.out.println( "GameElement at:" + kv.getKey().toString()
 					+ " -> " + kv.getValue().getType().toString() );
@@ -233,7 +234,7 @@ public class GameScene
 	{
 		return teleport;
 	}
-	
+
 	public void resetTeleport()
 	{
 		teleport = false;
