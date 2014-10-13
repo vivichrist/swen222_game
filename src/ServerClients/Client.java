@@ -22,9 +22,10 @@ import window.components.GUI;
 import world.game.GameState;
 import world.game.MultyPlayer;
 /**
- * @author  Zhaojiang Chang
+ * A Client to handle connection between server and player
+ * @author zhaojiang chang - ID:300282984
  *
- * */
+ */
 public class Client extends Thread {
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
@@ -49,6 +50,11 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * client check the receive packet
+	 * if received packet is valid then pass to parsePacket method 
+	 * 
+	 */
 	public void run(){
 
 		while(true){
@@ -64,12 +70,14 @@ public class Client extends Thread {
 			}
 			System.out.println("receive data from Server >");
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-
-
 		}
-
-
 	}
+	
+	/**
+	 * the parsePacket will check the first two byte 
+	 * byte will identify the type of data received
+	 * 
+	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
 		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0, 2));
@@ -107,7 +115,9 @@ public class Client extends Thread {
 		}
 	}
 
-	
+	/**
+	 * this method will send message from client to server
+	 * */
 	public void sendData(byte[]data){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
 		try {
@@ -117,7 +127,9 @@ public class Client extends Thread {
 		}
 
 	}
-
+	/**
+	 * this method is handle login package 
+	 * */
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");

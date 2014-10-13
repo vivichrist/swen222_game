@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ import java.awt.event.*;
  * @author Zhiheng Sun,  ID: 300256273
  * 
  */
-public class GUI implements WindowListener {
+public class GUI {
 
 	private static int width = 800;
 	private static int height = 770;
@@ -565,7 +566,7 @@ public class GUI implements WindowListener {
 				if(button == jbStartServer){
 					layeredPane.remove(chooseServerPanel);
 					try {
-						strServerName = getSeverName();
+						strServerName = getSeverName().getHostAddress();
 					} catch (UnknownHostException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -772,9 +773,9 @@ public class GUI implements WindowListener {
 	
 
 
-	private String getSeverName() throws UnknownHostException {
+	private InetAddress getSeverName() throws UnknownHostException {
 		// TODO for Jacky
-		return InetAddress.getLocalHost().toString();
+		return InetAddress.getLocalHost();
 	}
 
 
