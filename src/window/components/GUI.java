@@ -91,7 +91,8 @@ public class GUI implements WindowListener {
 	private JPanel chooseServerPanel;
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
-
+	private JPanel waitClientsPanel;
+	
 	private SouthPanel southPanel;
 
 	private Player player;
@@ -438,6 +439,29 @@ public class GUI implements WindowListener {
 		joinServerPanel.setOpaque(false);
 		layeredPane.add(joinServerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerJoinServer();
+	}
+	
+	/**
+	 * The following method sets up the frame that tells the player server
+	 * is waiting for other players to join in to start the game
+	 */
+	public void waitClientsPanel(){
+		int waitClientsPanelLeft = 130;
+		int waitClientsPanelTop = 200;
+		int waitClientsPanelWidth = 600;
+		int waitClientsPanelHeight = 200;
+
+		waitClientsPanel = new JPanel();
+		waitClientsPanel.setBounds(waitClientsPanelLeft, waitClientsPanelTop, waitClientsPanelWidth, waitClientsPanelHeight);
+
+		JLabel waitClients = new JLabel("Wait For Other Players...");
+		waitClients.setPreferredSize(new Dimension(600, 200));
+		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
+		waitClients.setForeground(new Color(100, 200, 100).brighter());
+
+		waitClientsPanel.add(waitClients);
+		waitClientsPanel.setOpaque(false);
+		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
 	}
 
 	/**
