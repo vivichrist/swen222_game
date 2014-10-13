@@ -78,7 +78,7 @@ public class GameState implements java.io.Serializable{
 	 * @return true if successfully teleported
 	 */
 	public boolean teleport(Player p, int floorNumber){
-		if(floorNumber >= floors.length) return false;
+		if(floorNumber >= floors.length || floorNumber < 0) return false;
 		else{			
 			p.getFloor().removePlayer(p);
 			floors[floorNumber].placePlayer(p.getPosition(), p);
