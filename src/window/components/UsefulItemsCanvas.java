@@ -33,7 +33,7 @@ public class UsefulItemsCanvas extends Canvas {
 	public UsefulItemsCanvas(Player player) {
 		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
-		this.setBounds(0, 600, 750, 70);
+		this.setBounds(0, 600, 750, 65);
 		usefulItems = new ArrayList<ImageIcon>();
 		getUsefulItems();
 	}

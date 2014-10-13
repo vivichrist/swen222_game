@@ -29,7 +29,7 @@ import world.game.MultyPlayer;
 public class Client extends Thread {
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
-	private static final int SERVER_PORT = 4768;
+	private  int port;
 	private GameState state;
 	private NetworkController networkController;
 	public boolean connection;
@@ -37,7 +37,8 @@ public class Client extends Thread {
 	public String name;
 	public GUI gui;
 	//public Client(GameState state, String ipAddress){
-	public Client(GUI gui,String name,String ipAddress,NetworkController networkController){
+	public Client(GUI gui,String name,String ipAddress,NetworkController networkController,int port){
+		this.port = port;
 		this.gui = gui;
 		this.networkController = networkController;
 		this.name = name;
@@ -119,7 +120,7 @@ public class Client extends Thread {
 	 * this method will send message from client to server
 	 * */
 	public void sendData(byte[]data){
-		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, SERVER_PORT);
+		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
