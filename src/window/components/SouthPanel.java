@@ -29,19 +29,22 @@ import world.game.Player;
  * 
  */
 public class SouthPanel {
-	/**
-	 *
-	 */
-	private static int left = 0;
-	private static int top = 600;
-	private static int width = 800;
-	private static int height = 170;
 
+	/**
+	 * The following stores the panel shown on the bottom of the frame which has player's 
+	 * collected tokens images and player's inventory images
+	 */
 	private JPanel panel;
 
-	private CollectItemsCanvas collectItemsCanvas;
-	private UsefulItemsCanvas usefulItemsCanvas;
+	private CollectItemsCanvas collectItemsCanvas;	// the canvas with player's collected tokens will be drawn on panel
+	private UsefulItemsCanvas usefulItemsCanvas;	// the canvas with player's inventory will be drawn on panel
 	
+	// the position of the panel on the frame
+		private static int left = 0;
+		private static int top = 600;
+		private static int width = 800;
+		private static int height = 170;
+		
 	/**
 	 * Sets up the panel for the given player
 	 * @param player	the player whose tokens and inventories will be drawn on canvases
