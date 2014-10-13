@@ -3,6 +3,7 @@ package world.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import world.components.Key;
 import world.components.MoveableObject;
 
 /**
@@ -30,6 +31,23 @@ public class Inventory implements java.io.Serializable{
 	public boolean add(MoveableObject item){
 		if(inventory.size() == maxSize) return false;
 		else return inventory.add(item);
+	}
+	
+	/**
+	 * Adds a Key to this Inventory.  If the Inventory already contains a Key it will be removed from the Inventory and returned.
+	 * @param key the Key to add
+	 * @return the Key that has been removed, returns null if no Key was already held
+	 */
+	public Key addKey(Key key){
+		Key removeKey = null;
+		for(int i = 0; i < inventory.size(); i++){
+			if(inventory.get(i) instanceof Key){
+				removeKey = (Key) inventory.remove(i);
+				break;
+			}
+		}
+		inventory.add(key);
+		return removeKey;
 	}
 	
 	/**

@@ -15,6 +15,7 @@ import window.components.GUI;
 import world.components.Door;
 import world.components.GameObject;
 import world.components.GameToken;
+import world.components.Key;
 import world.components.Map;
 import world.components.MoveableObject;
 
@@ -124,6 +125,17 @@ public class GameState implements java.io.Serializable{
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Performs a Key pickup for a given Player and Point.
+	 * @param player the Player to pick up the Key
+	 * @param p the Point to pick the Key up from
+	 * @return the Key from the Player's Inventory to be dropped, returns null if no Key was previously held
+	 */
+	public Key pickupKey(Player player, Point p){	
+		Key key = player.getFloor().removeKey(p);
+		return player.getInventory().addKey(key);
 	}
 
 	/**
