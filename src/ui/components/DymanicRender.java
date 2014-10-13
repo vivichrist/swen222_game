@@ -81,6 +81,12 @@ public class DymanicRender implements GraphicalObject
 		return new DymanicRender( type, act, position, dir, meshColor );
 	}
 	
+	public static DymanicRender instanceContainer( CellType type,
+			Behave orientation, Point p, Direction facing, Color maroon )
+	{
+		return new DymanicRender( type, orientation, p, facing, maroon );
+	}
+
 	public static DymanicRender instancePlayer( Behave act, Point position
 			, Direction dir, Color meshColor )
 	{
