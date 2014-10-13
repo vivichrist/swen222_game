@@ -9,49 +9,68 @@ import java.awt.geom.Point2D;
 
 import controllers.NetworkController;
 
+/**
+ * @author Vivian Stewart
+ * Mouse and Keyboard control of the player in this network conneected client 
+ */
 public class GameListener implements KeyListener, MouseListener
 {
-	public float			direction = 0f; // accumulated direction
-	private boolean			keyUpdate = false;
+	private float			direction = 0f; // buffered direction
+	private boolean			keyUpdate = false; // toggle actual and sustained updates 
 	private boolean			wKey = false, aKey = false, sKey = false
-						  , dKey = false, ctrl = false;
-	private final float		speed = 0.5f; // forward reverse constant
-	private final float		turnSpeed = 0.05f; //
-	private Point2D.Float	position; // accumulated position
-	private Point			click = null;
-	private GameScene	map;
+						  , dKey = false, ctrlKey = false;
+	private final float		speed = 0.5f; // forward/reverse constant
+	private final float		turnSpeed = 0.05f;
+	private Point2D.Float	position; // buffered position
+	private Point			click = null; // buffered mouse selection
+	private GameScene		scene; 
 
-	public void setKeyUpdate( boolean keyUpdate )
+/**
+ * 
+ * @param position - start position of the player
+ * @param direction - start direction of the player
+ * @param map - map of surrounding objects
+ */
+	public GameListener( Point2D.Float position, float direction, GameScene map )
 	{
-		this.keyUpdate = keyUpdate;
+		this.position = new Point2D.Float( position.x, position.y );
+		this.direction = direction;
+		this.scene = map;
 	}
 
+/**
+ * Buffered continuous y value.
+ * @return new player position y
+ */
+	public float getNewX()
+	{
+		return position.x;
+	}
+/**
+ * Buffered continuous x value
+ * @return new player position x
+ */
+	public float getNewY()
+	{
+		return position.y;
+	}
+/**
+ * Update happened so reset keyyUpdate until it is needed again.
+ */
+	public void resetKeyUpdate()
+	{
+		this.keyUpdate = false;
+	}
+
+/**
+ * Has a keyboard event updated the position/direction of the player.
+ * @return if keys were pressed and changed the state.
+ */
 	public boolean isKeyUpdate()
 	{
 		return keyUpdate;
 	}
 
-	// REQUIRES: x < map.xlimit and y < map.ylimit
-	public void setLocation( float x, float y )
-	{
-		this.position.setLocation( x, y );
-	}
-
-	public GameListener( Point2D.Float position, float direction, GameScene map )
-	{
-		this.position = new Point2D.Float( position.x, position.y );
-		this.direction = direction;
-		this.map = map;
-	}
-
-	public float getNewX()
-	{
-		return position.x;
-	}
-	public float getNewY()
-	{
-		return position.y;
-	}
 	public float getDirection()
 	{
 		return direction;
@@ -62,7 +81,7 @@ public class GameListener implements KeyListener, MouseListener
 
 	@Override
 	public void keyReleased( KeyEvent key )
-	{
+	{ // turn off persistent key presses
 		if ( key.getKeyCode() == KeyEvent.VK_W )
 		{
 			wKey = false;
@@ -79,12 +98,12 @@ public class GameListener implements KeyListener, MouseListener
 		{
 			dKey = false;
 		}
-		if ( !key.isControlDown() ) ctrl = false;
+		if ( !key.isControlDown() ) ctrlKey = false;
 	}
 
 	@Override
 	public void keyPressed( KeyEvent key )
-	{
+	{ // Switch on persistant key presses. Key is either pressed or sustained
 		if ( key.getKeyCode() == KeyEvent.VK_W || (!keyUpdate && wKey) )
 		{
 			movePos( (float) (direction - Math.PI) );
@@ -97,10 +116,10 @@ public class GameListener implements KeyListener, MouseListener
 		}
 		if ( key.getKeyCode() == KeyEvent.VK_A || (!keyUpdate && aKey) )
 		{
-			if ( key.isControlDown() )
+			if ( key.isControlDown() ) // strafing
 			{
 				movePos( (float) ( direction + 0.5f * Math.PI ) );
-				ctrl = true;
+				ctrlKey = true;
 			}
 			else
 				addToDirection( -turnSpeed );
@@ -108,10 +127,10 @@ public class GameListener implements KeyListener, MouseListener
 		}
 		if ( key.getKeyCode() == KeyEvent.VK_D || (!keyUpdate && dKey) )
 		{
-			if ( key.isControlDown() )
+			if ( key.isControlDown() ) // strafing
 			{
 				movePos( (float) ( direction - 0.5f * Math.PI ) );
-				ctrl = true;
+				ctrlKey = true;
 			}
 			else
 				addToDirection( turnSpeed );
@@ -128,29 +147,34 @@ public class GameListener implements KeyListener, MouseListener
 	public void update()
 	{
 		if ( !keyUpdate )
-    	{
+    	{	// forward/backward
 	    	if ( wKey )
 			{
-	    		movePos( (float) (direction - Math.PI) );
+	    		movePos( -direction );
 			}
 			if ( sKey )
 			{
 				movePos( direction );
 			}
-
+			// turn left/right or strafe left/right
 			if ( aKey )
 			{
-				if ( ctrl ) movePos( (float) (direction + 0.5f * Math.PI) );
+				if ( ctrlKey ) movePos( direction + 0.5f * (float)Math.PI );
 				else addToDirection( -turnSpeed );
 			}
 			if ( dKey )
 			{
-				if ( ctrl ) movePos( (float) (direction - 0.5f * Math.PI) );
+				if ( ctrlKey ) movePos( direction - 0.5f * (float)Math.PI );
 				else addToDirection( turnSpeed );
 			}
 		}
 	}
 
+/**
+ * Gets the point clicked to be unprojected by OpenGL to find selected
+ * Graphical object
+ * @return current clicked point
+ */
 	public Point getClick()
 	{
 		Point p = click;
@@ -158,15 +182,19 @@ public class GameListener implements KeyListener, MouseListener
 		return p;
 	}
 
+/**
+ * Used when loading a new level through a portal collision.
+ * @param map
+ */
 	public void reset( GameScene map )
 	{
-		this.map = map;
+		this.scene = map;
 		keyUpdate = false;
 		wKey = false;
 		aKey = false;
 		sKey = false;
 		dKey = false;
-		ctrl = false;
+		ctrlKey = false;
 	}
 
 /**
@@ -179,15 +207,16 @@ public class GameListener implements KeyListener, MouseListener
 				+ Math.sin( dir ) * speed );
 		float newy = (float) ( position.y
 				+ Math.cos( dir ) * speed );
+		// movement crosses square boundaries
 		boolean xcross = (int)(newx / GameView.cellsize)
 				!= (int)(position.x / GameView.cellsize);
 		boolean ycross = (int)(newy / GameView.cellsize)
 				!= (int)(position.y / GameView.cellsize);
 		// collision detection
 		if ( ( xcross || ycross )
-				&& map.isCollidable( newx, newy ) )
+				&& scene.isCollidable( newx, newy ) )
 		{
-			// NetworkController.movePlayer( NetworkController., new Point( cellx, celly ) );
+			// TODO: NetworkController.movePlayer( NetworkController.?, new Point( cellx, celly ) );
 			if ( xcross && !ycross )
 				position.setLocation( position.x, newy );
 			else if ( ycross && !xcross )
@@ -196,6 +225,10 @@ public class GameListener implements KeyListener, MouseListener
 		else position.setLocation( newx, newy );
 	}
 
+/**
+ * Adjust direction and constrain within 0 - 2 * PI (radians)
+ * @param f
+ */
 	private void addToDirection( float f )
 	{
 		direction += f;
@@ -205,7 +238,7 @@ public class GameListener implements KeyListener, MouseListener
 	@Override
 	public void mouseClicked( MouseEvent e )
 	{
-		System.out.println("Mouse Clicked");
+		// System.out.println("Mouse Clicked");
 		click = e.getPoint();
 	}
 

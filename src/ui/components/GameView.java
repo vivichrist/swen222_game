@@ -195,7 +195,7 @@ public class GameView extends GLJPanel
     	// do update
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
-    	keyInput.setKeyUpdate( false );
+    	keyInput.resetKeyUpdate( );
     	if ( scene.isTeleport() )
     	{
     		if ( NetworkController.teleport( state.getPlayer() ) )
