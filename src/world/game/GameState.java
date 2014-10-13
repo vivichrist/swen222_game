@@ -139,7 +139,8 @@ public class GameState implements java.io.Serializable{
 		if(toReturn != null){
 			player.getFloor().addMoveable(p, toReturn);
 		}
-		return toReturn; //player.getInventory().addKey(key);
+		Controller.refreshInventoryPanel();
+		return toReturn;
 	}
 
 	/**
