@@ -671,7 +671,6 @@ public class GUI {
 		networkController.setGameView(gameView);
 		
 	}
-
 	
 	/**
 	 * this method will call by client once client class received broadcast package from server
@@ -697,6 +696,7 @@ public class GUI {
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
 	}
+	
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport
