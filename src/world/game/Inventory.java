@@ -43,7 +43,6 @@ public class Inventory implements java.io.Serializable{
 		for(int i = 0; i < inventory.size(); i++){
 			if(inventory.get(i) instanceof Key){
 				removeKey = (Key) inventory.remove(i);
-				break;
 			}
 		}
 		inventory.add(key);
@@ -83,5 +82,13 @@ public class Inventory implements java.io.Serializable{
 	 */
 	public boolean contains(MoveableObject object){
 		return inventory.contains(object);
+	}
+	
+	public String toString(){
+		String contents = "";
+		for(MoveableObject m: inventory){
+			contents += m.toString() + " ";
+		}
+		return contents;
 	}
 }
