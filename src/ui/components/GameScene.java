@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import world.ColourPalette;
 import world.components.CellType;
+import world.components.Container;
 import world.components.Direction;
 import world.components.Furniture;
 import world.components.GameObject;
@@ -111,6 +112,7 @@ public class GameScene
 		DymanicRender dyn;
 		GameObject go;
 		Furniture furn;
+		Container cont;
 		Map fmap = game.getPlayer().getFloor();
 		for ( int j = 0; j < ylimit; ++j )
 		{
@@ -148,6 +150,8 @@ public class GameScene
 					break;
 				}
 				go = fmap.objectAtPoint(p);
+				furn = fmap.furnitureAtPoint(p);
+				cont = fmap.containerAtPoint( p );
 				if ( go == null ) continue;
 				if ( go instanceof GameToken )
 				{ // Tokens to be collected
@@ -184,21 +188,24 @@ public class GameScene
 						dyn = DymanicRender.instanceTorch( p, ColourPalette.GREYPURPLE2 );
 						gdata.addGrapicalObject( dyn );
 					}
-				} else
+				} else if ( furn != null )
 				{ // load furnature int the scene
-					furn = fmap.furnitureAtPoint(p);
-					if ( furn != null )
-					{
-						dyn = DymanicRender.instanceFurnature(
-								furn.getType(), Behave.ORIENTATION, p
-								, furn.getFacing(), ColourPalette.MAROON );
-						gdata.addDynamicOnly( dyn );
-						List<Point> lp = furn.getPoints();
-						System.out.println( "Number of points in Furature:" + lp.size() );
-						for ( Point pt: lp )
-							System.out.println( "Point:" + pt.toString() );
-						gdata.addAllGameElements( furn.getPoints(), dyn );
-					}
+					dyn = DymanicRender.instanceFurnature(
+							furn.getType(), Behave.ORIENTATION, p
+							, furn.getFacing(), ColourPalette.MAROON );
+					gdata.addDynamicOnly( dyn );
+					List<Point> lp = furn.getPoints();
+					System.out.println( "Number of points in Furature:" + lp.size() );
+					for ( Point pt: lp )
+						System.out.println( "Point:" + pt.toString() );
+					gdata.addAllGameElements( furn.getPoints(), dyn );
+				} else if ( cont != null )
+				{
+					dyn = DymanicRender.instanceContainer(
+							cont.getType(), Behave.ORIENTATION, p
+							, cont.getFacing(), ColourPalette.MAROON );
+					gdata.addDynamicOnly( dyn );
+					gdata.addGrapicalObject( dyn );
 				}
 			}
 		}
