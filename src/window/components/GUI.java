@@ -672,7 +672,7 @@ public class GUI implements WindowListener {
 		MultyPlayer player1 = null;
 		ArrayList<Player>players = new ArrayList<Player>();
 		Map[]floors =new Map[1];
-		floors[0] = new Map(new File("map1.txt"));
+		floors[0] = new Map(new File("map1.txt"), 0);
 		state = new GameState(players,floors);
 		player1 = new MultyPlayer(name, null,null, -1);
 
@@ -713,11 +713,16 @@ public class GUI implements WindowListener {
 	 * @return	the floor player chose 
 	 */
 	public int getFloor(int number){
+		int currentFloor = player.getFloor().floorNumber();
 		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 
-		String[] floors = new String[number];
+		String[] floors = new String[number - 1];
+		int count = 0;
 		for(int i = 0; i < number; i++){
-			floors[i] = floorsName[i] + " Floor";
+			if (i != currentFloor){
+				floors[count] = floorsName[i] + " Floor";
+				count++;
+			}
 		}
 		
 		String s = (String)JOptionPane.showInputDialog(
