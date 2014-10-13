@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
+import javax.swing.border.EtchedBorder;
 
 import world.game.Player;
 
@@ -47,7 +49,17 @@ public class SouthPanel {
 	public SouthPanel(Player player) {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
-		panel.setBackground(Color.LIGHT_GRAY);
+		panel.setBackground(Color.BLACK);
+		
+		
+		panel.setBorder(
+				 BorderFactory.createTitledBorder(
+	            BorderFactory.createEtchedBorder(
+	                    EtchedBorder.RAISED, Color.LIGHT_GRAY
+	                    , Color.DARK_GRAY), ""));
+		
+		
+		
 		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
 		usefulItemsCanvas = new UsefulItemsCanvas(player);
@@ -79,6 +91,3 @@ public class SouthPanel {
 		return panel;
 	}
 }
-	
-	
-	
