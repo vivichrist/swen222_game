@@ -47,7 +47,7 @@ public class SouthPanel {
 	public SouthPanel(Player player) {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
-		panel.setBackground(Color.LIGHT_GRAY);
+		panel.setBackground(Color.BLACK);
 		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
 		usefulItemsCanvas = new UsefulItemsCanvas(player);
