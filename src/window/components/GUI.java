@@ -571,6 +571,12 @@ public class GUI implements WindowListener {
 						e.printStackTrace();
 					}
 					strPortNum = "4768";
+					int port = Integer.parseInt(strPortNum);
+					while(!available(port)){
+						port++;
+					}
+					strPortNum = ""+port;
+
 					Server server = new Server();
 					server.start();
 
@@ -665,13 +671,6 @@ public class GUI implements WindowListener {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
-		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
-
-	
-		
-
-		//Code added by Kalo
-		
 		players = new ArrayList<Player>();
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
@@ -679,35 +678,24 @@ public class GUI implements WindowListener {
 		player1 = new MultyPlayer(nameC, null,null, -1);
 
 		controller = new Controller(state, this);
-		//TODO: need check user input ip address is equals server ip address
 		NetworkController networkController = new NetworkController(controller);
 		client = new Client(this,nameC,strServerNameC,networkController );
 		client.start();
-		
+
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-		
-		//state = controller.getGameState();
-		System.out.println("check state players size==================================:  before");
-
-		for(int i = 0; i<state.getPlayers().size(); i++){
-			
-			System.out.println("check state players size==================================:  "+state.getPlayer(i));
-		}
-		System.out.println("check state players size==================================:  ");
-
-		
-		System.out.println();
-		//client.
-		if(state.getPlayers().size()>1){
-		
-
-
-		}
 		networkController.setGameView(gameView);
 
 	}
+
+	
+	/**
+	 * this method will call by client once client class received broadcast package from server
+	 * player will able to start the game
+	 * @param name - current player name
+	 * @param state -  after been called game state
+	 * */
 	public void startClientWindows(String name, GameState state){
 		GLProfile.initSingleton();
 		GLProfile glprofile = GLProfile.getDefault();
@@ -781,85 +769,50 @@ public class GUI implements WindowListener {
 		return name;
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
+	
 
-	}
 
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		Packet01Disconnect packet = new Packet01Disconnect(name);
-		packet.writeData(client);
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stubs
-
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
 	private String getSeverName() throws UnknownHostException {
 		// TODO for Jacky
 		return InetAddress.getLocalHost().toString();
 	}
+
+
+	/**
+	 * this method is check the socket port 
+	 * @param port the number is going to check
+	 * \*/
 	private static boolean available(int port) {
-	    System.out.println("--------------Testing port " + port);
-	    DatagramSocket s = null;
-	    try {
-	        s = new DatagramSocket(port);
+		System.out.println("--------------Testing port " + port);
+		DatagramSocket s = null;
+		try {
+			s = new DatagramSocket(port);
 
-	        // If the code makes it this far without an exception it means
-	        // something is using the port and has responded.
-	        System.out.println("--------------Port " + port + " is not available");
-	        return false;
-	    } catch (IOException e) {
-	        System.out.println("--------------Port " + port + " is available");
-
-	        try {
-	        	if(s!=null)
-				s.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	        return true;
-	    } //finally {
-	       // if( s != null){
-	          //  try {
-	               // s.close();
-	          //  } catch (IOException e) {
-	          //      throw new RuntimeException("You should handle this error." , e);
-	          //  }
-	       // }
-	   // }
+			// If the code makes it this far without an exception it means
+			// something is using the port and has responded.
+			System.out.println("--------------Port " + port + " is  available");
+			s.close();
+			return true;
+		} catch (IOException e) {
+			System.out.println("--------------Port " + port + " is not available");
+			return false;
+		} 
 	}
-
-
+	/**
+	 * this method is check player input server Ip address
+	 * if input is not ip adress will return false
+	 * */
+	public static final boolean isIPAdd(final String ip) {
+		boolean isIPv4;
+		try {
+			final InetAddress inet = InetAddress.getByName(ip);
+			isIPv4 = inet.getHostAddress().equals(ip)
+					&& inet instanceof Inet4Address;
+		} catch (final UnknownHostException e) {
+			isIPv4 = false;
+		}
+		return isIPv4;
+	}
 
 	public void addWindowListener(WindowListeners windowListeners) {
 		// TODO Auto-generated method stub
