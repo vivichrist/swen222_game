@@ -20,9 +20,11 @@ import javax.swing.ToolTipManager;
 import world.game.Player;
 
 /**
- *
- * @author sunzhih
- *
+ * The SouthPanel is responsible for setting up a JPanel to hold CollectItemsCanvas
+ * and UsefulItemsCanvas. This class is added to the bottom of the game window.
+ * 
+ * @author Zhiheng Sun,  ID: 300256273
+ * 
  */
 public class SouthPanel {
 	/**
@@ -38,6 +40,10 @@ public class SouthPanel {
 	private CollectItemsCanvas collectItemsCanvas;
 	private UsefulItemsCanvas usefulItemsCanvas;
 	
+	/**
+	 * Sets up the panel for the given player
+	 * @param player	the player whose tokens and inventories will be drawn on canvases
+	 */
 	public SouthPanel(Player player) {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
@@ -49,14 +55,26 @@ public class SouthPanel {
 		panel.repaint();
 	}
 	
+	/**
+	 * The following method returns the current CollectItemsCanvas on the panel
+	 * @return	the current CollectItemsCanvas
+	 */
 	public CollectItemsCanvas getCollectItemsCanvas() {
 		return collectItemsCanvas;
 	}
-
+	
+	/**
+	 * The following method returns the current UsefulItemsCanvas on the panel
+	 * @return	the current UsefulItemsCanvas
+	 */
 	public UsefulItemsCanvas getUsefulItemsCanvas() {
 		return usefulItemsCanvas;
 	}
 
+	/**
+	 * The following method returns the current panel 
+	 * @return	the current panel
+	 */
 	public JPanel getPanel() {
 		return panel;
 	}
