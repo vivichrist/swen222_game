@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+import world.ColourPalette;
 import world.components.CellType;
 import world.components.Direction;
 
@@ -24,7 +25,7 @@ public class DymanicRender implements GraphicalObject
 	public static DymanicRender instanceDoor( Point position, Direction dir )
 	{
 		return new DymanicRender( CellType.DOOR, Behave.OPEN_CLOSE, position
-				, dir, Color.decode( "#338833" ) );
+				, dir, ColourPalette.GREYPURPLE );
 	}
 	
 	public static DymanicRender instanceKeyDoor( Point position, Direction dir, Color col )

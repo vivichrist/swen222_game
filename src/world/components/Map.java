@@ -336,9 +336,20 @@ public class Map implements java.io.Serializable{
 	public boolean removeGameToken(Point p, GameToken token){
 		if(tokens.get(p).equals(token)){
 			tokens.remove(p);
+			setEmpty(p);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Removes and returns a Key from a given Point in the Map
+	 * @param p the Point of the Key
+	 * @return the Key at the given Point
+	 * @requires that this method is called with a Point corresponding to a Key object (checked by collision in Renderer)
+	 */
+	public Key removeKey(Point p){
+		return (Key) moveableObjects.remove(p);
 	}
 	
 	/**
@@ -349,6 +360,7 @@ public class Map implements java.io.Serializable{
 	public boolean removeMoveableObject(Point p){
 		if(moveableObjects.containsKey(p)){
 			moveableObjects.remove(p);
+			setEmpty(p);
 			return true;
 		}
 		return false;

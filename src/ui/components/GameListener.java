@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 
+import controllers.NetworkController;
+
 public class GameListener implements KeyListener, MouseListener
 {
 	public float			direction = 0f; // accumulated direction
@@ -35,7 +37,7 @@ public class GameListener implements KeyListener, MouseListener
 		this.position.setLocation( x, y );
 	}
 
-	public GameListener( Point2D.Float position, float direction, GameScene map)
+	public GameListener( Point2D.Float position, float direction, GameScene map )
 	{
 		this.position = new Point2D.Float( position.x, position.y );
 		this.direction = direction;
@@ -185,6 +187,7 @@ public class GameListener implements KeyListener, MouseListener
 		if ( ( xcross || ycross )
 				&& map.isCollidable( newx, newy ) )
 		{
+			// NetworkController.movePlayer( NetworkController., new Point( cellx, celly ) );
 			if ( xcross && !map.isCollidable( position.x, newy ) )
 				position.setLocation( position.x, newy );
 			else if ( ycross && !map.isCollidable( newx, position.y ))

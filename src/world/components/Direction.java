@@ -1,5 +1,5 @@
 package world.components;
 
 public enum Direction{
-	NORTH, EAST, SOUTH, WEST
+	NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST;
 }

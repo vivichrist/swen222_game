@@ -190,9 +190,10 @@ public class GameView extends GLJPanel
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.setKeyUpdate( false );
-    	if ( scene.isTeleport()
-    			&& NetworkController.teleport( state.getPlayer() ) )
+    	if ( scene.isTeleport() )
     	{
+    		if ( NetworkController.teleport( state.getPlayer() ) )
+    			scene.resetTeleport();
 			scene = new GameScene( state );
 			gl.glLoadIdentity();
 			scene.addSurrounds();
@@ -204,7 +205,6 @@ public class GameView extends GLJPanel
         	StaticDisplayList staticDisplayList = StaticDisplayList.instance();
         	staticDisplayList.createDisplaylist( gl );
         	keyInput.reset( scene );
-        	scene.resetTeleport();
     	}
     }
 
