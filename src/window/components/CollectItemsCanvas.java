@@ -131,9 +131,9 @@ public class CollectItemsCanvas extends Canvas {
 		}
 		
 		// set the floor name string style and draw it on canvas
-		g.setFont(new Font("Arial", Font.BOLD, 30));
+		g.setFont(new Font("Arial", Font.BOLD, 31));
 		g.setColor(new Color(100, 200, 100));
-		g.drawString(floor, 450, 40);
+		g.drawString(floor, 420, 45);
 	}
 
 	/**
@@ -144,7 +144,4 @@ public class CollectItemsCanvas extends Canvas {
 	public void setFloorNum(int num){
 		floorNum = num;
 	}
-
-
-
 }
