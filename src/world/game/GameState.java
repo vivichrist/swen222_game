@@ -18,6 +18,7 @@ import world.components.GameToken;
 import world.components.Key;
 import world.components.Map;
 import world.components.MoveableObject;
+import world.components.Torch;
 
 /**
  * Represents the state of the game.
@@ -98,7 +99,7 @@ public class GameState implements java.io.Serializable{
 	public boolean pickupObjectAtPoint(Player player, Point point){
 		GameObject object = player.getFloor().objectAtPoint(point);
 
-		// Handle the case that the object is a GameToken
+		// Handle the case that the object is a GameToken (Players cannot collect other Player's token types)
 		if(object instanceof GameToken){
 			GameToken token = (GameToken) object;
 			if(!players.contains(player)){
@@ -114,6 +115,17 @@ public class GameState implements java.io.Serializable{
 				}
 				return true;
 			}
+		}
+		
+		// Handle the case that the object is a Torch (Players can only carry one Torch)
+		if(object instanceof Torch){
+			Torch torch = (Torch) object;
+			if(player.getInventory().addTorch(torch)){
+				player.getFloor().removeMoveableObject(point);
+				Controller.refreshInventoryPanel();
+				return true;
+			}
+			return false;
 		}
 
 		// Handle the normal case that the object is a MoveableObject
