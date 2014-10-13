@@ -101,7 +101,9 @@ public class GameScene
 				gdata.remove( p );
 				if ( key != null )
 				{
-					gdata.addGrapicalObject( DymanicRender.instanceKey( p, key.getColor() ) );
+					DymanicRender dyn = DymanicRender.instanceKey( p, key.getColor() );
+					gdata.addGrapicalObject( dyn );
+					GameViewData.instance().setToInitialise( dyn );
 				}
 				
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
