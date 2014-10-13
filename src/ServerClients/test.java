@@ -29,7 +29,7 @@ public class test {
 
 	public void startGame(){
 		if (JOptionPane.showConfirmDialog(frame, "Do you want to run the server") == 0) {
-			server = new Server();
+			server = new Server(4768);
 			server.start();
 		}
 		else{
@@ -41,7 +41,7 @@ public class test {
 					null,null, -1);
 
 			GUI gui = null;
-			client = new Client(gui,"Jacky","localhost",controller);
+			client = new Client(gui,"Jacky","localhost",controller,4768);
 			client.start();
 
 			Packet00Login loginPacket = new Packet00Login(player1.getName());
