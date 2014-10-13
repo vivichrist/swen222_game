@@ -148,14 +148,14 @@ public class GameListener implements KeyListener, MouseListener
 			}
 		}
 	}
-	
+
 	public Point getClick()
 	{
 		Point p = click;
 		click = null;
 		return p;
 	}
-	
+
 	public void reset( GameScene map )
 	{
 		this.map = map;
@@ -179,15 +179,15 @@ public class GameListener implements KeyListener, MouseListener
 				+ Math.cos( dir ) * speed );
 		boolean xcross = (int)(newx / GameView.cellsize)
 				!= (int)(position.x / GameView.cellsize);
-		boolean ycross = (int)(newy / GameView.cellsize) 
+		boolean ycross = (int)(newy / GameView.cellsize)
 				!= (int)(position.y / GameView.cellsize);
 		// collision detection
 		if ( ( xcross || ycross )
 				&& map.isCollidable( newx, newy ) )
 		{
-			if ( xcross && !ycross )
+			if ( xcross && !map.isCollidable( position.x, newy ) )
 				position.setLocation( position.x, newy );
-			else if ( ycross && !xcross )
+			else if ( ycross && !map.isCollidable( newx, position.y ))
 				position.setLocation( newx, position.y );
 		}
 		else position.setLocation( newx, newy );
