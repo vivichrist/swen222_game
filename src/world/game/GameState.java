@@ -136,7 +136,10 @@ public class GameState implements java.io.Serializable{
 	public Key pickupKey(Player player, Point p){	
 		Key key = player.getFloor().removeKey(p);
 		Key toReturn = player.getInventory().addKey(key);
-		return player.getInventory().addKey(key);
+		if(toReturn != null){
+			player.getFloor().addMoveable(p, toReturn);
+		}
+		return toReturn; //player.getInventory().addKey(key);
 	}
 
 	/**
