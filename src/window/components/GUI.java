@@ -17,6 +17,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ import javax.swing.JTextField;
 
 import ServerClients.Client;
 import ServerClients.Server;
+import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
@@ -67,10 +70,14 @@ import java.awt.event.*;
  * @author Zhiheng Sun,  ID: 300256273
  * 
  */
-public class GUI implements WindowListener {
-
+public class GUI {
+	
+	// the dimension of the frame 
 	private static int width = 800;
 	private static int height = 770;
+	
+	// please comment these variables, sorry I can't do it as I don't know them. 
+	// can we set the variables to private?
 	private GameState gameState;//do not change this field for jacky only
 	private static Controller controller;
 	GameState state = null;
@@ -78,11 +85,22 @@ public class GUI implements WindowListener {
 	ArrayList<Player>players;
 	Map[]floors;
 	Server server = null;
-	Canvas canvas = new Canvas();
 	GLJPanel gameView;
-	private JFrame frame;
-	private JLayeredPane layeredPane;
-
+	private Client client;
+	
+	private JFrame frame;	
+	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
+	
+	/**
+	 * The following stores the panel shown on the bottom of the frame which has player's 
+	 * collected tokens images and player's inventory images
+	 */
+	private SouthPanel southPanel;
+	
+	/**
+	 * The following JPanels are the panels used to display on the frame according 
+	 * to players' game entry choices
+	 */
 	private JPanel backgroundPanel;
 	private JPanel startPanel;
 	private JPanel choosePlayerPanel;
@@ -90,18 +108,9 @@ public class GUI implements WindowListener {
 	private JPanel chooseServerPanel;
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
-
-	private SouthPanel southPanel;
-
-	private Player player;
-
-	public static String name;
-	public String nameC;
-	public String strServerName;
-	public String strPortNum;
-	public String strServerNameC;
-	public String strPortNumC;
-
+	private JPanel waitClientsPanel;
+	
+	// buttons on all panels 
 	private JButton jbNew;
 	private JButton jbLoad;
 	private JButton jbInfo;
@@ -113,14 +122,22 @@ public class GUI implements WindowListener {
 	private JButton jbStart;
 	private JButton jbClientStart;
 
+	// textFields on all panels
 	private JTextField serverName;
 	private JTextField portNum;
 	private JTextField serverNameC;
 	private JTextField portNumC;
 	private JTextField textFieldNameC;
 	private JTextField textFieldName;
-	private Client client;
-
+	
+	private Player player;	// the current player
+	public static String name;	// the entered name of the player in single-player mode
+	public String nameC;	// the entered name of the player in multiple-player mode
+	public String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
+	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
+	public String strServerNameC;	// the player entered server name in multiple-player mode
+	public String strPortNumC;	// the player entered port number in multiple-player mode
+	
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -130,36 +147,26 @@ public class GUI implements WindowListener {
 	 * The following method sets up a frame to start the game entry
 	 */
 	public void setUp(){
-
 		frame = new JFrame("Adventure Game");
 		frame.setBackground(Color.BLACK);
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
-		//		frame.validate();
-		//		frame.repaint();
-		//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//		frame.setLayout(null);
-		//		frame.setResizable(false);
 
+		// add the background image to frame
 		layeredPane = new JLayeredPane();
 		ImageIcon background = new ImageIcon("Resource/bg1.png");
 		backgroundPanel = new JPanel();
 		backgroundPanel.setBounds(0, 0, width, height);
-
 		JLabel jl = new JLabel(background);
 		backgroundPanel.add(jl);
-
 		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
-		//layeredPane.add(backgroundPanel,JLayeredPane.MODAL_LAYER);
+		
 		frame.setLayeredPane(layeredPane);
-
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setVisible( true );
 
 		startPanel();
-
-		frame.setVisible(true);
 	}
 
 	/**
@@ -167,63 +174,24 @@ public class GUI implements WindowListener {
 	 * creates four buttons on it. Let players choose how to start the game.
 	 */
 	private void startPanel() {
-		int startPanelLeft = 350;
-		int startPanelTop = 180;
-		int startPanelWidth = 90;  //150
-		int startPanelHeight = 600;
-
 		startPanel = new JPanel();
-		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
-		//startPanel.setLayout(null);
-		//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
-		//		startPanel.setLayout(null);
+		setUpPanel(startPanel, 350, 180, 90, 600);
 
+		// buttons used on startPanel
 		jbNew = new JButton("New");
 		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
-
-		/*		jbNewGame.setOpaque(false);
-		jbNewGame.setContentAreaFilled(false);
-		jbNewGame.setBorderPainted(false);
-		jbLoad.setOpaque(false);
-		jbLoad.setContentAreaFilled(false);
-		jbLoad.setBorderPainted(false);
-		jbInfo.setOpaque(false);
-		jbInfo.setContentAreaFilled(false);
-		jbInfo.setBorderPainted(false);
-		jbExit.setOpaque(false);
-		jbExit.setContentAreaFilled(false);
-		jbExit.setBorderPainted(false);
-
-		jbNewGame.setBackground(new Color(100, 100, 100));
-		jbNewGame.set
-		jbNewGame.setLayout(null);
-		jbNewGame.setBounds(350, 200, 100, 400);
-		jbLoad.setLayout(null);
-		jbLoad.setBounds(350, 200, 30, 30);
-		 */
 
 		setButtonStyle(jbNew, 75, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbLoad, 80, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
 
-
-		/*		frame.getRootPane().setDefaultButton(jbNew);
-		jbNew.registerKeyboardAction(jbStart.getActionForKeyStroke(
-				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
-				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
-				JComponent.WHEN_FOCUSED);
-		 */
-
-
-
-
+		// set the panel to transparent and add the panel to frame
 		startPanel.setOpaque(false);
 		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
 		addListennerStart();
-
 	}
 
 	/**
@@ -231,20 +199,17 @@ public class GUI implements WindowListener {
 	 * either starts a single-player game or starts a multiple-player game
 	 */
 	public void choosePlayerPanel(){
-		int choosePlayerPanelLeft = 325;
-		int choosePlayerPanelTop = 200;
-		int choosePlayerPanelWidth = 150;
-		int choosePlayerPanelHeight = 120;
-
 		choosePlayerPanel = new JPanel();
-		choosePlayerPanel.setBounds(choosePlayerPanelLeft, choosePlayerPanelTop, choosePlayerPanelWidth, choosePlayerPanelHeight);
+		setUpPanel(choosePlayerPanel, 325, 200, 150, 120);
 
+		// buttons used on choosePlayerPanel
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
 
 		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(0, 135, 200).brighter());
 
+		// set the panel to transparent and add the panel to frame
 		choosePlayerPanel.setOpaque(false);
 		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChoosePlayer();
@@ -255,14 +220,10 @@ public class GUI implements WindowListener {
 	 * enter the character's name and starts a single-player game.
 	 */
 	public void chooseNamePanel(){
-		int chooseNamePanelLeft = 325;
-		int chooseNamePanelTop = 200;
-		int chooseNamePanelWidth = 150;
-		int chooseNamePanelHeight = 600;
-
 		chooseNamePanel = new JPanel();
-		chooseNamePanel.setBounds(chooseNamePanelLeft, chooseNamePanelTop, chooseNamePanelWidth, chooseNamePanelHeight);
+		setUpPanel(chooseNamePanel, 325, 200, 150, 600);
 
+		// label, textField and button used on chooseNamePanel
 		JLabel chooseName = new JLabel("Name:");
 		textFieldName = new JTextField(6);
 		jbStart = new JButton("START");
@@ -283,13 +244,7 @@ public class GUI implements WindowListener {
 		chooseNamePanel.add(space);
 		setButtonStyle(jbStart, 110, chooseNamePanel, Color.MAGENTA);
 
-		//		frame.getRootPane().setDefaultButton(jbStart);
-		//		jbStart.setFocusable(true);
-		//		jbStart.registerKeyboardAction(jbStart.getActionForKeyStroke(
-		//				KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false)),
-		//				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false),
-		//				JComponent.WHEN_FOCUSED);
-
+		// set the panel to transparent and add the panel to frame
 		chooseNamePanel.setOpaque(false);
 		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseName();
@@ -300,20 +255,17 @@ public class GUI implements WindowListener {
 	 * either starts a server of the game or join the server of the game
 	 */
 	public void chooseServerPanel(){
-		int chooseServerPanelLeft = 300;
-		int chooseServerPanelTop = 200;
-		int chooseServerPanelWidth = 200;
-		int chooseServerPanelHeight = 120;
-
 		chooseServerPanel = new JPanel();
-		chooseServerPanel.setBounds(chooseServerPanelLeft, chooseServerPanelTop, chooseServerPanelWidth, chooseServerPanelHeight);
+		setUpPanel(chooseServerPanel, 300, 200, 200, 120);
 
+		// buttons used on chooseServerPanel
 		jbStartServer = new JButton("Start Server");
 		jbJoinServer = new JButton("Join Server");
 
 		setButtonStyle(jbStartServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbJoinServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
 
+		// set the panel to transparent and add the panel to frame
 		chooseServerPanel.setOpaque(false);
 		layeredPane.add(chooseServerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerChooseServer();
@@ -324,14 +276,10 @@ public class GUI implements WindowListener {
 	 * been started and shows the server name and port number
 	 */
 	public void serverStartsPanel(){
-		int serverStartsPanellLeft = 150;
-		int serverStartsPanelTop = 180;
-		int serverStartsPanelWidth = 500;
-		int serverStartsPanelHeight = 500;
-
 		serverStartsPanel = new JPanel();
-		serverStartsPanel.setBounds(serverStartsPanellLeft, serverStartsPanelTop, serverStartsPanelWidth, serverStartsPanelHeight);
+		setUpPanel(serverStartsPanel, 150, 180, 500, 500);
 
+		// labels, textFields and button used on serverStartsPanel
 		JLabel serverStarts = new JLabel("SERVER STARTS!");
 		serverStarts.setPreferredSize(new Dimension(450, 100));
 		serverStarts.setFont(new Font("Arial", Font.BOLD, 50));
@@ -374,6 +322,8 @@ public class GUI implements WindowListener {
 		serverStartsPanel.add(serverName);
 		serverStartsPanel.add(port);
 		serverStartsPanel.add(portNum);
+		
+		// set the panel to transparent and add the panel to frame
 		serverStartsPanel.setOpaque(false);
 		layeredPane.add(serverStartsPanel, JLayeredPane.MODAL_LAYER);
 	}
@@ -384,14 +334,10 @@ public class GUI implements WindowListener {
 	 * server to start game
 	 */
 	public void joinServerPanel(){
-		int joinServerPanellLeft = 200;
-		int joinServerPanelTop = 200;
-		int joinServerPanelWidth = 500;
-		int joinServerPanelHeight = 500;
-
 		joinServerPanel = new JPanel();
-		joinServerPanel.setBounds(joinServerPanellLeft, joinServerPanelTop, joinServerPanelWidth, joinServerPanelHeight);
+		setUpPanel(joinServerPanel, 200, 200, 500, 500);
 
+		// labels, textFields and button used on joinServerPanel
 		JLabel nameP = new JLabel("Player Name : ");
 		textFieldNameC = new JTextField(18);
 
@@ -434,11 +380,46 @@ public class GUI implements WindowListener {
 		joinServerPanel.add(port);
 		joinServerPanel.add(portNumC);
 		setButtonStyle(jbClientStart, 110, joinServerPanel, Color.MAGENTA);
+		
+		// set the panel to transparent and add the panel to frame
 		joinServerPanel.setOpaque(false);
 		layeredPane.add(joinServerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerJoinServer();
 	}
+	
+	/**
+	 * The following method sets up the frame that tells the player server
+	 * is waiting for other players to join in to start the game
+	 */
+	public void waitClientsPanel(){
+		waitClientsPanel = new JPanel();
+		setUpPanel(waitClientsPanel, 130, 200, 600, 200);
 
+		// label used on joinServerPanel
+		JLabel waitClients = new JLabel("Wait For Other Players...");
+		waitClients.setPreferredSize(new Dimension(600, 200));
+		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
+		waitClients.setForeground(new Color(100, 200, 100).brighter());
+		waitClientsPanel.add(waitClients);
+		
+		// set the panel to transparent and add the panel to frame
+		waitClientsPanel.setOpaque(false);
+		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
+	}
+
+	/**
+	 * The following method sets the bounds of the given panel with the 
+	 * given values
+	 * @param panel	the given panel to set bounds to 
+	 * @param left	the left position of the panel
+	 * @param top	the top position of the panel
+	 * @param width	the width of the panel
+	 * @param height	the height of the panel
+	 */
+	private void setUpPanel(JPanel panel, int left, int top, int width, int height){
+		panel.setBounds(left, top, width, height);
+	}
+	
 	/**
 	 * The following method sets the button style by the given 
 	 * characteristics and adds the button onto the given panel
@@ -448,38 +429,38 @@ public class GUI implements WindowListener {
 	 * @param defaultColor	the default color of the given button
 	 */
 	private void setButtonStyle(final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
+		// set the button size and font
 		button.setPreferredSize(new Dimension(buttonWidth, 60));
 		button.setFont(new Font("Arial", Font.PLAIN, 30));
 		button.setForeground(defaultColor);
 		button.setHorizontalTextPosition(SwingConstants.CENTER);
 		button.setBorder(null);
 
+		// set the button to transparent
 		button.setOpaque(false);
 		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
 		button.setFocusPainted(false);
 
+		// add mouseListener onto the button 
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-
 			@Override
 			public void mousePressed(MouseEvent e) {}
-
 			@Override
 			public void mouseExited(MouseEvent e) {
 				button.setForeground(defaultColor);
 			}
-
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				button.setForeground(new Color(100, 200, 100).brighter());
 			}
-
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 		});
 
+		// add the button to the given panel
 		panel.add(button);
 	}
 
@@ -490,7 +471,7 @@ public class GUI implements WindowListener {
 		jbNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbNew){
+				if(button == jbNew){	// if button New is clicked, startPanel will be removed and choosePlayerPanel will appear
 					layeredPane.remove(startPanel);
 					choosePlayerPanel();
 					frame.repaint();
@@ -510,7 +491,7 @@ public class GUI implements WindowListener {
 		jbSingle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbSingle){
+				if(button == jbSingle){	// if button Single is clicked, choosePlayerPanel will be removed and chooseNamePanel will appear
 					layeredPane.remove(choosePlayerPanel);
 					chooseNamePanel();
 					frame.repaint();
@@ -519,7 +500,7 @@ public class GUI implements WindowListener {
 		jbMultiple.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbMultiple){
+				if(button == jbMultiple){	// if button Multiple is clicked, choosePlayerPanel will be removed and chooseServerPanel will appear
 					layeredPane.remove(choosePlayerPanel);
 					chooseServerPanel();
 					frame.repaint();
@@ -534,7 +515,7 @@ public class GUI implements WindowListener {
 		jbStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbStart){
+				if(button == jbStart){	// if button Start is clicked, chooseNamePanel will be removed and single-player mode game will be started
 					if(!textFieldName.getText().equals("")){
 						name = textFieldName.getText();
 						System.out.println("Player name: " + name);
@@ -548,7 +529,7 @@ public class GUI implements WindowListener {
 
 		textFieldName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				name = textFieldName.getText();
+				name = textFieldName.getText();	// get the name player entered from the textField
 			}
 		});
 	}
@@ -560,15 +541,21 @@ public class GUI implements WindowListener {
 		jbStartServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbStartServer){
+				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
 					layeredPane.remove(chooseServerPanel);
 					try {
-						strServerName = getSeverName();
+						strServerName = getSeverName().getHostAddress();
 					} catch (UnknownHostException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					strPortNum = "4768";
+					int port = Integer.parseInt(strPortNum);
+					while(!available(port)){
+						port++;
+					}
+					strPortNum = ""+port;
+
 					Server server = new Server();
 					server.start();
 
@@ -580,7 +567,7 @@ public class GUI implements WindowListener {
 		jbJoinServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbJoinServer){
+				if(button == jbJoinServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and joinServerPanel will appear
 					layeredPane.remove(chooseServerPanel);
 					joinServerPanel();
 					frame.repaint();
@@ -595,7 +582,7 @@ public class GUI implements WindowListener {
 		jbClientStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
-				if(button == jbClientStart){
+				if(button == jbClientStart){	// if button Start is clicked, joinServerPanel will be removed and multiple-player mode game will be started
 					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
 						nameC = textFieldNameC.getText();
 						strServerNameC = serverNameC.getText();
@@ -612,19 +599,19 @@ public class GUI implements WindowListener {
 
 		textFieldNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nameC = textFieldNameC.getText();
+				nameC = textFieldNameC.getText();	// get the player name player entered from the textField
 			}
 		});
 
 		serverNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				strServerNameC = serverNameC.getText();
+				strServerNameC = serverNameC.getText();	// get the server name player entered from the textField
 			}
 		});
 
 		portNumC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				strPortNumC = portNumC.getText();
+				strPortNumC = portNumC.getText();	// get the port number player entered from the textField
 			}
 		});
 	}
@@ -655,6 +642,8 @@ public class GUI implements WindowListener {
 		gameView.setFocusable( true );
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+		
+		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 	}
@@ -663,13 +652,6 @@ public class GUI implements WindowListener {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
-		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
-
-	
-		
-
-		//Code added by Kalo
-		
 		players = new ArrayList<Player>();
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
@@ -677,35 +659,24 @@ public class GUI implements WindowListener {
 		player1 = new MultyPlayer(nameC, null,null, -1);
 
 		controller = new Controller(state, this);
-		//TODO: need check user input ip address is equals server ip address
 		NetworkController networkController = new NetworkController(controller);
 		client = new Client(this,nameC,strServerNameC,networkController );
 		client.start();
-		
+
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-		
-		//state = controller.getGameState();
-		System.out.println("check state players size==================================:  before");
-
-		for(int i = 0; i<state.getPlayers().size(); i++){
-			
-			System.out.println("check state players size==================================:  "+state.getPlayer(i));
-		}
-		System.out.println("check state players size==================================:  ");
-
-		
-		System.out.println();
-		//client.
-		if(state.getPlayers().size()>1){
-		
-
-
-		}
 		networkController.setGameView(gameView);
-
+		
 	}
+
+	
+	/**
+	 * this method will call by client once client class received broadcast package from server
+	 * player will able to start the game
+	 * @param name - current player name
+	 * @param state -  after been called game state
+	 * */
 	public void startClientWindows(String name, GameState state){
 		GLProfile.initSingleton();
 		GLProfile glprofile = GLProfile.getDefault();
@@ -731,6 +702,7 @@ public class GUI implements WindowListener {
 		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 		String[] floors = new String[number - 1];
 		
+		// add the floors into list except the player's current floor
 		int count = 0;
 		for(int i = 0; i < number; i++){
 			if (i != currentFloor){
@@ -739,6 +711,7 @@ public class GUI implements WindowListener {
 			}
 		}
 
+		// let player choose a floor and assign it to s
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
 				"Which floor you want to go to?",
@@ -751,6 +724,7 @@ public class GUI implements WindowListener {
 			return -1;
 		}
 		
+		// change the string s back to corresponding integer
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
 				return j;
@@ -779,60 +753,55 @@ public class GUI implements WindowListener {
 		return name;
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
+	
 
-	}
 
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		Packet01Disconnect packet = new Packet01Disconnect(name);
-		packet.writeData(client);
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stubs
-
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-	private String getSeverName() throws UnknownHostException {
+	private InetAddress getSeverName() throws UnknownHostException {
 		// TODO for Jacky
-		return InetAddress.getLocalHost().toString();
+		return InetAddress.getLocalHost();
 	}
-//	public void setState(GameState st) {
-//		// TODO Auto-generated method stub
-//		this.players = (ArrayList<Player>) st.getPlayers();
-//		this.floors = st.floors;
-//		if(players.size() == 2){
-//			System.out.println("GUI setState player1 x: "+players.get(0).getPosition().x);
-//			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
-//			}
-//	}
+
+
+	/**
+	 * this method is check the socket port 
+	 * @param port the number is going to check
+	 * \*/
+	private static boolean available(int port) {
+		System.out.println("--------------Testing port " + port);
+		DatagramSocket s = null;
+		try {
+			s = new DatagramSocket(port);
+
+			// If the code makes it this far without an exception it means
+			// something is using the port and has responded.
+			System.out.println("--------------Port " + port + " is  available");
+			s.close();
+			return true;
+		} catch (IOException e) {
+			System.out.println("--------------Port " + port + " is not available");
+			return false;
+		} 
+	}
+	/**
+	 * this method is check player input server Ip address
+	 * if input is not ip adress will return false
+	 * */
+	public static final boolean isIPAdd(final String ip) {
+		boolean isIPv4;
+		try {
+			final InetAddress inet = InetAddress.getByName(ip);
+			isIPv4 = inet.getHostAddress().equals(ip)
+					&& inet instanceof Inet4Address;
+		} catch (final UnknownHostException e) {
+			isIPv4 = false;
+		}
+		return isIPv4;
+	}
+
+	public void addWindowListener(WindowListeners windowListeners) {
+		// TODO Auto-generated method stub
+		this.addWindowListener(windowListeners);
+		
+	}
 }
 

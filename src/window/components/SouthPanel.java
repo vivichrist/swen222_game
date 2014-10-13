@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
+import javax.swing.border.EtchedBorder;
 
 import world.game.Player;
 
@@ -27,19 +29,22 @@ import world.game.Player;
  * 
  */
 public class SouthPanel {
-	/**
-	 *
-	 */
-	private static int left = 0;
-	private static int top = 600;
-	private static int width = 800;
-	private static int height = 170;
 
+	/**
+	 * The following stores the panel shown on the bottom of the frame which has player's 
+	 * collected tokens images and player's inventory images
+	 */
 	private JPanel panel;
 
-	private CollectItemsCanvas collectItemsCanvas;
-	private UsefulItemsCanvas usefulItemsCanvas;
+	private CollectItemsCanvas collectItemsCanvas;	// the canvas with player's collected tokens will be drawn on panel
+	private UsefulItemsCanvas usefulItemsCanvas;	// the canvas with player's inventory will be drawn on panel
 	
+	// the position of the panel on the frame
+		private static int left = 0;
+		private static int top = 600;
+		private static int width = 800;
+		private static int height = 170;
+		
 	/**
 	 * Sets up the panel for the given player
 	 * @param player	the player whose tokens and inventories will be drawn on canvases
@@ -47,7 +52,17 @@ public class SouthPanel {
 	public SouthPanel(Player player) {
 		panel = new JPanel();
 		panel.setBounds(left, top, width, height);
-		panel.setBackground(Color.LIGHT_GRAY);
+		panel.setBackground(Color.BLACK);
+		
+		
+		panel.setBorder(
+				 BorderFactory.createTitledBorder(
+	            BorderFactory.createEtchedBorder(
+	                    EtchedBorder.RAISED, Color.LIGHT_GRAY
+	                    , Color.DARK_GRAY), ""));
+		
+		
+		
 		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
 		usefulItemsCanvas = new UsefulItemsCanvas(player);
@@ -79,6 +94,3 @@ public class SouthPanel {
 		return panel;
 	}
 }
-	
-	
-	
