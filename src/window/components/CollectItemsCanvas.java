@@ -3,6 +3,7 @@ package window.components;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -20,13 +21,13 @@ import world.game.Player;
  * 
  */
 public class CollectItemsCanvas extends Canvas {
-	
+
 	/**
 	 * The following is a list of ImageIcons of the collected 
 	 * items of the current player
 	 */
 	private ArrayList<ImageIcon> collectItems;
-	
+
 	/**
 	 * The following is a list of booleans which indicate tokens 
 	 * have been painted or not.
@@ -35,6 +36,14 @@ public class CollectItemsCanvas extends Canvas {
 
 	private Player player;	// the current player
 	private TokenType type;	// the token type of the current player
+	private int floorNum;	// the current floor number of the player
+	
+	/**
+	 * The following is a list of floor names which will be used to
+	 * write on the canvas to display the current floor of the player
+	 */
+	private String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
+
 	/**
 	 * Sets up the CollectItemsCanvas for the given player
 	 * @param player	the player whose tokens will be drawn on canvas
@@ -42,10 +51,11 @@ public class CollectItemsCanvas extends Canvas {
 	public CollectItemsCanvas(Player player) {
 		this.player = player;
 		type = player.getType();
-		this.setBackground(Color.LIGHT_GRAY);
+		this.setBackground(Color.BLACK);
 		this.setBounds(0, 600, 750, 70);
 		initialiseItems();
 		getCollectItems();
+		floorNum = player.getFloor().floorNumber();
 	}
 
 	/**
@@ -59,14 +69,14 @@ public class CollectItemsCanvas extends Canvas {
 			String resource = "Resource/" + type.toString().toLowerCase() + "/" + type.toString().toLowerCase() + " grey" + ".png";
 			collectItems.add(i, new ImageIcon(resource));			
 		}
-		
+
 		// set all of the tokens unpainted
 		isPaint = new ArrayList<Boolean>();
 		for (int j = 0; j < player.getTokenList().size(); j++){
 			isPaint.add(false);
 		}
 	}
-	
+
 	/**
 	 * The following method gets the collected tokens of the player,
 	 * and adds the corresponding images to the images list.
@@ -112,6 +122,29 @@ public class CollectItemsCanvas extends Canvas {
 		for(int i = 0; i < collectItems.size(); i++){	// go through the player's tokens images, draw the images on canvas with given width and height
 			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
+		
+		String floor = null;
+		for (int j = 0; j < floorsName.length; j ++){	// go through the floor names array to find the corresponding floor name 
+			if (j == floorNum){
+				floor = "Floor : " + floorsName[j] + " Floor";
+			}
+		}
+		
+		// set the floor name string style and draw it on canvas
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+		g.setColor(new Color(100, 200, 100));
+		g.drawString(floor, 450, 40);
 	}
+
+	/**
+	 * The following method set the current floor number of the player 
+	 * with the given number
+	 * @param num	the given floor number 
+	 */	
+	public void setFloorNum(int num){
+		floorNum = num;
+	}
+
+
 
 }
