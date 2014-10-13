@@ -73,8 +73,10 @@ public class GUI implements WindowListener {
 	private static int height = 770;
 	private GameState gameState;//do not change this field for jacky only
 	private static Controller controller;
-	GameState state;
-	MultyPlayer player1;
+	GameState state = null;
+	MultyPlayer player1 = null;
+	ArrayList<Player>players;
+	Map[]floors;
 	Server server = null;
 	Canvas canvas = new Canvas();
 	GLJPanel gameView;
@@ -663,49 +665,61 @@ public class GUI implements WindowListener {
 	protected void startGame2() {
 		System.out.println("Server Start?    >>>>>>>>>>"+ Server.serverStart);
 
-		GLProfile.initSingleton();
-		GLProfile glprofile = GLProfile.getDefault();
-		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+	
+		
 
 		//Code added by Kalo
-		GameState state = null;
-		MultyPlayer player1 = null;
-		ArrayList<Player>players = new ArrayList<Player>();
-		Map[]floors =new Map[1];
-		floors[0] = new Map(new File("map1.txt"), 0);
+		
+		players = new ArrayList<Player>();
+		floors =new Map[1];
+		floors[0] = new Map(new File("map1.txt"),0);
 		state = new GameState(players,floors);
-		player1 = new MultyPlayer(name, null,null, -1);
+		player1 = new MultyPlayer(nameC, null,null, -1);
 
 		controller = new Controller(state, this);
 		//TODO: need check user input ip address is equals server ip address
 		NetworkController networkController = new NetworkController(controller);
-		client = new Client(strServerNameC,networkController );
+		client = new Client(this,nameC,strServerNameC,networkController );
 		client.start();
+		
 		networkController.setClient(client);
 		Packet00Login loginPacket = new Packet00Login(nameC);
-
 		loginPacket.writeData(client);
+		
+		//state = controller.getGameState();
+		System.out.println("check state players size==================================:  before");
 
+		for(int i = 0; i<state.getPlayers().size(); i++){
+			
+			System.out.println("check state players size==================================:  "+state.getPlayer(i));
+		}
+		System.out.println("check state players size==================================:  ");
 
-
+		
+		System.out.println();
 		//client.
 		if(state.getPlayers().size()>1){
-			System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
-			gameView = new GameView( glcapabilities, frame, state );
-			gameView.setEnabled( true );
-			gameView.setVisible( true );
-			gameView.setFocusable( true );
-			layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
-			if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-			southPanel = new SouthPanel(controller.getPlayer(nameC));
-			layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+		
 
 
 		}
 		networkController.setGameView(gameView);
 
 	}
-
+	public void startClientWindows(String name, GameState state){
+		GLProfile.initSingleton();
+		GLProfile glprofile = GLProfile.getDefault();
+		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
+		System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
+		gameView = new GameView( glcapabilities, frame, state );
+		gameView.setEnabled( true );
+		gameView.setVisible( true );
+		gameView.setFocusable( true );
+		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
+		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
+		southPanel = new SouthPanel(controller.getPlayer(name));
+		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+	}
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport
@@ -811,6 +825,14 @@ public class GUI implements WindowListener {
 		// TODO for Jacky
 		return InetAddress.getLocalHost().toString();
 	}
-
+	public void setState(GameState st) {
+		// TODO Auto-generated method stub
+		this.players = (ArrayList<Player>) st.getPlayers();
+		this.floors = st.floors;
+		if(players.size() == 2){
+			System.out.println("GUI setState player1 x: "+players.get(0).getPosition().x);
+			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
+			}
+	}
 }
 
