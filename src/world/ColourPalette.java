@@ -37,6 +37,7 @@ public class ColourPalette {
 	 * @return the Color at index
 	 */
 	public static Color get(int index){
+		System.out.println(index);
 		if(index >= colours.size()) return null;
 		return colours.get(index);
 	}
