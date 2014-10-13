@@ -170,13 +170,9 @@ public class GUI implements WindowListener {
 	 * creates four buttons on it. Let players choose how to start the game.
 	 */
 	private void startPanel() {
-		int startPanelLeft = 350;
-		int startPanelTop = 180;
-		int startPanelWidth = 90;  //150
-		int startPanelHeight = 600;
-
 		startPanel = new JPanel();
-		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
+		setUpPanel(startPanel, 350, 180, 90, 600);
+		
 		//startPanel.setLayout(null);
 		//		startPanel.setBounds(startPanelLeft, startPanelTop, startPanelWidth, startPanelHeight);
 		//		startPanel.setLayout(null);
@@ -234,13 +230,8 @@ public class GUI implements WindowListener {
 	 * either starts a single-player game or starts a multiple-player game
 	 */
 	public void choosePlayerPanel(){
-		int choosePlayerPanelLeft = 325;
-		int choosePlayerPanelTop = 200;
-		int choosePlayerPanelWidth = 150;
-		int choosePlayerPanelHeight = 120;
-
 		choosePlayerPanel = new JPanel();
-		choosePlayerPanel.setBounds(choosePlayerPanelLeft, choosePlayerPanelTop, choosePlayerPanelWidth, choosePlayerPanelHeight);
+		setUpPanel(choosePlayerPanel, 325, 200, 150, 120);
 
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
@@ -258,13 +249,8 @@ public class GUI implements WindowListener {
 	 * enter the character's name and starts a single-player game.
 	 */
 	public void chooseNamePanel(){
-		int chooseNamePanelLeft = 325;
-		int chooseNamePanelTop = 200;
-		int chooseNamePanelWidth = 150;
-		int chooseNamePanelHeight = 600;
-
 		chooseNamePanel = new JPanel();
-		chooseNamePanel.setBounds(chooseNamePanelLeft, chooseNamePanelTop, chooseNamePanelWidth, chooseNamePanelHeight);
+		setUpPanel(chooseNamePanel, 325, 200, 150, 600);
 
 		JLabel chooseName = new JLabel("Name:");
 		textFieldName = new JTextField(6);
@@ -303,13 +289,8 @@ public class GUI implements WindowListener {
 	 * either starts a server of the game or join the server of the game
 	 */
 	public void chooseServerPanel(){
-		int chooseServerPanelLeft = 300;
-		int chooseServerPanelTop = 200;
-		int chooseServerPanelWidth = 200;
-		int chooseServerPanelHeight = 120;
-
 		chooseServerPanel = new JPanel();
-		chooseServerPanel.setBounds(chooseServerPanelLeft, chooseServerPanelTop, chooseServerPanelWidth, chooseServerPanelHeight);
+		setUpPanel(chooseServerPanel, 300, 200, 200, 120);
 
 		jbStartServer = new JButton("Start Server");
 		jbJoinServer = new JButton("Join Server");
@@ -327,13 +308,8 @@ public class GUI implements WindowListener {
 	 * been started and shows the server name and port number
 	 */
 	public void serverStartsPanel(){
-		int serverStartsPanellLeft = 150;
-		int serverStartsPanelTop = 180;
-		int serverStartsPanelWidth = 500;
-		int serverStartsPanelHeight = 500;
-
 		serverStartsPanel = new JPanel();
-		serverStartsPanel.setBounds(serverStartsPanellLeft, serverStartsPanelTop, serverStartsPanelWidth, serverStartsPanelHeight);
+		setUpPanel(serverStartsPanel, 150, 180, 500, 500);
 
 		JLabel serverStarts = new JLabel("SERVER STARTS!");
 		serverStarts.setPreferredSize(new Dimension(450, 100));
@@ -387,13 +363,8 @@ public class GUI implements WindowListener {
 	 * server to start game
 	 */
 	public void joinServerPanel(){
-		int joinServerPanellLeft = 200;
-		int joinServerPanelTop = 200;
-		int joinServerPanelWidth = 500;
-		int joinServerPanelHeight = 500;
-
 		joinServerPanel = new JPanel();
-		joinServerPanel.setBounds(joinServerPanellLeft, joinServerPanelTop, joinServerPanelWidth, joinServerPanelHeight);
+		setUpPanel(joinServerPanel, 200, 200, 500, 500);
 
 		JLabel nameP = new JLabel("Player Name : ");
 		textFieldNameC = new JTextField(18);
@@ -447,13 +418,8 @@ public class GUI implements WindowListener {
 	 * is waiting for other players to join in to start the game
 	 */
 	public void waitClientsPanel(){
-		int waitClientsPanelLeft = 130;
-		int waitClientsPanelTop = 200;
-		int waitClientsPanelWidth = 600;
-		int waitClientsPanelHeight = 200;
-
 		waitClientsPanel = new JPanel();
-		waitClientsPanel.setBounds(waitClientsPanelLeft, waitClientsPanelTop, waitClientsPanelWidth, waitClientsPanelHeight);
+		setUpPanel(waitClientsPanel, 130, 200, 600, 200);
 
 		JLabel waitClients = new JLabel("Wait For Other Players...");
 		waitClients.setPreferredSize(new Dimension(600, 200));
@@ -465,6 +431,16 @@ public class GUI implements WindowListener {
 		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
 	}
 
+	
+	private void setUpPanel(JPanel panel, int left, int top, int width, int height){
+		panel.setBounds(left, top, width, height);
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * The following method sets the button style by the given 
 	 * characteristics and adds the button onto the given panel
