@@ -13,15 +13,17 @@ public class Container implements GameObject{
 
 	private ArrayList<MoveableObject> contents;
 	private CellType type;
+	private Direction facing;
 	private int maxSize;
 	
 	/**
 	 * Constructor - creates a Container from a given CellType
 	 * @param type the type of Container to create
 	 */
-	public Container(CellType type){
+	public Container(CellType type, Direction facing){
 		contents = new ArrayList<MoveableObject>();
 		this.type = type;
+		this.facing = facing;
 		if(type == CellType.BRIEFCASE || type == CellType.CHEST) maxSize = 1;
 		if(type == CellType.DRAWERS) maxSize = 3;
 	}
@@ -47,5 +49,21 @@ public class Container implements GameObject{
 	public MoveableObject getContents(){
 		if(!contents.isEmpty()) return contents.remove(0);
 		else return null;
+	}
+	
+	/**
+	 * Returns the CellType of this Container
+	 * @return the CellType of this Container
+	 */
+	public CellType getType(){
+		return type;
+	}
+	
+	/**
+	 * Returns the Direction this Container is facing
+	 * @return the Direction this Container is facing
+	 */
+	public Direction getFacing(){
+		return facing;
 	}
 }

@@ -223,7 +223,7 @@ public class GameBuilder {
 					
 					// Check whether the item to add is furniture or a container and add it to the world
 					if(furnitureType == CellType.BRIEFCASE || furnitureType == CellType.CHEST || furnitureType == CellType.DRAWERS){
-						floors[i].addContainer(position, new Container(furnitureType));
+						floors[i].addContainer(position, new Container(furnitureType, furnitureDir));
 					}
 					else{
 						floors[i].addFurniture(position, new Furniture(furnitureType, position, furnitureDir));
