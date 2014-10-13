@@ -44,7 +44,7 @@ public class Packet03Move extends UDPPakcet {
 		this.x = Integer.parseInt(dataArray[2]);
 		this.y = Integer.parseInt(dataArray[3]);
 		this.point = new Point(x,y);
-		System.out.println("packet03Move con 2: ");
+		System.out.println("Packet03Move con 2: ");
 	}
 
 
@@ -54,7 +54,7 @@ public class Packet03Move extends UDPPakcet {
 	@Override
 	public void writeData(Client client) {
 		client.sendData(getData());
-		System.out.println("packet03Move con 3: ");
+		System.out.println("Packet03Move con 3: ");
 
 	}
 
@@ -63,10 +63,10 @@ public class Packet03Move extends UDPPakcet {
 	 */
 	@Override
 	public void writeData(Server server) {
-		System.out.println("packet03Move con 4: ");
+		System.out.println("Packet03Move con 4: ");
 		server.sendDataToAllClients(getData());
 
-		System.out.println("packet03Move con 5: ");
+		System.out.println("Packet03Move con 5: ");
 	}
 
 	/* (non-Javadoc)

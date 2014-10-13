@@ -40,6 +40,7 @@ import javax.swing.JTextField;
 
 import ServerClients.Client;
 import ServerClients.Server;
+import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
@@ -834,5 +835,11 @@ public class GUI implements WindowListener {
 //			System.out.println("GUI setState player2 x: "+players.get(1).getPosition().x);
 //			}
 //	}
+
+	public void addWindowListener(WindowListeners windowListeners) {
+		// TODO Auto-generated method stub
+		this.addWindowListener(windowListeners);
+		
+	}
 }
 
