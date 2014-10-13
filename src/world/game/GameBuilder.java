@@ -113,7 +113,7 @@ public class GameBuilder {
 	public void buildFloors(int floorCount){
 		floors = new Map[floorCount];
 		for(int i = 0; i < floorCount; i++){
-			floors[i] = new Map(new File("map1.txt"));
+			floors[i] = new Map(new File("map1.txt"), i);
 			
 			// Check the doors in the new Map, if they're lockable create keys for each door
 			for(Door door: floors[i].getDoors().values()){

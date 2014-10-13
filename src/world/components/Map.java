@@ -25,6 +25,7 @@ public class Map implements java.io.Serializable{
 
 	private int xLimit, yLimit;
 	private CellType[][] map;
+	private int floorNumber;
 	private List<Point> emptyCells;
 	private HashMap<Point, MoveableObject> moveableObjects = new HashMap<Point, MoveableObject>();
 	private HashMap<Point, Furniture> furnitureOrigins = new HashMap<Point, Furniture>();
@@ -39,7 +40,8 @@ public class Map implements java.io.Serializable{
 	 * Constructor - scans in the floor layout from a given map file.
 	 * @param file the map file for this floor
 	 */
-	public Map(File file){	
+	public Map(File file, int floorNumber){	
+		this.floorNumber = floorNumber;
 		try{
 			Scanner scan = new Scanner(file);
 
@@ -364,6 +366,14 @@ public class Map implements java.io.Serializable{
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns the number of the floor this Map represents
+	 * @return the number of the floor this Map represents
+	 */
+	public int floorNumber(){
+		return floorNumber;
 	}
 	
 }

@@ -85,7 +85,8 @@ public class GameState implements java.io.Serializable{
 			floors[floorNumber].placePlayer(p.getPosition(), p);
 			p.setFloor(floors[floorNumber]);
 			return true;
-		}	
+		}
+		
 	}
 
 	/**
@@ -95,7 +96,6 @@ public class GameState implements java.io.Serializable{
 	 * @return true if successfully picked up
 	 */
 	public boolean pickupObjectAtPoint(Player player, Point point){
-
 		GameObject object = player.getFloor().objectAtPoint(point);
 
 		// Handle the case that the object is a GameToken
@@ -135,6 +135,7 @@ public class GameState implements java.io.Serializable{
 	 */
 	public Key pickupKey(Player player, Point p){	
 		Key key = player.getFloor().removeKey(p);
+		Key toReturn = player.getInventory().addKey(key);
 		return player.getInventory().addKey(key);
 	}
 
