@@ -11,6 +11,14 @@ import javax.swing.ImageIcon;
 import world.components.TokenType;
 import world.game.Player;
 
+/**
+ * The CollectItemsCanvas is responsible for drawing tokens on canvas.
+ * This class draws collected items in color, and draws uncollected items 
+ * in grey.
+ * 
+ * @author Zhiheng Sun,  ID: 300256273
+ * 
+ */
 public class CollectItemsCanvas extends Canvas {
 
 	private Player player;
@@ -18,6 +26,10 @@ public class CollectItemsCanvas extends Canvas {
 	private ArrayList<ImageIcon> collectItems;
 	private ArrayList<Boolean> isPaint;
 
+	/**
+	 * Sets up the CollectItemsCanvas for the given player
+	 * @param player	the player whose tokens will be drawn on canvas
+	 */
 	public CollectItemsCanvas(Player player) {
 		this.player = player;
 		type = player.getType();
@@ -28,6 +40,10 @@ public class CollectItemsCanvas extends Canvas {
 		getCollectItems();
 	}
 
+	/**
+	 * The following method draws all the player's tokens in grey, 
+	 * and sets all tokens to unpainted.
+	 */
 	private void initialiseItems() {
 		collectItems = new ArrayList<ImageIcon>();
 		for(int i = 0; i < player.getTokenList().size(); i++){
@@ -40,7 +56,11 @@ public class CollectItemsCanvas extends Canvas {
 			isPaint.add(false);
 		}
 	}
-
+	
+	/**
+	 * The following method gets the collected tokens of the player,
+	 * and adds the corresponding images to the images list.
+	 */
 	private void getCollectItems() {		
 		for (int i = 0; i < player.getTokenList().size(); i++){
 			if (player.getTokenList().get(i).isFound() && !isPaint.get(i)){
@@ -52,6 +72,12 @@ public class CollectItemsCanvas extends Canvas {
 		}
 	}
 
+	/**
+	 * The following method returns the string of the given color, which is 
+	 * useful to get image name.
+	 * @param color	the given color
+	 * @return	the string of the given color
+	 */
 	private String identifyColor(Color color) {
 		if (color.equals(Color.BLUE)){
 			return "blue";
@@ -67,6 +93,9 @@ public class CollectItemsCanvas extends Canvas {
 		return null;
 	}
 
+	/**
+	 * The following method draws all the images on the CollectItemsCanvas.
+	 */
 	public void paint(Graphics g) {
 		System.out.println("1111111DD");
 		getCollectItems();
