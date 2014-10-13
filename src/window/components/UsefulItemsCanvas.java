@@ -30,7 +30,6 @@ public class UsefulItemsCanvas extends Canvas {
 		this.player = player;
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 750, 70);
-		//this.setSize(new Dimension(400, 70));
 		usefulItems = new ArrayList<ImageIcon>();
 		getUsefulItems();
 	}
@@ -40,7 +39,7 @@ public class UsefulItemsCanvas extends Canvas {
 	 * corresponding images to the images list.
 	 */
 	private void getUsefulItems() {
-		for (int i = usefulItems.size(); i < player.getInventory().size(); i++){
+		for (int i = usefulItems.size(); i < player.getInventory().size(); i++){	// go through the player's inventory, add images to collectItems
 			String resource = "Resource/inventory/" + player.getInventory().get(i).toString().toLowerCase() + ".png";
 			usefulItems.add(new ImageIcon(resource));
 		}
@@ -52,7 +51,7 @@ public class UsefulItemsCanvas extends Canvas {
 	public void paint(Graphics g) {
 		getUsefulItems();
 		int gap = 65;
-		for(int i = 0; i < usefulItems.size(); i++){
+		for(int i = 0; i < usefulItems.size(); i++){	// go through the player's inventory images, draw the images on canvas with given width and height
 			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
 	}
