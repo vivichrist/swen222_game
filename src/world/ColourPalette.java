@@ -77,6 +77,16 @@ public class ColourPalette {
 		if(index >= colours.size()) return null;
 		return colours.get(index);
 	}
+	
+	/**
+	 * Returns the Color corresponding to a given name
+	 * @param name the name of the Color to return
+	 * @return the Color corresponding to the given name
+	 */
+	public static Color get(String name){
+		int index = names.indexOf(name);
+		return get(index);
+	}
 
 	/**
 	 * Returns the name of the Color at a given index in this ColourPalette

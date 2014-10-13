@@ -17,6 +17,7 @@ import world.components.Container;
 import world.components.Direction;
 import world.components.Door;
 import world.components.Furniture;
+import world.components.GameToken;
 import world.components.Key;
 import world.components.Map;
 import world.components.TokenType;
@@ -69,7 +70,7 @@ public class GameBuilder {
 		players.add(new Player("bbb", TokenType.values()[2]));
 		players.add(new Player("ccc", TokenType.values()[3]));
 		
-		//getPlayers();
+		// Build and populate the game world - the order here matters
 		buildFloors(players.size());
 		placePlayers();
 		placeFurniture();
@@ -144,20 +145,27 @@ public class GameBuilder {
 	 * Distributes each Player's Tokens throughout the game world, choosing floors and Points at random
 	 */
 	private void placePlayerTokens(){
+		// Temporary collection of all GameTokens in this game
+		ArrayList<GameToken> tokens = new ArrayList<GameToken>();
 		for(int i = 0; i < players.size(); i++){
 			Player currentPlayer = players.get(i);
 			TokenList currentTokens = currentPlayer.getTokenList();
-			for(int j = 0; j < currentTokens.size(); j++){
-				Random random = new Random();
-				// Select a random floor in this world
-				Map randomFloor = floors[random.nextInt(floors.length)];
-				// Place the Token in a random cell on the floor
-				randomFloor.addGameToken(randomFloor.randomEmptyCell(), currentTokens.get(j));
+			// Add each Player's GameTokens to the tokens collection
+			for(int t = 0; t < currentTokens.size(); t++){
+				tokens.add(currentTokens.get(t));
 			}
+		}
+		// Distribute tokens throughout the game world at random
+		for(int i = 0; i < tokens.size(); i++){
+			Random random = new Random();
+			// Select a random floor in this world
+			Map randomFloor = floors[random.nextInt(floors.length)];
+			// Place the Token in a random cell on the floor
+			randomFloor.addGameToken(randomFloor.randomEmptyCell(), tokens.get(i));
 		}
 	}
 	
-	/**
+	/**x
 	 * Distributes a torches (one per player) throughout the game world, choosing floors and Points at random
 	 */
 	private void placeTorches(){
