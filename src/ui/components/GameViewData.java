@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Vivian Stewart
+ * Centralised data for scene and scene rendering
+ */
 public class GameViewData
 {
 	private final ArrayList<StaticRender>		staticScene;
@@ -17,6 +21,10 @@ public class GameViewData
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
 
+	/**
+	 * Singleton Patterned for ease of access
+	 * @return the single instance of this class
+	 */
 	public static GameViewData instance()
 	{
 		if ( instance == null )
@@ -57,6 +65,14 @@ public class GameViewData
 		return dynamicScene.add( sobject );
 	}
 
+	/**
+	 * Adds the graphical object to both the game map for collision detection
+	 * and mouse selection, and also to the rendering list. Items added at some
+	 * point in time after initialisation need to be assigned to the
+	 * toInitialise field to be initialised before the next frame.
+	 * @param graphical object
+	 * @return successfully added to renderer
+	 */
 	public boolean addGrapicalObject( GraphicalObject gobject )
 	{
 		gameElements.put( gobject.getLocation(), gobject );
@@ -72,17 +88,26 @@ public class GameViewData
 		return Collections.unmodifiableList( dynamicScene );
 	}
 
+	/**
+	 * @param p
+	 */
 	public void remove( Point p )
 	{
 		GraphicalObject go = gameElements.remove( p );
 		dynamicScene.remove( (DymanicRender)go );
 	}
 
+	/**
+	 * @return
+	 */
 	public DymanicRender getPreviousSelection()
 	{
 		return previousSelection;
 	}
 
+	/**
+	 * @param dyn
+	 */
 	public void replacePreviousSelection( DymanicRender dyn )
 	{
 		if ( previousSelection == dyn ) return;
@@ -93,6 +118,9 @@ public class GameViewData
 		previousSelection = dyn;
 	}
 
+	/**
+	 * 
+	 */
 	public void clear()
 	{
 		previousSelection = null;
@@ -102,16 +130,25 @@ public class GameViewData
 		toInitialise = null;
 	}
 
+	/**
+	 * @return
+	 */
 	public DymanicRender getToInitialise()
 	{
 		return toInitialise;
 	}
 
+	/**
+	 * @param toInitialise
+	 */
 	public void setToInitialise( DymanicRender toInitialise )
 	{
 		this.toInitialise = toInitialise;
 	}
 
+	/**
+	 * 
+	 */
 	public void resetToInitialise()
 	{
 		this.toInitialise = null;

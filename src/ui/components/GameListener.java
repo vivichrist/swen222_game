@@ -106,7 +106,7 @@ public class GameListener implements KeyListener, MouseListener
 	{ // Switch on persistant key presses. Key is either pressed or sustained
 		if ( key.getKeyCode() == KeyEvent.VK_W || (!keyUpdate && wKey) )
 		{
-			movePos( (float) (direction - Math.PI) );
+			movePos( direction - (float)Math.PI );
 			wKey = true;
 		}
 		if ( key.getKeyCode() == KeyEvent.VK_S || (!keyUpdate && sKey) )
@@ -118,7 +118,7 @@ public class GameListener implements KeyListener, MouseListener
 		{
 			if ( key.isControlDown() ) // strafing
 			{
-				movePos( (float) ( direction + 0.5f * Math.PI ) );
+				movePos( direction + 0.5f * (float)Math.PI );
 				ctrlKey = true;
 			}
 			else
@@ -129,7 +129,7 @@ public class GameListener implements KeyListener, MouseListener
 		{
 			if ( key.isControlDown() ) // strafing
 			{
-				movePos( (float) ( direction - 0.5f * Math.PI ) );
+				movePos( direction - 0.5f * (float)Math.PI );
 				ctrlKey = true;
 			}
 			else
@@ -150,7 +150,7 @@ public class GameListener implements KeyListener, MouseListener
     	{	// forward/backward
 	    	if ( wKey )
 			{
-	    		movePos( -direction );
+	    		movePos( direction - (float)Math.PI );
 			}
 			if ( sKey )
 			{
@@ -168,18 +168,6 @@ public class GameListener implements KeyListener, MouseListener
 				else addToDirection( turnSpeed );
 			}
 		}
-	}
-
-/**
- * Gets the point clicked to be unprojected by OpenGL to find selected
- * Graphical object
- * @return current clicked point
- */
-	public Point getClick()
-	{
-		Point p = click;
-		click = null;
-		return p;
 	}
 
 /**
@@ -203,10 +191,8 @@ public class GameListener implements KeyListener, MouseListener
  */
 	private void movePos( float dir )
 	{
-		float newx = (float) ( position.x
-				+ Math.sin( dir ) * speed );
-		float newy = (float) ( position.y
-				+ Math.cos( dir ) * speed );
+		float newx = position.x + (float)Math.sin( dir ) * speed;
+		float newy = position.y	+ (float)Math.cos( dir ) * speed;
 		// movement crosses square boundaries
 		boolean xcross = (int)(newx / GameView.cellsize)
 				!= (int)(position.x / GameView.cellsize);
@@ -214,25 +200,37 @@ public class GameListener implements KeyListener, MouseListener
 				!= (int)(position.y / GameView.cellsize);
 		// collision detection
 		if ( ( xcross || ycross )
-				&& scene.isCollidable( newx, newy ) )
+				&& scene.isCollidable( newx, newy, true ) )
 		{
 			// TODO: NetworkController.movePlayer( NetworkController.?, new Point( cellx, celly ) );
-			if ( xcross && !ycross )
+			if ( xcross && !scene.isCollidable( position.x, newy, false ) )
 				position.setLocation( position.x, newy );
-			else if ( ycross && !xcross )
+			else if ( ycross && !scene.isCollidable( newx, position.y, false ) )
 				position.setLocation( newx, position.y );
 		}
 		else position.setLocation( newx, newy );
 	}
 
 /**
- * Adjust direction and constrain within 0 - 2 * PI (radians)
- * @param f
+ * Adjust direction and constrained within 0 - 2 * PI (radians)
+ * @param increment/decrement direction by f
  */
 	private void addToDirection( float f )
 	{
 		direction += f;
 		direction %= GameView.PI2;
+	}
+
+/**
+ * Gets the point clicked to be unprojected by OpenGL to find selected
+ * Graphical object. Resets the click to null to avoid retriggering.
+ * @return current clicked point
+ */
+	public Point getClick()
+	{
+		Point p = click;
+		click = null;
+		return p;
 	}
 
 	@Override

@@ -56,9 +56,31 @@ public class GameScene
 	 * @param y - continuous y position value
 	 * @return if the position is inside a collidable square
 	 */
-	public boolean isCollidable( float x, float y )
+	public boolean isCollidable( float x, float y, boolean trigger )
 	{
-		return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
+		if ( trigger ) return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
+		return simmpleCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
+	}
+	
+	private boolean simmpleCollidable( int x, int y )
+	{
+		if ( x >= xlimit || y >= ylimit )
+		{
+			return false;
+		}
+		Point p = new Point( x, y );
+		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
+			|| gdata.getGameElements().get( p ) != null )
+		{	// collect it and remove from data to appear in items
+			CellType ct =  gdata.getGameElements().get( p ).getType();
+			// tokens and torch
+			if (( ct.ordinal() < CellType.CHEST.ordinal() 
+						&& ct.ordinal() < CellType.OUTOFBOUNDS.ordinal() )
+					|| ct == CellType.RINGS )
+				return false;
+			return true;
+		}
+		return map[x][y] == CellType.WALL;
 	}
 
 	/**
