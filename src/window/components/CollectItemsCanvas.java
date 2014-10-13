@@ -20,12 +20,21 @@ import world.game.Player;
  * 
  */
 public class CollectItemsCanvas extends Canvas {
-
-	private Player player;
-	private TokenType type;
+	
+	/**
+	 * The following is a list of ImageIcons of the collected 
+	 * items of the current player
+	 */
 	private ArrayList<ImageIcon> collectItems;
+	
+	/**
+	 * The following is a list of booleans which indicate tokens 
+	 * have been painted or not.
+	 */
 	private ArrayList<Boolean> isPaint;
 
+	private Player player;	// the current player
+	private TokenType type;	// the token type of the current player
 	/**
 	 * Sets up the CollectItemsCanvas for the given player
 	 * @param player	the player whose tokens will be drawn on canvas
@@ -35,22 +44,23 @@ public class CollectItemsCanvas extends Canvas {
 		type = player.getType();
 		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 750, 70);
-		//this.setSize(new Dimension(400, 70));
 		initialiseItems();
 		getCollectItems();
 	}
 
 	/**
 	 * The following method draws all the player's tokens in grey, 
-	 * and sets all tokens to unpainted.
+	 * and sets all tokens unpainted.
 	 */
 	private void initialiseItems() {
+		// go through the player's tokens, add grey images of player's tokens to collectItems
 		collectItems = new ArrayList<ImageIcon>();
 		for(int i = 0; i < player.getTokenList().size(); i++){
 			String resource = "Resource/" + type.toString().toLowerCase() + "/" + type.toString().toLowerCase() + " grey" + ".png";
 			collectItems.add(i, new ImageIcon(resource));			
 		}
-
+		
+		// set all of the tokens unpainted
 		isPaint = new ArrayList<Boolean>();
 		for (int j = 0; j < player.getTokenList().size(); j++){
 			isPaint.add(false);
@@ -62,11 +72,11 @@ public class CollectItemsCanvas extends Canvas {
 	 * and adds the corresponding images to the images list.
 	 */
 	private void getCollectItems() {		
-		for (int i = 0; i < player.getTokenList().size(); i++){
+		for (int i = 0; i < player.getTokenList().size(); i++){		// go through the player's tokens, add images of collected tokens to collectItems
 			if (player.getTokenList().get(i).isFound() && !isPaint.get(i)){
-				String color = identifyColor(player.getTokenList().get(i).getColor());
+				String color = identifyColor(player.getTokenList().get(i).getColor());	// get the color of the collected token
 				String resource = "Resource/" + type.toString().toLowerCase() + "/" + type.toString().toLowerCase() + " " + color + ".png";
-				collectItems.set(i, new ImageIcon(resource));
+				collectItems.set(i, new ImageIcon(resource));	// replace the grey image with the color image of the token
 				isPaint.set(i, true);
 			}
 		}
@@ -97,13 +107,11 @@ public class CollectItemsCanvas extends Canvas {
 	 * The following method draws all the images on the CollectItemsCanvas.
 	 */
 	public void paint(Graphics g) {
-		System.out.println("1111111DD");
 		getCollectItems();
 		int gap = 65;
-		for(int i = 0; i < collectItems.size(); i++){
+		for(int i = 0; i < collectItems.size(); i++){	// go through the player's tokens images, draw the images on canvas with given width and height
 			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
-		//g.drawRect(0, 600, 750, 70);
 	}
 
 }
