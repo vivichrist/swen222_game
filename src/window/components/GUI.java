@@ -674,7 +674,7 @@ public class GUI {
 	}
 	
 	/**
-	 * this method will call by client once client class received broadcast package from server
+	 * The following method will call by client once client class received broadcast package from server
 	 * player will able to start the game
 	 * @param name - current player name
 	 * @param state -  after been called game state
