@@ -19,7 +19,11 @@ import world.game.Player;
  */
 public class UsefulItemsCanvas extends Canvas {
 
-	private Player player;
+	private Player player;	// the current player
+	
+	/**
+	 * The following is a list of ImageIcons of the inventory of the current player
+	 */
 	private ArrayList<ImageIcon> usefulItems;
 	
 	/**
