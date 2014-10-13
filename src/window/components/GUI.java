@@ -42,6 +42,7 @@ import javax.swing.JTextField;
 
 import ServerClients.Client;
 import ServerClients.Server;
+import ServerClients.Timers;
 import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
@@ -555,8 +556,8 @@ public class GUI {
 						port++;
 					}
 					strPortNum = ""+port;
-
-					Server server = new Server();
+					
+					Server server = new Server(port);
 					server.start();
 
 					serverStartsPanel();
@@ -656,11 +657,12 @@ public class GUI {
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
 		state = new GameState(players,floors);
-		player1 = new MultyPlayer(nameC, null,null, -1);
+		//player1 = new MultyPlayer(nameC, null,null, -1);
 
 		controller = new Controller(state, this);
+		int clientPortNumber = Integer.parseInt(strPortNumC);
 		NetworkController networkController = new NetworkController(controller);
-		client = new Client(this,nameC,strServerNameC,networkController );
+		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
 		networkController.setClient(client);
@@ -690,6 +692,10 @@ public class GUI {
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 		southPanel = new SouthPanel(controller.getPlayer(name));
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+		layeredPane.remove(waitClientsPanel);
+		Timers timer = new Timers();    
+		int count = timer.getCountDownGame();
+		System.out.println("=============="+count);
 	}
 	/**
 	 * The following method pops up a window to ask the player to choose which floor

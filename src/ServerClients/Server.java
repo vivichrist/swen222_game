@@ -29,7 +29,6 @@ import world.game.Player;
  *
  */
 public class Server extends Thread {
-	public static final int SERVER_PORT = 4768;
 	static DatagramSocket socket;
 	public Client client;
 	//private GameState state;
@@ -37,15 +36,17 @@ public class Server extends Thread {
 	private GameState state;
 	private boolean serverOpen = false;
 	private String name;
+	private int portNumber;
 	public static int serverStart = 0;
 
 
-	public Server(){
+	public Server(int portNumber){
+		this.portNumber = portNumber;
 		connectedPlayers = new ArrayList<MultyPlayer>();
 
 		//this.state = state;
 		try {
-			this.socket = new DatagramSocket(SERVER_PORT);
+			this.socket = new DatagramSocket(portNumber);
 		} catch (SocketException e) {
 			e.printStackTrace();
 			System.out.println("server socket"+ e);
@@ -57,11 +58,11 @@ public class Server extends Thread {
 	public void run(){
 
 		while(true){
-			if(connectedPlayers.size()>1){
-
-					sentStateToAllClients();
-				
-			}
+//			if(connectedPlayers.size()>1){
+//
+//					sentStateToAllClients();
+//				
+//			}
 
 			this.serverStart = 99;
 			System.out.println("Server Start>>>>>>>>>>"+ serverStart);
@@ -116,12 +117,12 @@ public class Server extends Thread {
 			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
-//			if(connectedPlayers.size()==2 && serverOpen==false){
-//				if(connectedPlayers.size()>1){
-//
-//					sentStateToAllClients();
-//				}
-//			}
+			if(connectedPlayers.size()==2 && serverOpen==false){
+				if(connectedPlayers.size()>1){
+
+					sentStateToAllClients();
+				}
+			}
 				break;
 			case DISCONNECT:
 				packet = new Packet01Disconnect(data);

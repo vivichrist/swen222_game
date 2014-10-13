@@ -5,11 +5,12 @@ package ServerClients;
  * four mins count down 
  * this class will call from server class, once clients size >=3 will start timing.
  * */
-public class Timer {
+public class Timers {
 	
 	int countDownGame = 240;//4mins in seconds
 	int countDownPre = 10;//wait 10senconds before start game
-		public Timer(){
+		public Timers(){
+			timerGameStart();
 		}
 		/**
 		 * timerGameStart method is going to count down 4 mins for each client
