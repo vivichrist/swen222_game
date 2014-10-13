@@ -188,9 +188,9 @@ public class GameListener implements KeyListener, MouseListener
 				&& map.isCollidable( newx, newy ) )
 		{
 			// NetworkController.movePlayer( NetworkController., new Point( cellx, celly ) );
-			if ( xcross && !map.isCollidable( position.x, newy ) )
+			if ( xcross && !ycross )
 				position.setLocation( position.x, newy );
-			else if ( ycross && !map.isCollidable( newx, position.y ))
+			else if ( ycross && !xcross )
 				position.setLocation( newx, position.y );
 		}
 		else position.setLocation( newx, newy );

@@ -13,8 +13,9 @@ public class GameViewData
 	private final ArrayList<StaticRender>		staticScene;
 	private final ArrayList<DymanicRender>		dynamicScene;
 	private HashMap<Point, GraphicalObject>		gameElements;
-	private DymanicRender 						previousSelection	= null;
-	private static GameViewData					instance;
+	private DymanicRender						toInitialise;
+	private DymanicRender 						previousSelection = null;
+	private static GameViewData					instance = null;
 
 	public static GameViewData instance()
 	{
@@ -98,5 +99,21 @@ public class GameViewData
 		dynamicScene.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
+		toInitialise = null;
+	}
+
+	public DymanicRender getToInitialise()
+	{
+		return toInitialise;
+	}
+
+	public void setToInitialise( DymanicRender toInitialise )
+	{
+		this.toInitialise = toInitialise;
+	}
+
+	public void resetToInitialise()
+	{
+		this.toInitialise = null;
 	}
 }

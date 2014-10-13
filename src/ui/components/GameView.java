@@ -145,6 +145,12 @@ public class GameView extends GLJPanel
             				 , 0.0f, 0.0f, 1.0f );// up
             	gl2.glRotatef( direction, 0 ,0 ,1.0f );
             	gl2.glTranslatef( -position.x, -position.y, -10.0f );
+            	GameViewData gdata = GameViewData.instance();
+            	if ( gdata.getToInitialise() != null )
+            	{
+            		gdata.getToInitialise().initialise( gl2 );
+            		gdata.resetToInitialise();
+            	}
                 render( gl2 );
                 mouseSelect( gl2 );
             }
