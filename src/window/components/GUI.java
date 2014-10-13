@@ -591,7 +591,7 @@ public class GUI {
 						System.out.println("Server name: " + strServerNameC);
 						System.out.println("Port number: " + strPortNumC);
 						layeredPane.remove(joinServerPanel);
-						layeredPane.remove(backgroundPanel);
+						//layeredPane.remove(backgroundPanel);
 						startGame2();
 						frame.repaint();
 						//textFieldRealName.setText("");
@@ -652,6 +652,7 @@ public class GUI {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
+		waitClientsPanel();
 		players = new ArrayList<Player>();
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
