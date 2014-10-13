@@ -76,7 +76,7 @@ public class GameScene
 		Point p = new Point( x, y );
 		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
 			|| gdata.getGameElements().get( p ) != null )
-		{	// collect it and remove from data to apear in items
+		{	// collect it and remove from data to appear in items
 			CellType ct =  gdata.getGameElements().get( p ).getType();
 			System.out.println( "Collide (" + x + "," + y + ") type: " + ct );
 			if ( ct == CellType.RINGS )
@@ -85,17 +85,25 @@ public class GameScene
 				System.out.println("Teleporting to Floor:" + teleport );
 				return false;
 			}
-			if ( ct == CellType.KEYDOOR )
+			else if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
 					return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 				return true;
-			}
-			else if ( ct.toString() == game.getPlayer().getType().toString()
-					|| ct == CellType.KEY || ct == CellType.TORCH )
+			}// tokens and torch
+			else if ( ct.toString() == game.getPlayer().getType().toString() || ct == CellType.TORCH )
 			{
 				game.pickupObjectAtPoint( game.getPlayer(), p );
 				gdata.remove( p );
-
+			}
+			else if ( ct == CellType.KEY  )
+			{
+				Key key = game.pickupKey( game.getPlayer(), p );
+				gdata.remove( p );
+				if ( key != null )
+				{
+					gdata.addGrapicalObject( DymanicRender.instanceKey( p, key.getColor() ) );
+				}
+				
 			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
 		}
 		return map[x][y] == CellType.WALL;
@@ -149,10 +157,10 @@ public class GameScene
 					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p, ColourPalette.LIGHTOCEANBLUE ) );
 					break;
 				}
-				go = fmap.objectAtPoint(p);
-				furn = fmap.furnitureAtPoint(p);
+				go = fmap.objectAtPoint( p );
+				furn = fmap.furnitureAtPoint (p );
 				cont = fmap.containerAtPoint( p );
-				if ( go == null ) continue;
+				if ( go == null && cont == null && furn == null ) continue;
 				if ( go instanceof GameToken )
 				{ // Tokens to be collected
 					if ( ((GameToken)go).getType() == TokenType.CONE )
@@ -192,7 +200,7 @@ public class GameScene
 				{ // load furnature int the scene
 					dyn = DymanicRender.instanceFurnature(
 							furn.getType(), Behave.ORIENTATION, p
-							, furn.getFacing(), ColourPalette.MAROON );
+							, furn.getFacing(), ColourPalette.PALEGREEN );
 					gdata.addDynamicOnly( dyn );
 					List<Point> lp = furn.getPoints();
 					System.out.println( "Number of points in Furature:" + lp.size() );
@@ -201,10 +209,10 @@ public class GameScene
 					gdata.addAllGameElements( furn.getPoints(), dyn );
 				} else if ( cont != null )
 				{
+					System.out.println( "Container: " + cont.getType() );
 					dyn = DymanicRender.instanceContainer(
 							cont.getType(), Behave.ORIENTATION, p
 							, cont.getFacing(), ColourPalette.MAROON );
-					gdata.addDynamicOnly( dyn );
 					gdata.addGrapicalObject( dyn );
 				}
 			}

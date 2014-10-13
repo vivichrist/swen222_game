@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * @author vivian
+ * Read in WaveFront .obj files
+ */
 public class ObjReader
 {
 	private int lineNumber = 0;
