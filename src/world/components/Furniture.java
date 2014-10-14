@@ -1,9 +1,10 @@
 package world.components;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Furniture implements StationaryObject {
+public class Furniture implements StationaryObject, Serializable {
 
 	private final Direction facing;
 	private ArrayList<Point> points;

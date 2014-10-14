@@ -1,5 +1,6 @@
 package world.components;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import world.components.MoveableObject;
@@ -9,7 +10,7 @@ import world.components.MoveableObject;
  * @author Kalo Pilato - ID: 300313803
  *
  */
-public class Container implements GameObject{
+public class Container implements GameObject, Serializable{
 
 	private ArrayList<MoveableObject> contents;
 	private CellType type;
