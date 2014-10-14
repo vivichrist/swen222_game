@@ -10,7 +10,7 @@ public class Timers {
 	int countDownGame = 240;//4mins in seconds
 	int countDownPre = 10;//wait 10senconds before start game
 		public Timers(){
-			timerGameStart();
+			timerWaiting();
 		}
 		/**
 		 * timerGameStart method is going to count down 4 mins for each client
@@ -22,7 +22,7 @@ public class Timers {
 			long temp=currentTime;//assign currentTime to temp 
 			int gameCycle = 240000;//4mins in milliseconds
 
-		while (i-currentTime<gameCycle)
+		while (i-currentTime-2000<gameCycle)
 		{     
 
 			if ((i-temp)== 1000 )
@@ -70,5 +70,10 @@ public class Timers {
 		public int getCountDownPre() {
 			return countDownPre;
 		}
-		
+		public static void main (String[]arg){
+			Timers t = new Timers();
+			//while(t.getCountDownGame()>0){
+			System.out.println(t);
+		//	}
+		}
 }
