@@ -753,6 +753,7 @@ public class GUI {
 	 * */
 	public void startClientWindows(Player player, GameView gameView){
 		this.gameView = gameView;
+		this.player = player;
 
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
