@@ -44,7 +44,7 @@ import ServerClients.Client;
 import ServerClients.Server;
 import ServerClients.Timers;
 import ServerClients.WindowListeners;
-import ServerClients.test;
+//import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import controllers.RendererController;
@@ -138,13 +138,14 @@ public class GUI {
 	private JTextField textFieldName;
 
 	private Player player;	// the current player
+	private int numPlayer;
 	public static String name;	// the entered name of the player in single-player mode
-	public String nameC;	// the entered name of the player in multiple-player mode
+	public static String nameC;	// the entered name of the player in multiple-player mode
 	public String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-
+	
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -596,6 +597,14 @@ public class GUI {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
+					String nP= JOptionPane.showInputDialog(
+					        frame, 
+					        "Enter the number of players of the game", 
+					        "Number of Players", 
+					        JOptionPane.INFORMATION_MESSAGE
+					    );
+					numPlayer = Integer.parseInt(nP);
+					
 					layeredPane.remove(chooseServerPanel);
 					try {
 						strServerName = getSeverName().getHostAddress();
@@ -723,34 +732,13 @@ public class GUI {
 	 */
 	protected void startGame2() {
 		waitClientsPanel();
-		players = new ArrayList<Player>();
-		floors =new Map[1];
-		floors[0] = new Map(new File("map1.txt"),0);
-		state = new GameState(players,floors);
-		//player1 = new MultyPlayer(nameC, null,null, -1);
 
-		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
-
-		RendererController renCon = new RendererController(false);
-		NetworkController networkController = new NetworkController(controller, renCon);
-		renCon.setState(state);
-		renCon.setNetCon(networkController);
-		renCon.setUICon(controller);
-
-		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
+		client = new Client(this,nameC,strServerNameC,clientPortNumber );
 		client.start();
-
-		networkController.setClient(client);
+		
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-		networkController.setGameView(gameView);
-		
-		
-//		if (client.getPlayer().ipAddress == null || client.getPlayer().port  == null ){
-//			
-//		}
-//		
 	
 		System.out.println("1111111111111" + client.getPlayer().ipAddress);
 		System.out.println("1111111111111" + client.getPlayer().port);
@@ -762,24 +750,14 @@ public class GUI {
 	 * @param name - current player name
 	 * @param state -  after been called game state
 	 * */
-	public void startClientWindows(String name, GameState state){
-		GLProfile.initSingleton();
-		GLProfile glprofile = GLProfile.getDefault();
-		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
-		System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
-		gameView = new GameView( glcapabilities, frame, state,state.getPlayer(nameC) );
-		gameView.setEnabled( true );
-		gameView.setVisible( true );
-		gameView.setFocusable( true );
+	public void startClientWindows(Player player, GameView gameView){
+		this.gameView = gameView;
+
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-		southPanel = new SouthPanel(controller.getPlayer(name));
+		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
-
-//		Timers timer = new Timers(southPanel.getUsefulItemsCanvas());    
-//		int count = timer.getCountDownGame();
-//		System.out.println("=============="+count);
 	}
 
 	/**
@@ -913,6 +891,10 @@ public class GUI {
 		// TODO Auto-generated method stub
 		this.addWindowListener(windowListeners);
 
+	}
+	
+	public JFrame getFrame(){
+		return frame;
 	}
 }
 

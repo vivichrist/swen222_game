@@ -182,49 +182,6 @@ public class GameState implements java.io.Serializable{
 		if(player.getInventory().contains(door.getKey())) return true;
 		return false;
 	}
-
-	public byte[] serialize() {
-		System.out.println("x: "+ players.get(0).getPosition().x+ " Y: "+players.get(0).getPosition().y);
-
-		byte[] bytes = new byte[60000];
-		try {
-			//object to bytearray
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(this);
-			bytes = baos.toByteArray();
-			out.flush();
-			baos.close();
-			out.close();
-			return bytes;
-		}catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	public GameState deserialize(byte[]bytes) {
-
-		ByteArrayInputStream bais = null;
-		ObjectInputStream in = null;
-		try{
-			bais = new ByteArrayInputStream(bytes);
-			in = new ObjectInputStream(bais);
-			GameState s = (GameState) in.readObject();
-			return s;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally{
-			try {
-				bais.close();
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-		return null;
-	}
 	
 	/**
 	 * Return the current GameState
@@ -263,7 +220,7 @@ public class GameState implements java.io.Serializable{
 		if(players.size() == 2){
 			System.out.println("x: "+players.get(0).getPosition().x);
 			System.out.println("x: "+players.get(1).getPosition().x);
-			}
+		}
 	}
 
 	public void setConnection(boolean connection) {

@@ -85,14 +85,6 @@ public class NetworkController {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	/**
-	 * server send the serialized data to server then through the networkController pass to controller then update the state
-	 *  @param realData - 
-
-	 */
-	public static GameState deserialize(byte[] realData) {
-		return controller.deserialize(realData);
-	}
 
 	public void setState(GameState st) {
 		controller.setState(st);

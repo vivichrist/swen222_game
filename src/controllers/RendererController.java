@@ -24,7 +24,7 @@ public class RendererController {
 	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database
 	 */
 	public RendererController(boolean single){
-		GameViewData gv = GameViewData.instance();
+		view = GameViewData.instance();
 		singlePlayer = single;
 	}
 	
@@ -63,7 +63,9 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		view.addNewPlayerMove(player.getPosition(), point);
+		System.out.println("moving player: " + player.getName() + " to " + point.toString());
 		state.movePlayer(player, point);
+		System.out.println(player.getName() + " position: " + state.getPlayer(player.getName()).getPosition().toString());
 	}
 	
 	/**
