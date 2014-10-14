@@ -10,7 +10,8 @@ import ServerClients.Client;
 import ServerClients.Server;
 
 /**
- * @author changzhao
+ * A Packet03Move to handle move packets between the Server/Client and Controller(GameState and the GUI)
+ * @author zhaojiang chang - 300282984
  *
  */
 public class Packet03Move extends UDPPacket {
@@ -44,42 +45,40 @@ public class Packet03Move extends UDPPacket {
 		this.x = Integer.parseInt(dataArray[2]);
 		this.y = Integer.parseInt(dataArray[3]);
 		this.point = new Point(x,y);
-		System.out.println("Packet03Move con 2: ");
 	}
 
 
-	/* (non-Javadoc)
-	 * @see ServerClients.UDPpackets.UDPPakcet#writeData(ServerClients.Client)
+	/**
+	 * writeData(client) - this method is going to send data from client to server
+	 * @param client - once package created will call this method to send data to client
 	 */
 	@Override
 	public void writeData(Client client) {
 		client.sendData(getData());
-		System.out.println("Packet03Move con 3: ");
 
-	}
-
-	/* (non-Javadoc)
-	 * @see ServerClients.UDPpackets.UDPPakcet#writeData(ServerClients.Server)
-	 */
-	@Override
-	public void writeData(Server server) {
-		System.out.println("Packet03Move con 4: ");
-		server.sendActionDataToAllClients(getData());
-
-		System.out.println("Packet03Move con 5: ");
 	}
 
 	/**
-	 * getRealData - this method is going to return a bytes array with door open message and location
+	 * writeData(server) - this method is going to send data from server to all client (except current player)
+	 * @param server - once package received from client and broadcast to all client
+	 */
+	@Override
+	public void writeData(Server server) {
+		server.sendActionDataToAllClients(getData());
+	}
+	/**
+	 * getRealData - this method is going to return a bytes array with message with type
 	 * @return byte array
 	 */
+	
 	@Override
 	public byte[] getData() {
 		// TODO Auto-generated method stub
 		return ("03"+ ","+this.username +","+this.point.x+","+this.point.y).getBytes();
 	}
-	/* (non-Javadoc)
-	 * @see ServerClients.UDPpackets.UDPPakcet#getRealData()
+	/**
+	 * getRealData - this method is going to return a bytes array with message without type
+	 * @return byte array
 	 */
 	public byte[] getRealData(){
 		return(this.username +","+this.point.x+","+this.point.y).getBytes();

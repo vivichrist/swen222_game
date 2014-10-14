@@ -114,8 +114,8 @@ public class NetworkController {
 		System.out.println("teleport called");
 		return controller.teleport(p);
 	}
-	
-	
+
+
 	/**
 	 * gameview will call this method through RendererController and 
 	 * pass the action to client then send to server
@@ -125,7 +125,7 @@ public class NetworkController {
 		Packet05OpenDoor openDoor = new Packet05OpenDoor(name, point);
 		openDoor.writeData(client);
 	}
-	
+
 	/**
 	 * received action from server, need update the gameview and gamestate
 	 *Instruction from server (other player trigger the door open action)
@@ -146,13 +146,13 @@ public class NetworkController {
 		byte[]data = this.serialize(this.PlayerAndObject);
 		Packet06PickupObject pickup = new Packet06PickupObject(data);
 		pickup.writeData(client);
-		
+
 	}
 	/**
 	 * this method is going to create a dropObject package and send to server through the client
 	 * 
 	 * */
-	
+
 	public void dropObject(Player player, MoveableObject object, Point point) {
 		this.player = player;
 		this.object = object;
@@ -161,19 +161,19 @@ public class NetworkController {
 		Packet07DropObject drop = new Packet07DropObject(data);
 		drop.writeData(client);
 	}
-	
+
 	/**
 	 * this method will called after server send a drop message, 
 	 * 
 	 * */
-	
+
 	public void removeObjectFromClient(UDPPacket packet) {
 		if(packet instanceof Packet06PickupObject){
-		PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
-		Player player = p.player;
-		MoveableObject object = p.object;
-		Point point = p.point;
-		renCon.removeObject(player,object,point);
+			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
+			Player player = p.player;
+			MoveableObject object = p.object;
+			Point point = p.point;
+			renCon.removeObject(player,object,point);
 		}
 		else if(packet instanceof Packet07DropObject){
 			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet07DropObject)packet).getRealData());
@@ -181,8 +181,8 @@ public class NetworkController {
 			MoveableObject object = p.object;
 			Point point = p.point;
 			renCon.removeObject(player,object,point);
-			}
-		
+		}
+
 	}
 	class PlayerAndObject implements java.io.Serializable {
 		Player player;
@@ -194,7 +194,7 @@ public class NetworkController {
 			point = NetworkController.point ;
 		}
 	}
-	
+
 	public byte[] serialize(Object obj) {
 
 		byte[] bytes = new byte[60000];
@@ -242,9 +242,9 @@ public class NetworkController {
 	}
 
 
-	
 
-	
-	
+
+
+
 }
 

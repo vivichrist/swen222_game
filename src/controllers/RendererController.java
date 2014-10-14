@@ -1,6 +1,8 @@
 package controllers;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import ui.components.GameViewData;
 import world.components.MoveableObject;
@@ -129,6 +131,19 @@ public class RendererController {
 		uiCon.dropObject(player,object);
 		netCon.dropObject(player,object,point);
 	}
+	
+	public static boolean canOpenDoor(Player player, Point point){
+		boolean canOpen = state.canOpenDoor(player, point);
+		if(canOpen){
+			openDoor(player.getName(), point);
+			return true;
+		}
+		return false;
+	}
+	
+	public List<Player> getPlayers(){
+		return state.getPlayers();
+	}
 	 
 	/**
 	 * gameview will call this method 
@@ -136,7 +151,7 @@ public class RendererController {
 	 * 
 	 * */
 	
-	public void openDoor(String name, Point point){
+	private static void openDoor(String name, Point point){
 		netCon.openDoor(name, point);
 	}
 	
@@ -147,6 +162,10 @@ public class RendererController {
 	 */
 	public static boolean teleport(Player player){
 		return uiCon.teleport(player);
+	}
+	
+	public static void teleportOtherPlayer(Player player, int floorNumber){
+		
 	}
 	
 	
