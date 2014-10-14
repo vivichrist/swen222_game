@@ -69,8 +69,9 @@ public class Packet03Move extends UDPPacket {
 		System.out.println("Packet03Move con 5: ");
 	}
 
-	/* (non-Javadoc)
-	 * @see ServerClients.UDPpackets.UDPPakcet#getData()
+	/**
+	 * getRealData - this method is going to return a bytes array with door open message and location
+	 * @return byte array
 	 */
 	@Override
 	public byte[] getData() {

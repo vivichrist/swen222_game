@@ -24,7 +24,7 @@ public class RendererController {
 	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database
 	 */
 	public RendererController(boolean single){
-		GameViewData gv = GameViewData.instance();
+		view = GameViewData.instance();
 		singlePlayer = single;
 	}
 	
@@ -63,7 +63,9 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		view.addNewPlayerMove(player.getPosition(), point);
+		System.out.println("moving player: " + player.getName() + " to " + point.toString());
 		state.movePlayer(player, point);
+		System.out.println(player.getName() + " position: " + state.getPlayer(player.getName()).getPosition().toString());
 	}
 	
 	/**
@@ -112,7 +114,19 @@ public class RendererController {
 		//state.toOpenDoor(.......);
 		
 	}
+	/**
+	 * gameview call this method
+	 * 		update the gamestate 
+	 * 		and pass to networkController to create drop package to send to server
+	 * @param player - current player
+	 * @param object - object to drop (remove from player inventory lsit
+	 * @param point - once package broadcast from server gameview need use point to remove
+	 * 
+	 * */
 	public void dropObject(Player player, MoveableObject object, Point point){
+		//TODO: current player drop a object - updat the gamestate
+		
+		uiCon.dropObject(player,object);
 		netCon.dropObject(player,object,point);
 	}
 	 

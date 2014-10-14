@@ -86,7 +86,7 @@ public class Packet07DropObject extends UDPPacket {
 	public byte[] getData() {
 
 		byte[]newData =new byte[data.length];
-		byte[] a = "06".getBytes();
+		byte[] a = "07".getBytes();
 
 		newData[0] = a[0];
 		newData[1] = a[1];
