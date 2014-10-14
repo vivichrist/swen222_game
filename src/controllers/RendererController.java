@@ -169,9 +169,20 @@ public class RendererController {
 		return false;
 	}
 	
+	/**
+	 * Teleport another Player in the Game
+	 * @param playerName the name of the Player
+	 * @param floorNumber the floor to teleport to
+	 */
 	public static void teleportOtherPlayer(String playerName, int floorNumber){
 		Player player = state.getPlayer(playerName);
+		// If the player starts on the same floor as the current player they need to be removed from the current view
+		if(player.getFloor() == GameView.player.getFloor()){
+			view.remove(player.getPosition());
+		}
+		// Teleport the player in the game state
 		state.teleport(player, floorNumber);
+		// If the player lands on the same floor as the current player they need to be added to the current view
 		if(player.getFloor() == GameView.player.getFloor()){
 			view.addNewPlayerMove(null, player.getPosition());
 		}

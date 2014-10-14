@@ -174,12 +174,12 @@ public class SouthPanel {
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
 		usefulItemsCanvas = new UsefulItemsCanvas(player);
 		panel.add(usefulItemsCanvas, BorderLayout.WEST);
-		countDown = new CountDown();
-		panel.add(countDown);
+		//countDown = new CountDown();
+		//panel.add(countDown);
 		
-		countDown.setVisible( true );
+		//countDown.setVisible( true );
 		panel.repaint();
-		countDown.run();
+		//countDown.run();
 	}
 
 	/**

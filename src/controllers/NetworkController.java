@@ -49,11 +49,12 @@ public class NetworkController {
 		this.renCon = renCon;
 	}
 
-	
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public static void teleportOtherPlayer(String name, int floorNumber){
 		renCon.teleportOtherPlayer(name, floorNumber);
-		
 	}
 	public static void teleport(String name, int floorNumber){
 		
@@ -98,11 +99,20 @@ public class NetworkController {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+	/**
+	 * set game state
+	 * @param set state
+	 * */
 
 	public void setState(GameState st) {
 		controller.setState(st);
 
 	}
+	
+	/**
+	 * get player
+	 * @param get player
+	 * */
 
 	public Player getPlayer(String username) {
 		return controller.getPlayer(username);
@@ -118,15 +128,15 @@ public class NetworkController {
 
 	}
 
-	/**
-	 * Teleports a given Player to a user selected floor
-	 * @param p the Player to Teleport
-	 * @return the user selected floor
-	 */
-	public static boolean teleport(Player p){
-		System.out.println("teleport called");
-		return controller.teleport(p);
-	}
+//	/**
+//	 * Teleports a given Player to a user selected floor
+//	 * @param p the Player to Teleport
+//	 * @return the user selected floor
+//	 */
+//	public static boolean teleport(Player p){
+//		System.out.println("teleport called");
+//		return controller.teleport(p);
+//	}
 
 
 	/**
@@ -149,8 +159,11 @@ public class NetworkController {
 		renCon.toOpenDoor(doorAction,point);
 	}
 	/**
-	 * 
-	 * 
+	 * this method will called from rendererController
+	 * serialize the PlayerAndObject
+	 * end packet to client, then broadcast to all clients
+	 * @param player - current player
+	 * @param object - 
 	 * */
 	public void pickupObject(Player player, MoveableObject object, Point point){
 		this.player = player;
@@ -207,7 +220,10 @@ public class NetworkController {
 			point = NetworkController.point ;
 		}
 	}
-
+	/**
+	 * serialize object
+	 * 
+	 * */
 	public byte[] serialize(Object obj) {
 
 		byte[] bytes = new byte[60000];
@@ -227,7 +243,7 @@ public class NetworkController {
 		}
 	}
 	/**
-	 * deserialize the player 
+	 * deserialize object 
 	 * 
 	 * */
 	public Object deserialise(byte[]bytes) {
