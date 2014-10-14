@@ -43,6 +43,7 @@ public class Client extends Thread {
 	public static boolean isConnectToServer = false;
 	public String name;
 	public GUI gui;
+	public MultyPlayer p;
 	//public Client(GameState state, String ipAddress){
 	public Client(GUI gui,String name,String ipAddress,NetworkController networkController,int port){
 		this.port = port;
@@ -152,7 +153,8 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " has joined the game...");
 		new MultyPlayer( packet.getUsername(),null,address, port);
-
+		System.out.println("=============>" +  packet.getUsername() + address + port);
+		 p = new MultyPlayer( packet.getUsername(),null,address, port);
 	}
 
 	private void handleData(Packet02Data packet) {
@@ -188,6 +190,10 @@ public class Client extends Thread {
 		
 		this.connection = packet.isConnection();
 		networkController.setConnection(connection);
+	}
+	public MultyPlayer getPlayer() {
+		// TODO Auto-generated method stub
+		return p;
 	}
 
 }
