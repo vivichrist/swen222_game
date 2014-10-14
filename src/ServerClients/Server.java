@@ -153,12 +153,6 @@ public class Server extends Thread {
 				
 			}
 		}
-
-
-
-
-		
-
 		private void sentStateToAllClients() {
 
 			System.out.println("serverOpen = "+ serverOpen);

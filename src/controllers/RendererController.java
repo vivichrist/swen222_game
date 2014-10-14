@@ -3,6 +3,7 @@ package controllers;
 import java.awt.Point;
 
 import ui.components.GameViewData;
+import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
 
@@ -56,6 +57,24 @@ public class RendererController {
 	public static void movePlayer(Player player, Point point){
 		//netCon.movePlayer(player, point);
 		state.movePlayer(player, point);
+	}
+	/**
+	 * remove Object from client side after other client pickup a object
+	 * @param player - player who pickup the object
+	 * @param object - object to remove;
+	 * 
+	 * */
+	public static void removeObject(Player player, MoveableObject object){
+		//TODO: kalo call this method to remove from gamestate
+		//TODO: vivian call this method to remove from gameview
+	//	state.removeObject(player, object);
+	//	view.removeObject(player,object);
+	}
+
+	public void toOpenDoor(String doorAction, Point point) {
+		// TODO vivian call this method to open door with given point
+		//view.toOpenDoor(point.x,point.y);
+		
 	}
 	
 	
