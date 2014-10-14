@@ -12,7 +12,7 @@ import ServerClients.Server;
  *
  * @author zhaojiang chang - 300282984
  * */
-public class Packet05OpenDoor extends UDPPakcet {
+public class Packet05OpenDoor extends UDPPacket {
 	private String doorAction;
 	private Point point;
 	private byte[] data;

@@ -6,7 +6,7 @@ import ServerClients.Server;
 
 
 
-public class Packet00Login extends UDPPakcet {
+public class Packet00Login extends UDPPacket {
 
 	private String username;
 

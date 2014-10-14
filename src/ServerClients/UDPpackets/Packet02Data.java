@@ -12,7 +12,7 @@ import ServerClients.Client;
 import ServerClients.Server;
 
 
-public class Packet02Data extends UDPPakcet {
+public class Packet02Data extends UDPPacket {
 
 	private String username;
 	private GameState state;

@@ -5,7 +5,7 @@ import ServerClients.Server;
 
 
 
-public class Packet01Disconnect extends UDPPakcet {
+public class Packet01Disconnect extends UDPPacket {
 
     private String username;
 

@@ -13,7 +13,7 @@ import ServerClients.Server;
  * @author changzhao
  *
  */
-public class Packet03Move extends UDPPakcet {
+public class Packet03Move extends UDPPacket {
 
 	private String username;
 	private Point point;

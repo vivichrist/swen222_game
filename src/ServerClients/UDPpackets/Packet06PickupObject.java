@@ -11,7 +11,7 @@ import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
 
-public class Packet06PickupObject extends UDPPakcet {
+public class Packet06PickupObject extends UDPPacket {
 
 	private byte[] data;
 	private Player player;
