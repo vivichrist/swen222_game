@@ -40,7 +40,7 @@ public class UsefulItemsCanvas extends Canvas {
 	 */
 	public UsefulItemsCanvas(Player player) {
 		this.player = player;
-		this.setBackground(Color.BLACK);
+		this.setBackground(Color.LIGHT_GRAY);
 		this.setBounds(0, 600, 750, 65);
 		
 		// Kalo bugfix:
