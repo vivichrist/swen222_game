@@ -1,12 +1,12 @@
 package ServerClients.UDPpackets;
 
-import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import world.components.MoveableObject;
 import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
@@ -14,19 +14,16 @@ import ServerClients.Server;
 public class Packet06PickupObject extends UDPPakcet {
 
 	private String username;
-	private Point point;
 	private byte[] data;
-	private int x;
-	private int y;
+	
 	private Player player;
 	/**
 	 * Constructor - create a Packet06PickupObject package
-	 * @param username  - string current player
-	 * @param object - object name
-	 * @param point - object location
-	 * @param color - color of object
+	 * @param player  - player
+	 * @param object - object to pickup
+	 
 	 */
-	public Packet06PickupObject(Player player) {
+	public Packet06PickupObject(Player player, MoveableObject object) {
 		super(06);
 		this.player = player;
 
@@ -102,28 +99,18 @@ public class Packet06PickupObject extends UDPPakcet {
 	}
 
 	/**
-	 * this method is going to return a string open
-	 * @return string open
-	 */
-	public String getUsername() {
-		return username;
-	}
-	/**
-	 * this method is going to return a Point door location
-	 * @return Point
-	 */
-	public Point getPoint() {
-		return point;
-	}
+	 * 
+	 * serialize the player into byte code
+	 * */
 
-	public byte[] serialize() {
+	public byte[] serialize(Object obj) {
 
 		byte[] bytes = new byte[60000];
 		try {
 			//object to bytearray
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(this);
+			out.writeObject(obj);
 			bytes = baos.toByteArray();
 			out.flush();
 			baos.close();
@@ -134,15 +121,19 @@ public class Packet06PickupObject extends UDPPakcet {
 			return null;
 		}
 	}
-	public Player deserialize(byte[]bytes) {
+	/**
+	 * deserialize the player 
+	 * 
+	 * */
+	public Object deserialize(byte[]bytes) {
 
 		ByteArrayInputStream bais = null;
 		ObjectInputStream in = null;
 		try{
 			bais = new ByteArrayInputStream(bytes);
 			in = new ObjectInputStream(bais);
-			Player s = (Player) in.readObject();
-			return s;
+			Object obj =  in.readObject();
+			return obj;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
