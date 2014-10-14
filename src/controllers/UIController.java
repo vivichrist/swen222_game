@@ -3,6 +3,7 @@ package controllers;
 import java.awt.Point;
 
 import window.components.GUI;
+import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
 
@@ -72,6 +73,19 @@ public class UIController {
 
 	public void setConnection(boolean connection) {
 		state.setConnection(connection);
+	}
+	
+	
+	/**
+	 * this method is going to update the player inventory list once current player 
+	 * dorp an object
+	 * 
+	 * */
+
+	public void dropObject(Player player, MoveableObject object) {
+		// TODO kalo please check the following code make sure it is delete the correct object
+		//state.getPlayer(player.getName()).getInventory().remove(object);
+		
 	}
 
 
