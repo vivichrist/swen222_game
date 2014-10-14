@@ -17,10 +17,10 @@ import world.game.Player;
  */
 public class GameViewData
 {
-	private final ArrayList<StaticRender>		staticScene;
-	private final ArrayList<DymanicRender>		dynamicScene;
-	private HashMap<Point, GraphicalObject>		gameElements;
-	private HashMap<Point, Point>				newPlayerMove;
+	private final List<StaticRender>			staticScene;
+	private final List<DymanicRender>			dynamicScene;
+	private final Map<Point, GraphicalObject>	gameElements;
+	private final Map<Point, Point>				newPlayerMove;
 	private DymanicRender						toInitialise;
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
@@ -39,9 +39,10 @@ public class GameViewData
 	private GameViewData()
 	{
 		staticScene = new ArrayList<StaticRender>();
-		dynamicScene = new ArrayList<DymanicRender>();
-		gameElements = new HashMap<Point, GraphicalObject>();
-		newPlayerMove = new HashMap<Point, Point>();
+		// preemptive synchronisation for concurrent modification
+		dynamicScene = Collections.synchronizedList( new ArrayList<DymanicRender>() );
+		gameElements = Collections.synchronizedMap( new HashMap<Point, GraphicalObject>() );
+		newPlayerMove = Collections.synchronizedMap( new HashMap<Point, Point>() );
 	}
 
 	/**
