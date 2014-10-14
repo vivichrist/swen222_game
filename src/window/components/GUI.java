@@ -114,6 +114,8 @@ public class GUI {
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
 	private JPanel waitClientsPanel;
+	private JPanel gameOverPanel;
+	private JPanel wrongInfoPanel;
 
 	// buttons on all panels 
 	private JButton jbNew;
@@ -400,7 +402,7 @@ public class GUI {
 		waitClientsPanel = new JPanel();
 		setUpPanel(waitClientsPanel, 130, 200, 600, 200);
 
-		// label used on joinServerPanel
+		// label used on waitClientsPanel
 		JLabel waitClients = new JLabel("Wait For Other Players...");
 		waitClients.setPreferredSize(new Dimension(600, 200));
 		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
@@ -410,6 +412,53 @@ public class GUI {
 		// set the panel to transparent and add the panel to frame
 		waitClientsPanel.setOpaque(false);
 		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
+	}
+
+	/**
+	 * The following method sets up the frame that tells the player server
+	 * is waiting for other players to join in to start the game
+	 */
+	public void wrongInfoPanel(){
+		wrongInfoPanel = new JPanel();
+		setUpPanel(wrongInfoPanel, 30, 200, 760, 200);
+
+		// label used on waitClientsPanel
+		JLabel wrongInfo = new JLabel("Incorrent Information Entered!");
+		wrongInfo.setPreferredSize(new Dimension(760, 200));
+		wrongInfo.setFont(new Font("Arial", Font.BOLD, 50));
+		wrongInfo.setForeground(new Color(100, 200, 100).brighter());
+		wrongInfoPanel.add(wrongInfo);
+
+		// set the panel to transparent and add the panel to frame
+		wrongInfoPanel.setOpaque(false);
+		layeredPane.add(wrongInfoPanel, JLayeredPane.MODAL_LAYER);
+	}
+
+	/**
+	 * The following method sets up the frame that tells the player game is
+	 * over and who is the winner
+	 * @param p the winner player
+	 */
+	public void gameOverPanel(Player p){
+		gameOverPanel = new JPanel();
+		setUpPanel(gameOverPanel, 100, 200, 600, 160);
+
+		// label used on gameOverPanel
+		JLabel gameOver = new JLabel("Game Over!!!");
+		gameOver.setPreferredSize(new Dimension(350, 80));
+		gameOver.setFont(new Font("Arial", Font.BOLD, 50));
+		gameOver.setForeground(new Color(100, 200, 100).brighter());
+		gameOverPanel.add(gameOver);
+
+		JLabel wins = new JLabel(p.getName());
+		wins.setPreferredSize(new Dimension(310, 80));
+		wins.setFont(new Font("Arial", Font.BOLD, 50));
+		wins.setForeground(new Color(100, 200, 100).brighter());
+		gameOverPanel.add(wins);
+
+		// set the panel to transparent and add the panel to frame
+		gameOverPanel.setOpaque(false);
+		layeredPane.add(gameOverPanel, JLayeredPane.MODAL_LAYER);
 	}
 
 	/**
@@ -595,6 +644,8 @@ public class GUI {
 						System.out.println("Player name: " + nameC);
 						System.out.println("Server name: " + strServerNameC);
 						System.out.println("Port number: " + strPortNumC);
+						System.out.println("Server name real: " + strServerName);
+						System.out.println("Port number real: " + strPortNum);
 						layeredPane.remove(joinServerPanel);
 						layeredPane.remove(backgroundPanel);
 						startGame2();
@@ -631,13 +682,13 @@ public class GUI {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
-		
+
 		controller = new UIController(state, this);
-		
+
 		player = state.getPlayer(name);
 
 		gameView = new GameView( glcapabilities, frame, state,player );
-		
+
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
 		renCon.setUICon(controller);
@@ -673,13 +724,13 @@ public class GUI {
 
 		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
-		
+
 		RendererController renCon = new RendererController(false);
 		NetworkController networkController = new NetworkController(controller, renCon);
 		renCon.setState(state);
 		renCon.setNetCon(networkController);
 		renCon.setUICon(controller);
-		
+
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
@@ -687,7 +738,31 @@ public class GUI {
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
 		networkController.setGameView(gameView);
+		
 
+		
+		
+		
+		
+		
+		
+		
+//		if (client.getPlayer().ipAddress == null || client.getPlayer().port == null){
+//			
+//		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		System.out.println("1111111111111" + client.getPlayer().ipAddress);
+		System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
@@ -710,7 +785,7 @@ public class GUI {
 		southPanel = new SouthPanel(controller.getPlayer(name));
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
-		
+
 		Timers timer = new Timers();    
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
@@ -759,7 +834,7 @@ public class GUI {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * The following method would be called when the player walks up a container.
 	 * The item in the container is passed to the method, the method would pop up
@@ -826,7 +901,7 @@ public class GUI {
 			return false;
 		} 
 	}
-	
+
 	/**
 	 * this method is check player input server Ip address
 	 * if input is not ip adress will return false
