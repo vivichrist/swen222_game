@@ -9,6 +9,7 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
 import world.game.GameState;
+import world.game.Player;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -49,12 +50,12 @@ public class GameView extends GLJPanel
 	private GameListener		keyInput;
 	private GameState			state;
 
-    public GameView( GLCapabilities gc, JFrame frame, GameState state )
+    public GameView( GLCapabilities gc, JFrame frame, GameState state, Player player )
     {
     	super( gc );
     	// load game elements into the scene for rendering
     	scene = new GameScene(state);
-
+    	this.player = player;
     	this.state = state;
     	// initial point of extraction (where the player starts)
     	Point p = state.getPlayer().getPosition();
