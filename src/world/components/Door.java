@@ -20,35 +20,25 @@ public class Door implements java.io.Serializable{
 	public Door(boolean isLockable){
 		lockable = isLockable;
 	}
-
-	/**
-	 * Uses a Key in this Door's lock.  Provided it is the correct key, the lock will toggle the Door's locked state
-	 * i.e. if the Door was locked it will now be unlocked
-	 * @param key the Key to use in this lock
-	 * @return the 
-	 */
-	public boolean useKey(Key key){
-		//TODO: should the null check throw an exception???
-		if(key == null) return false;
-		
-		if(key.equals(this.key)){
-			locked = !locked;
-			return locked;
-		}
-		return false;
-	}
 	
 	/**
 	 * Sets the Key for this Door
 	 * @param key the Key to lock/unlock this Door
+	 * @return true if the Key was successfully set
 	 */
-	public void setKey(Key key) {
-		this.key = key;
+	public boolean setKey(Key key) {
+		if(lockable == false){
+			return false;
+		}
+		else{
+			this.key = key;
+			return true;
+		}
 	}
 	
 	/**
 	 * Returns the Key for this Door
-	 * @return
+	 * @return the Key for this Door
 	 */
 	public Key getKey(){
 		if(key == null) System.out.println("Door does not have a key");
@@ -75,8 +65,14 @@ public class Door implements java.io.Serializable{
 	 * Sets the locked status of this Door
 	 * @param locked the boolean to set this Door's locked status to (true = locked)
 	 */
-	public void setLocked(boolean locked) {
-		this.locked = locked;
+	public boolean setLocked(boolean locked) {
+		if(key == null || lockable == false){
+			return false;
+		}
+		else{
+			this.locked = locked;
+			return true;
+		}
 	}
 
 	/**
