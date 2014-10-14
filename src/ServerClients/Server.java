@@ -3,11 +3,8 @@
  */
 package ServerClients;
 
-import java.awt.Point;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -20,11 +17,10 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
-import ServerClients.UDPpackets.Packet04Connection;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
-import ServerClients.UDPpackets.UDPPakcet;
-import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
+import ServerClients.UDPpackets.UDPPacket;
+import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -64,11 +60,6 @@ public class Server extends Thread {
 	public void run(){
 
 		while(true){
-			//			if(connectedPlayers.size()>1){
-			//
-			//					sentStateToAllClients();
-			//				
-			//			}
 
 			this.serverStart = 99;
 			System.out.println("Server Start>>>>>>>>>>"+ serverStart);
@@ -77,15 +68,7 @@ public class Server extends Thread {
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try{
-				if(connectedPlayers.size()<1){
-
-					Packet04Connection pack = new Packet04Connection("false");
-					pack.writeData(this);
-				}else{
-					Packet04Connection pack = new Packet04Connection("true");
-					pack.writeData(this);
-
-				}
+				
 
 				socket.receive(packet);
 
@@ -107,9 +90,9 @@ public class Server extends Thread {
 
 		//System.out.println("server>>parsePacket");
 		String message = new String(data).trim();
-		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0,2));
+		PacketTypes type = UDPPacket.lookupPacket(message.substring(0,2));
 		System.out.println("server type: "+message.substring(0,2));
-		UDPPakcet packet = null;
+		UDPPacket packet = null;
 		switch (type) {
 		default:
 		case INVALID:
@@ -124,33 +107,33 @@ public class Server extends Thread {
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==2 && serverOpen==false){
-				sentStateToAllClients();
+					sentStateToAllClients();
 			}
-			break;
-		case DISCONNECT:
-			packet = new Packet01Disconnect(data);
-			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
-					+ ((Packet01Disconnect) packet).getUsername() + " has left...");
-			this.removeConnection((Packet01Disconnect) packet);
-			break;
-		case DATA:
-			packet = new Packet02Data(data);
-			name = ((Packet02Data) packet).getUsername();//may through a exception 
-			this.handleData(((Packet02Data) packet));
-			break;
-		case MOVE:
-			packet = new Packet03Move(data);
-			name = ((Packet03Move) packet).getUsername();
-			handleMove((Packet03Move) packet);
-			break;
-		case OPENDOOR:
-			packet = new Packet05OpenDoor(data);
-			handleOpenDoor((Packet05OpenDoor) packet);
-			break;
-		case PICKUP:
-			packet = new Packet06PickupObject(data);
-			handlePickupObject((Packet06PickupObject)packet);
-
+				break;
+			case DISCONNECT:
+				packet = new Packet01Disconnect(data);
+				System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+						+ ((Packet01Disconnect) packet).getUsername() + " has left...");
+				this.removeConnection((Packet01Disconnect) packet);
+				break;
+			case DATA:
+				packet = new Packet02Data(data);
+				name = ((Packet02Data) packet).getUsername();//may through a exception 
+				this.handleData(((Packet02Data) packet));
+				break;
+			case MOVE:
+				packet = new Packet03Move(data);
+				name = ((Packet03Move) packet).getUsername();
+				handleMove((Packet03Move) packet);
+				break;
+			case OPENDOOR:
+				packet = new Packet05OpenDoor(data);
+				handleOpenDoor((Packet05OpenDoor) packet);
+				break;
+			case PICKUP:
+				packet = new Packet06PickupObject(data);
+				handlePickupObject((Packet06PickupObject)packet);
+				break;
 		}
 	}
 	private void sentStateToAllClients() {

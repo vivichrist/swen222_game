@@ -709,6 +709,13 @@ public class GUI {
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+		
+		
+		
+		
+//		Timers timer = new Timers();    
+//		int count = timer.getCountDownGame();
+//		System.out.println("=============="+count);
 	}
 
 	/**
@@ -723,7 +730,9 @@ public class GUI {
 		
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-		
+	
+		System.out.println("1111111111111" + client.getPlayer().ipAddress);
+		System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
@@ -740,10 +749,6 @@ public class GUI {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
-
-//		Timers timer = new Timers();    
-//		int count = timer.getCountDownGame();
-//		System.out.println("=============="+count);
 	}
 
 	/**
