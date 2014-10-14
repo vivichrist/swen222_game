@@ -118,15 +118,15 @@ public class NetworkController {
 
 	}
 
-	/**
-	 * Teleports a given Player to a user selected floor
-	 * @param p the Player to Teleport
-	 * @return the user selected floor
-	 */
-	public static boolean teleport(Player p){
-		System.out.println("teleport called");
-		return controller.teleport(p);
-	}
+//	/**
+//	 * Teleports a given Player to a user selected floor
+//	 * @param p the Player to Teleport
+//	 * @return the user selected floor
+//	 */
+//	public static boolean teleport(Player p){
+//		System.out.println("teleport called");
+//		return controller.teleport(p);
+//	}
 
 
 	/**
