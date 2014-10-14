@@ -86,7 +86,7 @@ public class NetworkController {
 	 *  @param realData - 
 
 	 */
-	public GameState deserialize(byte[] realData) {
+	public static GameState deserialize(byte[] realData) {
 		return controller.deserialize(realData);
 	}
 
