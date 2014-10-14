@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import ui.components.GameView;
 import ui.components.GameViewData;
 import world.components.MoveableObject;
 import world.game.GameState;
@@ -161,11 +162,19 @@ public class RendererController {
 	 * @return
 	 */
 	public static boolean teleport(Player player){
-		return uiCon.teleport(player);
+		if(uiCon.teleport(player)){
+			netCon.teleport(player.getName(), player.getFloor().floorNumber());
+			return true;
+		}
+		return false;
 	}
 	
-	public static void teleportOtherPlayer(Player player, int floorNumber){
-		
+	public static void teleportOtherPlayer(String playerName, int floorNumber){
+		Player player = state.getPlayer(playerName);
+		state.teleport(player, floorNumber);
+		if(player.getFloor() == GameView.player.getFloor()){
+			view.addNewPlayerMove(null, player.getPosition());
+		}
 	}
 	
 	
