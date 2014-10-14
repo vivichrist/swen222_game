@@ -155,7 +155,8 @@ public class GUI {
 	 * The following method sets up a frame to start the game entry
 	 */
 	public void setUp(){
-		frame = new JFrame("Adventure Game");
+		frame = new JFrame();
+		frame.setTitle("Adventure Game");
 		frame.setBackground(Color.BLACK);
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
@@ -756,6 +757,9 @@ public class GUI {
 		this.gameView = gameView;
 		this.player = player;
 
+		frame.setTitle(player.getName());
+		frame.repaint();
+		
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 		southPanel = new SouthPanel(player);
