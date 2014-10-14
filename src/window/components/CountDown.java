@@ -2,7 +2,6 @@ package window.components;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.beans.Transient;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -43,7 +42,7 @@ public class CountDown extends JPanel
 	}
 
 	@Override
-	@Transient
+	
 	public Dimension getPreferredSize()
 	{
 		// TODO Auto-generated method stub

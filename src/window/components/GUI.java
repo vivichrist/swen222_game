@@ -650,11 +650,12 @@ public class GUI {
 						nameC = textFieldNameC.getText();
 						strServerNameC = serverNameC.getText();
 						strPortNumC = portNumC.getText();
-						System.out.println("Player name: " + nameC);
-						System.out.println("Server name: " + strServerNameC);
-						System.out.println("Port number: " + strPortNumC);
-						System.out.println("Server name real: " + strServerName);
-						System.out.println("Port number real: " + strPortNum);
+//						System.out.println("Player name: " + nameC);
+//						System.out.println("Server name: " + strServerNameC);
+//						System.out.println("Port number: " + strPortNumC);
+//						System.out.println("Server name real: " + strServerName);
+//						System.out.println("Port number real: " + strPortNum);
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 						layeredPane.remove(joinServerPanel);
 						layeredPane.remove(backgroundPanel);
 						startGame2();
@@ -740,8 +741,8 @@ public class GUI {
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
 	
-		System.out.println("1111111111111" + client.getPlayer().ipAddress);
-		System.out.println("1111111111111" + client.getPlayer().port);
+	//	System.out.println("1111111111111" + client.getPlayer().ipAddress);
+	//	System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
