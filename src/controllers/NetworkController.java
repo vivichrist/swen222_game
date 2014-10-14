@@ -11,6 +11,7 @@ import javax.media.opengl.awt.GLJPanel;
 
 import ServerClients.Client;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ui.components.GameView;
 import window.components.GUI;
@@ -119,7 +120,10 @@ public class NetworkController {
 		return controller.teleport(p);
 	}
 	
-	
+	public void openDoor(String name, Point point){
+		Packet05OpenDoor openDoor = new Packet05OpenDoor(name, point);
+		openDoor.writeData(client);
+	}
 	
 	
 	
