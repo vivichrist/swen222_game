@@ -261,7 +261,7 @@ public class GameScene
 							, furniture.getFacing()
 							, ColourPalette.PALEGREEN );
 					graphicData.addDynamicOnly( dynamicObject );
-					graphicData.addAllGameElements( furniture.getPoints(), dynamicObject );
+					graphicData.addPointsToGameElement( furniture.getPoints(), dynamicObject );
 				} else if ( container != null )
 				{ // load containers (briefcase, chest etc.)
 					System.out.println( "Container: " + container.getType() );

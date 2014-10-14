@@ -22,6 +22,10 @@ public class DymanicRender implements GraphicalObject
 	private List<int[]>		indices;
 	private boolean			xaligned = false;
 
+	/**
+	 * Static constructors for each type of GraphicalObject
+	 * @return new instance of renderable object.
+	 */
 	public static DymanicRender instanceDoor( Point position, Direction dir )
 	{
 		return new DymanicRender( CellType.DOOR, Behave.OPEN_CLOSE, position
@@ -35,7 +39,7 @@ public class DymanicRender implements GraphicalObject
 	}
 	
 	public static DymanicRender instanceTelePort( Point position )
-	{	// TODO: Teleporting behaviour
+	{
 		return new DymanicRender( CellType.RINGS, Behave.RINGS, position
 				, Direction.NORTH, Color.ORANGE );
 	}
@@ -94,15 +98,22 @@ public class DymanicRender implements GraphicalObject
 		return new DymanicRender( CellType.PLAYER, act, position, dir, meshColor );
 	}
 	
+	/**
+	 * @param type - classification ID indicating the mesh to use
+	 * @param act - what behaviour this object should have
+	 * @param position - location in the map of squares
+	 * @param dir - direction that this object should be facing
+	 * @param meshColor - colour of the lines rendered around polygons and
+	 * along lines
+	 */
 	private DymanicRender( CellType type, Behave act, Point position
 			, Direction dir, Color meshColor )
 	{
-		// System.out.println( "Graphical Object: " + type
-		//		+ " added at (" + position.x + "," + position.y + ")" );
+		// initial colour of outline an fill
 		this.meshColor = meshColor.getRGBColorComponents( null );
 		this.selectColor = Color.BLACK.getRGBColorComponents( null );
 		this.type = type;
-		// tokens key and torch should be centered in the middle of the square
+		// tokens, key and torch should be centered in the middle of the square
 		if ( (type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
 				&& type.ordinal() < CellType.CHEST.ordinal())
 					|| type == CellType.PLAYER )
@@ -113,8 +124,6 @@ public class DymanicRender implements GraphicalObject
 			this.position = new Point2D.Float(
 				  position.x * GameView.cellsize
 				, position.y * GameView.cellsize );
-		// System.out.println( "Actual Position:(" + this.position.x
-		//		+ "," + this.position.y + ")");
 		this.xaligned = dir == Direction.NORTH || dir == Direction.SOUTH;
 		// assign behaviours
 		anim = new LinkedList<Behaviour>();
@@ -140,6 +149,9 @@ public class DymanicRender implements GraphicalObject
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see ui.components.GraphicalObject#draw(javax.media.opengl.GL2)
+	 */
 	@Override
 	public boolean draw( GL2 gl )
 	{
@@ -174,7 +186,10 @@ public class DymanicRender implements GraphicalObject
 		}
 		return true;
 	}
-	// behaviour defines collidability
+	/**
+	 * behaviour defines collidability and can activate different behaviour.
+	 * @return if player can walk through this GraphicalObject
+	 */
 	public boolean collide()
 	{
 		if ( anim.isEmpty() ) return true;
@@ -184,6 +199,12 @@ public class DymanicRender implements GraphicalObject
 		return result;
 	}
 
+	/**
+	 * All dynamic graphical objects are rendered from an imported from a .obj
+	 * file mesh and drawn from the list of vertices and indices.
+	 *  (non-Javadoc)
+	 * @see ui.components.GraphicalObject#initialise(javax.media.opengl.GL2)
+	 */
 	@Override
 	public boolean initialise( GL2 gl )
 	{
@@ -195,7 +216,10 @@ public class DymanicRender implements GraphicalObject
 	}
 
 	/**
-	 * Renders the mesh of whatever type of GraphicalObject this happens to be
+	 * Renders the mesh of whatever type of GraphicalObject this happens to be.
+	 * this method renders polygons (multi-sided and planar), quads, triangles,
+	 * lines and points in the 'select' colour. Also draws the outline of each
+	 * in the 'mesh' colour 
 	 * @param gl
 	 */
 	private void renderMesh( GL2 gl )
@@ -269,28 +293,45 @@ public class DymanicRender implements GraphicalObject
 		}
 	}
 
+	/**
+	 * @return the colour of the triangle faces that changes when selected
+	 * and is by default, black.
+	 */
 	public Color getSelectColor()
 	{
 		return new Color( selectColor[0], selectColor[1], selectColor[2] );
 	}
 
+	/**
+	 * @param selectColor - change the selection colour applied to all
+	 * triangles of this GraphicalObject.
+	 */
 	public void setSelectColor( Color selectColor )
 	{
 		this.selectColor = selectColor.getColorComponents( null );
 	}
 
+	/* (non-Javadoc)
+	 * @see ui.components.GraphicalObject#isDynamic()
+	 */
 	@Override
 	public boolean isDynamic()
 	{
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see ui.components.GraphicalObject#getType()
+	 */
 	@Override
 	public CellType getType()
 	{
 		return type;
 	}
 
+	/* (non-Javadoc)
+	 * @see ui.components.GraphicalObject#getLocation()
+	 */
 	@Override
 	public Point getLocation()
 	{

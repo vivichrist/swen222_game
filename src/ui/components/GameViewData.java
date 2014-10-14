@@ -82,37 +82,61 @@ public class GameViewData
 	}
 	
 	/**
-	 * @param old
+	 * This Method a buffered "other player" move from the newPlayerMove map
+	 * because it has been moved. 
+	 * @param old is the point the player has moved from, and also the
+	 * reference key
 	 */
 	public void removePlayerMove( Point old )
 	{
 		newPlayerMove.remove( old );
 	}
 	
+	/**
+	 * @return the buffer of other player moves as unmodifiable map
+	 */
 	public Map<Point, Point> getOtherPlayerMove()
 	{
 		return Collections.unmodifiableMap( newPlayerMove );
 	}
 
-	public void addAllGameElements( List<Point> ps, GraphicalObject element )
+	/**
+	 * An element that takes up more than one point on the map must add point
+	 * references to that element to select and collide on many squares.
+	 * @param points
+	 * @param element
+	 */
+	public void addPointsToGameElement( List<Point> points, GraphicalObject element )
 	{
-		for ( Point p: ps )
+		for ( Point p: points )
 			gameElements.put( p, element );
 	}
 
+	/**
+	 * @return an unmodifiable list of solid collidable objects that never change
+	 */
 	public List<StaticRender> getStaticScene()
 	{
 		return Collections.unmodifiableList( staticScene );
 	}
 
-	public boolean addStaticOnly( StaticRender sobject )
+	/**
+	 * @param staticObject - solid collidable objects that never change to
+	 * queue for rendering.
+	 * @return if successful
+	 */
+	public boolean addStaticOnly( StaticRender staticObject )
 	{
-		return staticScene.add( sobject );
+		return staticScene.add( staticObject );
 	}
 
-	public boolean addDynamicOnly( DymanicRender sobject )
+	/**
+	 * @param dynamicObject - object that can move or change
+	 * @return if successful
+	 */
+	public boolean addDynamicOnly( DymanicRender dynamicObject )
 	{
-		return dynamicScene.add( sobject );
+		return dynamicScene.add( dynamicObject );
 	}
 
 	/**
@@ -133,13 +157,17 @@ public class GameViewData
 		return dynamicScene.add( (DymanicRender)gobject );
 	}
 
+	/**
+	 * @return an unmodifiable list of possibly moving or changing object
+	 */
 	public List<DymanicRender> getDynamicScene()
 	{
 		return Collections.unmodifiableList( dynamicScene );
 	}
 
 	/**
-	 * @param p
+	 * @param point of GraphicalObject to remove from the dynamic scene
+	 * and collision/selection
 	 */
 	public void remove( Point p )
 	{
@@ -148,7 +176,7 @@ public class GameViewData
 	}
 
 	/**
-	 * @return
+	 * @return the last element clicked on by the player
 	 */
 	public DymanicRender getPreviousSelection()
 	{
@@ -156,20 +184,22 @@ public class GameViewData
 	}
 
 	/**
-	 * @param dyn
+	 * This means that the player has selected something else in the scene.
+	 * @param dynamicObject - item to replace with the current selection item
 	 */
-	public void replacePreviousSelection( DymanicRender dyn )
+	public void replacePreviousSelection( DymanicRender dynamicObject )
 	{
-		if ( previousSelection == dyn ) return;
+		if ( previousSelection == dynamicObject ) return;
 		if ( previousSelection != null )
 		{
 			previousSelection.setSelectColor( Color.BLACK );
 		}
-		previousSelection = dyn;
+		previousSelection = dynamicObject;
 	}
 
 	/**
-	 * 
+	 * completely wipe all data of this level. Usually in response to teleport
+	 * to a new floor and hence new map.
 	 */
 	public void clear()
 	{
@@ -182,7 +212,8 @@ public class GameViewData
 	}
 
 	/**
-	 * @return
+	 * @return the dynamic element to be initialised because it has been added
+	 * late after mass initialisation happened (to load vertices and indices)
 	 */
 	public DymanicRender getToInitialise()
 	{
@@ -190,7 +221,8 @@ public class GameViewData
 	}
 
 	/**
-	 * @param toInitialise
+	 * @param toInitialise - new GraphicalObject to be initialised before
+	 * rendering because of being added to scene after  mass initialisation.
 	 */
 	public void setToInitialise( DymanicRender toInitialise )
 	{
@@ -198,7 +230,8 @@ public class GameViewData
 	}
 
 	/**
-	 * 
+	 * Once the GraphicalObject has been initialised it is removed from the
+	 * toInitialise field.
 	 */
 	public void resetToInitialise()
 	{
