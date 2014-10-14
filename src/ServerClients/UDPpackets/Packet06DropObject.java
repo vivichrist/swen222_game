@@ -3,9 +3,9 @@ package ServerClients.UDPpackets;
 import ServerClients.Client;
 import ServerClients.Server;
 
-public class Packet06Object extends UDPPakcet {
+public class Packet06DropObject extends UDPPakcet {
 
-	public Packet06Object(int packetId) {
+	public Packet06DropObject(int packetId) {
 		super(packetId);
 		// TODO Auto-generated constructor stub
 	}
