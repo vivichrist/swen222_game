@@ -77,6 +77,7 @@ public class GameViewData
 			dynamicScene.add( dyn );
 			toInitialise = dyn;
 			gameElements.put( next, dyn );
+			return;
 		}
 		newPlayerMove.put( current, next );
 	}
