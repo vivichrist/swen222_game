@@ -27,7 +27,7 @@ public class CountDown extends JPanel
 		long currentTime= System.currentTimeMillis();//current system 
 		long i=System.currentTimeMillis();
 		long temp=currentTime;//assign currentTime to temp
-		int gameCycle = 240000;//4mins in milliseconds
+		int gameCycle = 10000;//4mins in milliseconds
 		
 		while (i-currentTime-2000<gameCycle)
 		{     
