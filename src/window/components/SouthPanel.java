@@ -54,17 +54,12 @@ public class SouthPanel {
 		panel.setBounds(left, top, width, height);
 		panel.setBackground(Color.BLACK);
 
-
+		// add a border to the panel
 		panel.setBorder(
 				BorderFactory.createTitledBorder(
 						BorderFactory.createLineBorder(Color.WHITE, 5)));
-//						BorderFactory.createEtchedBorder(
-//								EtchedBorder.RAISED, Color.LIGHT_GRAY
-//								, Color.DARK_GRAY), "")
 						
-
-
-
+		// add the two canvases onto the panel
 		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
 		usefulItemsCanvas = new UsefulItemsCanvas(player);

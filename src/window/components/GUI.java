@@ -47,7 +47,8 @@ import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
-import controllers.Controller;
+import controllers.RendererController;
+import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
@@ -80,7 +81,7 @@ public class GUI {
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
 	private GameState gameState;//do not change this field for jacky only
-	private static Controller controller;
+	private static UIController controller;
 	GameState state = null;
 	MultyPlayer player1 = null;
 	ArrayList<Player>players;
@@ -628,9 +629,10 @@ public class GUI {
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
-		controller = new Controller(state, this);
+		controller = new UIController(state, this);
 		gameView = new GameView( glcapabilities, frame, state );
-		NetworkController netCon = new NetworkController(controller);
+		RendererController renCon = new RendererController();
+		NetworkController netCon = new NetworkController(controller, renCon);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
@@ -660,9 +662,10 @@ public class GUI {
 		state = new GameState(players,floors);
 		//player1 = new MultyPlayer(nameC, null,null, -1);
 
-		controller = new Controller(state, this);
+		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
-		NetworkController networkController = new NetworkController(controller);
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
@@ -672,10 +675,9 @@ public class GUI {
 		networkController.setGameView(gameView);
 		
 	}
-
 	
 	/**
-	 * this method will call by client once client class received broadcast package from server
+	 * The following method will call by client once client class received broadcast package from server
 	 * player will able to start the game
 	 * @param name - current player name
 	 * @param state -  after been called game state
@@ -698,6 +700,7 @@ public class GUI {
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
 	}
+	
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport

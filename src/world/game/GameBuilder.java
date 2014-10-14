@@ -43,14 +43,13 @@ public class GameBuilder {
 				players.add(new Player(playerNames.get(i), TokenType.values()[i]));
 			}
 			
-			//getPlayers();
+			// Build and populate the game world - the order here matters
 			buildFloors(players.size());
-			//TODO: place StationaryObjects
 			placePlayers();
-			//TODO: place MoveableObjects
+			placeFurniture();
 			placePlayerTokens();
+			placeKeys();
 			placeTorches();
-			//placeFurniture();
 			state = new GameState(players, floors);
 		}
 	}
