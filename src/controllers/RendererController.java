@@ -83,20 +83,22 @@ public class RendererController {
 	 * 
 	 * */
 	
-	public static void  pickupObject(Player player, MoveableObject object){
-		netCon.pickupObject(player, object);
+	public static void  pickupObject(Player player, MoveableObject object, Point point){
+		netCon.pickupObject(player, object, point);
 	}
 	/**
 	 * remove Object from client side after other client pickup a object
 	 * @param player - player who pickup the object
 	 * @param object - object to remove;
+	 * @param point  -  for GameView to remove the object
 	 * 
 	 * */
-	public static void removeObject(Player player, MoveableObject object){
+	public static void removeObject(Player player, MoveableObject object, Point point){
+	
 		//TODO: kalo call this method to remove from gamestate
 		//TODO: vivian call this method to remove from gameview
 	//	state.removeObject(player, object);
-	//	view.removeObject(player,object);
+	//	view.removeObject(point);
 	}
 	/**
 	 *received action from server, need update the gameview and gamestate
@@ -110,7 +112,9 @@ public class RendererController {
 		//state.toOpenDoor(.......);
 		
 	}
-	
+	public void dropObject(Player player, MoveableObject object, Point point){
+		netCon.dropObject(player,object,point);
+	}
 	 
 	/**
 	 * gameview will call this method 
