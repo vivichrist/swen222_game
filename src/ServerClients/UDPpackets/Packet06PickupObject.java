@@ -96,12 +96,7 @@ public class Packet06PickupObject extends UDPPacket {
 		return newData;
 	}
 
-	/**
-	 * 
-	 * serialize the player into byte code
-	 * */
 
-	
 
 }
 
