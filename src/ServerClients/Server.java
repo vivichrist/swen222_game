@@ -39,10 +39,12 @@ public class Server extends Thread {
 	private boolean serverOpen = false;
 	private String name;
 	private int portNumber;
+	private int numPlayers;
 	public static int serverStart = 0;
 
 
 	public Server(int portNumber, int numPlayers){
+		this.numPlayers = numPlayers;
 		this.portNumber = portNumber;
 		connectedPlayers = new ArrayList<MultyPlayer>();
 
@@ -106,7 +108,7 @@ public class Server extends Thread {
 			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
-			if(connectedPlayers.size()==2 && serverOpen==false){
+			if(connectedPlayers.size()==numPlayers && serverOpen==false){
 					sentStateToAllClients();
 			}
 				break;

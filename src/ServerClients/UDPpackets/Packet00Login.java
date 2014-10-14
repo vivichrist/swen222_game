@@ -4,13 +4,20 @@ import java.awt.Point;
 import ServerClients.Client;
 import ServerClients.Server;
 
-
+/**
+ * A Packet00Login to handle player login 
+ * @author zhaojiang chang - 300282984
+ *
+ */
 
 public class Packet00Login extends UDPPacket {
 
 	private String username;
 
-
+	/**
+	 * Constructor - unpack login package
+	 * @param data - byte array  name of the player
+	 */
 	public Packet00Login(byte[] data) {
 		super(00);
 		String[] dataArray = readData(data).split(",");

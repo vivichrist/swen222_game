@@ -1,17 +1,13 @@
 package ServerClients;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-
-import javax.media.opengl.awt.GLJPanel;
 
 import controllers.NetworkController;
 import ServerClients.UDPpackets.Packet00Login;
@@ -22,7 +18,6 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
-import ui.components.GameView;
 import window.components.GUI;
 import world.game.GameState;
 import world.game.MultyPlayer;
@@ -43,7 +38,7 @@ public class Client extends Thread {
 	public String name;
 	public GUI gui;
 	public MultyPlayer p;
-	//public Client(GameState state, String ipAddress){
+	
 	public Client(GUI gui,String name,String ipAddress,int port){
 		this.port = port;
 		this.gui = gui;
@@ -182,11 +177,6 @@ public class Client extends Thread {
 
 	}
 
-//	private void handleConnection(Packet04Connection packet) {
-//		
-//		this.connection = packet.isConnection();
-//		//networkController.setConnection(connection);
-//	}
 
 	public MultyPlayer getPlayer() {
 		// TODO Auto-generated method stub
