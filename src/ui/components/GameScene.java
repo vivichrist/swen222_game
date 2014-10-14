@@ -27,6 +27,7 @@ import world.game.Player;
 public class GameScene
 {
 	private GameState		game;
+	private Player			player;
 	private boolean			teleport = false;
 	private GameViewData	graphicData = GameViewData.instance();
 	private CellType[][]	staticMap;
@@ -36,6 +37,7 @@ public class GameScene
 	{
 		//Kalo added
 		game = state;
+		this.player = player;
 		// size of map is in the header
 		xlimit = player.getFloor().getXLimit();
 		ylimit = player.getFloor().getYLimit();
@@ -118,21 +120,21 @@ public class GameScene
 				return false;
 			}
 			else if ( ct == CellType.KEYDOOR )
-			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
+			{	if ( game.canOpenDoor( player, p ) )
 					return ((DymanicRender)graphicData
 							.getGameElements().get( p )).collide();
 				return true;
 			} // tokens and torch
-			else if ( ct.toString() == game.getPlayer().getType().toString()
+			else if ( ct.toString() == player.getType().toString()
 					|| ct == CellType.TORCH )
 			{ // collect torch and remove it from view if player does not have one
-				if ( game.pickupObjectAtPoint( game.getPlayer(), p ) )
+				if ( game.pickupObjectAtPoint( player, p ) )
 					graphicData.remove( p );
 			}
 			else if ( ct == CellType.KEY  )
 			{ // collect key and discard already collected key if it exists in
 			  // players inventory
-				Key key = game.pickupKey( game.getPlayer(), p );
+				Key key = game.pickupKey( player, p );
 				graphicData.remove( p );
 				if ( key != null )
 				{
@@ -163,7 +165,7 @@ public class GameScene
 		GameObject graphicalObject;
 		Furniture furniture;
 		Container container; // object containing items to collect
-		Map fmap = game.getPlayer().getFloor();
+		Map fmap = player.getFloor();
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
@@ -274,13 +276,13 @@ public class GameScene
 		}
 		// load other players into the scene
 		List<Player> players = game.getPlayers();
-		for ( Player player: players )
+		for ( Player p: players )
 		{
-			if ( game.getPlayer() != player && player.getFloor() == fmap )
+			if ( player != p && p.getFloor() == fmap )
 			{
 				dynamicObject = DymanicRender.instancePlayer( 
-						Behave.CONTROLLED, player.getPosition()
-						, player.getFacing(), Color.darkGray );
+						Behave.CONTROLLED, p.getPosition()
+						, p.getFacing(), Color.darkGray );
 				graphicData.addGrapicalObject( dynamicObject );
 			}
 		}

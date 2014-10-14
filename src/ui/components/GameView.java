@@ -56,9 +56,9 @@ public class GameView extends GLJPanel
     {
     	super( gc );
     	// load game elements into the scene for rendering
-    	scene = new GameScene( state, player );
     	this.state = state;
     	this.player = player;
+    	scene = new GameScene( state, player );
     	// initial point of extraction (where the player starts)
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
@@ -196,7 +196,7 @@ public class GameView extends GLJPanel
     	if ( 	   (int) ( position.x / cellsize ) != cellx
     			|| (int) ( position.y / cellsize ) != celly )
     		// tell the game server
-    		RendererController.movePlayer( player, new Point( cellx, celly ) );
+    		RendererController.movePlayer( player, new Point( cellx, celly ) ); // should move to movePos in GameListener
     	// do update
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
