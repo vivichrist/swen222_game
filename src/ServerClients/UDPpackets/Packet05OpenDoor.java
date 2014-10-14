@@ -1,31 +1,107 @@
 package ServerClients.UDPpackets;
 
+import java.awt.Point;
+
 import ServerClients.Client;
 import ServerClients.Server;
-
+/**
+ * this class is extends from UDPPacket abstract class
+ * main function for this class:
+ * create a openDoor message and change to byteCode
+ * or change from byteCode to string message
+ *
+ * @author zhaojiang chang - 300282984
+ * */
 public class Packet05OpenDoor extends UDPPakcet {
+	private String doorAction;
+	private Point point;
+	private byte[] data;
+	private int x;
+	private int y;
+	/**
+	 * Constructor - creates a Packet05OpenDoor package
+	 * @param doorAction  - string open
+	 * @param Point - door location
+	 */
+	public Packet05OpenDoor(String doorAction, Point point) {
+		super(05);
+		this.point = point;
+		this.doorAction = doorAction;
 
-	public Packet05OpenDoor(int packetId) {
-		super(packetId);
-		// TODO Auto-generated constructor stub
+	}
+	/**
+	 * Constructor - creates a Packet05OpenDoor package
+	 * @param data  - received from server and change byte array to string message
+	 */
+	public Packet05OpenDoor(byte[] data) {
+		super(05);
+		this.data = data;
+		String[]dataArray = readData(data).split(",");
+		for(int i = 0; i<dataArray.length; i++){
+			System.out.println(dataArray[i]);
+		}
+		this.doorAction = dataArray[1];
+		this.x = Integer.parseInt(dataArray[2]);
+		this.y = Integer.parseInt(dataArray[3]);
+		this.point = new Point(x,y);
+		System.out.println("Packet05OpenDoor con 2: ");
 	}
 
+
+	/**
+	 * writeData(client) - this method is going to send data from client to server
+	 * @param client - once openDoor package created will call this method to send data to client
+	 */
 	@Override
 	public void writeData(Client client) {
-		// TODO Auto-generated method stub
+		client.sendData(getData());
+		System.out.println("Packet05OpenDoor con 3: ");
 
 	}
 
+	/**
+	 * writeData(server) - this method is going to send data from server to all client (except current player)
+	 * @param server - once package received from client and broadcast to all client
+	 */
 	@Override
 	public void writeData(Server server) {
-		// TODO Auto-generated method stub
+		System.out.println("Packet05OpenDoor con 4: ");
+		server.sendDataToAllClients(getData());
 
+		System.out.println("Packet05OpenDoor con 5: ");
 	}
 
+	/**
+	 * getData - this method is going to return a bytes array with PacketTypes and door open message and location
+	 * @return byte array
+	 */
 	@Override
 	public byte[] getData() {
-		// TODO Auto-generated method stub
-		return null;
+		return ("05"+ ","+this.doorAction +","+this.point.x+","+this.point.y).getBytes();
+	}
+	/**
+	 * getRealData - this method is going to return a bytes array with door open message and location
+	 * @return byte array
+	 */
+	public byte[] getRealData(){
+		return(this.doorAction +","+this.point.x+","+this.point.y).getBytes();
+	}
+	/**
+	 * this method is going to return a string open
+	 * @return string open
+	 */
+	public String getDoorAction() {
+		return doorAction;
+	}
+	/**
+	 * this method is going to return a Point door location
+	 * @return Point
+	 */
+	public Point getPoint() {
+		return point;
 	}
 
+
 }
+
+
