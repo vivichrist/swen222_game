@@ -18,11 +18,10 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
-import ServerClients.UDPpackets.Packet04Connection;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
-import ServerClients.UDPpackets.UDPPakcet;
-import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
+import ServerClients.UDPpackets.UDPPacket;
+import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import ui.components.GameView;
 import window.components.GUI;
 import world.game.GameState;
@@ -90,10 +89,10 @@ public class Client extends Thread {
 	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
-		PacketTypes type = UDPPakcet.lookupPacket(message.substring(0, 2));
+		PacketTypes type = UDPPacket.lookupPacket(message.substring(0, 2));
 		System.out.println("client type: "+message.substring(0,2)+ "  package size: " + message.length());
 
-		UDPPakcet packet = null;
+		UDPPacket packet = null;
 		switch (type) {
 		default:
 		case INVALID:
@@ -118,10 +117,7 @@ public class Client extends Thread {
 			handleMove((Packet03Move) packet);
 			break;
 		
-		case CONNECTION:
-			packet = new Packet04Connection(data);
-			handleConnection((Packet04Connection) packet);
-			break;
+		
 		case OPENDOOR:
 			packet = new Packet05OpenDoor(data);
 			handleOpenDoor((Packet05OpenDoor) packet);
@@ -129,6 +125,7 @@ public class Client extends Thread {
 		case PICKUP:
 			packet = new Packet06PickupObject(data);
 			handlePickupObject((Packet06PickupObject)packet);
+			break;
 		}
 	}
 
@@ -186,11 +183,7 @@ public class Client extends Thread {
 		}
 
 	}
-	private void handleConnection(Packet04Connection packet) {
-		
-		this.connection = packet.isConnection();
-		networkController.setConnection(connection);
-	}
+	
 	public MultyPlayer getPlayer() {
 		// TODO Auto-generated method stub
 		return p;
