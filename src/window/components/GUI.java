@@ -630,11 +630,14 @@ public class GUI {
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
 		controller = new UIController(state, this);
+		
 		player = state.getPlayer(name);
 
 		gameView = new GameView( glcapabilities, frame, state,player );
 		RendererController renCon = new RendererController();
 		NetworkController netCon = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(netCon);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 

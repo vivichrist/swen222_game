@@ -6,6 +6,11 @@ import ui.components.GameViewData;
 import world.game.GameState;
 import world.game.Player;
 
+/**
+ * Controller for the Renderer to handle communication between the NetworkController, GameState and Renderer
+ * @author Kalo Pilato - ID: 300313803
+ *
+ */
 public class RendererController {
 
 	private static NetworkController netCon;
@@ -49,9 +54,11 @@ public class RendererController {
 	 * @param point the Point to move the Player to
 	 */
 	public static void movePlayer(Player player, Point point){
-		netCon.movePlayer(player, point);
+		//netCon.movePlayer(player, point);
 		state.movePlayer(player, point);
 	}
+	
+	
 
 	
 }
