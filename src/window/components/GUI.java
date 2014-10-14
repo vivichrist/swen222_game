@@ -653,6 +653,7 @@ public class GUI {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
+		waitClientsPanel();
 		players = new ArrayList<Player>();
 		floors =new Map[1];
 		floors[0] = new Map(new File("map1.txt"),0);
@@ -671,10 +672,9 @@ public class GUI {
 		networkController.setGameView(gameView);
 		
 	}
-
 	
 	/**
-	 * this method will call by client once client class received broadcast package from server
+	 * The following method will call by client once client class received broadcast package from server
 	 * player will able to start the game
 	 * @param name - current player name
 	 * @param state -  after been called game state
@@ -697,6 +697,7 @@ public class GUI {
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
 	}
+	
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport
@@ -730,9 +731,11 @@ public class GUI {
 			return -1;
 		}
 		
-		// change the string s back to corresponding integer
+		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
+				southPanel.getCollectItemsCanvas().setFloorNum(j);
+				southPanel.getCollectItemsCanvas().repaint();
 				return j;
 			}
 		}
