@@ -82,7 +82,12 @@ public class RendererController {
 		state.movePlayer(player, point);
 	}
 	
-	public static boolean teleport(Player player, Point point){
+	/**
+	 * Teleport the currentPlayer in the Game
+	 * @param player the Player to teleport
+	 * @return
+	 */
+	public static boolean teleport(Player player){
 		return uiCon.teleport(player);
 	}
 	
