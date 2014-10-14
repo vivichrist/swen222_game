@@ -76,7 +76,7 @@ public class DymanicRender implements GraphicalObject
 			, Direction.NORTH, col );
 	}
 	
-	public static DymanicRender instanceFurnature( CellType type, Behave act, Point position
+	public static DymanicRender instanceFurniture( CellType type, Behave act, Point position
 			, Direction dir, Color meshColor )
 	{
 		return new DymanicRender( type, act, position, dir, meshColor );

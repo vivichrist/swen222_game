@@ -9,10 +9,12 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
 import world.game.GameState;
+import world.game.Player;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
 import controllers.NetworkController;
+import controllers.RendererController;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -47,15 +49,16 @@ public class GameView extends GLJPanel
 	private GameScene			scene;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
+	public static Player		player;
 	private GameState			state;
 
-    public GameView( GLCapabilities gc, JFrame frame, GameState state )
+    public GameView( GLCapabilities gc, JFrame frame, GameState state, Player player )
     {
     	super( gc );
     	// load game elements into the scene for rendering
-    	scene = new GameScene(state);
-
+    	scene = new GameScene( state, player );
     	this.state = state;
+    	this.player = player;
     	// initial point of extraction (where the player starts)
     	Point p = state.getPlayer().getPosition();
         position = new Point2D.Float(
@@ -178,6 +181,8 @@ public class GameView extends GLJPanel
 
     /**
      * Various updates that are to be done before the rendering of each frame.
+     * - update from key and mouse input, the position and direction.
+     * - teleport to new floor and reset all visual and state info.
      */
     private void update( GL2 gl )
 	{
@@ -191,16 +196,16 @@ public class GameView extends GLJPanel
     	if ( 	   (int) ( position.x / cellsize ) != cellx
     			|| (int) ( position.y / cellsize ) != celly )
     		// tell the game server
-    		state.movePlayer( state.getPlayer(), new Point( cellx, celly ) );
+    		RendererController.movePlayer( player, new Point( cellx, celly ) );
     	// do update
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.resetKeyUpdate( );
     	if ( scene.isTeleport() )
     	{
-    		if ( NetworkController.teleport( state.getPlayer() ) )
+    		if ( NetworkController.teleport( player ) )
     			scene.resetTeleport();
-			scene = new GameScene( state );
+			scene = new GameScene( state, player );
 			gl.glLoadIdentity();
 			scene.addSurrounds();
         	gl.glLineWidth( 2f );
@@ -214,6 +219,9 @@ public class GameView extends GLJPanel
     	}
     }
 
+    /**
+     * @param gl context
+     */
     private void mouseSelect( GL2 gl )
     {
     	Point click = keyInput.getClick();

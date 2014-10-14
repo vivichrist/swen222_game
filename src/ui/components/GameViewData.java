@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.game.Player;
+
 /**
  * @author Vivian Stewart
  * Centralised data for scene and scene rendering
@@ -17,6 +19,7 @@ public class GameViewData
 	private final ArrayList<StaticRender>		staticScene;
 	private final ArrayList<DymanicRender>		dynamicScene;
 	private HashMap<Point, GraphicalObject>		gameElements;
+	private HashMap<Point, Point>				newPlayerMove;
 	private DymanicRender						toInitialise;
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
@@ -37,11 +40,32 @@ public class GameViewData
 		staticScene = new ArrayList<StaticRender>();
 		dynamicScene = new ArrayList<DymanicRender>();
 		gameElements = new HashMap<Point, GraphicalObject>();
+		newPlayerMove = new HashMap<Point, Point>();
 	}
 
 	public Map<Point, GraphicalObject> getGameElements()
 	{
 		return Collections.unmodifiableMap( gameElements );
+	}
+	
+	public boolean moveGameElement( Point current, Point next )
+	{
+		return gameElements.put( next, gameElements.get( current ) ) != null;
+	}
+
+	public void addNewPlayerMove( Point current, Point next )
+	{
+		newPlayerMove.put( current, next );
+	}
+	
+	public void removePlayerMove( Point old )
+	{
+		newPlayerMove.remove( old );
+	}
+	
+	public Map<Point, Point> getOtherPlayerMove()
+	{
+		return Collections.unmodifiableMap( newPlayerMove );
 	}
 
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
@@ -125,6 +149,7 @@ public class GameViewData
 	{
 		previousSelection = null;
 		dynamicScene.clear();
+		newPlayerMove.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
 		toInitialise = null;

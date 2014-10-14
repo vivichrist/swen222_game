@@ -47,6 +47,7 @@ import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
+import controllers.RendererController;
 import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
@@ -631,13 +632,19 @@ public class GUI {
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
 		controller = new UIController(state, this);
-		gameView = new GameView( glcapabilities, frame, state );
-		NetworkController netCon = new NetworkController(controller);
+		
+		player = state.getPlayer(name);
+
+		gameView = new GameView( glcapabilities, frame, state,player );
+		RendererController renCon = new RendererController();
+		NetworkController netCon = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(netCon);
+		renCon.setSinglePlayer(true);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
 
-		player = state.getPlayer(name);
 		//gameView = new GameView( glcapabilities, frame );
 
 		gameView.setEnabled( true );
@@ -664,7 +671,12 @@ public class GUI {
 
 		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
-		NetworkController networkController = new NetworkController(controller);
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
@@ -686,7 +698,7 @@ public class GUI {
 		GLProfile glprofile = GLProfile.getDefault();
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 		System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
-		gameView = new GameView( glcapabilities, frame, state );
+		gameView = new GameView( glcapabilities, frame, state,state.getPlayer(nameC) );
 		gameView.setEnabled( true );
 		gameView.setVisible( true );
 		gameView.setFocusable( true );
@@ -695,6 +707,14 @@ public class GUI {
 		southPanel = new SouthPanel(controller.getPlayer(name));
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
+		
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
+		
 		Timers timer = new Timers();    
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);

@@ -4,7 +4,11 @@
 package ServerClients;
 
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,6 +21,8 @@ import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.Packet04Connection;
+import ServerClients.UDPpackets.Packet05OpenDoor;
+import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
@@ -118,10 +124,7 @@ public class Server extends Thread {
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==2 && serverOpen==false){
-				if(connectedPlayers.size()>1){
-
 					sentStateToAllClients();
-				}
 			}
 				break;
 			case DISCONNECT:
@@ -132,7 +135,7 @@ public class Server extends Thread {
 				break;
 			case DATA:
 				packet = new Packet02Data(data);
-				name = ((Packet02Data) packet).getUsername();
+				name = ((Packet02Data) packet).getUsername();//may through a exception 
 				this.handleData(((Packet02Data) packet));
 				break;
 			case MOVE:
@@ -140,10 +143,21 @@ public class Server extends Thread {
 				name = ((Packet03Move) packet).getUsername();
 				handleMove((Packet03Move) packet);
 				break;
-
+			case OPENDOOR:
+				packet = new Packet05OpenDoor(data);
+				handleOpenDoor((Packet05OpenDoor) packet);
+				break;
+			case PICKUP:
+				packet = new Packet06PickupObject(data);
+				handlePickupObject((Packet06PickupObject)packet);
+				
 			}
 		}
 
+
+
+
+		
 
 		private void sentStateToAllClients() {
 
@@ -184,7 +198,7 @@ public class Server extends Thread {
 				e.printStackTrace();
 			}
 		}
-		public void sendMoveDataToAllClients(byte[] data) {
+		public void sendActionDataToAllClients(byte[] data) {
 			for (MultyPlayer p : connectedPlayers) {
 				System.out.println(name+"  "+ p.getName());
 				if(!name.equals(p.getName())){
@@ -230,7 +244,17 @@ public class Server extends Thread {
 			packet.writeData(this);
 
 		}
-
+		private void handleOpenDoor(Packet05OpenDoor packet) {
+			byte[] temp = packet.getData();
+			Packet05OpenDoor pk = new Packet05OpenDoor(temp);
+			packet.writeData(this);
+		}		
+		private void handlePickupObject(Packet06PickupObject packet) {
+			byte[] temp = packet.getData();
+			Packet06PickupObject pk = new Packet06PickupObject(temp);
+			pk.writeData(this);
+			
+		}
 		private void handleMove(Packet03Move packet) {
 			if(getPlayer(packet.getUsername())!=null){
 				int index = getPlayerIndex(packet.getUsername());
@@ -295,6 +319,5 @@ public class Server extends Thread {
 		public void setServerStart(int num){
 			this.serverStart = num;
 		}
-
-	}
+		}
 
