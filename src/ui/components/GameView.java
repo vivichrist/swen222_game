@@ -49,14 +49,14 @@ public class GameView extends GLJPanel
 	private GameScene			scene;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
-	private final Player		player;
+	public static Player		player;
 	private GameState			state;
 
     public GameView( GLCapabilities gc, JFrame frame, GameState state, Player player )
     {
     	super( gc );
     	// load game elements into the scene for rendering
-    	scene = new GameScene(state);
+    	scene = new GameScene( state, player );
     	this.state = state;
     	this.player = player;
     	// initial point of extraction (where the player starts)
@@ -205,7 +205,7 @@ public class GameView extends GLJPanel
     	{
     		if ( NetworkController.teleport( player ) )
     			scene.resetTeleport();
-			scene = new GameScene( state );
+			scene = new GameScene( state, player );
 			gl.glLoadIdentity();
 			scene.addSurrounds();
         	gl.glLineWidth( 2f );

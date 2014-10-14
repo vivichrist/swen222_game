@@ -1,13 +1,20 @@
 package controllers;
 
 import java.awt.Point;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.media.opengl.awt.GLJPanel;
 
 import ServerClients.Client;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet06PickupObject;
 import ui.components.GameView;
 import window.components.GUI;
+import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
 /**
@@ -20,9 +27,12 @@ public class NetworkController {
 	private static GUI gui;
 	private static GameState state;
 	private GameView gameView;
+	private Object PlayerAndObject;
+	static Player player;
+	static MoveableObject object;
 	private static UIController controller;
 	private static RendererController renCon;
-	
+
 	/**
 	 * Constructor - creates a Network Controller for GameState/GUI/Client interaction in this game
 	 * @param state the GameState of this game
@@ -43,9 +53,9 @@ public class NetworkController {
 		Packet03Move move = new Packet03Move(player.getName(),point);
 		move.writeData(client);
 
-		controller.movePlayer(player, point);	
+		//controller.movePlayer(player, point);	
 	}
-	
+
 	/**
 	 * Receive action from server then move other player (current may able to see other player movement 
 	 *  @param player - other player  
@@ -53,7 +63,7 @@ public class NetworkController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		System.out.println("NetworkController->moveOtherPlayer "+ point.x+" "+point.y);
-		controller.moveOtherPlayer(player, point);
+		renCon.moveOtherPlayer(player, point);
 	}
 	/**
 	 * pass gameView from GUI
@@ -88,7 +98,7 @@ public class NetworkController {
 	public Player getPlayer(String username) {
 		return controller.getPlayer(username);
 	}
-	
+
 	/**
 	 * check server connection
 	 *  @param boolean value - return true means connect to the server 
@@ -96,7 +106,7 @@ public class NetworkController {
 	 */
 	public void setConnection(boolean connection) {
 		controller.setConnection(connection);
-		
+
 	}
 
 	/**
@@ -108,5 +118,76 @@ public class NetworkController {
 		System.out.println("teleport called");
 		return controller.teleport(p);
 	}
+	/**
+	 * received action from 
+	 **/
+	public void openDoor(String doorAction, Point point) {
+		// TODO add openDoor method in renCon
+		//renCon.openDoor(doorAction,point);
+	}
+	
+	public void pickupObject(Player player, MoveableObject object){
+		this.player = player;
+		this.object = object;
+		byte[]data = this.serialize(this.PlayerAndObject);
+		Packet06PickupObject pickup = new Packet06PickupObject(data);
+		pickup.writeData(client);
+		
+	}
+	class PlayerAndObject implements java.io.Serializable {
+		Player player;
+		MoveableObject object;
+		public PlayerAndObject(){
+			player = NetworkController.player;
+			object = NetworkController.object;
+		}
+	}
+	
+	public byte[] serialize(Object obj) {
 
+		byte[] bytes = new byte[60000];
+		try {
+			//object to bytearray
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(obj);
+			bytes = baos.toByteArray();
+			out.flush();
+			baos.close();
+			out.close();
+			return bytes;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * deserialize the player 
+	 * 
+	 * */
+	public Object deserialise(byte[]bytes) {
+
+		ByteArrayInputStream bais = null;
+		ObjectInputStream in = null;
+		try{
+			bais = new ByteArrayInputStream(bytes);
+			in = new ObjectInputStream(bais);
+			Object obj =  in.readObject();
+			return obj;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				bais.close();
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return null;
+	}
+	
 }
+
