@@ -17,6 +17,7 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.UDPPacket;
@@ -136,8 +137,14 @@ public class Server extends Thread {
 			packet = new Packet06PickupObject(data);
 			handlePickupObject((Packet06PickupObject)packet);
 			break;
+		case TELEPORT:
+			packet = new Packet04Teleport(data);
+			handleTeleport((Packet04Teleport)packet);
+			
 		}
 	}
+	
+
 	private void sentStateToAllClients() {
 
 		System.out.println("serverOpen = "+ serverOpen);
@@ -244,6 +251,13 @@ public class Server extends Thread {
 		}
 
 	}
+	
+	private void handleTeleport(Packet04Teleport packet) {
+		
+			packet.writeData(this);
+		
+	}
+	
 	public void addConnection(MultyPlayer player, Packet00Login packet) {
 		boolean alreadyConnected = false;
 		for (MultyPlayer p : this.connectedPlayers) {

@@ -8,7 +8,7 @@ import ServerClients.Server;
 public abstract class UDPPacket {
 
     public static enum PacketTypes {
-        INVALID(-1), LOGIN(00), DISCONNECT(01), DATA(02),MOVE(03), CONNECTION(04), OPENDOOR(05), PICKUP(06), DROP(07);
+        INVALID(-1), LOGIN(00), DISCONNECT(01), DATA(02),MOVE(03), TELEPORT(04), OPENDOOR(05), PICKUP(06), DROP(07);
 
         private int UPDpacketId;
 

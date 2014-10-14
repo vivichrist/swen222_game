@@ -11,6 +11,7 @@ import javax.media.opengl.awt.GLJPanel;
 
 import ServerClients.Client;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
@@ -48,6 +49,18 @@ public class NetworkController {
 		this.renCon = renCon;
 	}
 
+	
+	
+	public static void teleportOtherPlayer(String name, int floorNumber){
+		renCon.teleportOtherPlayer(name, floorNumber);
+		
+	}
+	public static void teleport(String name, int floorNumber){
+		
+		Packet04Teleport teleport = new Packet04Teleport(name,floorNumber);
+		teleport.writeData(client);
+
+	}
 	/**
 	 * Receive action from gameView(user input) then create a new move package to send to server then broadcast to all other client
 	 *  @param player - current player  

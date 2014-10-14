@@ -14,6 +14,7 @@ import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
+import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.UDPPacket;
@@ -119,6 +120,10 @@ public class Client extends Thread {
 			packet = new Packet06PickupObject(data);
 			handlePickupObject((Packet06PickupObject)packet);
 			break;
+		case TELEPORT:
+			packet = new Packet04Teleport(data);
+			handleTeleport((Packet04Teleport)packet);
+			break;
 		}
 	}
 
@@ -175,6 +180,18 @@ public class Client extends Thread {
 			}
 		}
 
+	}
+	
+
+	private void handleTeleport(Packet04Teleport packet) {
+		Player p = networkController.getPlayer(packet.getUsername());
+		if(p!=null){
+			if(!GUI.nameC.equalsIgnoreCase(p.getName())){
+				networkController.teleportOtherPlayer(packet.getUsername(), packet.getFloorNumber());
+			}else{
+				System.out.println("local player should not teleport by server");
+			}
+		}
 	}
 
 
