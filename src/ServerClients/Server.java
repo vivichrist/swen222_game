@@ -40,7 +40,7 @@ public class Server extends Thread {
 	public static int serverStart = 0;
 
 
-	public Server(int portNumber){
+	public Server(int portNumber, int numPlayers){
 		this.portNumber = portNumber;
 		connectedPlayers = new ArrayList<MultyPlayer>();
 
