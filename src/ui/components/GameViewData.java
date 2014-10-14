@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.components.Direction;
 import world.game.Player;
 
 /**
@@ -69,6 +70,14 @@ public class GameViewData
 	 */
 	public void addNewPlayerMove( Point current, Point next )
 	{
+		if ( current == null )
+		{
+			DymanicRender dyn = DymanicRender.instancePlayer( 
+					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
+			dynamicScene.add( dyn );
+			toInitialise = dyn;
+			gameElements.put( next, dyn );
+		}
 		newPlayerMove.put( current, next );
 	}
 	
