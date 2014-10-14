@@ -116,7 +116,19 @@ public class RendererController {
 		//state.toOpenDoor(.......);
 		
 	}
+	/**
+	 * gameview call this method
+	 * 		update the gamestate 
+	 * 		and pass to networkController to create drop package to send to server
+	 * @param player - current player
+	 * @param object - object to drop (remove from player inventory lsit
+	 * @param point - once package broadcast from server gameview need use point to remove
+	 * 
+	 * */
 	public void dropObject(Player player, MoveableObject object, Point point){
+		//TODO: current player drop a object - updat the gamestate
+		
+		uiCon.dropObject(player,object);
 		netCon.dropObject(player,object,point);
 	}
 	
