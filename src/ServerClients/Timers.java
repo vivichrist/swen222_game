@@ -1,4 +1,11 @@
 package ServerClients;
+
+import java.awt.Canvas;
+
+import javax.swing.JPanel;
+
+import window.components.UsefulItemsCanvas;
+
 /**
  * @author  Zhaojiang Chang
  * 
@@ -9,6 +16,11 @@ public class Timers {
 	
 	int countDownGame = 240;//4mins in seconds
 	int countDownPre = 10;//wait 10senconds before start game
+	
+
+	
+	
+	
 		public Timers(){
 			timerWaiting();
 		}
@@ -28,7 +40,6 @@ public class Timers {
 			if ((i-temp)== 1000 )
 			{
 				System.out.println(" you got "+countDownGame+" second to collect all the items");
-
 				countDownGame = (int) (gameCycle/1000-(i-currentTime)/1000);
 				temp+=1000;
 			}
@@ -54,7 +65,6 @@ public class Timers {
 				if ((i-temp)== 1000 )
 				{
 					System.out.println(" Game will start in "+countDownPre+" second");
-
 					countDownPre = (int) (gameCycle/1000-(i-currentTime)/1000);
 					temp+=1000;
 				}
@@ -71,9 +81,9 @@ public class Timers {
 			return countDownPre;
 		}
 		public static void main (String[]arg){
-			Timers t = new Timers();
+			//Timers t = new Timers();
 			//while(t.getCountDownGame()>0){
-			System.out.println(t);
+			//System.out.println(t);
 		//	}
 		}
 }
