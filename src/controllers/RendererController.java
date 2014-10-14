@@ -94,6 +94,12 @@ public class RendererController {
 		//view.toOpenDoor(point.x,point.y);
 		
 	}
+	/**
+	 * */
+	
+	public void openDoor(String name, Point point){
+		netCon.openDoor(name, point);
+	}
 	
 	/**
 	 * Teleport the currentPlayer in the Game
