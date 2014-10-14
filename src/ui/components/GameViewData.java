@@ -19,7 +19,7 @@ public class GameViewData
 	private final ArrayList<StaticRender>		staticScene;
 	private final ArrayList<DymanicRender>		dynamicScene;
 	private HashMap<Point, GraphicalObject>		gameElements;
-	private HashMap<Point, Player>				newPlayerMove;
+	private HashMap<Point, Point>				newPlayerMove;
 	private DymanicRender						toInitialise;
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
@@ -40,7 +40,7 @@ public class GameViewData
 		staticScene = new ArrayList<StaticRender>();
 		dynamicScene = new ArrayList<DymanicRender>();
 		gameElements = new HashMap<Point, GraphicalObject>();
-		newPlayerMove = new HashMap<Point, Player>();
+		newPlayerMove = new HashMap<Point, Point>();
 	}
 
 	public Map<Point, GraphicalObject> getGameElements()
@@ -48,14 +48,14 @@ public class GameViewData
 		return Collections.unmodifiableMap( gameElements );
 	}
 
-	public void addNewPlayerMove( Point p, Player player )
+	public void addNewPlayerMove( Point current, Point next )
 	{
-		newPlayerMove.put( p, player );
+		newPlayerMove.put( current, next );
 	}
 	
-	public void removePlayerMove( Point p )
+	public void removePlayerMove( Point old )
 	{
-		newPlayerMove.remove( p );
+		newPlayerMove.remove( old );
 	}
 
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
@@ -139,6 +139,7 @@ public class GameViewData
 	{
 		previousSelection = null;
 		dynamicScene.clear();
+		newPlayerMove.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
 		toInitialise = null;
