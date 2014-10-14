@@ -118,12 +118,17 @@ public class NetworkController {
 		System.out.println("teleport called");
 		return controller.teleport(p);
 	}
+	
+	
+	
+	
+	
 	/**
-	 * received action from 
+	 * received action from server 
 	 **/
-	public void openDoor(String doorAction, Point point) {
-		// TODO add openDoor method in renCon
-		//renCon.openDoor(doorAction,point);
+	public void toOpenDoor(String doorAction, Point point) {
+		// TODO: add openDoor method in renCon
+		renCon.toOpenDoor(doorAction,point);
 	}
 	
 	public void pickupObject(Player player, MoveableObject object){
@@ -132,6 +137,16 @@ public class NetworkController {
 		byte[]data = this.serialize(this.PlayerAndObject);
 		Packet06PickupObject pickup = new Packet06PickupObject(data);
 		pickup.writeData(client);
+		
+	}
+	
+	
+	
+	public void removeObjectFromClient(Packet06PickupObject packet) {
+		PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(packet.getRealData());
+		Player player = p.player;
+		MoveableObject object = p.object;
+		renCon.removeObject(player,object);
 		
 	}
 	class PlayerAndObject implements java.io.Serializable {
@@ -188,6 +203,8 @@ public class NetworkController {
 		}
 		return null;
 	}
+
+	
 	
 }
 
