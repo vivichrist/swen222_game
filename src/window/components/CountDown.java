@@ -15,6 +15,7 @@ public class CountDown extends JPanel
 	 */
 	private static final long	serialVersionUID	= 1L;
 	private int countDownGame = 240;//4mins in seconds
+	private Timer timer = new Timer();
 	
 	public CountDown()
 	{
@@ -24,21 +25,7 @@ public class CountDown extends JPanel
 	
 	public void run()
 	{
-		long currentTime= System.currentTimeMillis();//current system 
-		long i=System.currentTimeMillis();
-		long temp=currentTime;//assign currentTime to temp
-		int gameCycle = 240000;//4mins in milliseconds
-		
-		while (i-currentTime-2000<gameCycle)
-		{     
-			if ((i-temp)== 1000 )
-			{
-				this.paint( getGraphics() );
-				countDownGame = (int) (gameCycle/1000-(i-currentTime)/1000);
-				temp+=1000;
-			}
-			i=System.currentTimeMillis();
-		}
+		timer.run();
 	}
 
 	@Override
@@ -66,4 +53,28 @@ public class CountDown extends JPanel
 		cd.run();
 		cd.setVisible( true );
 	}
+	
+	private class Timer extends Thread
+	{
+		public void run()
+		{
+			long currentTime= System.currentTimeMillis();//current system 
+			long i=System.currentTimeMillis();
+			long temp=currentTime;//assign currentTime to temp
+			int gameCycle = 240000;//4mins in milliseconds
+			
+			while (i-currentTime-2000<gameCycle)
+			{     
+				if ((i-temp)== 1000 )
+				{
+					paint( getGraphics() );
+					countDownGame = (int) (gameCycle/1000-(i-currentTime)/1000);
+					temp+=1000;
+				}
+				i=System.currentTimeMillis();
+			}
+		}
+	}
 }
+
+
