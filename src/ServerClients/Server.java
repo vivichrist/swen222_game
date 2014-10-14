@@ -20,6 +20,7 @@ import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
+import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import world.game.GameBuilder;
@@ -140,9 +141,15 @@ public class Server extends Thread {
 		case TELEPORT:
 			packet = new Packet04Teleport(data);
 			handleTeleport((Packet04Teleport)packet);
-			
+			break;
+		case DROP:
+			packet = new Packet07DropObject(data);
+			handleDropObject((Packet07DropObject)packet);
+			break;
 		}
 	}
+	
+
 	
 
 	private void sentStateToAllClients() {
@@ -239,6 +246,13 @@ public class Server extends Thread {
 	private void handlePickupObject(Packet06PickupObject packet) {
 		byte[] temp = packet.getData();
 		Packet06PickupObject pk = new Packet06PickupObject(temp);
+		pk.writeData(this);
+
+	}
+	private void handleDropObject(Packet07DropObject packet) {
+		
+		byte[] temp = packet.getData();
+		Packet07DropObject pk = new Packet07DropObject(temp);
 		pk.writeData(this);
 
 	}

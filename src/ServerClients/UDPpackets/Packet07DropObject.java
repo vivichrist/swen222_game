@@ -16,6 +16,7 @@ public class Packet07DropObject extends UDPPacket {
 	
 	private byte[] data;
 	private Player player;
+	private MoveableObject object;
 	/**
 	 * Constructor - create a Packet07DropObject package
 	 * @param player  - player
@@ -25,6 +26,7 @@ public class Packet07DropObject extends UDPPacket {
 	public Packet07DropObject(Player player, MoveableObject object) {
 		super(07);
 		this.player = player;
+		this.object = object;
 
 	}
 	/**

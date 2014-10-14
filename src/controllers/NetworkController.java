@@ -187,27 +187,28 @@ public class NetworkController {
 		Packet07DropObject drop = new Packet07DropObject(data);
 		drop.writeData(client);
 	}
+	
+	
+	public void addObjectToView(byte[]data){
+		
+		PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
+		//TODO: kalo call this method to update the 
+		//renCon.addObjectToView(object.player, object.object);
+	}
 
 	/**
 	 * this method will called after server send a drop message, 
 	 * 
 	 * */
 
-	public void removeObjectFromClient(UDPPacket packet) {
-		if(packet instanceof Packet06PickupObject){
+	public void removeObjectFromClient(Packet06PickupObject packet) {
 			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
 			Player player = p.player;
 			MoveableObject object = p.object;
 			Point point = p.point;
 			renCon.removeObject(player,object,point);
-		}
-		else if(packet instanceof Packet07DropObject){
-			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet07DropObject)packet).getRealData());
-			Player player = p.player;
-			MoveableObject object = p.object;
-			Point point = p.point;
-			renCon.removeObject(player,object,point);
-		}
+		
+		
 
 	}
 	class PlayerAndObject implements java.io.Serializable {
