@@ -53,6 +53,7 @@ import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
 import world.components.GameObject;
+import world.components.GameToken;
 import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
@@ -763,31 +764,27 @@ public class GUI {
 		}
 		return -1;
 	}
-
-
-
-
-
-
-	public void findContainer(GameObject item){
-		String info = "Find " + item.toString();
-		ImageIcon icon = new ImageIcon("Resource/ball/ball grey.png");
+	
+	/**
+	 * The following method would be called when the player walks up a container.
+	 * The item in the container is passed to the method, the method would pop up
+	 * a window and tell the player what is found in the container.
+	 * @param item	the item found in the container
+	 */
+	public void findContainer(GameToken item){
+		// get the image of the item found
+		String color = southPanel.getCollectItemsCanvas().identifyColor(item.getColor());
+		String info = "Find " + item.toString().toUpperCase() + " in " + color.toUpperCase();
+		String resource = "Resource/" + item.toString().toLowerCase() + "/" + item.toString().toLowerCase() + " " + color + ".png";
+		ImageIcon icon = new ImageIcon(resource);
 		Image img = icon.getImage() ;  
-		Image newimg = img.getScaledInstance( 100, 100,  java.awt.Image.SCALE_SMOOTH ) ;  
-		icon = new ImageIcon( newimg );
+		Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH) ;  
+		icon = new ImageIcon(newimg);
 
-
-
-
+		// pop up the window to show the infomation
 		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
 		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
-
-
-
-
-
-
 
 	public GameState getState(){
 		return gameState;
@@ -809,14 +806,10 @@ public class GUI {
 		return name;
 	}
 
-
-
-
 	private InetAddress getSeverName() throws UnknownHostException {
 		// TODO for Jacky
 		return InetAddress.getLocalHost();
 	}
-
 
 	/**
 	 * this method is check the socket port 
@@ -838,6 +831,7 @@ public class GUI {
 			return false;
 		} 
 	}
+	
 	/**
 	 * this method is check player input server Ip address
 	 * if input is not ip adress will return false
