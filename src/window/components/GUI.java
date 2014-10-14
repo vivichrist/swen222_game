@@ -709,6 +709,13 @@ public class GUI {
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+		
+		
+		
+		
+//		Timers timer = new Timers();    
+//		int count = timer.getCountDownGame();
+//		System.out.println("=============="+count);
 	}
 
 	/**
@@ -770,9 +777,9 @@ public class GUI {
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
 
-		Timers timer = new Timers();    
-		int count = timer.getCountDownGame();
-		System.out.println("=============="+count);
+//		Timers timer = new Timers(southPanel.getUsefulItemsCanvas());    
+//		int count = timer.getCountDownGame();
+//		System.out.println("=============="+count);
 	}
 
 	/**
