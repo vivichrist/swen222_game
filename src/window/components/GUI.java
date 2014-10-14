@@ -47,6 +47,7 @@ import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
+import controllers.RendererController;
 import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
@@ -630,7 +631,8 @@ public class GUI {
 		//state.setController(controller);
 		controller = new UIController(state, this);
 		gameView = new GameView( glcapabilities, frame, state );
-		NetworkController netCon = new NetworkController(controller);
+		RendererController renCon = new RendererController();
+		NetworkController netCon = new NetworkController(controller, renCon);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
@@ -662,7 +664,8 @@ public class GUI {
 
 		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
-		NetworkController networkController = new NetworkController(controller);
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 

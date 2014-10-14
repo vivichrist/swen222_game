@@ -21,14 +21,17 @@ public class NetworkController {
 	private static GameState state;
 	private GameView gameView;
 	private static UIController controller;
+	private static RendererController renCon;
+	
 	/**
 	 * Constructor - creates a Network Controller for GameState/GUI/Client interaction in this game
 	 * @param state the GameState of this game
 	 * @param gui the GUI for this game
 	 * @param client the Client for the game
 	 */
-	public NetworkController(UIController controller){
+	public NetworkController(UIController controller, RendererController renCon){
 		this.controller = controller;
+		this.renCon = renCon;
 	}
 
 	/**
@@ -40,9 +43,9 @@ public class NetworkController {
 		Packet03Move move = new Packet03Move(player.getName(),point);
 		move.writeData(client);
 
-		controller.movePlayer(player, point);
-		
+		controller.movePlayer(player, point);	
 	}
+	
 	/**
 	 * Receive action from server then move other player (current may able to see other player movement 
 	 *  @param player - other player  
