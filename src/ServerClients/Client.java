@@ -1,6 +1,10 @@
 package ServerClients;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -21,6 +25,7 @@ import ui.components.GameView;
 import window.components.GUI;
 import world.game.GameState;
 import world.game.MultyPlayer;
+import world.game.Player;
 /**
  * A Client to handle connection between server and player
  * @author zhaojiang chang - ID:300282984
@@ -164,6 +169,47 @@ public class Client extends Thread {
 		
 		this.connection = packet.isConnection();
 		networkController.setConnection(connection);
+	}
+	public byte[] serialize() {
+
+		byte[] bytes = new byte[60000];
+		try {
+			//object to bytearray
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(this);
+			bytes = baos.toByteArray();
+			out.flush();
+			baos.close();
+			out.close();
+			return bytes;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public Player deserialize(byte[]bytes) {
+
+		ByteArrayInputStream bais = null;
+		ObjectInputStream in = null;
+		try{
+			bais = new ByteArrayInputStream(bytes);
+			in = new ObjectInputStream(bais);
+			Player s = (Player) in.readObject();
+			return s;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				bais.close();
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return null;
 	}
 
 }

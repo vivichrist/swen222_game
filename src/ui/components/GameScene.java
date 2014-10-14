@@ -21,14 +21,15 @@ import world.game.Player;
 
 /**
  * @author Vivian Stewart
- *
+ * - Setup of the visual world.
+ * - Collision Detection between world and the player.
  */
 public class GameScene
 {
 	private GameState		game;
 	private boolean			teleport = false;
-	private GameViewData gdata = GameViewData.instance();
-	private CellType[][]	map;
+	private GameViewData	graphicData = GameViewData.instance();
+	private CellType[][]	staticMap;
 	public final int		xlimit, ylimit;
 
 	public GameScene(GameState state)
@@ -40,9 +41,9 @@ public class GameScene
 		ylimit = game.getPlayer().getFloor().getYLimit();
 		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
-		map = game.getPlayer().getFloor().getCellTypeMap();
+		staticMap = game.getPlayer().getFloor().getCellTypeMap();
 		// print out the map
-		for ( CellType[] line: map )
+		for ( CellType[] line: staticMap )
 		{
 			for ( CellType c: line )
 				System.out.print( " " + c.ordinal() );
@@ -52,6 +53,8 @@ public class GameScene
 
 
 	/**
+	 * Convert continuous coordinates to discrete square map coordinates and
+	 * possibly trigger behaviour of the object in that square if applicable.
 	 * @param x - continuous x position value
 	 * @param y - continuous y position value
 	 * @return if the position is inside a collidable square
@@ -61,46 +64,53 @@ public class GameScene
 		if ( trigger ) return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
 		return simmpleCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
 	}
-	
-	private boolean simmpleCollidable( int x, int y )
+
+	/**
+	 * @param newXCoordinate - row select
+	 * @param newYCoordinate - column select
+	 * @return if this square has a collidable object in it
+	 */
+	private boolean simmpleCollidable( int newXCoordinate, int newYCoordinate )
 	{
-		if ( x >= xlimit || y >= ylimit )
+		if ( newXCoordinate >= xlimit || newYCoordinate >= ylimit )
 		{
 			return false;
 		}
-		Point p = new Point( x, y );
-		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
-			|| gdata.getGameElements().get( p ) != null )
-		{	// collect it and remove from data to appear in items
-			CellType ct =  gdata.getGameElements().get( p ).getType();
-			// tokens and torch
+		Point p = new Point( newXCoordinate, newYCoordinate );
+		if ( staticMap[newXCoordinate][newYCoordinate].ordinal()
+				> CellType.WALL.ordinal()
+			|| graphicData.getGameElements().get( p ) != null )
+		{
+			CellType ct =  graphicData.getGameElements().get( p ).getType();
+			// tokens, keys, rings and torch
 			if (( ct.ordinal() < CellType.CHEST.ordinal() 
 						&& ct.ordinal() < CellType.OUTOFBOUNDS.ordinal() )
 					|| ct == CellType.RINGS )
 				return false;
 			return true;
 		}
-		return map[x][y] == CellType.WALL;
+		return staticMap[newXCoordinate][newYCoordinate] == CellType.WALL;
 	}
 
 	/**
-	 * @param x - row select
-	 * @param y - column select
-	 * @return if this cell has a collidable object in it
+	 * @param newXCoordinate - row select
+	 * @param newYCoordinate - column select
+	 * @return if this square has a collidable object in it and trigger its' behaviour
 	 */
-	public boolean isCollidable( int x, int y )
+	public boolean isCollidable( int newXCoordinate, int newYCoordinate )
 	{
-		if ( x >= xlimit || y >= ylimit )
+		if ( newXCoordinate >= xlimit || newYCoordinate >= ylimit )
 		{
 			return false;
-			// throw new IndexOutOfBoundsException( "Cannot index (" + x + "," + y + ") Bit" );
 		}
-		Point p = new Point( x, y );
-		if ( map[x][y].ordinal() > CellType.WALL.ordinal() // position is a token, key or torch
-			|| gdata.getGameElements().get( p ) != null )
-		{	// collect it and remove from data to appear in items
-			CellType ct =  gdata.getGameElements().get( p ).getType();
-			System.out.println( "Collide (" + x + "," + y + ") type: " + ct );
+		Point p = new Point( newXCoordinate, newYCoordinate );
+		if ( staticMap[newXCoordinate][newYCoordinate].ordinal()
+					> CellType.WALL.ordinal()
+				|| graphicData.getGameElements().get( p ) != null )
+		{	
+			CellType ct =  graphicData.getGameElements().get( p ).getType();
+			System.out.println( "Collide (" + newXCoordinate + "," 
+									+ newYCoordinate + ") type: " + ct );
 			if ( ct == CellType.RINGS )
 			{
 				teleport = true;
@@ -109,171 +119,210 @@ public class GameScene
 			}
 			else if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( game.getPlayer(), p ) )
-					return ((DymanicRender)gdata.getGameElements().get( p )).collide();
+					return ((DymanicRender)graphicData
+							.getGameElements().get( p )).collide();
 				return true;
-			}// tokens and torch
-			else if ( ct.toString() == game.getPlayer().getType().toString() || ct == CellType.TORCH )
-			{
+			} // tokens and torch
+			else if ( ct.toString() == game.getPlayer().getType().toString()
+					|| ct == CellType.TORCH )
+			{ // collect it and remove from data to appear in items
 				game.pickupObjectAtPoint( game.getPlayer(), p );
-				gdata.remove( p );
+				graphicData.remove( p );
 			}
 			else if ( ct == CellType.KEY  )
-			{
+			{ // collect key and discard already collected key if it exists in
+			  // players inventory
 				Key key = game.pickupKey( game.getPlayer(), p );
-				gdata.remove( p );
+				graphicData.remove( p );
 				if ( key != null )
 				{
-					DymanicRender dyn = DymanicRender.instanceKey( p, key.getColor() );
-					gdata.addGrapicalObject( dyn );
+					DymanicRender dyn = DymanicRender.instanceKey(
+							p, key.getColor() );
+					graphicData.addGrapicalObject( dyn );
 					GameViewData.instance().setToInitialise( dyn );
 				}
 				
-			} else return ((DymanicRender)gdata.getGameElements().get( p )).collide();
+			} else
+				return ((DymanicRender)graphicData
+							.getGameElements().get( p )).collide();
 		}
-		return map[x][y] == CellType.WALL;
+		return staticMap[newXCoordinate][newYCoordinate] == CellType.WALL;
 	}
 
 	/**
-	 * Setup Scene with all the GraphicalObjects, Static and Dynamic
+	 * Setup Scene with all the GraphicalObjects mapped for collision detection
+	 * and Mouse Selection. And all the Static and Dynamic Objects in their
+	 * rendering queues.
 	 */
 	public void addSurrounds()
 	{
-		gdata.clear(); // need to destroy staticID too. for new floor
-		Direction dir;
-		Point p;
-		DymanicRender dyn;
-		GameObject go;
-		Furniture furn;
-		Container cont;
+		graphicData.clear(); // need to destroy staticID too. for new floor
+		Direction direction; // facing direction
+		Point location; // map coordinates
+		DymanicRender dynamicObject;
+		GameObject graphicalObject;
+		Furniture furniture;
+		Container container; // object containing items to collect
 		Map fmap = game.getPlayer().getFloor();
 		for ( int j = 0; j < ylimit; ++j )
 		{
 			for ( int i = 0; i < xlimit; ++i )
 			{
 				CellType[] nesw = findNeighbours( i, j );
-				p =  new Point( i, j );
-				dir = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY
+				location =  new Point( i, j );
+				direction = nesw[0] == nesw[2] && nesw[0] == CellType.EMPTY
 						? Direction.NORTH : Direction.EAST;
-				switch( map[i][j] )
-				{
+				switch( staticMap[i][j] )
+				{ // Statically rendered objects
 				case WALL :
-					gdata.addStaticOnly( new StaticRender( CellType.WALL, nesw, p, ColourPalette.TAN ) );
+					graphicData.addStaticOnly( new StaticRender( 
+							CellType.WALL, nesw, location, ColourPalette.TAN ) );
 					break;
 				case DOOR :
-					dyn = DymanicRender.instanceDoor( p, dir );
-					StaticRender doorWay = new StaticRender( CellType.DOOR, nesw, p, ColourPalette.BAIGE );
-					gdata.addStaticOnly( doorWay );
-					gdata.addGrapicalObject( dyn );
+					dynamicObject = DymanicRender.instanceDoor( location, direction );
+					StaticRender doorWay = new StaticRender( 
+							CellType.DOOR, nesw, location, ColourPalette.BAIGE );
+					graphicData.addStaticOnly( doorWay );
+					graphicData.addGrapicalObject( dynamicObject );
 					break;
 				case KEYDOOR :
-					dyn = DymanicRender.instanceKeyDoor( p, dir
-							, fmap.getDoor( p ).getKey().getColor() );
-					StaticRender keydoorWay = new StaticRender( CellType.KEYDOOR, nesw, p, ColourPalette.BAIGE );
-					gdata.addStaticOnly( keydoorWay );
-					gdata.addGrapicalObject( dyn );
+					dynamicObject = DymanicRender.instanceKeyDoor( location, direction
+							, fmap.getDoor( location ).getKey().getColor() );
+					StaticRender keydoorWay = new StaticRender( 
+							CellType.KEYDOOR, nesw, location, ColourPalette.BAIGE );
+					graphicData.addStaticOnly( keydoorWay );
+					graphicData.addGrapicalObject( dynamicObject );
 					break;
 				case TELEPORT :
-					dyn = DymanicRender.instanceTelePort( p );
-					gdata.addStaticOnly( new StaticRender( CellType.TELEPORT, nesw, p, ColourPalette.GREYPURPLE ) );
-					gdata.addGrapicalObject( dyn );
+					dynamicObject = DymanicRender.instanceTelePort( location );
+					graphicData.addStaticOnly( new StaticRender( 
+							CellType.TELEPORT, nesw, location, ColourPalette.GREYPURPLE ) );
+					graphicData.addGrapicalObject( dynamicObject );
 					break;
 				default:
-					gdata.addStaticOnly( new StaticRender( CellType.EMPTY, nesw, p, ColourPalette.LIGHTOCEANBLUE ) );
+					graphicData.addStaticOnly( new StaticRender( 
+							CellType.EMPTY, nesw, location, ColourPalette.LIGHTOCEANBLUE ) );
 					break;
 				}
-				go = fmap.objectAtPoint( p );
-				furn = fmap.furnitureAtPoint (p );
-				cont = fmap.containerAtPoint( p );
-				if ( go == null && cont == null && furn == null ) continue;
-				if ( go instanceof GameToken )
+				// Dynamically rendered objects
+				graphicalObject = fmap.objectAtPoint( location );
+				furniture = fmap.furnitureAtPoint ( location );
+				container = fmap.containerAtPoint( location );
+				if ( graphicalObject == null 
+						&& container == null 
+						&& furniture == null ) continue;
+				if ( graphicalObject instanceof GameToken )
 				{ // Tokens to be collected
-					if ( ((GameToken)go).getType() == TokenType.CONE )
+					if ( ((GameToken)graphicalObject).getType() == TokenType.CONE )
 					{
-						dyn = DymanicRender.instanceCone( p, ((GameToken)go).getColor() );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceCone( 
+								location, ((GameToken)graphicalObject).getColor() );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
-					else if ( ((GameToken)go).getType() == TokenType.BALL )
+					else if ( ((GameToken)graphicalObject).getType() == TokenType.BALL )
 					{
-						dyn = DymanicRender.instanceBall( p, ((GameToken)go).getColor() );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceBall(
+								location, ((GameToken)graphicalObject).getColor() );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
-					else if ( ((GameToken)go).getType() == TokenType.DIAMOND )
+					else if ( ((GameToken)graphicalObject).getType() == TokenType.DIAMOND )
 					{
-						dyn = DymanicRender.instanceDiamond( p, ((GameToken)go).getColor() );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceDiamond( 
+								location, ((GameToken)graphicalObject).getColor() );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
-					else if ( ((GameToken)go).getType() == TokenType.CUBE )
+					else if ( ((GameToken)graphicalObject).getType() == TokenType.CUBE )
 					{
-						dyn = DymanicRender.instanceCube( p, ((GameToken)go).getColor() );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceCube(
+								location, ((GameToken)graphicalObject).getColor() );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
 				} // items that enable other items to be collected or triggered
-				else if ( go instanceof MoveableObject )
+				else if ( graphicalObject instanceof MoveableObject )
 				{
-					if ( go instanceof Key )
+					if ( graphicalObject instanceof Key )
 					{
-						dyn = DymanicRender.instanceKey( p, ((Key)go).getColor() );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceKey(
+								location, ((Key)graphicalObject).getColor() );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
-					else if ( go instanceof Torch )
+					else if ( graphicalObject instanceof Torch )
 					{
-						dyn = DymanicRender.instanceTorch( p, ColourPalette.GREYPURPLE2 );
-						gdata.addGrapicalObject( dyn );
+						dynamicObject = DymanicRender.instanceTorch( 
+								location, ColourPalette.GREYPURPLE2 );
+						graphicData.addGrapicalObject( dynamicObject );
 					}
-				} else if ( furn != null )
-				{ // load furnature int the scene
-					dyn = DymanicRender.instanceFurnature(
-							furn.getType(), Behave.ORIENTATION, p
-							, furn.getFacing(), ColourPalette.PALEGREEN );
-					gdata.addDynamicOnly( dyn );
-					List<Point> lp = furn.getPoints();
-					System.out.println( "Number of points in Furature:" + lp.size() );
-					for ( Point pt: lp )
-						System.out.println( "Point:" + pt.toString() );
-					gdata.addAllGameElements( furn.getPoints(), dyn );
-				} else if ( cont != null )
-				{
-					System.out.println( "Container: " + cont.getType() );
-					dyn = DymanicRender.instanceContainer(
-							cont.getType(), Behave.ORIENTATION, p
-							, cont.getFacing(), ColourPalette.MAROON );
-					gdata.addGrapicalObject( dyn );
+				} else if ( furniture != null )
+				{ // load furniture int the scene
+					dynamicObject = DymanicRender.instanceFurniture(
+							furniture.getType()
+							, Behave.ORIENTATION
+							, location
+							, furniture.getFacing()
+							, ColourPalette.PALEGREEN );
+					graphicData.addDynamicOnly( dynamicObject );
+					graphicData.addAllGameElements( furniture.getPoints(), dynamicObject );
+				} else if ( container != null )
+				{ // load containers (briefcase, chest etc.)
+					System.out.println( "Container: " + container.getType() );
+					dynamicObject = DymanicRender.instanceContainer(
+							container.getType(), Behave.ORIENTATION, location
+							, container.getFacing(), ColourPalette.MAROON );
+					graphicData.addGrapicalObject( dynamicObject );
 				}
 			}
 		}
 		// load other players into the scene
 		List<Player> players = game.getPlayers();
-		for ( Player pl: players )
+		for ( Player player: players )
 		{
-			if ( game.getPlayer() != pl && pl.getFloor() == fmap )
+			if ( game.getPlayer() != player && player.getFloor() == fmap )
 			{
-				dyn = DymanicRender.instancePlayer( Behave.CONTROLLED
-					, pl.getPosition(), pl.getFacing(), Color.darkGray );
-				gdata.addGrapicalObject( dyn );
+				dynamicObject = DymanicRender.instancePlayer( 
+						Behave.CONTROLLED, player.getPosition()
+						, player.getFacing(), Color.darkGray );
+				graphicData.addGrapicalObject( dynamicObject );
 			}
 		}
 
 		// testing
-		for ( Entry<Point, GraphicalObject> kv: gdata.getGameElements().entrySet() )
-			System.out.println( "GameElement at:" + kv.getKey().toString()
-					+ " -> " + kv.getValue().getType().toString() );
+		for ( Entry<Point, GraphicalObject> entry
+				: graphicData.getGameElements().entrySet() )
+			System.out.println( "GameElement at:" 
+				+ entry.getKey().toString()
+				+ " -> "
+				+ entry.getValue().getType().toString() );
 	}
+	/**
+	 * Return the surrounding square of the square(i,j) for static map
+	 * evaluation and connecting of walls.
+	 * @param i - row of square
+	 * @param j - column of square
+	 * @return the north, east, south and west facing adjacent squares
+	 * of point (i,j) 
+	 */
 	private CellType[] findNeighbours( int i, int j )
 	{
 		return new CellType[] {
-			  j - 1 < 0		  ? CellType.OUTOFBOUNDS : map[ i ]   [j - 1]
-			, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : map[i + 1] [ j ]
-			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : map[ i ]   [j + 1]
-			, i - 1 < 0       ? CellType.OUTOFBOUNDS : map[i - 1] [ j ]
+			  j - 1 < 0		  ? CellType.OUTOFBOUNDS : staticMap[ i ]   [j - 1]
+			, i + 1 >= xlimit ? CellType.OUTOFBOUNDS : staticMap[i + 1] [ j ]
+			, j + 1 >= ylimit ? CellType.OUTOFBOUNDS : staticMap[ i ]   [j + 1]
+			, i - 1 < 0       ? CellType.OUTOFBOUNDS : staticMap[i - 1] [ j ]
 		};
 	}
 
 
+	/**
+	 * @return true if teleporting is active.
+	 */
 	public boolean isTeleport()
 	{
 		return teleport;
 	}
 
+	/**
+	 * Teleporting is done, return to normal
+	 */
 	public void resetTeleport()
 	{
 		teleport = false;
