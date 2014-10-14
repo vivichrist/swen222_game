@@ -32,16 +32,16 @@ public class GameScene
 	private CellType[][]	staticMap;
 	public final int		xlimit, ylimit;
 
-	public GameScene(GameState state)
+	public GameScene( GameState state, Player player )
 	{
 		//Kalo added
 		game = state;
 		// size of map is in the header
-		xlimit = game.getPlayer().getFloor().getXLimit();
-		ylimit = game.getPlayer().getFloor().getYLimit();
+		xlimit = player.getFloor().getXLimit();
+		ylimit = player.getFloor().getYLimit();
 		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
-		staticMap = game.getPlayer().getFloor().getCellTypeMap();
+		staticMap = player.getFloor().getCellTypeMap();
 		// print out the map
 		for ( CellType[] line: staticMap )
 		{
