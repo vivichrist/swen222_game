@@ -45,12 +45,10 @@ public class Client extends Thread {
 	public GUI gui;
 	public MultyPlayer p;
 	//public Client(GameState state, String ipAddress){
-	public Client(GUI gui,String name,String ipAddress,NetworkController networkController,int port){
+	public Client(GUI gui,String name,String ipAddress,int port){
 		this.port = port;
 		this.gui = gui;
-		this.networkController = networkController;
 		this.name = name;
-		this.networkController.setClient(this);
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -159,12 +157,12 @@ public class Client extends Thread {
 
 	private void handleData(Packet02Data packet) {
 
-		GameState st = NetworkController.deserialize(packet.getRealData());
-		networkController.setState(st);
-		if(st.getPlayers().size()>1){
-			gui.startClientWindows(name,st);
-		}
+		GameState st = deserialize(packet.getRealData());
+		networkController = new MultiPlayerBuild(st, gui, name).getNetworkController();
+		networkController.setClient(this);
+		
 	}
+	
 	private void handleOpenDoor(Packet05OpenDoor packet) {
 		//Player player = (Player) this.deserialize(packet.getData());
 		networkController.toOpenDoor(packet.getDoorAction(), packet.getPoint());
@@ -176,9 +174,9 @@ public class Client extends Thread {
 	
 	private void handleMove(Packet03Move packet) {
 
-		MultyPlayer p = (MultyPlayer) networkController.getPlayer(packet.getUsername());
+		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
-			if(!GUI.name.equalsIgnoreCase(p.getName())){
+			if(!GUI.nameC.equalsIgnoreCase(p.getName())){
 				networkController.moveOtherPlayer(p, packet.getPoint());
 			}else{
 				System.out.println("local player should not move by server");
@@ -189,11 +187,35 @@ public class Client extends Thread {
 	private void handleConnection(Packet04Connection packet) {
 		
 		this.connection = packet.isConnection();
-		networkController.setConnection(connection);
+		//networkController.setConnection(connection);
 	}
 	public MultyPlayer getPlayer() {
 		// TODO Auto-generated method stub
 		return p;
+	}
+	
+	public GameState deserialize(byte[]bytes) {
+
+		ByteArrayInputStream bais = null;
+		ObjectInputStream in = null;
+		try{
+			bais = new ByteArrayInputStream(bytes);
+			in = new ObjectInputStream(bais);
+			GameState s = (GameState) in.readObject();
+			return s;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				bais.close();
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return null;
 	}
 
 }

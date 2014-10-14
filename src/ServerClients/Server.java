@@ -64,11 +64,11 @@ public class Server extends Thread {
 	public void run(){
 
 		while(true){
-//			if(connectedPlayers.size()>1){
-//
-//					sentStateToAllClients();
-//				
-//			}
+			//			if(connectedPlayers.size()>1){
+			//
+			//					sentStateToAllClients();
+			//				
+			//			}
 
 			this.serverStart = 99;
 			System.out.println("Server Start>>>>>>>>>>"+ serverStart);
@@ -124,194 +124,213 @@ public class Server extends Thread {
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==2 && serverOpen==false){
-					sentStateToAllClients();
+				sentStateToAllClients();
 			}
-				break;
-			case DISCONNECT:
-				packet = new Packet01Disconnect(data);
-				System.out.println("[" + address.getHostAddress() + ":" + port + "] "
-						+ ((Packet01Disconnect) packet).getUsername() + " has left...");
-				this.removeConnection((Packet01Disconnect) packet);
-				break;
-			case DATA:
-				packet = new Packet02Data(data);
-				name = ((Packet02Data) packet).getUsername();//may through a exception 
-				this.handleData(((Packet02Data) packet));
-				break;
-			case MOVE:
-				packet = new Packet03Move(data);
-				name = ((Packet03Move) packet).getUsername();
-				handleMove((Packet03Move) packet);
-				break;
-			case OPENDOOR:
-				packet = new Packet05OpenDoor(data);
-				handleOpenDoor((Packet05OpenDoor) packet);
-				break;
-			case PICKUP:
-				packet = new Packet06PickupObject(data);
-				handlePickupObject((Packet06PickupObject)packet);
-				
-			}
-		}
-		private void sentStateToAllClients() {
-
-			System.out.println("serverOpen = "+ serverOpen);
-			ArrayList<String>names = new ArrayList<String>();
-			for(MultyPlayer p:connectedPlayers ){
-				names.add(p.getName());
-			}
-			for(String name: names){
-				System.out.println("names: "+ name);
-			}
-			System.out.println("new gamebuilder builded");
-			GameBuilder builder =new GameBuilder(names);
-			state = builder.getGameState();
-
-			byte[] temp =state.serialize();
-
-			byte[]newData =new byte[temp.length+2];
-			byte[] b = "02".getBytes();
-			newData[0] = b[0];
-			newData[1] = b[1];
-
-			for(int i = 0; i<temp.length;i++){
-				newData[i+2] = temp[i];
-			}
-			Packet02Data p = new Packet02Data(newData);
-			p.writeData(this);
-			serverOpen  = true;
-
+			break;
+		case DISCONNECT:
+			packet = new Packet01Disconnect(data);
+			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+					+ ((Packet01Disconnect) packet).getUsername() + " has left...");
+			this.removeConnection((Packet01Disconnect) packet);
+			break;
+		case DATA:
+			packet = new Packet02Data(data);
+			name = ((Packet02Data) packet).getUsername();//may through a exception 
+			this.handleData(((Packet02Data) packet));
+			break;
+		case MOVE:
+			packet = new Packet03Move(data);
+			name = ((Packet03Move) packet).getUsername();
+			handleMove((Packet03Move) packet);
+			break;
+		case OPENDOOR:
+			packet = new Packet05OpenDoor(data);
+			handleOpenDoor((Packet05OpenDoor) packet);
+			break;
+		case PICKUP:
+			packet = new Packet06PickupObject(data);
+			handlePickupObject((Packet06PickupObject)packet);
 
 		}
+	}
+	private void sentStateToAllClients() {
 
-		private void sendData(byte[]data, InetAddress ipAddress, int port){
-			DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-			try {
-				socket.send(packet);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		System.out.println("serverOpen = "+ serverOpen);
+		ArrayList<String>names = new ArrayList<String>();
+		for(MultyPlayer p:connectedPlayers ){
+			names.add(p.getName());
 		}
-		public void sendActionDataToAllClients(byte[] data) {
-			for (MultyPlayer p : connectedPlayers) {
-				System.out.println(name+"  "+ p.getName());
-				if(!name.equals(p.getName())){
-					sendData(data, p.ipAddress, p.port);
-					System.out.println(p.ipAddress+ "  "+p.port);
-				}
-			}
+		for(String name: names){
+			System.out.println("names: "+ name);
+		}
+		System.out.println("new gamebuilder builded");
+		GameBuilder builder =new GameBuilder(names);
+		state = builder.getGameState();
 
+		byte[] temp = serialize();
+
+		byte[]newData =new byte[temp.length+2];
+		byte[] b = "02".getBytes();
+		newData[0] = b[0];
+		newData[1] = b[1];
+
+		for(int i = 0; i<temp.length;i++){
+			newData[i+2] = temp[i];
 		}
-		public void sendDataToAllClients(byte[] data) {
-			for (MultyPlayer p : connectedPlayers) {
-				//System.out.println(name+"  "+ p.getName());
-				//if(!name.equals(p.getName())){
+		Packet02Data p = new Packet02Data(newData);
+		p.writeData(this);
+		serverOpen  = true;
+
+
+	}
+
+	private void sendData(byte[]data, InetAddress ipAddress, int port){
+		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void sendActionDataToAllClients(byte[] data) {
+		for (MultyPlayer p : connectedPlayers) {
+			System.out.println(name+"  "+ p.getName());
+			if(!name.equals(p.getName())){
 				sendData(data, p.ipAddress, p.port);
-				//System.out.println(p.ipAddress+ "  "+p.port);
-
+				System.out.println(p.ipAddress+ "  "+p.port);
 			}
+		}
+
+	}
+	public void sendDataToAllClients(byte[] data) {
+		for (MultyPlayer p : connectedPlayers) {
+			//System.out.println(name+"  "+ p.getName());
+			//if(!name.equals(p.getName())){
+			sendData(data, p.ipAddress, p.port);
+			//System.out.println(p.ipAddress+ "  "+p.port);
 
 		}
-		public MultyPlayer getPlayer(String username) {
-			for (MultyPlayer player : this.connectedPlayers) {
-				if (player.getName().equals(username)) {
-					//System.out.println(player.getPosition().x+"   "+player.getPosition().y);
-					return player;
-				}
+
+	}
+	public MultyPlayer getPlayer(String username) {
+		for (MultyPlayer player : this.connectedPlayers) {
+			if (player.getName().equals(username)) {
+				//System.out.println(player.getPosition().x+"   "+player.getPosition().y);
+				return player;
 			}
+		}
+		return null;
+	}
+	public int getPlayerIndex(String username) {
+		int index = 0;
+		for (MultyPlayer player : this.connectedPlayers) {
+			if (player.getName().equals(username)) {
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+	private void handleData(Packet02Data packet) {
+
+		byte[] temp = packet.getData();
+		Packet02Data pk = new Packet02Data(temp);
+		packet.writeData(this);
+
+	}
+	private void handleOpenDoor(Packet05OpenDoor packet) {
+		byte[] temp = packet.getData();
+		Packet05OpenDoor pk = new Packet05OpenDoor(temp);
+		packet.writeData(this);
+	}		
+	private void handlePickupObject(Packet06PickupObject packet) {
+		byte[] temp = packet.getData();
+		Packet06PickupObject pk = new Packet06PickupObject(temp);
+		pk.writeData(this);
+
+	}
+	private void handleMove(Packet03Move packet) {
+		if(getPlayer(packet.getUsername())!=null){
+			int index = getPlayerIndex(packet.getUsername());
+			Player player = state.getPlayer(packet.getUsername());
+			state.movePlayer(player, packet.getPoint());
+			packet.writeData(this);
+		}
+
+	}
+	public void addConnection(MultyPlayer player, Packet00Login packet) {
+		boolean alreadyConnected = false;
+		for (MultyPlayer p : this.connectedPlayers) {
+			if (player.getName().equalsIgnoreCase(p.getName())) {
+				if (p.ipAddress == null) {
+					p.ipAddress = player.ipAddress;
+				}
+				if (p.port == -1) {
+					p.port = player.port;
+				}
+				alreadyConnected = true;
+				System.out.println("allrady connected");
+			}
+			else {
+				//relay to the current connected player that there is a new player
+				sendData(packet.getData(), p.ipAddress, p.port);
+
+				// relay to the new player that the currently connect player exists
+				packet = new Packet00Login(p.getName());
+				sendData(packet.getData(), player.ipAddress, player.port);
+			}
+		}
+		if (!alreadyConnected) {
+			this.connectedPlayers.add(player);
+			System.out.println("palyer: "+ player.getName());
+
+			for(MultyPlayer p: connectedPlayers){
+				System.out.println(p.getName()+" "+" "+p.ipAddress+ "  "+ p.port);
+			}
+		}
+	}
+	public ArrayList<String> getPlayerNames(){
+		ArrayList<String>names = new ArrayList<String>();
+		for(MultyPlayer p: connectedPlayers){
+			names.add(p.getName());
+
+		}
+		return names;
+	}
+
+	public void removeConnection(Packet01Disconnect packet) {
+		this.connectedPlayers.remove(getPlayerIndex(packet.getUsername()));
+		packet.writeData(this);
+	}
+
+	public List<MultyPlayer> getConnectedPlayers() {
+		return connectedPlayers;
+	}
+	public int getServerStart(){
+		System.out.println("GetServerStart: "+ this.serverStart);
+		return this.serverStart;
+	}
+	public void setServerStart(int num){
+		this.serverStart = num;
+	}
+	
+	private byte[] serialize() {
+
+		byte[] bytes = new byte[60000];
+		try {
+			//object to bytearray
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream out = new ObjectOutputStream(baos);
+			out.writeObject(state);
+			bytes = baos.toByteArray();
+			out.flush();
+			baos.close();
+			out.close();
+			return bytes;
+		}catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
-		public int getPlayerIndex(String username) {
-			int index = 0;
-			for (MultyPlayer player : this.connectedPlayers) {
-				if (player.getName().equals(username)) {
-					break;
-				}
-				index++;
-			}
-			return index;
-		}
-		private void handleData(Packet02Data packet) {
-
-			byte[] temp = packet.getData();
-			Packet02Data pk = new Packet02Data(temp);
-			packet.writeData(this);
-
-		}
-		private void handleOpenDoor(Packet05OpenDoor packet) {
-			byte[] temp = packet.getData();
-			Packet05OpenDoor pk = new Packet05OpenDoor(temp);
-			packet.writeData(this);
-		}		
-		private void handlePickupObject(Packet06PickupObject packet) {
-			byte[] temp = packet.getData();
-			Packet06PickupObject pk = new Packet06PickupObject(temp);
-			pk.writeData(this);
-			
-		}
-		private void handleMove(Packet03Move packet) {
-			if(getPlayer(packet.getUsername())!=null){
-				int index = getPlayerIndex(packet.getUsername());
-				MultyPlayer player = this.connectedPlayers.get(index);
-				state.movePlayer((Player)player, packet.getPoint());
-				packet.writeData(this);
-			}
-
-		}
-		public void addConnection(MultyPlayer player, Packet00Login packet) {
-			boolean alreadyConnected = false;
-			for (MultyPlayer p : this.connectedPlayers) {
-				if (player.getName().equalsIgnoreCase(p.getName())) {
-					if (p.ipAddress == null) {
-						p.ipAddress = player.ipAddress;
-					}
-					if (p.port == -1) {
-						p.port = player.port;
-					}
-					alreadyConnected = true;
-					System.out.println("allrady connected");
-				}
-				else {
-					//relay to the current connected player that there is a new player
-					sendData(packet.getData(), p.ipAddress, p.port);
-
-					// relay to the new player that the currently connect player exists
-					packet = new Packet00Login(p.getName());
-					sendData(packet.getData(), player.ipAddress, player.port);
-				}
-			}
-			if (!alreadyConnected) {
-				this.connectedPlayers.add(player);
-				System.out.println("palyer: "+ player.getName());
-
-				for(MultyPlayer p: connectedPlayers){
-					System.out.println(p.getName()+" "+" "+p.ipAddress+ "  "+ p.port);
-				}
-			}
-		}
-		public ArrayList<String> getPlayerNames(){
-			ArrayList<String>names = new ArrayList<String>();
-			for(MultyPlayer p: connectedPlayers){
-				names.add(p.getName());
-
-			}
-			return names;
-		}
-
-		public void removeConnection(Packet01Disconnect packet) {
-			this.connectedPlayers.remove(getPlayerIndex(packet.getUsername()));
-			packet.writeData(this);
-		}
-
-		public List<MultyPlayer> getConnectedPlayers() {
-			return connectedPlayers;
-		}
-		public int getServerStart(){
-			System.out.println("GetServerStart: "+ this.serverStart);
-			return this.serverStart;
-		}
-		public void setServerStart(int num){
-			this.serverStart = num;
-		}
-		}
+	}
+}
 

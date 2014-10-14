@@ -53,9 +53,6 @@ public class UIController {
 	public void movePlayer(Player player, Point point){
 		state.movePlayer(player, point);
 	}
-	public GameState deserialize(byte[] realData) {
-		return state.deserialize(realData);
-	}
 	
 	public boolean teleport(Player p){
 		int floor = gui.getFloor(state.floorCount());
