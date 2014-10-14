@@ -25,12 +25,19 @@ public class Packet00Login extends UDPPacket {
 		System.out.println("username = "+ username);
 	}
 
+	/**
+	 * Constructor - create a login package with given name
+	 * @param username - player name
+	 */
 	public Packet00Login(String username) {
 		super(00);
 		this.username = username;
 
 	}
 
+	/**
+	 * 
+	 * */
 	@Override
 	public void writeData(Client client) {
 		if(client==null)System.out.println("null client");
