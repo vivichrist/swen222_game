@@ -115,7 +115,8 @@ public class DymanicRender implements GraphicalObject
 		this.type = type;
 		// tokens, key and torch should be centered in the middle of the square
 		if ( (type.ordinal() > CellType.OUTOFBOUNDS.ordinal()
-				&& type.ordinal() < CellType.CHEST.ordinal()) )
+				&& type.ordinal() < CellType.CHEST.ordinal())
+					|| type == CellType.PLAYER )
 			this.position = new Point2D.Float(
 					  (position.x * GameView.cellsize) + (GameView.cellsize/2f)
 					, (position.y * GameView.cellsize) + (GameView.cellsize/2f) );
