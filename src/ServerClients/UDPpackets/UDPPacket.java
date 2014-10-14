@@ -5,7 +5,7 @@ import ServerClients.Server;
 
 
 
-public abstract class UDPPakcet {
+public abstract class UDPPacket {
 
     public static enum PacketTypes {
         INVALID(-1), LOGIN(00), DISCONNECT(01), DATA(02),MOVE(03), CONNECTION(04), OPENDOOR(05), PICKUP(06), DROP(07);
@@ -23,7 +23,7 @@ public abstract class UDPPakcet {
 
     public byte packetId;
 
-    public UDPPakcet(int packetId) {
+    public UDPPacket(int packetId) {
         this.packetId = (byte) packetId;
     }
 

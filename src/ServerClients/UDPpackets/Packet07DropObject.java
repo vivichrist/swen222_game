@@ -11,7 +11,7 @@ import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
 
-public class Packet07DropObject extends UDPPakcet {
+public class Packet07DropObject extends UDPPacket {
 
 	
 	private byte[] data;
