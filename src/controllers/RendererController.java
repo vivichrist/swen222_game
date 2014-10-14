@@ -14,8 +14,10 @@ import world.game.Player;
 public class RendererController {
 
 	private static NetworkController netCon;
+	private static UIController uiCon;
 	private static GameState state;
 	private static GameViewData view;
+	private static boolean singlePlayer;
 	
 	/**
 	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database
@@ -39,6 +41,27 @@ public class RendererController {
 	}
 	
 	/**
+	 * @param u the UIController to set
+	 */
+	public static void setUICon(UIController u){
+		uiCon = u;
+	}
+	
+	/**
+	 * @return the singlePlayer
+	 */
+	public boolean isSinglePlayer() {
+		return singlePlayer;
+	}
+
+	/**
+	 * @param singlePlayer the singlePlayer to set
+	 */
+	public void setSinglePlayer(boolean singlePlayer) {
+		this.singlePlayer = singlePlayer;
+	}
+
+	/**
 	 * Moves another Player in the Game
 	 * @param player the Player to move
 	 * @param point the Point to move the Player to
@@ -54,8 +77,13 @@ public class RendererController {
 	 * @param point the Point to move the Player to
 	 */
 	public static void movePlayer(Player player, Point point){
-		//netCon.movePlayer(player, point);
+		if(!singlePlayer) netCon.movePlayer(player, point);
+		if(state == null) System.out.println("State is null in RendererController");
 		state.movePlayer(player, point);
+	}
+	
+	public static boolean teleport(Player player, Point point){
+		return uiCon.teleport(player);
 	}
 	
 	

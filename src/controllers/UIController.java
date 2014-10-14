@@ -26,6 +26,11 @@ public class UIController {
 		this.gui = gui;
 	}
 	
+	public UIController(GUI gui){
+		//this.state = state;
+		this.gui = gui;
+	}
+	
 	/**
 	 * Redraws the GameToken panel in the GUI - use for updating the GUI when a Player collects a GameToken
 	 */

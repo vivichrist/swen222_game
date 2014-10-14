@@ -11,40 +11,41 @@ import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
 
-public class Packet06PickupObject extends UDPPakcet {
+public class Packet07DropObject extends UDPPakcet {
 
+	
 	private byte[] data;
 	private Player player;
 	/**
-	 * Constructor - create a Packet06PickupObject package
+	 * Constructor - create a Packet07DropObject package
 	 * @param player  - player
 	 * @param object - object to pickup
 	 
 	 */
-	public Packet06PickupObject(Player player, MoveableObject object) {
-		super(06);
+	public Packet07DropObject(Player player, MoveableObject object) {
+		super(07);
 		this.player = player;
 
 	}
 	/**
-	 * Constructor - creates a Packet06PickupObject package
+	 * Constructor - creates a Packet07DropObject package
 	 * @param data  - received from server and change byte array to string message
 	 */
-	public Packet06PickupObject(byte[] data) {
-		super(06);
+	public Packet07DropObject(byte[] data) {
+		super(07);
 		this.data = data;
-		System.out.println("Packet06PickupObject con 2: ");
+		System.out.println("Packet07DropObject con 2: ");
 	}
 
 
 	/**
 	 * writeData(client) - this method is going to send data from client to server
-	 * @param client - once pickup object package created will call this method to send data to client
+	 * @param client - once openDoor package created will call this method to send data to client
 	 */
 	@Override
 	public void writeData(Client client) {
 		client.sendData(getData());
-		System.out.println("Packet06PickupObject con 3: ");
+		System.out.println("Packet07DropObject con 3: ");
 
 	}
 
@@ -54,10 +55,10 @@ public class Packet06PickupObject extends UDPPakcet {
 	 */
 	@Override
 	public void writeData(Server server) {
-		System.out.println("Packet06PickupObject con 4: ");
+		System.out.println("Packet07DropObject con 4: ");
 		server.sendActionDataToAllClients(getData());
 
-		System.out.println("Packet06PickupObject con 5: ");
+		System.out.println("Packet07DropObject con 5: ");
 	}
 	/**
 	 * getRealData - this method is going to return a bytes array with door open message and location
@@ -95,11 +96,6 @@ public class Packet06PickupObject extends UDPPakcet {
 		}
 		return newData;
 	}
-
-	/**
-	 * 
-	 * serialize the player into byte code
-	 * */
 
 	
 

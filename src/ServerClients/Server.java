@@ -21,6 +21,8 @@ import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.Packet04Connection;
+import ServerClients.UDPpackets.Packet05OpenDoor;
+import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import world.game.GameBuilder;
@@ -122,10 +124,7 @@ public class Server extends Thread {
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
 			if(connectedPlayers.size()==2 && serverOpen==false){
-				if(connectedPlayers.size()>1){
-
 					sentStateToAllClients();
-				}
 			}
 				break;
 			case DISCONNECT:
@@ -136,7 +135,7 @@ public class Server extends Thread {
 				break;
 			case DATA:
 				packet = new Packet02Data(data);
-				name = ((Packet02Data) packet).getUsername();
+				name = ((Packet02Data) packet).getUsername();//may through a exception 
 				this.handleData(((Packet02Data) packet));
 				break;
 			case MOVE:
@@ -144,10 +143,21 @@ public class Server extends Thread {
 				name = ((Packet03Move) packet).getUsername();
 				handleMove((Packet03Move) packet);
 				break;
-
+			case OPENDOOR:
+				packet = new Packet05OpenDoor(data);
+				handleOpenDoor((Packet05OpenDoor) packet);
+				break;
+			case PICKUP:
+				packet = new Packet06PickupObject(data);
+				handlePickupObject((Packet06PickupObject)packet);
+				
 			}
 		}
 
+
+
+
+		
 
 		private void sentStateToAllClients() {
 
@@ -188,7 +198,7 @@ public class Server extends Thread {
 				e.printStackTrace();
 			}
 		}
-		public void sendMoveDataToAllClients(byte[] data) {
+		public void sendActionDataToAllClients(byte[] data) {
 			for (MultyPlayer p : connectedPlayers) {
 				System.out.println(name+"  "+ p.getName());
 				if(!name.equals(p.getName())){
@@ -234,7 +244,17 @@ public class Server extends Thread {
 			packet.writeData(this);
 
 		}
-
+		private void handleOpenDoor(Packet05OpenDoor packet) {
+			byte[] temp = packet.getData();
+			Packet05OpenDoor pk = new Packet05OpenDoor(temp);
+			packet.writeData(this);
+		}		
+		private void handlePickupObject(Packet06PickupObject packet) {
+			byte[] temp = packet.getData();
+			Packet06PickupObject pk = new Packet06PickupObject(temp);
+			pk.writeData(this);
+			
+		}
 		private void handleMove(Packet03Move packet) {
 			if(getPlayer(packet.getUsername())!=null){
 				int index = getPlayerIndex(packet.getUsername());
@@ -299,48 +319,5 @@ public class Server extends Thread {
 		public void setServerStart(int num){
 			this.serverStart = num;
 		}
-		public byte[] serialize() {
-
-			byte[] bytes = new byte[60000];
-			try {
-				//object to bytearray
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ObjectOutputStream out = new ObjectOutputStream(baos);
-				out.writeObject(this);
-				bytes = baos.toByteArray();
-				out.flush();
-				baos.close();
-				out.close();
-				return bytes;
-			}catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
 		}
-		public Player deserialize(byte[]bytes) {
-
-			ByteArrayInputStream bais = null;
-			ObjectInputStream in = null;
-			try{
-				bais = new ByteArrayInputStream(bytes);
-				in = new ObjectInputStream(bais);
-				Player s = (Player) in.readObject();
-				return s;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			finally{
-				try {
-					bais.close();
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			}
-			return null;
-		}
-
-
-	}
 

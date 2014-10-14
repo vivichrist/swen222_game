@@ -64,7 +64,7 @@ public class Packet03Move extends UDPPakcet {
 	@Override
 	public void writeData(Server server) {
 		System.out.println("Packet03Move con 4: ");
-		server.sendDataToAllClients(getData());
+		server.sendActionDataToAllClients(getData());
 
 		System.out.println("Packet03Move con 5: ");
 	}
