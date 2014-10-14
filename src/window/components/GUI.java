@@ -638,6 +638,7 @@ public class GUI {
 		NetworkController netCon = new NetworkController(controller, renCon);
 		renCon.setState(state);
 		renCon.setNetCon(netCon);
+		renCon.setSinglePlayer(true);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
@@ -670,6 +671,10 @@ public class GUI {
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		RendererController renCon = new RendererController();
 		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
@@ -700,6 +705,14 @@ public class GUI {
 		southPanel = new SouthPanel(controller.getPlayer(name));
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
+		
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
+		
 		Timers timer = new Timers();    
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
