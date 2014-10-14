@@ -57,6 +57,11 @@ public class GameViewData
 	{
 		newPlayerMove.remove( old );
 	}
+	
+	public Map<Point, Point> getOtherPlayerMove()
+	{
+		return Collections.unmodifiableMap( newPlayerMove );
+	}
 
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
 	{
