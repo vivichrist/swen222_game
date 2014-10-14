@@ -437,10 +437,11 @@ public class GUI {
 
 	/**
 	 * The following method sets up the frame that tells the player game is
-	 * over and who is the winner
-	 * @param p the winner player
+	 * over and who is the winner or everyone has run out of time
+	 * @param p	the winner player if it exists
+	 * @param hasWinner	whether is game has a winner or not
 	 */
-	public void gameOverPanel(Player p){
+	public void gameOverPanel(boolean hasWinner, Player p){
 		gameOverPanel = new JPanel();
 		setUpPanel(gameOverPanel, 100, 200, 600, 160);
 
