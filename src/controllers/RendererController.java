@@ -78,7 +78,6 @@ public class RendererController {
 	 */
 	public static void movePlayer(Player player, Point point){
 		if(!singlePlayer) netCon.movePlayer(player, point);
-		if(state == null) System.out.println("State is null in RendererController");
 		state.movePlayer(player, point);
 	}
 	
@@ -163,7 +162,7 @@ public class RendererController {
 	 */
 	public static boolean teleport(Player player){
 		if(uiCon.teleport(player)){
-			netCon.teleport(player.getName(), player.getFloor().floorNumber());
+			if(!singlePlayer) netCon.teleport(player.getName(), player.getFloor().floorNumber());
 			return true;
 		}
 		return false;
@@ -187,8 +186,5 @@ public class RendererController {
 			view.addNewPlayerMove(null, player.getPosition());
 		}
 	}
-	
-	
-
 	
 }
