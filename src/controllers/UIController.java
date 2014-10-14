@@ -11,7 +11,7 @@ import world.game.Player;
  * @author Kalo Pilato - ID:300313803
  *
  */
-public class Controller {
+public class UIController {
 
 	private static GameState state;
 	private static GUI gui;
@@ -21,7 +21,7 @@ public class Controller {
 	 * @param state the GameState of this game
 	 * @param gui the GUI for this game
 	 */
-	public Controller(GameState state, GUI gui){
+	public UIController(GameState state, GUI gui){
 		this.state = state;
 		this.gui = gui;
 	}

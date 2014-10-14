@@ -47,7 +47,7 @@ import ServerClients.WindowListeners;
 import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
-import controllers.Controller;
+import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
@@ -80,7 +80,7 @@ public class GUI {
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
 	private GameState gameState;//do not change this field for jacky only
-	private static Controller controller;
+	private static UIController controller;
 	GameState state = null;
 	MultyPlayer player1 = null;
 	ArrayList<Player>players;
@@ -628,7 +628,7 @@ public class GUI {
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
-		controller = new Controller(state, this);
+		controller = new UIController(state, this);
 		gameView = new GameView( glcapabilities, frame, state );
 		NetworkController netCon = new NetworkController(controller);
 		netCon.setState(state);
@@ -660,7 +660,7 @@ public class GUI {
 		state = new GameState(players,floors);
 		//player1 = new MultyPlayer(nameC, null,null, -1);
 
-		controller = new Controller(state, this);
+		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		NetworkController networkController = new NetworkController(controller);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
