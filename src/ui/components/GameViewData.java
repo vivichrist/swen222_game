@@ -47,6 +47,11 @@ public class GameViewData
 	{
 		return Collections.unmodifiableMap( gameElements );
 	}
+	
+	public boolean moveGameElement( Point current, Point next )
+	{
+		return gameElements.put( next, gameElements.get( current ) ) != null;
+	}
 
 	public void addNewPlayerMove( Point current, Point next )
 	{

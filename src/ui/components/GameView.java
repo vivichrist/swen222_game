@@ -49,7 +49,7 @@ public class GameView extends GLJPanel
 	private GameScene			scene;
 	// keyInput (keyboard) is also responsible for position and direction changes
 	private GameListener		keyInput;
-	private final Player		player;
+	public static Player		player;
 	private GameState			state;
 
     public GameView( GLCapabilities gc, JFrame frame, GameState state, Player player )
