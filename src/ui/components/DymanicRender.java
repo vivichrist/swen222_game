@@ -147,6 +147,10 @@ public class DymanicRender implements GraphicalObject
 			break;
 		default: break;
 		}
+		MeshStore m = MeshStore.instance();
+		Mesh mesh = m.getMesh( type );
+		vertices = mesh.getVertices();
+		indices = mesh.getIndices();
 	}
 
 	/* (non-Javadoc)
@@ -208,10 +212,7 @@ public class DymanicRender implements GraphicalObject
 	@Override
 	public boolean initialise( GL2 gl )
 	{
-		MeshStore m = MeshStore.instance();
-		Mesh mesh = m.getMesh( type );
-		vertices = mesh.getVertices();
-		indices = mesh.getIndices();
+		// initialisation as a bad idea for dynamic objects
 		return true;
 	}
 
