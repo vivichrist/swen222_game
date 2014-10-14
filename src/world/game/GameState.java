@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.Controller;
+import controllers.UIController;
 import window.components.GUI;
 import world.components.Door;
 import world.components.GameObject;
@@ -108,7 +108,7 @@ public class GameState implements java.io.Serializable{
 			else{
 				player.getFloor().removeGameToken(point, token);
 				player.getTokenList().tokenFound(token);
-				Controller.refreshTokenPanel();
+				UIController.refreshTokenPanel();
 				if(player.getTokenList().collectedAll()){
 					//TODO: update action here to go in to win state checking or something
 					System.out.println("All Tokens Collected!");
@@ -122,7 +122,7 @@ public class GameState implements java.io.Serializable{
 			Torch torch = (Torch) object;
 			if(player.getInventory().addTorch(torch)){
 				player.getFloor().removeMoveableObject(point);
-				Controller.refreshInventoryPanel();
+				UIController.refreshInventoryPanel();
 				return true;
 			}
 			return false;
@@ -133,7 +133,7 @@ public class GameState implements java.io.Serializable{
 			MoveableObject moveable = (MoveableObject) object;
 			player.getInventory().add(moveable);
 			player.getFloor().removeMoveableObject(point);
-			Controller.refreshInventoryPanel();
+			UIController.refreshInventoryPanel();
 			return true;
 		}
 		return false;
@@ -151,7 +151,7 @@ public class GameState implements java.io.Serializable{
 		if(toReturn != null){
 			player.getFloor().addMoveable(p, toReturn);
 		}
-		Controller.refreshInventoryPanel();
+		UIController.refreshInventoryPanel();
 		return toReturn;
 	}
 
