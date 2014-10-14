@@ -125,7 +125,7 @@ public class GameScene
 			} // tokens and torch
 			else if ( ct.toString() == game.getPlayer().getType().toString()
 					|| ct == CellType.TORCH )
-			{ // collect it and remove from data to appear in items
+			{ // collect torch and remove it from view if player does not have one
 				if ( game.pickupObjectAtPoint( game.getPlayer(), p ) )
 					graphicData.remove( p );
 			}

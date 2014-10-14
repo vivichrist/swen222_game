@@ -10,6 +10,11 @@ public class Controlled implements Behaviour
 
 	public Controlled(){}
 
+	/**
+	 * Allow game logic control of this other players position
+	 *  (non-Javadoc)
+	 * @see ui.components.Behaviour#modify(javax.media.opengl.GL2, java.awt.geom.Point2D.Float)
+	 */
 	@Override
 	public void modify( GL2 gl, Float pos )
 	{
@@ -24,6 +29,7 @@ public class Controlled implements Behaviour
 				, (int)(newLocation.y * GameView.cellsize) );
 		System.out.println( 
 				"move player from:" + oldLocation + "->" + newLocation );
+		gdata.removePlayerMove( oldLocation );
 	}
 
 	@Override

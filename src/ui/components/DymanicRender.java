@@ -194,6 +194,10 @@ public class DymanicRender implements GraphicalObject
 		return true;
 	}
 
+	/**
+	 * Renders the mesh of whatever type of GraphicalObject this happens to be
+	 * @param gl
+	 */
 	private void renderMesh( GL2 gl )
 	{
 		for ( int[] i: indices )

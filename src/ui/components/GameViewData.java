@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.components.Direction;
 import world.game.Player;
 
 /**
@@ -43,21 +44,46 @@ public class GameViewData
 		newPlayerMove = new HashMap<Point, Point>();
 	}
 
+	/**
+	 * @return an unmodifiable map of collidables an selectables
+	 */
 	public Map<Point, GraphicalObject> getGameElements()
 	{
 		return Collections.unmodifiableMap( gameElements );
 	}
 	
+	/**
+	 * @param current - position of element
+	 * @param next - position to move element to
+	 * @return if successful
+	 */
 	public boolean moveGameElement( Point current, Point next )
 	{
 		return gameElements.put( next, gameElements.get( current ) ) != null;
 	}
 
+	/**
+	 * Buffer the changes to other player positions. To be
+	 * updated before the next frame.
+	 * @param current position
+	 * @param next position
+	 */
 	public void addNewPlayerMove( Point current, Point next )
 	{
+		if ( current == null )
+		{
+			DymanicRender dyn = DymanicRender.instancePlayer( 
+					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
+			dynamicScene.add( dyn );
+			toInitialise = dyn;
+			gameElements.put( next, dyn );
+		}
 		newPlayerMove.put( current, next );
 	}
 	
+	/**
+	 * @param old
+	 */
 	public void removePlayerMove( Point old )
 	{
 		newPlayerMove.remove( old );
