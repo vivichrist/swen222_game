@@ -17,6 +17,7 @@ import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
+import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import window.components.GUI;
@@ -40,6 +41,14 @@ public class Client extends Thread {
 	public GUI gui;
 	public MultyPlayer p;
 	
+
+	/**
+	 * Constructor - creates a Client
+	 * @param name - current player name 
+	 * @param gui the GUI for this game
+	 * @param ipAddress - server ip address
+	 * @param port - server port
+	 */
 	public Client(GUI gui,String name,String ipAddress,int port){
 		this.port = port;
 		this.gui = gui;
@@ -105,13 +114,10 @@ public class Client extends Thread {
 			packet = new Packet02Data(data);
 			handleData((Packet02Data) packet);
 			break;
-
 		case MOVE:
 			packet = new Packet03Move(data);
 			handleMove((Packet03Move) packet);
 			break;
-		
-		
 		case OPENDOOR:
 			packet = new Packet05OpenDoor(data);
 			handleOpenDoor((Packet05OpenDoor) packet);
@@ -124,9 +130,14 @@ public class Client extends Thread {
 			packet = new Packet04Teleport(data);
 			handleTeleport((Packet04Teleport)packet);
 			break;
+		case DROP:
+			packet = new Packet07DropObject(data);
+			handlePickupObject((Packet07DropObject)packet);
+			break;
 		}
 	}
 
+	
 	
 	
 	/**
@@ -168,7 +179,10 @@ public class Client extends Thread {
 	private void handlePickupObject(Packet06PickupObject packet) {
 		networkController.removeObjectFromClient(packet);
 	}
-	
+	private void handlePickupObject(Packet07DropObject packet) {
+
+		networkController.addObjectToView(packet.getRealData());
+	}
 	private void handleMove(Packet03Move packet) {
 
 		Player p = networkController.getPlayer(packet.getUsername());
