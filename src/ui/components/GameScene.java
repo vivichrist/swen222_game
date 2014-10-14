@@ -126,8 +126,8 @@ public class GameScene
 			else if ( ct.toString() == game.getPlayer().getType().toString()
 					|| ct == CellType.TORCH )
 			{ // collect it and remove from data to appear in items
-				game.pickupObjectAtPoint( game.getPlayer(), p );
-				graphicData.remove( p );
+				if ( game.pickupObjectAtPoint( game.getPlayer(), p ) )
+					graphicData.remove( p );
 			}
 			else if ( ct == CellType.KEY  )
 			{ // collect key and discard already collected key if it exists in
