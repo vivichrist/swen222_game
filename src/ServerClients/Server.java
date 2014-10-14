@@ -39,12 +39,15 @@ public class Server extends Thread {
 	private boolean serverOpen = false;
 	private String name;
 	private int portNumber;
-	private int numPlayers;
+	private int numPlayers=0;
 	public static int serverStart = 0;
 
 
 	public Server(int portNumber, int numPlayers){
 		this.numPlayers = numPlayers;
+		if(numPlayers<1){
+			numPlayers = 2;
+		}
 		this.portNumber = portNumber;
 		connectedPlayers = new ArrayList<MultyPlayer>();
 
@@ -70,7 +73,7 @@ public class Server extends Thread {
 
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try{
-				
+
 
 				socket.receive(packet);
 
@@ -108,34 +111,31 @@ public class Server extends Thread {
 			MultyPlayer player = new MultyPlayer( ((Packet00Login) packet).getUsername(), null, address, port);
 			this.addConnection(player, (Packet00Login) packet);
 			System.out.println("Server>parsePacket>LOGIN seccucssfully");
-			if(connectedPlayers.size()==numPlayers && serverOpen==false){
-					sentStateToAllClients();
-			}
-				break;
-			case DISCONNECT:
-				packet = new Packet01Disconnect(data);
-				System.out.println("[" + address.getHostAddress() + ":" + port + "] "
-						+ ((Packet01Disconnect) packet).getUsername() + " has left...");
-				this.removeConnection((Packet01Disconnect) packet);
-				break;
-			case DATA:
-				packet = new Packet02Data(data);
-				name = ((Packet02Data) packet).getUsername();//may through a exception 
-				this.handleData(((Packet02Data) packet));
-				break;
-			case MOVE:
-				packet = new Packet03Move(data);
-				name = ((Packet03Move) packet).getUsername();
-				handleMove((Packet03Move) packet);
-				break;
-			case OPENDOOR:
-				packet = new Packet05OpenDoor(data);
-				handleOpenDoor((Packet05OpenDoor) packet);
-				break;
-			case PICKUP:
-				packet = new Packet06PickupObject(data);
-				handlePickupObject((Packet06PickupObject)packet);
-				break;
+			break;
+		case DISCONNECT:
+			packet = new Packet01Disconnect(data);
+			System.out.println("[" + address.getHostAddress() + ":" + port + "] "
+					+ ((Packet01Disconnect) packet).getUsername() + " has left...");
+			this.removeConnection((Packet01Disconnect) packet);
+			break;
+		case DATA:
+			packet = new Packet02Data(data);
+			name = ((Packet02Data) packet).getUsername();//may through a exception 
+			this.handleData(((Packet02Data) packet));
+			break;
+		case MOVE:
+			packet = new Packet03Move(data);
+			name = ((Packet03Move) packet).getUsername();
+			handleMove((Packet03Move) packet);
+			break;
+		case OPENDOOR:
+			packet = new Packet05OpenDoor(data);
+			handleOpenDoor((Packet05OpenDoor) packet);
+			break;
+		case PICKUP:
+			packet = new Packet06PickupObject(data);
+			handlePickupObject((Packet06PickupObject)packet);
+			break;
 		}
 	}
 	private void sentStateToAllClients() {
@@ -185,6 +185,7 @@ public class Server extends Thread {
 				System.out.println(p.ipAddress+ "  "+p.port);
 			}
 		}
+
 
 	}
 	public void sendDataToAllClients(byte[] data) {
@@ -267,10 +268,8 @@ public class Server extends Thread {
 		}
 		if (!alreadyConnected) {
 			this.connectedPlayers.add(player);
-			System.out.println("palyer: "+ player.getName());
-
-			for(MultyPlayer p: connectedPlayers){
-				System.out.println(p.getName()+" "+" "+p.ipAddress+ "  "+ p.port);
+			if(connectedPlayers.size()==numPlayers && serverOpen==false){
+				sentStateToAllClients();
 			}
 		}
 	}
@@ -298,7 +297,7 @@ public class Server extends Thread {
 	public void setServerStart(int num){
 		this.serverStart = num;
 	}
-	
+
 	private byte[] serialize() {
 
 		byte[] bytes = new byte[60000];

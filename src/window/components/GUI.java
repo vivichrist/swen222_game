@@ -742,8 +742,8 @@ public class GUI {
 		
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-	
-	//	System.out.println("1111111111111" + client.getPlayer().ipAddress);
+		if(client.getPlayer()==null)System.out.println("null player");
+		System.out.println("1111111111111" +client.getPlayer().ipAddress);
 	//	System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
