@@ -619,7 +619,7 @@ public class GUI {
 					}
 					strPortNum = ""+port;
 
-					Server server = new Server(port);
+					Server server = new Server(port, numPlayer);
 					server.start();
 
 					serverStartsPanel();
