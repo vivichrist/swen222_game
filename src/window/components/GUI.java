@@ -739,28 +739,12 @@ public class GUI {
 		loginPacket.writeData(client);
 		networkController.setGameView(gameView);
 		
-
 		
-		
-		
-		
-		
-		
-		
-//		if (client.getPlayer().ipAddress == null || client.getPlayer().port == null){
+//		if (client.getPlayer().ipAddress == null || client.getPlayer().port  == null ){
 //			
 //		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+//		
+	
 		System.out.println("1111111111111" + client.getPlayer().ipAddress);
 		System.out.println("1111111111111" + client.getPlayer().port);
 	}
