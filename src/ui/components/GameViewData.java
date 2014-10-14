@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.game.Player;
+
 /**
  * @author Vivian Stewart
  * Centralised data for scene and scene rendering
@@ -17,6 +19,7 @@ public class GameViewData
 	private final ArrayList<StaticRender>		staticScene;
 	private final ArrayList<DymanicRender>		dynamicScene;
 	private HashMap<Point, GraphicalObject>		gameElements;
+	private HashMap<Point, Player>				newPlayerMove;
 	private DymanicRender						toInitialise;
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
@@ -37,11 +40,22 @@ public class GameViewData
 		staticScene = new ArrayList<StaticRender>();
 		dynamicScene = new ArrayList<DymanicRender>();
 		gameElements = new HashMap<Point, GraphicalObject>();
+		newPlayerMove = new HashMap<Point, Player>();
 	}
 
 	public Map<Point, GraphicalObject> getGameElements()
 	{
 		return Collections.unmodifiableMap( gameElements );
+	}
+
+	public void addNewPlayerMove( Point p, Player player )
+	{
+		newPlayerMove.put( p, player );
+	}
+	
+	public void removePlayerMove( Point p )
+	{
+		newPlayerMove.remove( p );
 	}
 
 	public void addAllGameElements( List<Point> ps, GraphicalObject element )
