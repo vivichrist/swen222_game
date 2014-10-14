@@ -138,13 +138,14 @@ public class GUI {
 	private JTextField textFieldName;
 
 	private Player player;	// the current player
+	private int numPlayer;
 	public static String name;	// the entered name of the player in single-player mode
 	public String nameC;	// the entered name of the player in multiple-player mode
 	public String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-
+	
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -596,6 +597,14 @@ public class GUI {
 			public void actionPerformed(ActionEvent ae) {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
+					String nP= JOptionPane.showInputDialog(
+					        frame, 
+					        "Enter the number of players of the game", 
+					        "Number of Players", 
+					        JOptionPane.INFORMATION_MESSAGE
+					    );
+					numPlayer = Integer.parseInt(nP);
+					
 					layeredPane.remove(chooseServerPanel);
 					try {
 						strServerName = getSeverName().getHostAddress();
