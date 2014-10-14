@@ -10,7 +10,7 @@ import ServerClients.Client;
 import ServerClients.Server;
 
 /**
- * A Packet03Move to handle move packets between the Server/Client and Controller(GameState and the GUI)
+ * A Packet04Teleport to handle teleport packets 
  * @author zhaojiang chang - 300282984
  *
  */
@@ -19,18 +19,22 @@ public class Packet04Teleport extends UDPPacket {
 	private String username;
 	private int floorNumber;
 	private byte[] data;
-	private int x;
-	private int y;
 
-	/**
-	 * @param packetId
-	 */
+	/**Constructor - creates a teleport package
+	 * @param username
+	 * @param floorNumber
+	 * 
+	 * */
 	public Packet04Teleport(String username, int floorNumber) {
 		super(04);
 		this.username = username;
 		this.floorNumber = floorNumber;
-		
 	}
+	
+	/**Constructor - creates a teleport package
+	 * @param  data - byte array - name and floornumber
+	 *  
+	 * */
 	public Packet04Teleport(byte[] data) {
 		super(04);
 		this.data = data;
