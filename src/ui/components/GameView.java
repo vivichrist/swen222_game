@@ -203,7 +203,7 @@ public class GameView extends GLJPanel
     	keyInput.resetKeyUpdate( );
     	if ( scene.isTeleport() )
     	{
-    		if ( NetworkController.teleport( player ) )
+    		if ( RendererController.teleport( player ) )
     			scene.resetTeleport();
 			scene = new GameScene( state, player );
 			gl.glLoadIdentity();
