@@ -265,11 +265,14 @@ public class GameView extends GLJPanel
 	 * All GraphicalObjects to render themselves, both static and dynamic.
 	 * @param gl2 - opengl rendering context
 	 */
-	private void render( GL2 gl2 )
+	private synchronized void render( GL2 gl2 )
 	{
 		StaticDisplayList.instance().drawDisplayList( gl2 );
 		gl2.glLineWidth( 2f );
-		for( GraphicalObject go: data.getDynamicScene() )
-        	go.draw( gl2 );
+		for( int i = 0; i < data.getDynamicScene().size(); ++i )
+		{
+			data.getDynamicScene().get( i ).draw( gl2 );
+		}
+			
     }
 }

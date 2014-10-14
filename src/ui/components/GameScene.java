@@ -64,7 +64,7 @@ public class GameScene
 	public boolean isCollidable( float x, float y, boolean trigger )
 	{
 		if ( trigger ) return isCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
-		return simmpleCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
+		return simpleCollidable( (int)(x/GameView.cellsize), (int)(y/GameView.cellsize) );
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class GameScene
 	 * @param newYCoordinate - column select
 	 * @return if this square has a collidable object in it
 	 */
-	private boolean simmpleCollidable( int newXCoordinate, int newYCoordinate )
+	private boolean simpleCollidable( int newXCoordinate, int newYCoordinate )
 	{
 		if ( newXCoordinate >= xlimit || newYCoordinate >= ylimit )
 		{
@@ -117,7 +117,7 @@ public class GameScene
 			{
 				teleport = true;
 				System.out.println("Teleporting to Floor:" + teleport );
-				return false;
+				return true;
 			}
 			else if ( ct == CellType.KEYDOOR )
 			{	if ( game.canOpenDoor( player, p ) )
