@@ -630,14 +630,15 @@ public class GUI {
 		GameState state = new GameBuilder(name).getGameState();
 		//state.setController(controller);
 		controller = new UIController(state, this);
-		gameView = new GameView( glcapabilities, frame, state );
+		player = state.getPlayer(name);
+
+		gameView = new GameView( glcapabilities, frame, state,player );
 		RendererController renCon = new RendererController();
 		NetworkController netCon = new NetworkController(controller, renCon);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
 
-		player = state.getPlayer(name);
 		//gameView = new GameView( glcapabilities, frame );
 
 		gameView.setEnabled( true );
@@ -687,7 +688,7 @@ public class GUI {
 		GLProfile glprofile = GLProfile.getDefault();
 		GLCapabilities glcapabilities = new GLCapabilities( glprofile );
 		System.out.println("state.getPlayers().size()>= "+ state.getPlayers().size());
-		gameView = new GameView( glcapabilities, frame, state );
+		gameView = new GameView( glcapabilities, frame, state,state.getPlayer(nameC) );
 		gameView.setEnabled( true );
 		gameView.setVisible( true );
 		gameView.setFocusable( true );
