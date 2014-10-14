@@ -20,14 +20,14 @@ public class NetworkController {
 	private static GUI gui;
 	private static GameState state;
 	private GameView gameView;
-	private static Controller controller;
+	private static UIController controller;
 	/**
 	 * Constructor - creates a Network Controller for GameState/GUI/Client interaction in this game
 	 * @param state the GameState of this game
 	 * @param gui the GUI for this game
 	 * @param client the Client for the game
 	 */
-	public NetworkController(Controller controller){
+	public NetworkController(UIController controller){
 		this.controller = controller;
 	}
 
@@ -85,6 +85,7 @@ public class NetworkController {
 	public Player getPlayer(String username) {
 		return controller.getPlayer(username);
 	}
+	
 	/**
 	 * check server connection
 	 *  @param boolean value - return true means connect to the server 
