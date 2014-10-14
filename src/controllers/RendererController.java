@@ -76,6 +76,16 @@ public class RendererController {
 		if(state == null) System.out.println("State is null in RendererController");
 		state.movePlayer(player, point);
 	}
+	
+	/**
+	 * once current player pickup a object will call this method and pass to netCon to 
+	 * create a new pickup pack 
+	 * 
+	 * */
+	
+	public static void  pickupObject(Player player, MoveableObject object){
+		netCon.pickupObject(player, object);
+	}
 	/**
 	 * remove Object from client side after other client pickup a object
 	 * @param player - player who pickup the object
@@ -88,13 +98,24 @@ public class RendererController {
 	//	state.removeObject(player, object);
 	//	view.removeObject(player,object);
 	}
-
+	/**
+	 *received action from server, need update the gameview and gamestate
+	 *Instruction from server (other player trigger the door open action)
+	 * 
+	 * */
 	public void toOpenDoor(String doorAction, Point point) {
-		// TODO vivian call this method to open door with given point
+		// TODO:  vivian call this method to open door with given point
+		//TODO: Kalo call this method to open door with given point
 		//view.toOpenDoor(point.x,point.y);
+		//state.toOpenDoor(.......);
 		
 	}
+	
+	 
 	/**
+	 * gameview will call this method 
+	 * and pass the action to client then send to server
+	 * 
 	 * */
 	
 	public void openDoor(String name, Point point){

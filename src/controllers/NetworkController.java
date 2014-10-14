@@ -120,21 +120,30 @@ public class NetworkController {
 		return controller.teleport(p);
 	}
 	
+	
+	/**
+	 * gameview will call this method through RendererController and 
+	 * pass the action to client then send to server
+	 * 
+	 * */
 	public void openDoor(String name, Point point){
 		Packet05OpenDoor openDoor = new Packet05OpenDoor(name, point);
 		openDoor.writeData(client);
 	}
 	
-	
-	
 	/**
-	 * received action from server 
+	 * received action from server, need update the gameview and gamestate
+	 *Instruction from server (other player trigger the door open action)
+	 *this method will pass to RendererController
 	 **/
 	public void toOpenDoor(String doorAction, Point point) {
 		// TODO: add openDoor method in renCon
 		renCon.toOpenDoor(doorAction,point);
 	}
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public void pickupObject(Player player, MoveableObject object){
 		this.player = player;
 		this.object = object;

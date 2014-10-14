@@ -55,7 +55,7 @@ public class GameListener implements KeyListener, MouseListener
 		return position.y;
 	}
 /**
- * Update happened so reset keyyUpdate until it is needed again.
+ * Update happened so reset keyUpdate until it is needed again.
  */
 	public void resetKeyUpdate()
 	{
