@@ -66,7 +66,7 @@ public class Packet05OpenDoor extends UDPPakcet {
 	@Override
 	public void writeData(Server server) {
 		System.out.println("Packet05OpenDoor con 4: ");
-		server.sendDataToAllClients(getData());
+		server.sendActionDataToAllClients(getData());
 
 		System.out.println("Packet05OpenDoor con 5: ");
 	}

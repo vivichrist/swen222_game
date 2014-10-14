@@ -19,6 +19,7 @@ import ServerClients.UDPpackets.Packet01Disconnect;
 import ServerClients.UDPpackets.Packet02Data;
 import ServerClients.UDPpackets.Packet03Move;
 import ServerClients.UDPpackets.Packet04Connection;
+import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.UDPPakcet;
 import ServerClients.UDPpackets.UDPPakcet.PacketTypes;
 import ui.components.GameView;
@@ -47,6 +48,7 @@ public class Client extends Thread {
 		this.gui = gui;
 		this.networkController = networkController;
 		this.name = name;
+		this.networkController.setClient(this);
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -118,9 +120,14 @@ public class Client extends Thread {
 			packet = new Packet04Connection(data);
 			handleConnection((Packet04Connection) packet);
 			break;
+		case OPENDOOR:
+			packet = new Packet05OpenDoor(data);
+			handleOpenDoor((Packet05OpenDoor) packet);
+			break;
 		}
 	}
 
+	
 	/**
 	 * this method will send message from client to server
 	 * */
@@ -150,9 +157,13 @@ public class Client extends Thread {
 		if(st.getPlayers().size()>1){
 			gui.startClientWindows(name,st);
 		}
-
 	}
-
+	private void handleOpenDoor(Packet05OpenDoor packet) {
+		// TODO Auto-generated method stub
+		//Player player = (Player) this.deserialize(packet.getData());
+		networkController.openDoor(packet.getDoorAction(), packet.getPoint());
+		
+	}
 	private void handleMove(Packet03Move packet) {
 
 		MultyPlayer p = (MultyPlayer) networkController.getPlayer(packet.getUsername());
@@ -170,14 +181,14 @@ public class Client extends Thread {
 		this.connection = packet.isConnection();
 		networkController.setConnection(connection);
 	}
-	public byte[] serialize() {
+	public byte[] serialize(Object obj) {
 
 		byte[] bytes = new byte[60000];
 		try {
 			//object to bytearray
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(this);
+			out.writeObject(obj);
 			bytes = baos.toByteArray();
 			out.flush();
 			baos.close();
@@ -188,15 +199,19 @@ public class Client extends Thread {
 			return null;
 		}
 	}
-	public Player deserialize(byte[]bytes) {
+	/**
+	 * deserialize the player 
+	 * 
+	 * */
+	public Object deserialize(byte[]bytes) {
 
 		ByteArrayInputStream bais = null;
 		ObjectInputStream in = null;
 		try{
 			bais = new ByteArrayInputStream(bytes);
 			in = new ObjectInputStream(bais);
-			Player s = (Player) in.readObject();
-			return s;
+			Object obj =  in.readObject();
+			return obj;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -211,6 +226,5 @@ public class Client extends Thread {
 		}
 		return null;
 	}
-
 }
 
