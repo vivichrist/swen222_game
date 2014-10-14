@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 import world.components.CellType;
 
+/**
+ * @author Vivian Stewart
+ * Load and store all data obtained from .obj files, for easy access to the
+ * renderer.
+ */
 public class MeshStore
 {
 	private static MeshStore instance = null;
@@ -47,6 +52,10 @@ public class MeshStore
 		return instance;
 	}
 
+	/**
+	 * @param type of the requested mesh
+	 * @return the vertices and indices of the requested mesh
+	 */
 	public Mesh getMesh( CellType type )
 	{
 		if ( !meshes.containsKey( type ) )

@@ -98,7 +98,7 @@ public class CollectItemsCanvas extends Canvas {
 	 * @param color	the given color
 	 * @return	the string of the given color
 	 */
-	private String identifyColor(Color color) {
+	public String identifyColor(Color color) {
 		if (color.equals(Color.BLUE)){
 			return "blue";
 		} else if (color.equals(Color.GREEN)){

@@ -52,6 +52,8 @@ import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
+import world.components.GameObject;
+import world.components.GameToken;
 import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
@@ -59,6 +61,7 @@ import world.game.MultyPlayer;
 import world.game.Player;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -73,11 +76,11 @@ import java.awt.event.*;
  * 
  */
 public class GUI {
-	
+
 	// the dimension of the frame 
 	private static int width = 800;
 	private static int height = 770;
-	
+
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
 	private GameState gameState;//do not change this field for jacky only
@@ -89,16 +92,16 @@ public class GUI {
 	Server server = null;
 	GLJPanel gameView;
 	private Client client;
-	
+
 	private JFrame frame;	
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
-	
+
 	/**
 	 * The following stores the panel shown on the bottom of the frame which has player's 
 	 * collected tokens images and player's inventory images
 	 */
 	private SouthPanel southPanel;
-	
+
 	/**
 	 * The following JPanels are the panels used to display on the frame according 
 	 * to players' game entry choices
@@ -111,7 +114,7 @@ public class GUI {
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
 	private JPanel waitClientsPanel;
-	
+
 	// buttons on all panels 
 	private JButton jbNew;
 	private JButton jbLoad;
@@ -131,7 +134,7 @@ public class GUI {
 	private JTextField portNumC;
 	private JTextField textFieldNameC;
 	private JTextField textFieldName;
-	
+
 	private Player player;	// the current player
 	public static String name;	// the entered name of the player in single-player mode
 	public String nameC;	// the entered name of the player in multiple-player mode
@@ -139,7 +142,7 @@ public class GUI {
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-	
+
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -163,7 +166,7 @@ public class GUI {
 		JLabel jl = new JLabel(background);
 		backgroundPanel.add(jl);
 		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
-		
+
 		frame.setLayeredPane(layeredPane);
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setVisible( true );
@@ -324,7 +327,7 @@ public class GUI {
 		serverStartsPanel.add(serverName);
 		serverStartsPanel.add(port);
 		serverStartsPanel.add(portNum);
-		
+
 		// set the panel to transparent and add the panel to frame
 		serverStartsPanel.setOpaque(false);
 		layeredPane.add(serverStartsPanel, JLayeredPane.MODAL_LAYER);
@@ -382,13 +385,13 @@ public class GUI {
 		joinServerPanel.add(port);
 		joinServerPanel.add(portNumC);
 		setButtonStyle(jbClientStart, 110, joinServerPanel, Color.MAGENTA);
-		
+
 		// set the panel to transparent and add the panel to frame
 		joinServerPanel.setOpaque(false);
 		layeredPane.add(joinServerPanel, JLayeredPane.MODAL_LAYER);
 		addListennerJoinServer();
 	}
-	
+
 	/**
 	 * The following method sets up the frame that tells the player server
 	 * is waiting for other players to join in to start the game
@@ -403,7 +406,7 @@ public class GUI {
 		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
 		waitClients.setForeground(new Color(100, 200, 100).brighter());
 		waitClientsPanel.add(waitClients);
-		
+
 		// set the panel to transparent and add the panel to frame
 		waitClientsPanel.setOpaque(false);
 		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
@@ -421,7 +424,7 @@ public class GUI {
 	private void setUpPanel(JPanel panel, int left, int top, int width, int height){
 		panel.setBounds(left, top, width, height);
 	}
-	
+
 	/**
 	 * The following method sets the button style by the given 
 	 * characteristics and adds the button onto the given panel
@@ -557,7 +560,7 @@ public class GUI {
 						port++;
 					}
 					strPortNum = ""+port;
-					
+
 					Server server = new Server(port);
 					server.start();
 
@@ -628,16 +631,19 @@ public class GUI {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
-		//state.setController(controller);
+		
 		controller = new UIController(state, this);
 		
 		player = state.getPlayer(name);
 
 		gameView = new GameView( glcapabilities, frame, state,player );
+		
 		RendererController renCon = new RendererController();
 		NetworkController netCon = new NetworkController(controller, renCon);
+		renCon.setUICon(controller);
 		renCon.setState(state);
 		renCon.setNetCon(netCon);
+		renCon.setSinglePlayer(true);
 		netCon.setState(state);
 		netCon.setGameView(gameView);
 
@@ -649,7 +655,7 @@ public class GUI {
 		gameView.setFocusable( true );
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
-		
+
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
@@ -668,8 +674,13 @@ public class GUI {
 
 		controller = new UIController(state, this);
 		int clientPortNumber = Integer.parseInt(strPortNumC);
+		
 		RendererController renCon = new RendererController();
 		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
 		client = new Client(this,nameC,strServerNameC,networkController,clientPortNumber );
 		client.start();
 
@@ -677,9 +688,9 @@ public class GUI {
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
 		networkController.setGameView(gameView);
-		
+
 	}
-	
+
 	/**
 	 * The following method will call by client once client class received broadcast package from server
 	 * player will able to start the game
@@ -700,11 +711,19 @@ public class GUI {
 		southPanel = new SouthPanel(controller.getPlayer(name));
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
+		
+		RendererController renCon = new RendererController();
+		NetworkController networkController = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setNetCon(networkController);
+		renCon.setUICon(controller);
+		renCon.setSinglePlayer(false);
+		
 		Timers timer = new Timers();    
 		int count = timer.getCountDownGame();
 		System.out.println("=============="+count);
 	}
-	
+
 	/**
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport
@@ -715,7 +734,7 @@ public class GUI {
 		int currentFloor = player.getFloor().floorNumber();
 		String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 		String[] floors = new String[number - 1];
-		
+
 		// add the floors into list except the player's current floor
 		int count = 0;
 		for(int i = 0; i < number; i++){
@@ -737,7 +756,7 @@ public class GUI {
 		if (s == null){
 			return -1;
 		}
-		
+
 		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
@@ -747,6 +766,27 @@ public class GUI {
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * The following method would be called when the player walks up a container.
+	 * The item in the container is passed to the method, the method would pop up
+	 * a window and tell the player what is found in the container.
+	 * @param item	the item found in the container
+	 */
+	public void findContainer(GameToken item){
+		// get the image of the item found
+		String color = southPanel.getCollectItemsCanvas().identifyColor(item.getColor());
+		String info = "Find " + item.toString().toUpperCase() + " in " + color.toUpperCase();
+		String resource = "Resource/" + item.toString().toLowerCase() + "/" + item.toString().toLowerCase() + " " + color + ".png";
+		ImageIcon icon = new ImageIcon(resource);
+		Image img = icon.getImage() ;  
+		Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH) ;  
+		icon = new ImageIcon(newimg);
+
+		// pop up the window to show the infomation
+		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
+		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 
 	public GameState getState(){
@@ -769,14 +809,10 @@ public class GUI {
 		return name;
 	}
 
-	
-
-
 	private InetAddress getSeverName() throws UnknownHostException {
 		// TODO for Jacky
 		return InetAddress.getLocalHost();
 	}
-
 
 	/**
 	 * this method is check the socket port 
@@ -798,6 +834,7 @@ public class GUI {
 			return false;
 		} 
 	}
+	
 	/**
 	 * this method is check player input server Ip address
 	 * if input is not ip adress will return false
@@ -817,7 +854,7 @@ public class GUI {
 	public void addWindowListener(WindowListeners windowListeners) {
 		// TODO Auto-generated method stub
 		this.addWindowListener(windowListeners);
-		
+
 	}
 }
 
