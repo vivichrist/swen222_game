@@ -23,8 +23,9 @@ public class RendererController {
 	/**
 	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database
 	 */
-	public RendererController(){
+	public RendererController(boolean single){
 		GameViewData gv = GameViewData.instance();
+		singlePlayer = single;
 	}
 	
 	/**
@@ -53,13 +54,6 @@ public class RendererController {
 	 */
 	public boolean isSinglePlayer() {
 		return singlePlayer;
-	}
-
-	/**
-	 * @param singlePlayer the singlePlayer to set
-	 */
-	public void setSinglePlayer(boolean singlePlayer) {
-		this.singlePlayer = singlePlayer;
 	}
 
 	/**

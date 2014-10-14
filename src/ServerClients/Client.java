@@ -157,7 +157,7 @@ public class Client extends Thread {
 
 	private void handleData(Packet02Data packet) {
 
-		GameState st = networkController.deserialize(packet.getRealData());
+		GameState st = NetworkController.deserialize(packet.getRealData());
 		networkController.setState(st);
 		if(st.getPlayers().size()>1){
 			gui.startClientWindows(name,st);
