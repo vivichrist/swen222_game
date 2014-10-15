@@ -87,8 +87,7 @@ public class GUI {
 	 * The following JPanels are the panels used to display on the frame according 
 	 * to players' game entry choices
 	 */	
-	private JPanel backgroundPanel;
-	private JPanel chooseNamePanel;
+	private Panel backgroundPanel;
 	private JPanel chooseServerPanel;
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
@@ -100,7 +99,6 @@ public class GUI {
 
 	private JButton jbStartServer;
 	private JButton jbJoinServer;
-	private JButton jbStart;
 	private JButton jbClientStart;
 
 	// textFields on all panels
@@ -109,11 +107,10 @@ public class GUI {
 	private JTextField serverNameC;
 	private JTextField portNumC;
 	private JTextField textFieldNameC;
-	private JTextField textFieldName;
 
 	private Player player;	// the current player
 	private int numPlayer;
-	public static String name;	// the entered name of the player in single-player mode
+	private static String name;	// the entered name of the player in single-player mode
 	public static String nameC;	// the entered name of the player in multiple-player mode
 	public String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
@@ -138,13 +135,9 @@ public class GUI {
 
 		// add the background image to frame
 		layeredPane = new JLayeredPane();
-		ImageIcon background = new ImageIcon("Resource/bg1.png");
-		backgroundPanel = new JPanel();
-		backgroundPanel.setBounds(0, 0, width, height);
-		JLabel jl = new JLabel(background);
-		backgroundPanel.add(jl);
-		layeredPane.add( backgroundPanel, JLayeredPane.DEFAULT_LAYER );
-
+		backgroundPanel = new BackgroundPanel(this);
+		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+		
 		frame.setLayeredPane(layeredPane);
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setVisible( true );
@@ -153,40 +146,6 @@ public class GUI {
 		addPanel(startPanel);
 	}
 
-	/**
-	 * The following method sets up the frame that let player 
-	 * enter the character's name and starts a single-player game.
-	 */
-	public void chooseNamePanel(){
-		chooseNamePanel = new JPanel();
-		setUpPanel(chooseNamePanel, 325, 200, 150, 600);
-
-		// label, textField and button used on chooseNamePanel
-		JLabel chooseName = new JLabel("Name:");
-		textFieldName = new JTextField(6);
-		jbStart = new JButton("START");
-
-		chooseName.setPreferredSize(new Dimension(100, 60));
-		chooseName.setFont(new Font("Arial", Font.PLAIN, 30));
-		chooseName.setForeground(new Color(0, 135, 200).brighter());
-
-		textFieldName.setPreferredSize(new Dimension(130, 40));
-		textFieldName.setFont(new Font("Arial", Font.PLAIN, 30));
-		textFieldName.setForeground(new Color(30, 30, 30));
-
-		JLabel space = new JLabel("");
-		space.setPreferredSize(new Dimension(100, 20));
-
-		chooseNamePanel.add(chooseName);
-		chooseNamePanel.add(textFieldName);
-		chooseNamePanel.add(space);
-		setButtonStyle(jbStart, 110, chooseNamePanel, Color.MAGENTA);
-
-		// set the panel to transparent and add the panel to frame
-		chooseNamePanel.setOpaque(false);
-		layeredPane.add(chooseNamePanel, JLayeredPane.MODAL_LAYER);
-		addListennerChooseName();
-	}
 
 	/**
 	 * The following method sets up the frame that let player choose 
@@ -286,11 +245,11 @@ public class GUI {
 		textFieldNameC.setPreferredSize(new Dimension(250, 40));
 		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
 		textFieldNameC.setForeground(new Color(30, 30, 30));
-		
+
 		JLabel name = new JLabel("Server IP: ");
 		String serverIP = null;
 		try {
-			 serverIP = getSeverName().getHostAddress();
+			serverIP = getSeverName().getHostAddress();
 			int countDot = 0;
 			for(int i = 0; i<serverIP.length(); i++){
 				if(serverIP.substring(i, i+1).equals(".")){
@@ -472,23 +431,7 @@ public class GUI {
 	 * The following method adds action listener onto buttons on chooseNamePanel
 	 */
 	public void addListennerChooseName(){
-		jbStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbStart){	// if button Start is clicked, chooseNamePanel will be removed and single-player mode game will be started
-					if(!textFieldName.getText().equals("")){
-						name = textFieldName.getText();
-						layeredPane.remove(chooseNamePanel);
-						layeredPane.remove(backgroundPanel);
-						startGame();
-						frame.repaint();
-					}}}});
 
-		textFieldName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				name = textFieldName.getText();	// get the name player entered from the textField
-			}
-		});
 	}
 
 	/**
@@ -507,7 +450,7 @@ public class GUI {
 							);
 					if (nP == null){
 						layeredPane.remove(chooseServerPanel);
-				//		startPanel();
+						//		startPanel();
 						frame.repaint();
 					} else {
 						boolean isStr = false;
@@ -569,7 +512,7 @@ public class GUI {
 						}
 						frame.repaint();
 					}}}
-			});
+		});
 		textFieldNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nameC = textFieldNameC.getText();	// get the player name player entered from the textField
@@ -600,7 +543,7 @@ public class GUI {
 		controller = new UIController(state, this);
 		player = state.getPlayer(name);
 		gameView = new GameView( glcapabilities, frame, state,player );
-		
+
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
 		renCon.setState(state);
@@ -713,25 +656,25 @@ public class GUI {
 		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
 		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
-	
-	
-	
+
+
+
 	protected void addPanel(Panel panel){
 		layeredPane.add(panel, JLayeredPane.MODAL_LAYER);
 		frame.repaint();
 	}
-	
+
 	protected void removePanel(Panel panel){
 		layeredPane.remove(panel);
 		frame.repaint();
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
 	}
@@ -747,7 +690,7 @@ public class GUI {
 	public String getName(){
 		return name;
 	}
-	
+
 	/**
 	 * this method is going to return the current local host address
 	 * 
@@ -764,7 +707,7 @@ public class GUI {
 		DatagramSocket s = null;
 		try {
 			s = new DatagramSocket(port);
-			
+
 			// If the code makes it this far without an exception it means
 			// something is using the port and has responded.
 			s.close();
@@ -797,6 +740,14 @@ public class GUI {
 
 	public JFrame getFrame(){
 		return frame;
+	}
+
+	protected void setName(String name){
+		this.name = name;
+	}
+
+	protected Panel getBackgroundPanel(){
+		return backgroundPanel;
 	}
 }
 
