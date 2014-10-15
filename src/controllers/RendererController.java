@@ -184,7 +184,7 @@ public class RendererController {
 		Player player = state.getPlayer(playerName);
 		// If the player starts on the same floor as the current player they need to be removed from the current view
 		if(player.getFloor() == GameView.player.getFloor()){
-			view.remove(player.getPosition());
+			view.removePlayerAtPoint(player.getPosition());
 		}
 		// Teleport the player in the game state
 		state.teleport(player, floorNumber);
