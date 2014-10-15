@@ -487,7 +487,7 @@ public class GUI {
 	 * @param panel	the panel the button will be on
 	 * @param defaultColor	the default color of the given button
 	 */
-	private void setButtonStyle(final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
+	private void setButtonStyle (final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
 		// set the button size and font
 		button.setPreferredSize(new Dimension(buttonWidth, 60));
 		button.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -811,6 +811,20 @@ public class GUI {
 		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
 		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
+	
+	
+	
+	
+	
+	protected void removePanel(JPanel panel){
+		frame.remove(panel);
+	}
+	
+	
+	
+	
+	
+	
 	
 	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
