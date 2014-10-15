@@ -68,7 +68,7 @@ public class RendererController {
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
 		state.movePlayer(state.getPlayer(player.getName()), point);
-		view.addNewPlayerMove(oldPos, point);
+		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point);
 	}
 	
 	/**
@@ -109,6 +109,10 @@ public class RendererController {
 		System.out.println("Point to pick up from : " + p.toString());
 		state.pickupObjectAtPoint(player, p);
 		view.remove(p);
+	}
+	
+	public static void openDoor(){
+		
 	}
 	
 	/**
@@ -153,13 +157,28 @@ public class RendererController {
 		netCon.dropObject(player,object,point);
 	}
 	
+	/**
+	 * Checks whether a Player can open a door
+	 * @param player the Player opening the door
+	 * @param point the Point of the door
+	 * @return true if the Door can be opened
+	 */
 	public static boolean canOpenDoor(Player player, Point point){
 		boolean canOpen = state.canOpenDoor(player, point);
 		if(canOpen){
-			openDoor(player.getName(), point);
+			if(!singlePlayer) netCon.openDoor(player.getName(), point);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Triggers a Door to open in the Renderer from another Client
+	 * @param name the name of the Player
+	 * @param p the Point of the Door
+	 */
+	public static void triggerDoor(String name, Point p){
+		if(state.getPlayer(name).getFloor() == GameView.player.getFloor()) view.triggerDoorOpen(p);
 	}
 	
 	/**
@@ -168,16 +187,6 @@ public class RendererController {
 	 */
 	public List<Player> getPlayers(){
 		return state.getPlayers();
-	}
-	 
-	/**
-	 * gameview will call this method 
-	 * and pass the action to client then send to server
-	 * 
-	 * */
-	
-	private static void openDoor(String name, Point point){
-		netCon.openDoor(name, point);
 	}
 	
 	/**
