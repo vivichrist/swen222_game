@@ -186,7 +186,7 @@ public class Client extends Thread {
 
 	private void handleOpenDoor(Packet05OpenDoor packet) {
 		//Player player = (Player) this.deserialize(packet.getData());
-		networkController.toOpenDoor(packet.getDoorAction(), packet.getPoint());
+		networkController.triggerDoor(packet.getName(), packet.getPoint());
 	}
 	/**
 	 * this method is handle the pickup object action, 
