@@ -50,11 +50,21 @@ public class UIController {
 	}
 	
 	/**
+	 * Teleports a Player to a user provided floor number
+	 * @param p the Player to teleport
+	 * @return true if successfully completed
+	 */
+	public boolean teleport(Player p){
+		int floor = gui.getFloor(state.floorCount());
+		return state.teleport(p, floor);
+	}
+	
+	/**
 	 * Alerts the Winner of this game
 	 * @param p the Player that wins this game
 	 */
-	public static void setWinner(Player p){
-		gui.setWinner(p.getName());
+	public static void setWinner(String playerName){
+		gui.setWinner(playerName);
 	}
 
 	public Player getPlayer(String username) {
