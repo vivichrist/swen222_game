@@ -145,7 +145,7 @@ public class GUI {
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-	
+
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -600,34 +600,45 @@ public class GUI {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
 					String nP= JOptionPane.showInputDialog(
-					        frame, 
-					        "Enter the number of players of the game", 
-					        "Number of Players", 
-					        JOptionPane.INFORMATION_MESSAGE
-					    );
-					numPlayer = Integer.parseInt(nP);
-					
-					layeredPane.remove(chooseServerPanel);
-					try {
-						strServerName = getSeverName().getHostAddress();
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					strPortNum = "4768";
-					int port = Integer.parseInt(strPortNum);
-					while(!available(port)){
-						port++;
-					}
-					strPortNum = ""+port;
+							frame, 
+							"Enter the number of players of the game", 
+							"Number of Players", 
+							JOptionPane.INFORMATION_MESSAGE
+							);
+					if (nP == null){
+						layeredPane.remove(chooseServerPanel);
+						startPanel();
+						frame.repaint();
+					} else {
+						boolean isStr = false;
+						try {
+							numPlayer = Integer.parseInt(nP);
+						} catch (NumberFormatException e){
+							isStr = true;
+						}
+						if (isStr) {
+						} else {
+							layeredPane.remove(chooseServerPanel);
+							try {
+								strServerName = getSeverName().getHostAddress();
+							} catch (UnknownHostException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							strPortNum = "4768";
+							int port = Integer.parseInt(strPortNum);
+							while(!available(port)){
+								port++;
+							}
+							strPortNum = ""+port;
 
-					Server server = new Server(port, numPlayer);
-					server.start();
+							Server server = new Server(port, numPlayer);
+							server.start();
 
-					serverStartsPanel();
+							serverStartsPanel();
 
-					frame.repaint();
-				}}});
+							frame.repaint();
+						}}}}});
 
 		jbJoinServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -652,16 +663,16 @@ public class GUI {
 						nameC = textFieldNameC.getText();
 						strServerNameC = serverNameC.getText();
 						strPortNumC = portNumC.getText();
-//						System.out.println("Player name: " + nameC);
-//						System.out.println("Server name: " + strServerNameC);
-//						System.out.println("Port number: " + strPortNumC);
-//						System.out.println("Server name real: " + strServerName);
-//						System.out.println("Port number real: " + strPortNum);
+						//						System.out.println("Player name: " + nameC);
+						//						System.out.println("Server name: " + strServerNameC);
+						//						System.out.println("Port number: " + strPortNumC);
+						//						System.out.println("Server name real: " + strServerName);
+						//						System.out.println("Port number real: " + strPortNum);
 						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 						if(isIPAdd(strServerNameC)){
-						layeredPane.remove(joinServerPanel);
-						layeredPane.remove(backgroundPanel);
-						startGame2();
+							layeredPane.remove(joinServerPanel);
+							layeredPane.remove(backgroundPanel);
+							startGame2();
 						}
 						frame.repaint();
 						//textFieldRealName.setText("");
@@ -720,7 +731,7 @@ public class GUI {
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
-		
+
 	}
 
 	/**
@@ -732,12 +743,12 @@ public class GUI {
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		client = new Client(this,nameC,strServerNameC,clientPortNumber );
 		client.start();
-		
+
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
 		//if(client.getPlayer()==null)System.out.println("null player");
 		//System.out.println("1111111111111" +client.getPlayer().ipAddress);
-	//	System.out.println("1111111111111" + client.getPlayer().port);
+		//	System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
@@ -752,7 +763,7 @@ public class GUI {
 
 		frame.setTitle(player.getName());
 		frame.repaint();
-		
+
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 		southPanel = new SouthPanel(player);
@@ -779,7 +790,6 @@ public class GUI {
 				count++;
 			}
 		}
-
 		// let player choose a floor and assign it to s
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
@@ -792,7 +802,6 @@ public class GUI {
 		if (s == null){
 			return -1;
 		}
-
 		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
@@ -892,7 +901,7 @@ public class GUI {
 		this.addWindowListener(windowListeners);
 
 	}
-	
+
 	public JFrame getFrame(){
 		return frame;
 	}
