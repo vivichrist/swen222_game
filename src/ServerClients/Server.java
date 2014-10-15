@@ -239,10 +239,12 @@ public class Server extends Thread {
 			//if(!name.equals(p.getName())){
 			sendData(data, p.ipAddress, p.port);
 			//System.out.println(p.ipAddress+ "  "+p.port);
-
 		}
-
 	}
+	
+	/**
+	 * get player by 
+	 * */
 	public MultyPlayer getPlayer(String username) {
 		for (MultyPlayer player : this.connectedPlayers) {
 			if (player.getName().equals(username)) {

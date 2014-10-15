@@ -151,9 +151,7 @@ public class NetworkController  implements Serializable{
 	public void pickupObject(Player player, Point point){
 		this.player = player;
 		this.point = point;
-		PlayerAndObject p = new PlayerAndObject();
-		byte[]data = this.serialize(p);
-		Packet06PickupObject pickup = new Packet06PickupObject(data);
+		Packet06PickupObject pickup = new Packet06PickupObject(player.getName(),point);
 		pickup.writeData(client);
 
 	}
@@ -174,7 +172,7 @@ public class NetworkController  implements Serializable{
 	
 	public void addObjectToView(byte[]data){
 		
-		PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
+		//PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
 		//TODO: kalo call this method to update the 
 		//renCon.addObjectToView(object.player, object.object);
 	}
@@ -185,26 +183,16 @@ public class NetworkController  implements Serializable{
 	 * */
 
 	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
-			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
-			Player player = p.player;
-			MoveableObject object = p.object;
-			Point point = p.point;
-			renCon.pickupObjectOtherPlayer(player,point);
+			//PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
+//			Player player = p.player;
+//			MoveableObject object = p.object;
+//			Point point = p.point;
+		//	renCon.pickupObjectOtherPlayer(player,point);
 		
 		
 
 	}
-	class PlayerAndObject implements Serializable {
-		Player player;
-		MoveableObject object;
-		Point point;
-		public PlayerAndObject(){
-			player = NetworkController.player;
-			object = NetworkController.object;
-			point = NetworkController.point ;
-		}
-		
-	}
+	
 	/**
 	 * serialize object
 	 * 
