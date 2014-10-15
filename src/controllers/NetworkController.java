@@ -157,10 +157,8 @@ public class NetworkController  implements Serializable{
 		pickup.writeData(client);
 
 	}
-	public void pickupKey(Player player, Key key){
-		this.player = player;
-		this.point = point;
-		Packet08PickupKey pickup = new Packet08PickupKey(player.getName(),point);
+	public void pickupKey(String name, Point point){
+		Packet08PickupKey pickup = new Packet08PickupKey(name,point);
 		pickup.writeData(client);
 
 	}
