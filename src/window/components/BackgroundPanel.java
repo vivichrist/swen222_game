@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 /**
  * The BackgroundPanel class is a JPanel which is represented 
  * as the background image on the frame. 
-
+ * 
  * @author Zhiheng Sun,  ID: 300256273
  * 
  */
