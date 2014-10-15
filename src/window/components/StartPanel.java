@@ -30,7 +30,7 @@ public class StartPanel extends Panel{
 	}
 
 	@Override
-	protected void setUpButtons() {
+	protected void setUpComponents() {
 		// buttons used on startPanel
 		jbNew = new JButton("New");
 		jbInfo = new JButton("Info");
