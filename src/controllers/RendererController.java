@@ -67,8 +67,7 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
-		System.out.println("moving player: " + player.getName() + " to " + point.toString());
-		state.movePlayer(player, point);
+		state.movePlayer(state.getPlayer(player.getName()), point);
 		view.addNewPlayerMove(oldPos, point);
 	}
 	
@@ -92,6 +91,7 @@ public class RendererController {
 	 */
 	public static boolean pickupObjectAtPoint(Player player, Point p){
 		boolean pickedUp = (state.pickupObjectAtPoint(player, p));
+		System.out.println("object picked up -> calling networking");
 		if(pickedUp){
 			if(!singlePlayer) netCon.pickupObject(player, p);
 			return true;
@@ -105,6 +105,8 @@ public class RendererController {
 	 * @param p the Point to pick the item up from
 	 */
 	public static void pickupObjectOtherPlayer(Player player, Point p){
+		System.out.println("Player picking up object: " + player.getName());
+		System.out.println("Point to pick up from : " + p.toString());
 		state.pickupObjectAtPoint(player, p);
 		view.remove(p);
 	}
