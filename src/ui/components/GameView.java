@@ -97,7 +97,7 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_LINE_SMOOTH );
             	gl2.glEnable( GL2.GL_POLYGON_SMOOTH );
             	gl2.glEnable( GL2.GL_POLYGON_OFFSET_LINE );
-            	gl2.glPolygonOffset( 0.1f, 100f );
+            	// gl2.glPolygonOffset( 0.1f, 100f );
             	gl2.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
             	gl2.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );
             	// Antialias lines
@@ -273,6 +273,6 @@ public class GameView extends GLJPanel
 		{
 			data.getDynamicScene().get( i ).draw( gl2 );
 		}
-			
+
     }
 }
