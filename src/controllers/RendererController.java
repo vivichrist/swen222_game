@@ -66,10 +66,9 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
+		System.out.println("moving player: " + player.getName() + " to " + point.toString());
 		state.movePlayer(player, point);
 		view.addNewPlayerMove(oldPos, point);
-		System.out.println("moving player: " + player.getName() + " to " + point.toString());
-
 		System.out.println(player.getName() + " position: " + state.getPlayer(player.getName()).getPosition().toString());
 	}
 	

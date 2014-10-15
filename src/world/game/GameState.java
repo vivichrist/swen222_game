@@ -68,10 +68,6 @@ public class GameState implements java.io.Serializable{
 	public Player getPlayer(int index){
 		return players.get(index);
 	}
-	
-//	public Player getPlayer(){
-//		return players.get(0);
-//	}
 
 
 	/**
@@ -207,30 +203,6 @@ public class GameState implements java.io.Serializable{
 	 */
 	public List<Player> getPlayers(){
 		return players;
-	}
-
-	public void addPlayer(MultyPlayer player) {
-		// TODO Auto-generated method stub
-		players.add(player);
-	}
-
-	public void setState(GameState st) {
-		// TODO Auto-generated method stub
-		this.players = st.getPlayers();
-		this.floors = st.floors;
-		if(players.size() == 2){
-			System.out.println("x: "+players.get(0).getPosition().x);
-			System.out.println("x: "+players.get(1).getPosition().x);
-		}
-	}
-
-	public void setConnection(boolean connection) {
-		// TODO Auto-generated method stub
-		this.serverConnection = connection;
-	}
-
-	public boolean ServerConnection() {
-		return serverConnection;
 	}
 	
 

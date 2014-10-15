@@ -703,14 +703,11 @@ public class GUI {
 
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
-		renCon.setUICon(controller);
 		renCon.setState(state);
 		renCon.setNetCon(netCon);
-		netCon.setState(state);
+		renCon.setUICon(controller);
+
 		netCon.setGameView(gameView);
-
-
-		//gameView = new GameView( glcapabilities, frame );
 
 		gameView.setEnabled( true );
 		gameView.setVisible( true );
@@ -722,12 +719,6 @@ public class GUI {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		
-		
-		
-		
-//		Timers timer = new Timers();    
-//		int count = timer.getCountDownGame();
-//		System.out.println("=============="+count);
 	}
 
 	/**
