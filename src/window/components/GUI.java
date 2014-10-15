@@ -358,7 +358,7 @@ public class GUI {
 		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
 		textFieldNameC.setForeground(new Color(30, 30, 30));
 
-		JLabel name = new JLabel("Server Name : ");
+		JLabel name = new JLabel("Server IP: ");
 		serverNameC = new JTextField(18);
 
 		name.setPreferredSize(new Dimension(150, 60));
@@ -370,7 +370,7 @@ public class GUI {
 		serverNameC.setForeground(new Color(30, 30, 30));
 
 		JLabel port = new JLabel("Port Number : ");
-		portNumC = new JTextField(18);
+		portNumC = new JTextField("4768",18);
 
 		port.setPreferredSize(new Dimension(150, 60));
 		port.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -658,9 +658,11 @@ public class GUI {
 //						System.out.println("Server name real: " + strServerName);
 //						System.out.println("Port number real: " + strPortNum);
 						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+						if(isIPAdd(strServerNameC)){
 						layeredPane.remove(joinServerPanel);
 						layeredPane.remove(backgroundPanel);
 						startGame2();
+						}
 						frame.repaint();
 						//textFieldRealName.setText("");
 					}}}});
