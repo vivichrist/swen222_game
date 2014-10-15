@@ -1,15 +1,18 @@
-package ServerClients;
+package window.components;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import ServerClients.Client;
+
 public class WindowListeners implements WindowListener {
 
-    private Client client;
+    private GUI gui;
+	private Client client;
 
-    public WindowListeners(Client client) {
-        this.client = client;
-        this.client.gui.addWindowListener(this);
+    public WindowListeners(GUI gui) {
+    	this.gui =gui;
+        gui.addWindowListener(this);
     }
 
     @Override
@@ -41,5 +44,10 @@ public class WindowListeners implements WindowListener {
     @Override
     public void windowOpened(WindowEvent event) {
     }
+
+	public void setClient(Client client) {
+		// TODO Auto-generated method stub
+		this.client = client;
+	}
 
 }
