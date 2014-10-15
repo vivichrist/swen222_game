@@ -18,18 +18,19 @@ public class Controlled implements Behaviour
 	@Override
 	public void modify( GL2 gl, Float pos )
 	{
-		
+
 		GameViewData gdata = GameViewData.instance();
 		Point oldLocation = new Point( (int) (pos.x/GameView.cellsize)
 									 , (int) (pos.y/GameView.cellsize) );
 		Point newLocation = gdata.getOtherPlayerMove().get( oldLocation );
 		if ( newLocation == null ) return;
-		if ( !gdata.moveGameElement( oldLocation, newLocation ) ) return;
+		gdata.moveGameElement( oldLocation, newLocation );
 		pos.setLocation( (int)(newLocation.x * GameView.cellsize) + (GameView.cellsize/2f)
 				, (int)(newLocation.y * GameView.cellsize) + (GameView.cellsize/2f) );
-		System.out.println( 
+		System.out.println(
 				"move player from:" + oldLocation + "->" + newLocation );
 		gdata.removePlayerMove( oldLocation );
+		// gdata.remove( oldLocation );
 	}
 
 	@Override
