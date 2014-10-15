@@ -17,6 +17,7 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.Packet08PickupKey;
+import ServerClients.UDPpackets.Packet09WinGame;
 import world.components.Key;
 import world.components.MoveableObject;
 import world.game.Player;
@@ -70,7 +71,6 @@ public class NetworkController  implements Serializable{
 		Packet03Move move = new Packet03Move(player.getName(),point);
 		move.writeData(client);
 
-		//controller.movePlayer(player, point);	
 	}
 
 	/**
@@ -108,16 +108,6 @@ public class NetworkController  implements Serializable{
 		return controller.getPlayer(username);
 	}
 
-	//	/**
-	//	 * Teleports a given Player to a user selected floor
-	//	 * @param p the Player to Teleport
-	//	 * @return the user selected floor
-	//	 */
-	//	public static boolean teleport(Player p){
-	//		System.out.println("teleport called");
-	//		return controller.teleport(p);
-	//	}
-
 
 	/**
 	 * gameview will call this method through RendererController and 
@@ -129,15 +119,7 @@ public class NetworkController  implements Serializable{
 		openDoor.writeData(client);
 	}
 
-	/**
-	 * received action from server, need update the gameview and gamestate
-	 *Instruction from server (other player trigger the door open action)
-	 *this method will pass to RendererController
-	 **/
-	public void toOpenDoor(String doorAction, Point point) {
-		// TODO: add openDoor method in renCon
-		renCon.toOpenDoor(doorAction,point);
-	}
+	
 	/**
 	 * this method will called from rendererController
 	 * end packet to client, then broadcast to all clients
@@ -203,6 +185,18 @@ public class NetworkController  implements Serializable{
 
 	}
 
+
+	public void setWinnerFromNetwork(String username) {
+		renCon.setWinnerFromNetwork(username);
+	}
+	
+	public void setWinner(String name){
+		
+		Packet09WinGame win = new Packet09WinGame(name);
+		win.writeData(client);
+
+		
+	}
 
 	/**
 	 * serialize object

@@ -130,7 +130,7 @@ public class GameScene
 			else if ( ct == CellType.KEY  )
 			{ // collect key and discard already collected key if it exists in
 			  // players inventory
-				Key key = game.pickupKey( player, p );
+				Key key = RendererController.pickupKey( player, p );
 				graphicData.remove( p );
 				if ( key != null )
 				{

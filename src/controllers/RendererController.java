@@ -122,8 +122,13 @@ public class RendererController {
 		if(!playerName.equals(GameView.player.getName())){
 			Player player = state.getPlayer(playerName);
 			Key toDrop = state.pickupKey(player, p);
-			if(toDrop == null) return;
-			if(player.getFloor() == GameView.player.getFloor()) view.addKey(toDrop.getColor(), p);
+			if(player.getFloor() == GameView.player.getFloor()){
+				if(toDrop == null) view.remove(p);
+				else{
+					System.out.println("Swapping Key");
+					view.addKey(toDrop.getColor(), p);
+				}
+			}
 		}
 	}
 	
@@ -139,48 +144,6 @@ public class RendererController {
 		return toDrop;
 	}
 	
-	/**
-	 * remove Object from client side after other client pickup a object
-	 * @param player - player who pickup the object
-	 * @param object - object to remove;
-	 * @param point  -  for GameView to remove the object
-	 * 
-	 * */
-	public static void removeObject(Player player, MoveableObject object, Point point){
-	
-		//TODO: kalo call this method to remove from gamestate
-		//TODO: vivian call this method to remove from gameview
-	//	state.removeObject(player, object);
-	//	view.removeObject(point);
-	}
-	
-	/**
-	 *received action from server, need update the gameview and gamestate
-	 *Instruction from server (other player trigger the door open action)
-	 * 
-	 * */
-	public void toOpenDoor(String doorAction, Point point) {
-		// TODO:  vivian call this method to open door with given point
-		//TODO: Kalo call this method to open door with given point
-		//view.toOpenDoor(point.x,point.y);
-		//state.toOpenDoor(.......);
-		
-	}
-	/**
-	 * gameview call this method
-	 * 		update the gamestate 
-	 * 		and pass to networkController to create drop package to send to server
-	 * @param player - current player
-	 * @param object - object to drop (remove from player inventory lsit
-	 * @param point - once package broadcast from server gameview need use point to remove
-	 * 
-	 * */
-	public void dropObject(Player player, MoveableObject object, Point point){
-		//TODO: current player drop a object - updat the gamestate
-		
-		uiCon.dropObject(player,object);
-		netCon.dropObject(player,object,point);
-	}
 	
 	/**
 	 * Checks whether a Player can open a door
@@ -245,5 +208,24 @@ public class RendererController {
 			view.addNewPlayerMove(null, player.getPosition());
 		}
 	}
+
+	
+	/**
+	 * Notifies the Winner of this game
+	 * @param p the Player that wins
+	 */
+	public static void setWinner(Player p){
+		if(!singlePlayer) netCon.setWinner(p.getName());
+		else UIController.setWinner(p.getName());
+	}
+	
+	/**
+	 * Passes through the winner notification alert from the network
+	 * @param p the Player that has won
+	 */
+	public static void setWinnerFromNetwork(String playerName){
+		UIController.setWinner(playerName);
+	}
+
 	
 }

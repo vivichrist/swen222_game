@@ -19,6 +19,7 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.Packet08PickupKey;
+import ServerClients.UDPpackets.Packet09WinGame;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import window.components.GUI;
@@ -139,17 +140,17 @@ public class Client extends Thread {
 			packet = new Packet08PickupKey(data);
 			handlePickupKey((Packet08PickupKey)packet);
 			break;
+			
+		case WIN:
+			packet = new Packet09WinGame(data);
+			handleWin((Packet09WinGame) packet, address, port);
 		}
 	}
 
 
 
 
-	
-	private void handlePickupObject(Packet07DropObject packet) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	/**
 	 * this method will send message from client to server
 	 * @param data  - byte array data packet with PacketType 
@@ -186,7 +187,16 @@ public class Client extends Thread {
 		networkController.setClient(this);
 
 	}
-
+	
+	private void handleWin(Packet09WinGame packet, InetAddress address,
+			int port2) {
+		System.out.println(packet.getUsername()+ " win the game ");
+		networkController.setWinnerFromNetwork(packet.getUsername());
+		
+	}
+	private void handlePickupObject(Packet07DropObject packet) {
+		
+	}
 	/**
 	 * this method is handle the open door action, 
 	 * received  data from server, 
