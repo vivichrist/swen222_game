@@ -25,15 +25,15 @@ public abstract class Panel extends JPanel{
 		this.gui = gui;
 		// set the panel to transparent and call methods to set up buttons and listener
 		setOpaque(false);
-		setUpButtons();
+		setUpComponents();
 		addListenner();
 	}
 
 	/**
-	 * The following method initializes the buttons on it and calls method to set the 
+	 * The following method initializes the components on it and calls method to set the 
 	 * style of the buttons
 	 */
-	protected abstract void setUpButtons();
+	protected abstract void setUpComponents();
 
 	/**
 	 * The following method adds action listeners onto buttons of the panel
