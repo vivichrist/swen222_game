@@ -33,14 +33,11 @@ public class Client extends Thread {
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 	private  int port;
-	private GameState state;
 	private NetworkController networkController;
 	public boolean connection;
-	public static boolean isConnectToServer = false;
 	public String name;
 	public GUI gui;
-	public MultyPlayer p;
-	
+
 
 	/**
 	 * Constructor - creates a Client
@@ -84,10 +81,13 @@ public class Client extends Thread {
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
 	}
-	
+
 	/**
 	 * the parsePacket will check the first two byte 
 	 * byte will identify the type of data received
+	 * @param data received from client
+	 * @param address client ip address
+	 * @param port client port
 	 * 
 	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
@@ -137,11 +137,12 @@ public class Client extends Thread {
 		}
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * this method will send message from client to server
+	 * @param data  - byte array data packet with PacketType 
 	 * */
 	public void sendData(byte[]data){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
@@ -154,49 +155,86 @@ public class Client extends Thread {
 	}
 	/**
 	 * this method is handle login package 
+	 * @param packet - received packet from client 
 	 * */
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
-				+ " has joined the game...");
+				+ " joined the game...");
 		new MultyPlayer( packet.getUsername(),null,address, port);
-		System.out.println("=============>" +  packet.getUsername() + address + port);
-		 p = new MultyPlayer( packet.getUsername(),null,address, port);
-	}
 
+	}
+	/**
+	 * this method is handle the game state, 
+	 * received serialized data from server, 
+	 * then deserialize 
+	 * @param packet - bytes array 
+	 * */
 	private void handleData(Packet02Data packet) {
 
 		GameState st = deserialize(packet.getRealData());
 		networkController = new MultiPlayerBuild(st, gui, name).getNetworkController();
 		networkController.setClient(this);
-		
+
 	}
-	
+
+	/**
+	 * this method is handle the open door action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
+
 	private void handleOpenDoor(Packet05OpenDoor packet) {
 		//Player player = (Player) this.deserialize(packet.getData());
-		networkController.toOpenDoor(packet.getDoorAction(), packet.getPoint());
+		networkController.triggerDoor(packet.getName(), packet.getPoint());
 	}
-	
+	/**
+	 * this method is handle the pickup object action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handlePickupObject(Packet06PickupObject packet) {
-		networkController.removeObjectFromClient(packet);
+		System.out.println();
+		networkController.pickupObjectOtherPlayer(packet);
 	}
+
+	/**
+	 * this method is handle the pickup object action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handlePickupObject(Packet07DropObject packet) {
 
 		networkController.addObjectToView(packet.getRealData());
 	}
+
+	/**
+	 * this method is handle the move action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handleMove(Packet03Move packet) {
 
 		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
-			if(!GUI.nameC.equalsIgnoreCase(p.getName())){
+			//if(!GUI.nameC.equalsIgnoreCase(p.getName())){
 				networkController.moveOtherPlayer(p, packet.getPoint());
-			}else{
-				System.out.println("local player should not move by server");
-			}
+//			}else{
+//				System.out.println("local player should not move by server");
+//			}
 		}
 
 	}
-	
 
+	/**
+	 * this method is handle the teleport action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handleTeleport(Packet04Teleport packet) {
 		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
@@ -208,12 +246,11 @@ public class Client extends Thread {
 		}
 	}
 
-
-	public MultyPlayer getPlayer() {
-		// TODO Auto-generated method stub
-		return p;
-	}
-	
+	/**
+	 * this method is deserialize the object
+	 * @param bytes array
+	 * 
+	 * */
 	public GameState deserialize(byte[]bytes) {
 
 		ByteArrayInputStream bais = null;

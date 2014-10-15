@@ -1,21 +1,11 @@
 package window.components;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -23,7 +13,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
@@ -32,26 +21,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import ServerClients.Client;
 import ServerClients.Server;
-import ServerClients.Timers;
 //import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
-import ServerClients.UDPpackets.Packet01Disconnect;
 import controllers.RendererController;
 import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
-import world.components.GameObject;
 import world.components.GameToken;
 import world.components.Map;
 import world.game.GameBuilder;
@@ -62,7 +44,6 @@ import world.game.Player;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 
-import java.awt.*;
 import java.awt.event.*;
 
 
@@ -82,18 +63,19 @@ public class GUI {
 
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
-	private GameState gameState;//do not change this field for jacky only
-	private static UIController controller;
+	//private GameState gameState;//do not change this field for jacky only
 	GameState state = null;
 	MultyPlayer player1 = null;
 	ArrayList<Player>players;
 	Map[]floors;
 	Server server = null;
-	GLJPanel gameView;
-	private Client client;
 
-	private JFrame frame;	
+	private JFrame frame;	// this is the frame the game will be shown on 
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
+	private GLJPanel gameView;	// the rendering window of the game
+
+	private static UIController controller;	// the handler between the GameState and the GUI
+	private Client client;	// is client side of the game
 
 	/**
 	 * The following stores the panel shown on the bottom of the frame which has player's 
@@ -118,7 +100,6 @@ public class GUI {
 
 	// buttons on all panels 
 	private JButton jbNew;
-	private JButton jbLoad;
 	private JButton jbInfo;
 	private JButton jbExit;
 	private JButton jbSingle;
@@ -187,12 +168,10 @@ public class GUI {
 
 		// buttons used on startPanel
 		jbNew = new JButton("New");
-		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 
 		setButtonStyle(jbNew, 75, startPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbLoad, 80, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
 
@@ -298,7 +277,7 @@ public class GUI {
 		information.setFont(new Font("Arial", Font.BOLD, 20));
 		information.setForeground(new Color(0, 135, 200).brighter());
 
-		JLabel name = new JLabel("Server Name : ");
+		JLabel name = new JLabel("Server IP : ");
 		serverName = new JTextField(18);
 
 		name.setPreferredSize(new Dimension(150, 60));
@@ -356,9 +335,26 @@ public class GUI {
 		textFieldNameC.setPreferredSize(new Dimension(250, 40));
 		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
 		textFieldNameC.setForeground(new Color(30, 30, 30));
-
+		
 		JLabel name = new JLabel("Server IP: ");
+		String serverIP = null;
+		try {
+			 serverIP = getSeverName().getHostAddress();
+			int countDot = 0;
+			for(int i = 0; i<serverIP.length(); i++){
+				if(serverIP.substring(i, i+1).equals(".")){
+					countDot++;
+					if(countDot==3){
+						serverIP = serverIP.substring(0, i+1);
+						break;
+					}
+				}
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		serverNameC = new JTextField(18);
+		serverNameC.setText(serverIP);
 
 		name.setPreferredSize(new Dimension(150, 60));
 		name.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -561,7 +557,6 @@ public class GUI {
 					chooseServerPanel();
 					frame.repaint();
 				}}});
-
 	}
 
 	/**
@@ -574,13 +569,10 @@ public class GUI {
 				if(button == jbStart){	// if button Start is clicked, chooseNamePanel will be removed and single-player mode game will be started
 					if(!textFieldName.getText().equals("")){
 						name = textFieldName.getText();
-						System.out.println("Player name: " + name);
 						layeredPane.remove(chooseNamePanel);
-						System.out.println(name);
 						layeredPane.remove(backgroundPanel);
 						startGame();
 						frame.repaint();
-						//textFieldRealName.setText("");
 					}}}});
 
 		textFieldName.addActionListener(new ActionListener() {
@@ -647,7 +639,6 @@ public class GUI {
 					joinServerPanel();
 					frame.repaint();
 				}}});
-
 	}
 
 	/**
@@ -660,35 +651,26 @@ public class GUI {
 				if(button == jbClientStart){	// if button Start is clicked, joinServerPanel will be removed and multiple-player mode game will be started
 					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
 						nameC = textFieldNameC.getText();
-						strServerNameC = serverNameC.getText();
 						strPortNumC = portNumC.getText();
-						//						System.out.println("Player name: " + nameC);
-						//						System.out.println("Server name: " + strServerNameC);
-						//						System.out.println("Port number: " + strPortNumC);
-						//						System.out.println("Server name real: " + strServerName);
-						//						System.out.println("Port number real: " + strPortNum);
-						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+						strServerNameC = serverNameC.getText();
 						if(isIPAdd(strServerNameC)){
 							layeredPane.remove(joinServerPanel);
 							layeredPane.remove(backgroundPanel);
 							startGame2();
 						}
 						frame.repaint();
-						//textFieldRealName.setText("");
-					}}}});
-
+					}}}
+			});
 		textFieldNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nameC = textFieldNameC.getText();	// get the player name player entered from the textField
 			}
 		});
-
 		serverNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				strServerNameC = serverNameC.getText();	// get the server name player entered from the textField
 			}
 		});
-
 		portNumC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				strPortNumC = portNumC.getText();	// get the port number player entered from the textField
@@ -706,13 +688,10 @@ public class GUI {
 
 		//Code added by Kalo
 		GameState state = new GameBuilder(name).getGameState();
-
 		controller = new UIController(state, this);
-
 		player = state.getPlayer(name);
-
 		gameView = new GameView( glcapabilities, frame, state,player );
-
+		
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
 		renCon.setState(state);
@@ -720,12 +699,10 @@ public class GUI {
 		renCon.setUICon(controller);
 
 		netCon.setGameView(gameView);
-
 		gameView.setEnabled( true );
 		gameView.setVisible( true );
 		gameView.setFocusable( true );
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
-		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
@@ -747,9 +724,6 @@ public class GUI {
 
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
-		//if(client.getPlayer()==null)System.out.println("null player");
-		//System.out.println("1111111111111" +client.getPlayer().ipAddress);
-		//	System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
@@ -762,11 +736,7 @@ public class GUI {
 		this.gameView = gameView;
 		this.player = player;
 
-		frame.setTitle(player.getName());
-		frame.repaint();
-
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
-		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 		layeredPane.remove(waitClientsPanel);
@@ -806,8 +776,8 @@ public class GUI {
 		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
-				southPanel.getCollectItemsCanvas().setFloorNum(j);
-				southPanel.getCollectItemsCanvas().repaint();
+				southPanel.getUsefulItemsCanvas().setFloorNum(j);
+				southPanel.getUsefulItemsCanvas().repaint();
 				return j;
 			}
 		}
@@ -830,15 +800,11 @@ public class GUI {
 		Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH) ;  
 		icon = new ImageIcon(newimg);
 
-		// pop up the window to show the infomation
+		// pop up the window to show the information
 		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
 		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
-
-	public GameState getState(){
-		return gameState;
-	}
-
+	
 	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
 	}
@@ -848,15 +814,18 @@ public class GUI {
 	}
 
 	public static void main(String[] args){
-		GUI gui = new GUI();
+		new GUI();
 	}
 
 	public String getName(){
 		return name;
 	}
-
+	
+	/**
+	 * this method is going to return the current local host address
+	 * 
+	 * */
 	private InetAddress getSeverName() throws UnknownHostException {
-		// TODO for Jacky
 		return InetAddress.getLocalHost();
 	}
 
@@ -865,18 +834,15 @@ public class GUI {
 	 * @param port the number is going to check
 	 * \*/
 	private static boolean available(int port) {
-		System.out.println("--------------Testing port " + port);
 		DatagramSocket s = null;
 		try {
 			s = new DatagramSocket(port);
-
+			
 			// If the code makes it this far without an exception it means
 			// something is using the port and has responded.
-			System.out.println("--------------Port " + port + " is  available");
 			s.close();
 			return true;
 		} catch (IOException e) {
-			System.out.println("--------------Port " + port + " is not available");
 			return false;
 		} 
 	}
@@ -899,8 +865,7 @@ public class GUI {
 
 	public void addWindowListener(WindowListeners windowListeners) {
 		// TODO Auto-generated method stub
-		this.addWindowListener(windowListeners);
-
+		//this.addWindowListener(windowListeners);
 	}
 
 	public JFrame getFrame(){

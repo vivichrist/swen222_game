@@ -13,20 +13,20 @@ import ServerClients.Server;
  * @author zhaojiang chang - 300282984
  * */
 public class Packet05OpenDoor extends UDPPacket {
-	private String doorAction;
+	private String name;
 	private Point point;
 	private byte[] data;
 	private int x;
 	private int y;
 	/**
 	 * Constructor - creates a Packet05OpenDoor package
-	 * @param doorAction  - string open
+	 * @param name  - string open
 	 * @param Point - door location
 	 */
-	public Packet05OpenDoor(String doorAction, Point point) {
+	public Packet05OpenDoor(String name, Point point) {
 		super(05);
 		this.point = point;
-		this.doorAction = doorAction;
+		this.name = name;
 
 	}
 	/**
@@ -40,7 +40,7 @@ public class Packet05OpenDoor extends UDPPacket {
 		for(int i = 0; i<dataArray.length; i++){
 			System.out.println(dataArray[i]);
 		}
-		this.doorAction = dataArray[1];
+		this.name = dataArray[1];
 		this.x = Integer.parseInt(dataArray[2]);
 		this.y = Integer.parseInt(dataArray[3]);
 		this.point = new Point(x,y);
@@ -77,21 +77,21 @@ public class Packet05OpenDoor extends UDPPacket {
 	 */
 	@Override
 	public byte[] getData() {
-		return ("05"+ ","+this.doorAction +","+this.point.x+","+this.point.y).getBytes();
+		return ("05"+ ","+this.name +","+this.point.x+","+this.point.y).getBytes();
 	}
 	/**
 	 * getRealData - this method is going to return a bytes array with door open message and location
 	 * @return byte array
 	 */
 	public byte[] getRealData(){
-		return(this.doorAction +","+this.point.x+","+this.point.y).getBytes();
+		return(this.name +","+this.point.x+","+this.point.y).getBytes();
 	}
 	/**
 	 * this method is going to return a string open
 	 * @return string open
 	 */
-	public String getDoorAction() {
-		return doorAction;
+	public String getName() {
+		return name;
 	}
 	/**
 	 * this method is going to return a Point door location

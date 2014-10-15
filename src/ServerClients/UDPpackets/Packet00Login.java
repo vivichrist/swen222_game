@@ -66,6 +66,12 @@ public class Packet00Login extends UDPPacket {
 		return username;
 	}
 
+	@Override
+	public byte[] getRealData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

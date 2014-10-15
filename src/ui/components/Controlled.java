@@ -25,8 +25,8 @@ public class Controlled implements Behaviour
 		Point newLocation = gdata.getOtherPlayerMove().get( oldLocation );
 		if ( newLocation == null ) return;
 		// gdata.moveGameElement( oldLocation, newLocation );
-		pos.setLocation( (int)(newLocation.x * GameView.cellsize) + (GameView.cellsize/2f)
-				, (int)(newLocation.y * GameView.cellsize) + (GameView.cellsize/2f) );
+		pos.setLocation( (newLocation.x * GameView.cellsize + (GameView.cellsize/2f))
+				, (newLocation.y * GameView.cellsize + (GameView.cellsize/2f)) );
 		System.out.println(
 				"move player from:" + oldLocation + "->" + newLocation );
 		gdata.removePlayerMove( oldLocation );

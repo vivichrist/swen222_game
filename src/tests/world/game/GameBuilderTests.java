@@ -2,17 +2,13 @@ package tests.world.game;
 
 import static org.junit.Assert.*;
 
-import java.awt.Color;
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.junit.Test;
-
-import world.components.TokenType;
 import world.game.GameBuilder;
 import world.game.GameState;
-import world.game.Player;
 
+//TODO: Needs more tests - works fine in practice
 /**
  * Tests for the GameBuilder class
  * @author Kalo Pilato - ID:300313803

@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.media.opengl.awt.GLJPanel;
 
@@ -26,7 +27,7 @@ import world.game.Player;
  * @author zhaojiang chang - 300282984
  *
  */
-public class NetworkController {
+public class NetworkController  implements Serializable{
 	private static Client client;
 	private static GUI gui;
 	private static GameState state;
@@ -147,12 +148,10 @@ public class NetworkController {
 	 * @param player - current player
 	 * @param object - 
 	 * */
-	public void pickupObject(Player player, MoveableObject object, Point point){
+	public void pickupObject(Player player, Point point){
 		this.player = player;
-		this.object = object;
 		this.point = point;
-		byte[]data = this.serialize(this.PlayerAndObject);
-		Packet06PickupObject pickup = new Packet06PickupObject(data);
+		Packet06PickupObject pickup = new Packet06PickupObject(player.getName(),point);
 		pickup.writeData(client);
 
 	}
@@ -173,7 +172,7 @@ public class NetworkController {
 	
 	public void addObjectToView(byte[]data){
 		
-		PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
+		//PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
 		//TODO: kalo call this method to update the 
 		//renCon.addObjectToView(object.player, object.object);
 	}
@@ -183,26 +182,23 @@ public class NetworkController {
 	 * 
 	 * */
 
-	public void removeObjectFromClient(Packet06PickupObject packet) {
-			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
-			Player player = p.player;
-			MoveableObject object = p.object;
-			Point point = p.point;
-			renCon.removeObject(player,object,point);
+	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
+		
+			//PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
+//			Player player = p.player;
+//			MoveableObject object = p.object;
+//			Point point = p.point;
+			renCon.pickupObjectOtherPlayer(packet.getUsername(),packet.getPoint());
 		
 		
 
 	}
-	class PlayerAndObject implements java.io.Serializable {
-		Player player;
-		MoveableObject object;
-		Point point;
-		public PlayerAndObject(){
-			player = NetworkController.player;
-			object = NetworkController.object;
-			point = NetworkController.point ;
-		}
+	public void triggerDoor(String name, Point p) {
+		renCon.triggerDoor(name, p);
+		
 	}
+
+	
 	/**
 	 * serialize object
 	 * 
@@ -253,6 +249,7 @@ public class NetworkController {
 		return null;
 	}
 
+	
 
 
 

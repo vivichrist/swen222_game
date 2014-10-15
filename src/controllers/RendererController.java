@@ -67,9 +67,8 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
-		System.out.println("moving player: " + player.getName() + " to " + point.toString());
-		state.movePlayer(player, point);
-		view.addNewPlayerMove(oldPos, point);
+		state.movePlayer(state.getPlayer(player.getName()), point);
+		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point);
 	}
 	
 	/**
@@ -80,17 +79,43 @@ public class RendererController {
 	public static void movePlayer(Player player, Point point){
 		if(!singlePlayer) netCon.movePlayer(player, point);
 		state.movePlayer(player, point);
+		System.out.println("Player one position: " + state.getPlayers().get(0).getPosition());
+		System.out.println("Player two position: " + state.getPlayers().get(1).getPosition());
 	}
 	
 	/**
-	 * once current player pickup a object will call this method and pass to netCon to 
-	 * create a new pickup pack 
-	 * 
-	 * */
-	
-	public static void  pickupObject(Player player, MoveableObject object, Point point){
-		netCon.pickupObject(player, object, point);
+	 * Picks up an item for the current Player in the Game
+	 * @param player the Player to pick up an item
+	 * @param p the Point to pick the item up from
+	 * @return true if successfully picked up
+	 */
+	public static boolean pickupObjectAtPoint(Player player, Point p){
+		boolean pickedUp = (state.pickupObjectAtPoint(player, p));
+		System.out.println("object picked up -> calling networking");
+		if(pickedUp){
+			if(!singlePlayer) netCon.pickupObject(player, p);
+			return true;
+		}
+		return false;
 	}
+	
+	/**
+	 * Picks up an item for another Player in the Game
+	 * @param player the Player to pick up an item
+	 * @param p the Point to pick the item up from
+	 */
+	public static void pickupObjectOtherPlayer(String playername, Point p){
+		System.out.println("Player picking up object: " + playername);
+		System.out.println("Point to pick up from : " + p.toString());
+		Player player = state.getPlayer(playername);
+		state.pickupObjectAtPoint(player, p);
+		view.remove(p);
+	}
+	
+	public static void openDoor(){
+		
+	}
+	
 	/**
 	 * remove Object from client side after other client pickup a object
 	 * @param player - player who pickup the object
@@ -133,13 +158,28 @@ public class RendererController {
 		netCon.dropObject(player,object,point);
 	}
 	
+	/**
+	 * Checks whether a Player can open a door
+	 * @param player the Player opening the door
+	 * @param point the Point of the door
+	 * @return true if the Door can be opened
+	 */
 	public static boolean canOpenDoor(Player player, Point point){
 		boolean canOpen = state.canOpenDoor(player, point);
 		if(canOpen){
-			openDoor(player.getName(), point);
+			if(!singlePlayer) netCon.openDoor(player.getName(), point);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Triggers a Door to open in the Renderer from another Client
+	 * @param name the name of the Player
+	 * @param p the Point of the Door
+	 */
+	public static void triggerDoor(String name, Point p){
+		if(state.getPlayer(name).getFloor() == GameView.player.getFloor()) view.triggerDoorOpen(p);
 	}
 	
 	/**
@@ -148,16 +188,6 @@ public class RendererController {
 	 */
 	public List<Player> getPlayers(){
 		return state.getPlayers();
-	}
-	 
-	/**
-	 * gameview will call this method 
-	 * and pass the action to client then send to server
-	 * 
-	 * */
-	
-	private static void openDoor(String name, Point point){
-		netCon.openDoor(name, point);
 	}
 	
 	/**
@@ -182,7 +212,7 @@ public class RendererController {
 		Player player = state.getPlayer(playerName);
 		// If the player starts on the same floor as the current player they need to be removed from the current view
 		if(player.getFloor() == GameView.player.getFloor()){
-			view.remove(player.getPosition());
+			view.removePlayerAtPoint(player.getPosition());
 		}
 		// Teleport the player in the game state
 		state.teleport(player, floorNumber);
