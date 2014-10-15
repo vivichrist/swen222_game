@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.components.CellType;
 import world.components.Direction;
 import world.game.Player;
 
@@ -52,15 +53,18 @@ public class GameViewData
 	{
 		return Collections.unmodifiableMap( gameElements );
 	}
-	
+
 	/**
 	 * @param current - position of element
 	 * @param next - position to move element to
-	 * @return if successful
 	 */
-	public boolean moveGameElement( Point current, Point next )
+	public void moveGameElement( Point current, Point next )
 	{
-		return gameElements.put( next, gameElements.get( current ) ) != null;
+		GraphicalObject go = gameElements.remove( current );
+		if ( go == null )
+			throw new RuntimeException(
+					"No Object at Point:" + current + " -> null" );
+		gameElements.put( next, go );
 	}
 
 	/**
@@ -73,7 +77,7 @@ public class GameViewData
 	{
 		if ( current == null )
 		{
-			DymanicRender dyn = DymanicRender.instancePlayer( 
+			DymanicRender dyn = DymanicRender.instancePlayer(
 					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
 			dynamicScene.add( dyn );
 			toInitialise = dyn;
@@ -82,10 +86,10 @@ public class GameViewData
 		}
 		newPlayerMove.put( current, next );
 	}
-	
+
 	/**
 	 * This Method a buffered "other player" move from the newPlayerMove map
-	 * because it has been moved. 
+	 * because it has been moved.
 	 * @param old is the point the player has moved from, and also the
 	 * reference key
 	 */
@@ -93,7 +97,7 @@ public class GameViewData
 	{
 		newPlayerMove.remove( old );
 	}
-	
+
 	/**
 	 * @return the buffer of other player moves as unmodifiable map
 	 */
@@ -173,8 +177,11 @@ public class GameViewData
 	 */
 	public void remove( Point p )
 	{
-		GraphicalObject go = gameElements.remove( p );
-		dynamicScene.remove( (DymanicRender)go );
+		DymanicRender go = (DymanicRender)gameElements.remove( p );
+		if ( go == null )
+			throw new RuntimeException(
+					"No Object at Point:" + p + " -> null" );
+		dynamicScene.remove( go );
 	}
 
 	/**
