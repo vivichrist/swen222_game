@@ -8,18 +8,18 @@ public class StaticDisplayList
 
 	public static StaticDisplayList	instance()
 	{
-		if ( instance == null ) 
+		if ( instance == null )
 			instance = new StaticDisplayList();
 		return instance;
 	}
 
 	private static StaticDisplayList instance = null;
-	
+
 	private StaticDisplayList()
 	{
 		staticID = 0;
 	}
-	
+
 	public boolean createDisplaylist( GL2 gl )
 	{
 		GameViewData data	= GameViewData.instance();
@@ -32,7 +32,6 @@ public class StaticDisplayList
 		if ( staticID == 0 ) return false;
     	gl.glNewList(staticID, GL2.GL_COMPILE);
     	gl.glLineWidth( 3.0f );
-    	System.out.println( "Static Scene Object count:" + data.getStaticScene().size() );
     	for( GraphicalObject go: data.getStaticScene() )
     	{
     		go.initialise( gl );
@@ -40,7 +39,7 @@ public class StaticDisplayList
     	gl.glEndList();
     	return true;
 	}
-	
+
 	public int destroy( GL2 gl )
 	{
 		if ( staticID == 0 ) return staticID;
@@ -48,7 +47,7 @@ public class StaticDisplayList
 		instance = null;
 		return staticID;
 	}
-	
+
 	public void drawDisplayList( GL2 gl )
 	{
 		if ( staticID == 0 ) return;

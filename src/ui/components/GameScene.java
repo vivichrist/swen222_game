@@ -41,16 +41,8 @@ public class GameScene
 		// size of map is in the header
 		xlimit = player.getFloor().getXLimit();
 		ylimit = player.getFloor().getYLimit();
-		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
 		staticMap = player.getFloor().getCellTypeMap();
-		// print out the map
-		for ( CellType[] line: staticMap )
-		{
-			for ( CellType c: line )
-				System.out.print( " " + c.ordinal() );
-			System.out.println();
-		}
 	}
 
 
