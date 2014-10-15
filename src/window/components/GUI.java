@@ -93,7 +93,7 @@ public class GUI {
 	private Player player;	// the current player
 	private int numPlayer;
 	private static String name;	// the entered name of the player in single-player mode
-	private static String nameC;	// the entered name of the player in multiple-player mode
+	public static String nameC;	// the entered name of the player in multiple-player mode
 	private String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
 	private String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	private String strServerNameC;	// the player entered server name in multiple-player mode
