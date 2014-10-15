@@ -144,7 +144,7 @@ public class GUI {
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-	
+
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -298,7 +298,7 @@ public class GUI {
 		information.setFont(new Font("Arial", Font.BOLD, 20));
 		information.setForeground(new Color(0, 135, 200).brighter());
 
-		JLabel name = new JLabel("Server Name : ");
+		JLabel name = new JLabel("Server IP : ");
 		serverName = new JTextField(18);
 
 		name.setPreferredSize(new Dimension(150, 60));
@@ -356,9 +356,27 @@ public class GUI {
 		textFieldNameC.setPreferredSize(new Dimension(250, 40));
 		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
 		textFieldNameC.setForeground(new Color(30, 30, 30));
-
+		
 		JLabel name = new JLabel("Server IP: ");
+		String serverIP = null;
+		try {
+			 serverIP = getSeverName().getHostAddress();
+			int countDot = 0;
+			for(int i = 0; i<serverIP.length(); i++){
+				if(serverIP.substring(i, i+1).equals(".")){
+					countDot++;
+					if(countDot==3){
+						serverIP = serverIP.substring(0, i+1);
+						break;
+					}
+				}
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		serverNameC = new JTextField(18);
+		serverNameC.setText(serverIP);
 
 		name.setPreferredSize(new Dimension(150, 60));
 		name.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -599,13 +617,13 @@ public class GUI {
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
 					String nP= JOptionPane.showInputDialog(
-					        frame, 
-					        "Enter the number of players of the game", 
-					        "Number of Players", 
-					        JOptionPane.INFORMATION_MESSAGE
-					    );
+							frame, 
+							"Enter the number of players of the game", 
+							"Number of Players", 
+							JOptionPane.INFORMATION_MESSAGE
+							);
 					numPlayer = Integer.parseInt(nP);
-					
+
 					layeredPane.remove(chooseServerPanel);
 					try {
 						strServerName = getSeverName().getHostAddress();
@@ -649,22 +667,26 @@ public class GUI {
 				if(button == jbClientStart){	// if button Start is clicked, joinServerPanel will be removed and multiple-player mode game will be started
 					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
 						nameC = textFieldNameC.getText();
-						strServerNameC = serverNameC.getText();
 						strPortNumC = portNumC.getText();
-//						System.out.println("Player name: " + nameC);
-//						System.out.println("Server name: " + strServerNameC);
-//						System.out.println("Port number: " + strPortNumC);
-//						System.out.println("Server name real: " + strServerName);
-//						System.out.println("Port number real: " + strPortNum);
+
+						strServerNameC = serverNameC.getText();
+						//						System.out.println("Player name: " + nameC);
+						//						System.out.println("Server name: " + strServerNameC);
+						//						System.out.println("Port number: " + strPortNumC);
+						//						System.out.println("Server name real: " + strServerName);
+						//						System.out.println("Port number real: " + strPortNum);
 						System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 						if(isIPAdd(strServerNameC)){
-						layeredPane.remove(joinServerPanel);
-						layeredPane.remove(backgroundPanel);
-						startGame2();
+							layeredPane.remove(joinServerPanel);
+							layeredPane.remove(backgroundPanel);
+							startGame2();
 						}
 						frame.repaint();
 						//textFieldRealName.setText("");
-					}}}});
+					}}}
+
+		
+			});
 
 		textFieldNameC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -732,12 +754,12 @@ public class GUI {
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		client = new Client(this,nameC,strServerNameC,clientPortNumber );
 		client.start();
-		
+
 		Packet00Login loginPacket = new Packet00Login(nameC);
 		loginPacket.writeData(client);
 		//if(client.getPlayer()==null)System.out.println("null player");
 		//System.out.println("1111111111111" +client.getPlayer().ipAddress);
-	//	System.out.println("1111111111111" + client.getPlayer().port);
+		//	System.out.println("1111111111111" + client.getPlayer().port);
 	}
 
 	/**
@@ -752,7 +774,7 @@ public class GUI {
 
 		frame.setTitle(player.getName());
 		frame.repaint();
-		
+
 		layeredPane.add( gameView, JLayeredPane.DEFAULT_LAYER );
 		if ( !gameView.requestFocusInWindow() ) System.out.println( "GameView can't get focus" );
 		southPanel = new SouthPanel(player);
@@ -844,9 +866,11 @@ public class GUI {
 	public String getName(){
 		return name;
 	}
-
+	/**
+	 * this method is going to return the current local host address
+	 * 
+	 * */
 	private InetAddress getSeverName() throws UnknownHostException {
-		// TODO for Jacky
 		return InetAddress.getLocalHost();
 	}
 
@@ -892,7 +916,7 @@ public class GUI {
 		this.addWindowListener(windowListeners);
 
 	}
-	
+
 	public JFrame getFrame(){
 		return frame;
 	}

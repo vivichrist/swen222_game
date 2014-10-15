@@ -210,7 +210,6 @@ public class Client extends Thread {
 
 
 	public MultyPlayer getPlayer() {
-		// TODO Auto-generated method stub
 		return p;
 	}
 	
