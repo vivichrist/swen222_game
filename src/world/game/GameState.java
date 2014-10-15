@@ -30,7 +30,8 @@ public class GameState implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	private  List<Player> players;
 	private  Map[] floors;
-	private GameBuilder game;
+	
+	//TODO: are these fields used? ask Jacky
 	private boolean isMoved;
 	private boolean serverConnection= false;
 
