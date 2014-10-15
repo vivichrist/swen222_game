@@ -43,7 +43,6 @@ import javax.swing.JTextField;
 import ServerClients.Client;
 import ServerClients.Server;
 import ServerClients.Timers;
-import ServerClients.WindowListeners;
 //import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import ServerClients.UDPpackets.Packet01Disconnect;
@@ -732,6 +731,8 @@ public class GUI {
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
 
+		WindowListeners listeners = new WindowListeners(this);
+		listeners.setClient(client);
 	}
 
 	/**
