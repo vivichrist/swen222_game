@@ -70,7 +70,7 @@ public class GUI {
 	Map[]floors;
 	Server server = null;
 
-	private JFrame frame;	// this is the frame the game will be shown on 
+	public JFrame frame;	// this is the frame the game will be shown on 
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
 	private GLJPanel gameView;	// the rendering window of the game
 
@@ -88,7 +88,6 @@ public class GUI {
 	 * to players' game entry choices
 	 */	
 	private Panel backgroundPanel;
-	private JPanel chooseServerPanel;
 	private JPanel serverStartsPanel;
 	private JPanel joinServerPanel;
 	private JPanel waitClientsPanel;
@@ -97,8 +96,7 @@ public class GUI {
 
 	// buttons on all panels 
 
-	private JButton jbStartServer;
-	private JButton jbJoinServer;
+
 	private JButton jbClientStart;
 
 	// textFields on all panels
@@ -146,27 +144,6 @@ public class GUI {
 		addPanel(startPanel);
 	}
 
-
-	/**
-	 * The following method sets up the frame that let player choose 
-	 * either starts a server of the game or join the server of the game
-	 */
-	public void chooseServerPanel(){
-		chooseServerPanel = new JPanel();
-		setUpPanel(chooseServerPanel, 300, 200, 200, 120);
-
-		// buttons used on chooseServerPanel
-		jbStartServer = new JButton("Start Server");
-		jbJoinServer = new JButton("Join Server");
-
-		setButtonStyle(jbStartServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbJoinServer, 170, chooseServerPanel, new Color(0, 135, 200).brighter());
-
-		// set the panel to transparent and add the panel to frame
-		chooseServerPanel.setOpaque(false);
-		layeredPane.add(chooseServerPanel, JLayeredPane.MODAL_LAYER);
-		addListennerChooseServer();
-	}
 
 	/**
 	 * The following method sets up the frame that shows server has 
@@ -438,59 +415,7 @@ public class GUI {
 	 * The following method adds action listener onto buttons on chooseServerPanel
 	 */
 	public void addListennerChooseServer(){
-		jbStartServer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
-					String nP= JOptionPane.showInputDialog(
-							frame, 
-							"Enter the number of players of the game", 
-							"Number of Players", 
-							JOptionPane.INFORMATION_MESSAGE
-							);
-					if (nP == null){
-						layeredPane.remove(chooseServerPanel);
-						//		startPanel();
-						frame.repaint();
-					} else {
-						boolean isStr = false;
-						try {
-							numPlayer = Integer.parseInt(nP);
-						} catch (NumberFormatException e){
-							isStr = true;
-						}
-						if (isStr) {
-						} else {
-							layeredPane.remove(chooseServerPanel);
-							try {
-								strServerName = getSeverName().getHostAddress();
-							} catch (UnknownHostException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							strPortNum = "4768";
-							int port = Integer.parseInt(strPortNum);
-							while(!available(port)){
-								port++;
-							}
-							strPortNum = ""+port;
-
-							Server server = new Server(port, numPlayer);
-							server.start();
-
-							serverStartsPanel();
-
-							frame.repaint();
-						}}}}});
-
-		jbJoinServer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbJoinServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and joinServerPanel will appear
-					layeredPane.remove(chooseServerPanel);
-					joinServerPanel();
-					frame.repaint();
-				}}});
+		
 	}
 
 	/**
@@ -695,27 +620,11 @@ public class GUI {
 	 * this method is going to return the current local host address
 	 * 
 	 * */
-	private InetAddress getSeverName() throws UnknownHostException {
+	protected InetAddress getSeverName() throws UnknownHostException {
 		return InetAddress.getLocalHost();
 	}
 
-	/**
-	 * this method is check the socket port 
-	 * @param port the number is going to check
-	 * \*/
-	private static boolean available(int port) {
-		DatagramSocket s = null;
-		try {
-			s = new DatagramSocket(port);
 
-			// If the code makes it this far without an exception it means
-			// something is using the port and has responded.
-			s.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		} 
-	}
 
 	/**
 	 * this method is check player input server Ip address
@@ -748,6 +657,26 @@ public class GUI {
 
 	protected Panel getBackgroundPanel(){
 		return backgroundPanel;
+	}
+
+	public void setNumPlayer(int parseInt) {
+		this.numPlayer = parseInt;
+	}
+	
+	public void setStrServerName(String s) {
+		this.strServerName = s;
+	}
+	
+	public void setStrPortNum(String s) {
+		this.strPortNum = s;
+	}
+
+	public String getStrPortNum() {
+		return this.strPortNum;
+	}
+
+	public int getNumPlayer() {
+		return numPlayer;
 	}
 }
 
