@@ -840,7 +840,7 @@ public class GUI {
 
 	/**
 	 * this method is check player input server Ip address
-	 * if input is not ip adress will return false
+	 * if input is not ip address will return false
 	 * */
 	public static final boolean isIPAdd(final String ip) {
 		boolean isIPv4;
