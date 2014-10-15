@@ -6,6 +6,7 @@ import java.util.List;
 
 import ui.components.GameView;
 import ui.components.GameViewData;
+import world.components.Key;
 import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
@@ -67,9 +68,8 @@ public class RendererController {
 	 */
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
-		System.out.println("moving player: " + player.getName() + " to " + point.toString());
-		state.movePlayer(player, point);
-		view.addNewPlayerMove(oldPos, point);
+		state.movePlayer(state.getPlayer(player.getName()), point);
+		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point);
 	}
 	
 	/**
@@ -92,6 +92,7 @@ public class RendererController {
 	 */
 	public static boolean pickupObjectAtPoint(Player player, Point p){
 		boolean pickedUp = (state.pickupObjectAtPoint(player, p));
+		System.out.println("object picked up -> calling networking");
 		if(pickedUp){
 			if(!singlePlayer) netCon.pickupObject(player, p);
 			return true;
@@ -104,9 +105,36 @@ public class RendererController {
 	 * @param player the Player to pick up an item
 	 * @param p the Point to pick the item up from
 	 */
-	public static void pickupObjectOtherPlayer(Player player, Point p){
+	public static void pickupObjectOtherPlayer(String playername, Point p){
+		System.out.println("Player picking up object: " + playername);
+		System.out.println("Point to pick up from : " + p.toString());
+		Player player = state.getPlayer(playername);
 		state.pickupObjectAtPoint(player, p);
 		view.remove(p);
+	}
+	
+	/**
+	 * Picks up a Key for another Player, dropping their current Key (if they have one) and updating the Renderer (if on the same floor)
+	 * @param playerName the name of the Player picking up the Key
+	 * @param p the Point to pick up the Key from
+	 */
+	public static void pickupKeyOtherPlayer(String playerName, Point p){
+		Player player = state.getPlayer(playerName);
+		Key toDrop = state.pickupKey(player, p);
+		if(toDrop == null) return;
+		if(player.getFloor() == GameView.player.getFloor()) view.addKey(toDrop.getColor(), p);
+	}
+	
+	/**
+	 * Picks up a Key for a Player, dropping their current Key (if they have one)
+	 * @param player the Player picking up the Key
+	 * @param p the Point to pick up the key from
+	 * @return the Key to drop, returns null if no Key gets dropped
+	 */
+	public static Key pickupKey(Player player, Point p){
+		Key toDrop = state.pickupKey(player, p);
+		if(!singlePlayer) netCon.pickupKey(player.getName(), p);
+		return toDrop;
 	}
 	
 	/**
@@ -123,6 +151,7 @@ public class RendererController {
 	//	state.removeObject(player, object);
 	//	view.removeObject(point);
 	}
+	
 	/**
 	 *received action from server, need update the gameview and gamestate
 	 *Instruction from server (other player trigger the door open action)
@@ -151,13 +180,28 @@ public class RendererController {
 		netCon.dropObject(player,object,point);
 	}
 	
+	/**
+	 * Checks whether a Player can open a door
+	 * @param player the Player opening the door
+	 * @param point the Point of the door
+	 * @return true if the Door can be opened
+	 */
 	public static boolean canOpenDoor(Player player, Point point){
 		boolean canOpen = state.canOpenDoor(player, point);
 		if(canOpen){
-			openDoor(player.getName(), point);
+			if(!singlePlayer) netCon.openDoor(player.getName(), point);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Triggers a Door to open in the Renderer from another Client
+	 * @param name the name of the Player
+	 * @param p the Point of the Door
+	 */
+	public static void triggerDoor(String name, Point p){
+		if(state.getPlayer(name).getFloor() == GameView.player.getFloor()) view.triggerDoorOpen(p);
 	}
 	
 	/**
@@ -166,16 +210,6 @@ public class RendererController {
 	 */
 	public List<Player> getPlayers(){
 		return state.getPlayers();
-	}
-	 
-	/**
-	 * gameview will call this method 
-	 * and pass the action to client then send to server
-	 * 
-	 * */
-	
-	private static void openDoor(String name, Point point){
-		netCon.openDoor(name, point);
 	}
 	
 	/**

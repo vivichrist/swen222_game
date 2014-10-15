@@ -1,5 +1,6 @@
 package ServerClients.UDPpackets;
 
+import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,20 +16,28 @@ public class Packet07DropObject extends UDPPacket {
 
 	
 	private byte[] data;
-	private Player player;
-	private MoveableObject object;
+	private byte[] keyData;
+	private String name;
+
 	/**
 	 * Constructor - create a Packet07DropObject package
 	 * @param player  - player
 	 * @param object - object to pickup
 	 
 	 */
-	public Packet07DropObject(Player player, MoveableObject object) {
+	public Packet07DropObject(String name, byte[]keyData) {
 		super(07);
-		this.player = player;
-		this.object = object;
+		this.name = name;
+		this.keyData = keyData;
 
 	}
+	
+	public Packet07DropObject(String name) {
+		super(07);
+		this.name = name;
+
+	}
+
 	/**
 	 * Constructor - creates a Packet07DropObject package
 	 * @param data  - received from server and change byte array to string message
@@ -36,6 +45,7 @@ public class Packet07DropObject extends UDPPacket {
 	public Packet07DropObject(byte[] data) {
 		super(07);
 		this.data = data;
+		
 		System.out.println("Packet07DropObject con 2: ");
 	}
 
@@ -86,12 +96,16 @@ public class Packet07DropObject extends UDPPacket {
 	 */
 	@Override
 	public byte[] getData() {
-
-		byte[]newData =new byte[data.length];
+		
+		//byte[]newData =new byte[data.length];
+		byte[]newData =new byte[keyData.length+name.length()];
 		byte[] a = "07".getBytes();
 
 		newData[0] = a[0];
 		newData[1] = a[1];
+		for(int i = 2; i<name.length();i++){
+			//newData[i] = name.substring(i-2, i).getBytes();
+		}
 		for(int i = 0; i<data.length;i++){
 			newData[i] = data[i];
 

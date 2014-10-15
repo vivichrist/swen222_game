@@ -23,7 +23,12 @@ import world.game.Player;
 /**
  * @author Vivian Stewart
  * - Setup of the visual world.
- * - Collision Detection between world and the player.
+ *		* Populate the two rendering lists
+ * - Setup collision detection between the world and the player.
+ *		* Populate collision/selection map
+ * - Define the boundaries of the world
+ * - Execute collision detection between the world and the player and
+ * 	 trigger behaviour of graphical objects
  */
 public class GameScene
 {
@@ -110,8 +115,8 @@ public class GameScene
 				System.out.println("Teleporting to Floor:" + teleport );
 				return true;
 			}
-			else if ( ct == CellType.KEYDOOR )
-			{	if ( game.canOpenDoor( player, p ) )
+			else if ( ct == CellType.KEYDOOR || ct == CellType.DOOR )
+			{	if ( RendererController.canOpenDoor( player, p ) )
 					return ((DymanicRender)graphicData
 							.getGameElements().get( p )).collide();
 				return true;
@@ -132,7 +137,6 @@ public class GameScene
 					DymanicRender dyn = DymanicRender.instanceKey(
 							p, key.getColor() );
 					graphicData.addGrapicalObject( dyn );
-					GameViewData.instance().setToInitialise( dyn );
 				}
 
 			} else

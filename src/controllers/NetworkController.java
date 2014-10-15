@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.media.opengl.awt.GLJPanel;
 
@@ -15,9 +16,11 @@ import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
+import ServerClients.UDPpackets.Packet08PickupKey;
 import ServerClients.UDPpackets.UDPPacket;
 import ui.components.GameView;
 import window.components.GUI;
+import world.components.Key;
 import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
@@ -26,7 +29,7 @@ import world.game.Player;
  * @author zhaojiang chang - 300282984
  *
  */
-public class NetworkController {
+public class NetworkController  implements Serializable{
 	private static Client client;
 	private static GUI gui;
 	private static GameState state;
@@ -57,7 +60,7 @@ public class NetworkController {
 		renCon.teleportOtherPlayer(name, floorNumber);
 	}
 	public static void teleport(String name, int floorNumber){
-		
+
 		Packet04Teleport teleport = new Packet04Teleport(name,floorNumber);
 		teleport.writeData(client);
 
@@ -100,7 +103,7 @@ public class NetworkController {
 		this.client = client;
 	}
 
-	
+
 	/**
 	 * get player
 	 * @param get player
@@ -110,15 +113,15 @@ public class NetworkController {
 		return controller.getPlayer(username);
 	}
 
-//	/**
-//	 * Teleports a given Player to a user selected floor
-//	 * @param p the Player to Teleport
-//	 * @return the user selected floor
-//	 */
-//	public static boolean teleport(Player p){
-//		System.out.println("teleport called");
-//		return controller.teleport(p);
-//	}
+	//	/**
+	//	 * Teleports a given Player to a user selected floor
+	//	 * @param p the Player to Teleport
+	//	 * @return the user selected floor
+	//	 */
+	//	public static boolean teleport(Player p){
+	//		System.out.println("teleport called");
+	//		return controller.teleport(p);
+	//	}
 
 
 	/**
@@ -150,8 +153,14 @@ public class NetworkController {
 	public void pickupObject(Player player, Point point){
 		this.player = player;
 		this.point = point;
-		byte[]data = this.serialize(this.PlayerAndObject);
-		Packet06PickupObject pickup = new Packet06PickupObject(data);
+		Packet06PickupObject pickup = new Packet06PickupObject(player.getName(),point);
+		pickup.writeData(client);
+
+	}
+	public void pickupKey(Player player, Key key){
+		this.player = player;
+		this.point = point;
+		Packet08PickupKey pickup = new Packet08PickupKey(player.getName(),point);
 		pickup.writeData(client);
 
 	}
@@ -160,19 +169,17 @@ public class NetworkController {
 	 * 
 	 * */
 
-	public void dropObject(Player player, MoveableObject object, Point point) {
-		this.player = player;
-		this.object = object;
-		this.point = point;
-		byte[]data = this.serialize(this.PlayerAndObject);
-		Packet07DropObject drop = new Packet07DropObject(data);
+	public void dropObject(String name, Key key, Point point) {
+
+		byte[]keyData = this.serialize(key);
+		Packet07DropObject drop = new Packet07DropObject(name,keyData);
 		drop.writeData(client);
 	}
-	
-	
+
+
 	public void addObjectToView(byte[]data){
-		
-		PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
+
+		//PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
 		//TODO: kalo call this method to update the 
 		//renCon.addObjectToView(object.player, object.object);
 	}
@@ -183,25 +190,22 @@ public class NetworkController {
 	 * */
 
 	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
-			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
-			Player player = p.player;
-			MoveableObject object = p.object;
-			Point point = p.point;
-			renCon.pickupObjectOtherPlayer(player,point);
+
 		
-		
+		renCon.pickupObjectOtherPlayer(packet.getUsername(),packet.getPoint());
+	}
+	public void pickupKeyOtherPlayer(Packet08PickupKey packet) {
+
+		renCon.pickupKeyOtherPlayer(packet.getUsername(),packet.getPoint());
+	}
+
+
+	public void triggerDoor(String name, Point p) {
+		renCon.triggerDoor(name, p);
 
 	}
-	class PlayerAndObject implements java.io.Serializable {
-		Player player;
-		MoveableObject object;
-		Point point;
-		public PlayerAndObject(){
-			player = NetworkController.player;
-			object = NetworkController.object;
-			point = NetworkController.point ;
-		}
-	}
+
+
 	/**
 	 * serialize object
 	 * 
@@ -251,6 +255,8 @@ public class NetworkController {
 		}
 		return null;
 	}
+
+
 
 
 

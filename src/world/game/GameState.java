@@ -168,7 +168,7 @@ public class GameState implements java.io.Serializable{
 	 */
 	public boolean canOpenDoor(Player player, Point point){
 		Door door = player.getFloor().getDoor(point);
-		if(player.getInventory().contains(door.getKey())) return true;
+		if(player.getInventory().contains(door.getKey()) || !door.isLockable()) return true;
 		return false;
 	}
 	

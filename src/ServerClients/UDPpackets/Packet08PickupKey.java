@@ -12,8 +12,9 @@ import world.game.Player;
 import ServerClients.Client;
 import ServerClients.Server;
 
-public class Packet06PickupObject extends UDPPacket {
+public class Packet08PickupKey extends UDPPacket {
 
+	
 	private String username;
 	private Point point;
 	private byte[] data;
@@ -25,8 +26,8 @@ public class Packet06PickupObject extends UDPPacket {
 	 * @param point - player location
 	 * 
 	 * */
-	public Packet06PickupObject(String username, Point point) {
-		super(06);
+	public Packet08PickupKey(String username, Point point) {
+		super(-2);
 		this.username = username;
 		this.point = point;
 		for(int i = 0; i<getData().length; i++){
@@ -38,8 +39,8 @@ public class Packet06PickupObject extends UDPPacket {
 	 * @param data - byte array username and location
 	 * 
 	 * */
-	public Packet06PickupObject(byte[] data) {
-		super(06);
+	public Packet08PickupKey(byte[] data) {
+		super(-2);
 		this.data = data;
 		String[]dataArray = readData(data).split(",");
 		this.username = dataArray[1];
@@ -71,7 +72,7 @@ public class Packet06PickupObject extends UDPPacket {
 	@Override
 	public byte[] getData() {
 		// TODO Auto-generated method stub
-		return ("06"+ ","+this.username +","+this.point.x+","+this.point.y).getBytes();
+		return ("-2"+ ","+this.username +","+this.point.x+","+this.point.y).getBytes();
 	}
 	/**
 	 * getRealData - this method is going to return a bytes array with message without type

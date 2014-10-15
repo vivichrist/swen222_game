@@ -18,6 +18,7 @@ import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
+import ServerClients.UDPpackets.Packet08PickupKey;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import window.components.GUI;
@@ -37,7 +38,7 @@ public class Client extends Thread {
 	public boolean connection;
 	public String name;
 	public GUI gui;
-	
+
 
 	/**
 	 * Constructor - creates a Client
@@ -81,7 +82,7 @@ public class Client extends Thread {
 			this.parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
 	}
-	
+
 	/**
 	 * the parsePacket will check the first two byte 
 	 * byte will identify the type of data received
@@ -134,11 +135,16 @@ public class Client extends Thread {
 			packet = new Packet07DropObject(data);
 			handlePickupObject((Packet07DropObject)packet);
 			break;
+		case PICKUPKEY:
+			packet = new Packet08PickupKey(data);
+			handlePickupKey((Packet08PickupKey)packet);
+			break;
 		}
 	}
 
-	
-	
+
+
+
 	
 	/**
 	 * this method will send message from client to server
@@ -161,43 +167,83 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
 				+ " joined the game...");
 		new MultyPlayer( packet.getUsername(),null,address, port);
-		
-	}
 
+	}
+	/**
+	 * this method is handle the game state, 
+	 * received serialized data from server, 
+	 * then deserialize 
+	 * @param packet - bytes array 
+	 * */
 	private void handleData(Packet02Data packet) {
 
 		GameState st = deserialize(packet.getRealData());
 		networkController = new MultiPlayerBuild(st, gui, name).getNetworkController();
 		networkController.setClient(this);
-		
+
 	}
-	
+
+	/**
+	 * this method is handle the open door action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
+
 	private void handleOpenDoor(Packet05OpenDoor packet) {
 		//Player player = (Player) this.deserialize(packet.getData());
-		networkController.toOpenDoor(packet.getDoorAction(), packet.getPoint());
+		networkController.triggerDoor(packet.getName(), packet.getPoint());
 	}
-	
+	/**
+	 * this method is handle the pickup object action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handlePickupObject(Packet06PickupObject packet) {
 		networkController.pickupObjectOtherPlayer(packet);
 	}
+
+	
+	private void handlePickupKey(Packet08PickupKey packet) {
+		networkController.pickupKeyOtherPlayer(packet);
+	}
+	/**
+	 * this method is handle the pickup object action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handlePickupObject(Packet07DropObject packet) {
 
 		networkController.addObjectToView(packet.getRealData());
 	}
+
+	/**
+	 * this method is handle the move action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handleMove(Packet03Move packet) {
 
 		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
-			if(!GUI.nameC.equalsIgnoreCase(p.getName())){
+			//if(!GUI.nameC.equalsIgnoreCase(p.getName())){
 				networkController.moveOtherPlayer(p, packet.getPoint());
-			}else{
-				System.out.println("local player should not move by server");
-			}
+//			}else{
+//				System.out.println("local player should not move by server");
+//			}
 		}
 
 	}
-	
 
+	/**
+	 * this method is handle the teleport action, 
+	 * received  data from server, 
+	 * then send to netowrkController to send the action to logic 
+	 * @param packet - bytes array 
+	 * */
 	private void handleTeleport(Packet04Teleport packet) {
 		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
@@ -209,7 +255,11 @@ public class Client extends Thread {
 		}
 	}
 
-	
+	/**
+	 * this method is deserialize the object
+	 * @param bytes array
+	 * 
+	 * */
 	public GameState deserialize(byte[]bytes) {
 
 		ByteArrayInputStream bais = null;

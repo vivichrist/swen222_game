@@ -21,6 +21,7 @@ import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
+import ServerClients.UDPpackets.Packet08PickupKey;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import world.game.GameBuilder;
@@ -29,7 +30,8 @@ import world.game.MultyPlayer;
 import world.game.Player;
 
 /**
- * @author  Zhaojiang Chang
+ * A Server to handle connection between server and player
+ * @author zhaojiang chang - ID:300282984
  *
  */
 public class Server extends Thread {
@@ -44,6 +46,11 @@ public class Server extends Thread {
 	private int numPlayers=0;
 	public static int serverStart = 0;
 
+	/**
+	 * Constructor - creates a Server
+	 * @param portNumber - server port number 
+	 * @param numPlayers - number of players
+	 * */
 
 	public Server(int portNumber, int numPlayers){
 		this.numPlayers = numPlayers;
@@ -63,7 +70,11 @@ public class Server extends Thread {
 
 
 	}
-
+	/**
+	 * server check the receive packet
+	 * if received packet is valid then pass to parsePacket method 
+	 * 
+	 */
 	public void run(){
 
 		while(true){
@@ -91,7 +102,14 @@ public class Server extends Thread {
 
 
 	}
-
+	/**
+	 * the parsePacket will check the first two byte 
+	 * byte will identify the type of data received
+	 * @param data received from client
+	 * @param address client ip address
+	 * @param port client port
+	 * 
+	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		//System.out.println("bbb9");
 
@@ -146,11 +164,21 @@ public class Server extends Thread {
 			packet = new Packet07DropObject(data);
 			handleDropObject((Packet07DropObject)packet);
 			break;
+		case PICKUPKEY:
+			packet = new Packet08PickupKey(data);
+			handlePickupKey((Packet08PickupKey)packet);
+			break;
 		}
 	}
-	
+
 
 	
+	
+	/**
+	 * this method is going to send init data to all cilents to 
+	 * start the game
+	 * 
+	 * */
 
 	private void sentStateToAllClients() {
 
@@ -159,10 +187,7 @@ public class Server extends Thread {
 		for(MultyPlayer p:connectedPlayers ){
 			names.add(p.getName());
 		}
-		for(String name: names){
-			System.out.println("names: "+ name);
-		}
-		System.out.println("new gamebuilder builded");
+
 		GameBuilder builder =new GameBuilder(names);
 		state = builder.getGameState();
 
@@ -182,7 +207,10 @@ public class Server extends Thread {
 
 
 	}
-
+	/**
+	 * this method will send message from server to client
+	 * @param data  - byte array data packet with PacketType 
+	 * */
 	private void sendData(byte[]data, InetAddress ipAddress, int port){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
 		try {
@@ -191,27 +219,39 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * this method is going to send the action data to all clients
+	 * except from client
+	 * @param data
+	 * */
 	public void sendActionDataToAllClients(byte[] data) {
 		for (MultyPlayer p : connectedPlayers) {
-			System.out.println(name+"  "+ p.getName());
-			//if(!name.equals(p.getName())){
+			if(!name.equals(p.getName())){
+				System.out.println("From "+name+"  send to: "+ p.getName());
+
 				sendData(data, p.ipAddress, p.port);
-				System.out.println(p.ipAddress+ "  "+p.port);
-			//}
+				System.out.println("send data to "+p.ipAddress+ "  "+p.port);
+			}
 		}
-
-
 	}
+	/**
+	 * this method is going to send the action data to all clients
+	 * @param data
+	 * */
+
 	public void sendDataToAllClients(byte[] data) {
 		for (MultyPlayer p : connectedPlayers) {
 			//System.out.println(name+"  "+ p.getName());
 			//if(!name.equals(p.getName())){
 			sendData(data, p.ipAddress, p.port);
 			//System.out.println(p.ipAddress+ "  "+p.port);
-
 		}
-
 	}
+
+	/**
+	 * get player by 
+	 * */
 	public MultyPlayer getPlayer(String username) {
 		for (MultyPlayer player : this.connectedPlayers) {
 			if (player.getName().equals(username)) {
@@ -249,8 +289,14 @@ public class Server extends Thread {
 		pk.writeData(this);
 
 	}
-	private void handleDropObject(Packet07DropObject packet) {
+	private void handlePickupKey(Packet08PickupKey packet) {
+		byte[] temp = packet.getData();
+		Packet08PickupKey pk = new Packet08PickupKey(temp);
+		pk.writeData(this);
 		
+	}
+	private void handleDropObject(Packet07DropObject packet) {
+
 		byte[] temp = packet.getData();
 		Packet07DropObject pk = new Packet07DropObject(temp);
 		pk.writeData(this);
@@ -265,13 +311,13 @@ public class Server extends Thread {
 		}
 
 	}
-	
+
 	private void handleTeleport(Packet04Teleport packet) {
-		
-			packet.writeData(this);
-		
+
+		packet.writeData(this);
+
 	}
-	
+
 	public void addConnection(MultyPlayer player, Packet00Login packet) {
 		boolean alreadyConnected = false;
 		for (MultyPlayer p : this.connectedPlayers) {

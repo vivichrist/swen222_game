@@ -14,7 +14,13 @@ import world.game.Player;
 
 /**
  * @author Vivian Stewart
- * Centralised data for scene and scene rendering
+ * Centralised data for scene and scene rendering.
+ * - The OpenGL display list reference to draw all objects that do not change or 
+ * 	 move.
+ * - Both of the rendering lists are housed here.
+ * - The map of collidable and selectable items.
+ * - The buffer of moves that other visible players make.
+ * for the sack of convenience this follows the Singleton Pattern.
  */
 public class GameViewData
 {
@@ -22,7 +28,6 @@ public class GameViewData
 	private final List<DymanicRender>			dynamicScene;
 	private final Map<Point, GraphicalObject>	gameElements;
 	private final Map<Point, Point>				newPlayerMove;
-	private DymanicRender						toInitialise;
 	private DymanicRender 						previousSelection = null;
 	private static GameViewData					instance = null;
 
@@ -81,8 +86,6 @@ public class GameViewData
 			DymanicRender dyn = DymanicRender.instancePlayer(
 					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
 			dynamicScene.add( dyn );
-			toInitialise = dyn;
-			// gameElements.put( next, dyn );
 			return;
 		}
 		newPlayerMove.put( current, next );
@@ -163,6 +166,13 @@ public class GameViewData
 		}
 		return dynamicScene.add( (DymanicRender)gobject );
 	}
+	
+	public void addKey( Color colour, Point location )
+	{
+		DymanicRender dyn = DymanicRender.instanceKey(
+				location, colour );
+		addGrapicalObject( dyn );
+	}
 
 	/**
 	 * @return an unmodifiable list of possibly moving or changing object
@@ -183,6 +193,15 @@ public class GameViewData
 			throw new RuntimeException(
 					"No Object at Point:" + p + " -> null" );
 		dynamicScene.remove( go );
+	}
+	
+	/**
+	 * Used when other players open doors in multiplayer mode.
+	 * @param doorpoint - phantom door opening
+	 */
+	public void triggerDoorOpen( Point doorpoint )
+	{
+		((DymanicRender)gameElements.get( doorpoint )).collide();
 	}
 
 	public void removePlayerAtPoint( Point p )
@@ -225,33 +244,10 @@ public class GameViewData
 		newPlayerMove.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
-		toInitialise = null;
 	}
 
 	/**
 	 * @return the dynamic element to be initialised because it has been added
 	 * late after mass initialisation happened (to load vertices and indices)
 	 */
-	public DymanicRender getToInitialise()
-	{
-		return toInitialise;
-	}
-
-	/**
-	 * @param toInitialise - new GraphicalObject to be initialised before
-	 * rendering because of being added to scene after  mass initialisation.
-	 */
-	public void setToInitialise( DymanicRender toInitialise )
-	{
-		this.toInitialise = toInitialise;
-	}
-
-	/**
-	 * Once the GraphicalObject has been initialised it is removed from the
-	 * toInitialise field.
-	 */
-	public void resetToInitialise()
-	{
-		this.toInitialise = null;
-	}
 }
