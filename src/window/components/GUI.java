@@ -622,29 +622,40 @@ public class GUI {
 							"Number of Players", 
 							JOptionPane.INFORMATION_MESSAGE
 							);
-					numPlayer = Integer.parseInt(nP);
+					if (nP == null){
+						layeredPane.remove(chooseServerPanel);
+						startPanel();
+						frame.repaint();
+					} else {
+						boolean isStr = false;
+						try {
+							numPlayer = Integer.parseInt(nP);
+						} catch (NumberFormatException e){
+							isStr = true;
+						}
+						if (isStr) {
+						} else {
+							layeredPane.remove(chooseServerPanel);
+							try {
+								strServerName = getSeverName().getHostAddress();
+							} catch (UnknownHostException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							strPortNum = "4768";
+							int port = Integer.parseInt(strPortNum);
+							while(!available(port)){
+								port++;
+							}
+							strPortNum = ""+port;
 
-					layeredPane.remove(chooseServerPanel);
-					try {
-						strServerName = getSeverName().getHostAddress();
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					strPortNum = "4768";
-					int port = Integer.parseInt(strPortNum);
-					while(!available(port)){
-						port++;
-					}
-					strPortNum = ""+port;
+							Server server = new Server(port, numPlayer);
+							server.start();
 
-					Server server = new Server(port, numPlayer);
-					server.start();
+							serverStartsPanel();
 
-					serverStartsPanel();
-
-					frame.repaint();
-				}}});
+							frame.repaint();
+						}}}}});
 
 		jbJoinServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
@@ -668,8 +679,8 @@ public class GUI {
 					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
 						nameC = textFieldNameC.getText();
 						strPortNumC = portNumC.getText();
-
 						strServerNameC = serverNameC.getText();
+
 						//						System.out.println("Player name: " + nameC);
 						//						System.out.println("Server name: " + strServerNameC);
 						//						System.out.println("Port number: " + strPortNumC);
@@ -741,6 +752,7 @@ public class GUI {
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
+
 		WindowListeners listeners = new WindowListeners(this);
 		listeners.setClient(client);
 	}
@@ -801,7 +813,6 @@ public class GUI {
 				count++;
 			}
 		}
-
 		// let player choose a floor and assign it to s
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
@@ -814,7 +825,6 @@ public class GUI {
 		if (s == null){
 			return -1;
 		}
-
 		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){

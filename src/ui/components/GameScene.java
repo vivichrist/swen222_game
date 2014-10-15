@@ -85,7 +85,7 @@ public class GameScene
 		{
 			CellType ct =  graphicData.getGameElements().get( p ).getType();
 			// tokens, keys, rings and torch
-			if (( ct.ordinal() < CellType.CHEST.ordinal() 
+			if (( ct.ordinal() < CellType.CHEST.ordinal()
 						&& ct.ordinal() < CellType.OUTOFBOUNDS.ordinal() )
 					|| ct == CellType.RINGS )
 				return false;
@@ -109,9 +109,9 @@ public class GameScene
 		if ( staticMap[newXCoordinate][newYCoordinate].ordinal()
 					> CellType.WALL.ordinal()
 				|| graphicData.getGameElements().get( p ) != null )
-		{	
+		{
 			CellType ct =  graphicData.getGameElements().get( p ).getType();
-			System.out.println( "Collide (" + newXCoordinate + "," 
+			System.out.println( "Collide (" + newXCoordinate + ","
 									+ newYCoordinate + ") type: " + ct );
 			if ( ct == CellType.RINGS )
 			{
@@ -143,7 +143,7 @@ public class GameScene
 					graphicData.addGrapicalObject( dyn );
 					GameViewData.instance().setToInitialise( dyn );
 				}
-				
+
 			} else
 				return ((DymanicRender)graphicData
 							.getGameElements().get( p )).collide();
@@ -177,12 +177,12 @@ public class GameScene
 				switch( staticMap[i][j] )
 				{ // Statically rendered objects
 				case WALL :
-					graphicData.addStaticOnly( new StaticRender( 
+					graphicData.addStaticOnly( new StaticRender(
 							CellType.WALL, nesw, location, ColourPalette.TAN ) );
 					break;
 				case DOOR :
 					dynamicObject = DymanicRender.instanceDoor( location, direction );
-					StaticRender doorWay = new StaticRender( 
+					StaticRender doorWay = new StaticRender(
 							CellType.DOOR, nesw, location, ColourPalette.BAIGE );
 					graphicData.addStaticOnly( doorWay );
 					graphicData.addGrapicalObject( dynamicObject );
@@ -190,19 +190,19 @@ public class GameScene
 				case KEYDOOR :
 					dynamicObject = DymanicRender.instanceKeyDoor( location, direction
 							, fmap.getDoor( location ).getKey().getColor() );
-					StaticRender keydoorWay = new StaticRender( 
+					StaticRender keydoorWay = new StaticRender(
 							CellType.KEYDOOR, nesw, location, ColourPalette.BAIGE );
 					graphicData.addStaticOnly( keydoorWay );
 					graphicData.addGrapicalObject( dynamicObject );
 					break;
 				case TELEPORT :
 					dynamicObject = DymanicRender.instanceTelePort( location );
-					graphicData.addStaticOnly( new StaticRender( 
+					graphicData.addStaticOnly( new StaticRender(
 							CellType.TELEPORT, nesw, location, ColourPalette.GREYPURPLE ) );
 					graphicData.addGrapicalObject( dynamicObject );
 					break;
 				default:
-					graphicData.addStaticOnly( new StaticRender( 
+					graphicData.addStaticOnly( new StaticRender(
 							CellType.EMPTY, nesw, location, ColourPalette.LIGHTOCEANBLUE ) );
 					break;
 				}
@@ -210,14 +210,14 @@ public class GameScene
 				graphicalObject = fmap.objectAtPoint( location );
 				furniture = fmap.furnitureAtPoint ( location );
 				container = fmap.containerAtPoint( location );
-				if ( graphicalObject == null 
-						&& container == null 
+				if ( graphicalObject == null
+						&& container == null
 						&& furniture == null ) continue;
 				if ( graphicalObject instanceof GameToken )
 				{ // Tokens to be collected
 					if ( ((GameToken)graphicalObject).getType() == TokenType.CONE )
 					{
-						dynamicObject = DymanicRender.instanceCone( 
+						dynamicObject = DymanicRender.instanceCone(
 								location, ((GameToken)graphicalObject).getColor() );
 						graphicData.addGrapicalObject( dynamicObject );
 					}
@@ -229,7 +229,7 @@ public class GameScene
 					}
 					else if ( ((GameToken)graphicalObject).getType() == TokenType.DIAMOND )
 					{
-						dynamicObject = DymanicRender.instanceDiamond( 
+						dynamicObject = DymanicRender.instanceDiamond(
 								location, ((GameToken)graphicalObject).getColor() );
 						graphicData.addGrapicalObject( dynamicObject );
 					}
@@ -250,7 +250,7 @@ public class GameScene
 					}
 					else if ( graphicalObject instanceof Torch )
 					{
-						dynamicObject = DymanicRender.instanceTorch( 
+						dynamicObject = DymanicRender.instanceTorch(
 								location, ColourPalette.GREYPURPLE2 );
 						graphicData.addGrapicalObject( dynamicObject );
 					}
@@ -280,17 +280,17 @@ public class GameScene
 		{
 			if ( player != p && p.getFloor() == fmap )
 			{
-				dynamicObject = DymanicRender.instancePlayer( 
+				dynamicObject = DymanicRender.instancePlayer(
 						Behave.CONTROLLED, p.getPosition()
 						, p.getFacing(), Color.darkGray );
-				graphicData.addGrapicalObject( dynamicObject );
+				graphicData.addDynamicOnly(dynamicObject);
 			}
 		}
 
 		// testing
 		for ( Entry<Point, GraphicalObject> entry
 				: graphicData.getGameElements().entrySet() )
-			System.out.println( "GameElement at:" 
+			System.out.println( "GameElement at:"
 				+ entry.getKey().toString()
 				+ " -> "
 				+ entry.getValue().getType().toString() );
@@ -301,7 +301,7 @@ public class GameScene
 	 * @param i - row of square
 	 * @param j - column of square
 	 * @return the north, east, south and west facing adjacent squares
-	 * of point (i,j) 
+	 * of point (i,j)
 	 */
 	private CellType[] findNeighbours( int i, int j )
 	{
