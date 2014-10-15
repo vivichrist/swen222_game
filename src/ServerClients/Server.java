@@ -21,6 +21,7 @@ import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
+import ServerClients.UDPpackets.Packet08PickupKey;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import world.game.GameBuilder;
@@ -163,10 +164,16 @@ public class Server extends Thread {
 			packet = new Packet07DropObject(data);
 			handleDropObject((Packet07DropObject)packet);
 			break;
+		case PICKUPKEY:
+			packet = new Packet08PickupKey(data);
+			handlePickupKey((Packet08PickupKey)packet);
+			break;
 		}
 	}
 
 
+	
+	
 	/**
 	 * this method is going to send init data to all cilents to 
 	 * start the game
@@ -212,7 +219,7 @@ public class Server extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * this method is going to send the action data to all clients
 	 * except from client
@@ -232,7 +239,7 @@ public class Server extends Thread {
 	 * this method is going to send the action data to all clients
 	 * @param data
 	 * */
-	
+
 	public void sendDataToAllClients(byte[] data) {
 		for (MultyPlayer p : connectedPlayers) {
 			//System.out.println(name+"  "+ p.getName());
@@ -241,7 +248,7 @@ public class Server extends Thread {
 			//System.out.println(p.ipAddress+ "  "+p.port);
 		}
 	}
-	
+
 	/**
 	 * get player by 
 	 * */
@@ -281,6 +288,12 @@ public class Server extends Thread {
 		Packet06PickupObject pk = new Packet06PickupObject(temp);
 		pk.writeData(this);
 
+	}
+	private void handlePickupKey(Packet08PickupKey packet) {
+		byte[] temp = packet.getData();
+		Packet08PickupKey pk = new Packet08PickupKey(temp);
+		pk.writeData(this);
+		
 	}
 	private void handleDropObject(Packet07DropObject packet) {
 

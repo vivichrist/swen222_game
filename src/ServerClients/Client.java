@@ -18,6 +18,7 @@ import ServerClients.UDPpackets.Packet04Teleport;
 import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
+import ServerClients.UDPpackets.Packet08PickupKey;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import window.components.GUI;
@@ -134,12 +135,21 @@ public class Client extends Thread {
 			packet = new Packet07DropObject(data);
 			handlePickupObject((Packet07DropObject)packet);
 			break;
+		case PICKUPKEY:
+			packet = new Packet08PickupKey(data);
+			handlePickupKey((Packet08PickupKey)packet);
+			break;
 		}
 	}
 
 
 
 
+	
+	private void handlePickupObject(Packet07DropObject packet) {
+		// TODO Auto-generated method stub
+		
+	}
 	/**
 	 * this method will send message from client to server
 	 * @param data  - byte array data packet with PacketType 
@@ -195,21 +205,14 @@ public class Client extends Thread {
 	 * @param packet - bytes array 
 	 * */
 	private void handlePickupObject(Packet06PickupObject packet) {
-		System.out.println();
 		networkController.pickupObjectOtherPlayer(packet);
 	}
 
-	/**
-	 * this method is handle the pickup object action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
-	 * */
-	private void handlePickupObject(Packet07DropObject packet) {
-
-		networkController.addObjectToView(packet.getRealData());
+	
+	private void handlePickupKey(Packet08PickupKey packet) {
+		networkController.pickupKeyOtherPlayer(packet);
 	}
-
+	
 	/**
 	 * this method is handle the move action, 
 	 * received  data from server, 
