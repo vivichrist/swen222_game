@@ -61,23 +61,16 @@ public class GUI {
 	private static int width = 800;
 	private static int height = 770;
 
-<<<<<<< HEAD
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
 	//private GameState gameState;//do not change this field for jacky only
-	private static UIController controller;
 	GameState state = null;
 	MultyPlayer player1 = null;
 	ArrayList<Player>players;
 	Map[]floors;
 	Server server = null;
-	GLJPanel gameView;
-	private Client client;
 
-	private JFrame frame;	
-=======
 	private JFrame frame;	// this is the frame the game will be shown on 
->>>>>>> 6163b1dbbeba8a28f23d48b25bf75cb9e56834cb
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
 	private GLJPanel gameView;	// the rendering window of the game
 
