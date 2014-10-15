@@ -166,6 +166,13 @@ public class GameViewData
 		}
 		return dynamicScene.add( (DymanicRender)gobject );
 	}
+	
+	public void addKey( Color colour, Point location )
+	{
+		DymanicRender dyn = DymanicRender.instanceKey(
+				location, colour );
+		addGrapicalObject( dyn );
+	}
 
 	/**
 	 * @return an unmodifiable list of possibly moving or changing object

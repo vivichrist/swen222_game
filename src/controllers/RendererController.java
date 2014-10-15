@@ -6,6 +6,7 @@ import java.util.List;
 
 import ui.components.GameView;
 import ui.components.GameViewData;
+import world.components.Key;
 import world.components.MoveableObject;
 import world.game.GameState;
 import world.game.Player;
@@ -112,8 +113,28 @@ public class RendererController {
 		view.remove(p);
 	}
 	
-	public static void openDoor(){
-		
+	/**
+	 * Picks up a Key for another Player, dropping their current Key (if they have one) and updating the Renderer (if on the same floor)
+	 * @param playerName the name of the Player picking up the Key
+	 * @param p the Point to pick up the Key from
+	 */
+	public static void pickupKeyOtherPlayer(String playerName, Point p){
+		Player player = state.getPlayer(playerName);
+		Key toDrop = state.pickupKey(player, p);
+		if(toDrop == null) return;
+		if(player.getFloor() == GameView.player.getFloor()) view.addKey(toDrop.getColor(), p);
+	}
+	
+	/**
+	 * Picks up a Key for a Player, dropping their current Key (if they have one)
+	 * @param player the Player picking up the Key
+	 * @param p the Point to pick up the key from
+	 * @return the Key to drop, returns null if no Key gets dropped
+	 */
+	public static Key pickupKey(Player player, Point p){
+		Key toDrop = state.pickupKey(player, p);
+		if(!singlePlayer) netCon.pickupKey(player.getName(), p);
+		return toDrop;
 	}
 	
 	/**
@@ -130,6 +151,7 @@ public class RendererController {
 	//	state.removeObject(player, object);
 	//	view.removeObject(point);
 	}
+	
 	/**
 	 *received action from server, need update the gameview and gamestate
 	 *Instruction from server (other player trigger the door open action)
