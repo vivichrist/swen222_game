@@ -119,7 +119,6 @@ import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EtchedBorder;
 
-import ServerClients.Timers;
 
 import world.game.Player;
 
@@ -141,14 +140,10 @@ public class SouthPanel {
 	private CollectItemsCanvas collectItemsCanvas;	// the canvas with player's collected tokens will be drawn on panel
 	private UsefulItemsCanvas usefulItemsCanvas;	// the canvas with player's inventory will be drawn on panel
 
-	
-	
-	private CountDown countDown;
-	
-	
-	
-	
-	
+
+
+
+
 	// the position of the panel on the frame
 	private static int left = 0;
 	private static int top = 577;
@@ -168,7 +163,7 @@ public class SouthPanel {
 		panel.setBorder(
 				BorderFactory.createTitledBorder(
 						BorderFactory.createLineBorder(Color.WHITE, 5)));
-						
+
 		// add the two canvases onto the panel
 		collectItemsCanvas = new CollectItemsCanvas(player);
 		panel.add(collectItemsCanvas, BorderLayout.WEST);
@@ -176,7 +171,7 @@ public class SouthPanel {
 		panel.add(usefulItemsCanvas, BorderLayout.WEST);
 		//countDown = new CountDown();
 		//panel.add(countDown);
-		
+
 		//countDown.setVisible( true );
 		panel.repaint();
 		//countDown.run();
