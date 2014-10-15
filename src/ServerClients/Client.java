@@ -191,7 +191,7 @@ public class Client extends Thread {
 	private void handleWin(Packet09WinGame packet, InetAddress address,
 			int port2) {
 		System.out.println(packet.getUsername()+ " win the game ");
-		networkController.setWinner(packet.getUsername());
+		networkController.setWinnerFromNetwork(packet.getUsername());
 		
 	}
 	private void handlePickupObject(Packet07DropObject packet) {
