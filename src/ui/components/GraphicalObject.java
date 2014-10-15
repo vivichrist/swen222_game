@@ -26,6 +26,11 @@ public interface GraphicalObject
 	 * @return if successful
 	 */
 	public Point getLocation();
+	/**
+	 * Opportunity Load meshes and incorporate in setup 
+	 * @param gl
+	 * @return
+	 */
 	public boolean initialise( GL2 gl );
 	public boolean isDynamic();
 	public CellType getType();
