@@ -54,17 +54,17 @@ public class GameBuilder {
 		}
 	}
 	
-	//TODO: remove this constructor once integration testing is complete - or at least modify for single player
 	/**
-	 * Temporary Constructor - creates a new game with a given list of Players.  Currently builds the same number of floors as there are Players
-	 * @param players the list of Players in this game.
+	 * Single Player Constructor - creates a new game with a given player name. 
+	 * Currently builds a world with 3 "dumb" players to populate the world with extra items and floors
+	 * @param players the list of Player names for this game.
 	 */
 	public GameBuilder(String playerName){
 		players = new ArrayList<Player>();
 		new ColourPalette();
 		players.add(new Player(playerName, TokenType.values()[0]));
 		
-		//Temporary testing code - adding a second player to the game
+		// Add additional Players to the game to expand the world and show Player avatars
 		players.add(new Player("aaa", TokenType.values()[1]));
 		players.add(new Player("bbb", TokenType.values()[2]));
 		players.add(new Player("ccc", TokenType.values()[3]));
