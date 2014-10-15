@@ -61,7 +61,7 @@ public class GUI {
 	private static int width = 800;
 	private static int height = 770;
 
-	public JFrame frame;	// this is the frame the game will be shown on 
+	private JFrame frame;	// this is the frame the game will be shown on 
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
 	private GLJPanel gameView;	// the rendering window of the game
 
@@ -76,13 +76,12 @@ public class GUI {
 
 	/**
 	 * The following JPanels are the panels used to display on the frame according 
-	 * to players' game entry choices
+	 * to players' stage of the game entry.
 	 */	
 	private Panel backgroundPanel;
 	private Panel waitClientsPanel;
 
 	private JPanel gameOverPanel;
-	private JPanel wrongInfoPanel;
 
 	// textFields on all panels
 	private JTextField serverName;
@@ -94,12 +93,12 @@ public class GUI {
 	private Player player;	// the current player
 	private int numPlayer;
 	private static String name;	// the entered name of the player in single-player mode
-	public static String nameC;	// the entered name of the player in multiple-player mode
-	public String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
-	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
-	public String strServerNameC;	// the player entered server name in multiple-player mode
-	public String strPortNumC;	// the player entered port number in multiple-player mode
-	public String winner;	// the winner of the game
+	private static String nameC;	// the entered name of the player in multiple-player mode
+	private String strServerName;	// the shown server name on serverStarts panel in multiple-player mode
+	private String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
+	private String strServerNameC;	// the player entered server name in multiple-player mode
+	private String strPortNumC;	// the player entered port number in multiple-player mode
+	private String winner;	// the winner of the game
 	
 	public GUI(){
 		new ColourPalette();
@@ -109,7 +108,7 @@ public class GUI {
 	/**
 	 * The following method sets up a frame to start the game entry
 	 */
-	public void setUp(){
+	private void setUp(){
 		frame = new JFrame();
 		frame.setTitle("Adventure Game");
 		frame.getRootPane().setBackground(Color.BLACK);
@@ -134,26 +133,6 @@ public class GUI {
 
 		StartPanel startPanel = new StartPanel(this);
 		addPanel(startPanel);
-	}
-
-	/**
-	 * The following method sets up the frame that tells the player server
-	 * is waiting for other players to join in to start the game
-	 */
-	public void wrongInfoPanel(){
-		wrongInfoPanel = new JPanel();
-		setUpPanel(wrongInfoPanel, 30, 200, 760, 200);
-
-		// label used on waitClientsPanel
-		JLabel wrongInfo = new JLabel("Incorrent Information Entered!");
-		wrongInfo.setPreferredSize(new Dimension(760, 200));
-		wrongInfo.setFont(new Font("Arial", Font.BOLD, 50));
-		wrongInfo.setForeground(new Color(100, 200, 100).brighter());
-		wrongInfoPanel.add(wrongInfo);
-
-		// set the panel to transparent and add the panel to frame
-		wrongInfoPanel.setOpaque(false);
-		layeredPane.add(wrongInfoPanel, JLayeredPane.MODAL_LAYER);
 	}
 
 	/**
@@ -226,9 +205,6 @@ public class GUI {
 		// add the southPanel onto the bottom of the frame
 		southPanel = new SouthPanel(player);
 		layeredPane.add(southPanel.getPanel(), JLayeredPane.MODAL_LAYER);
-
-		WindowListeners listeners = new WindowListeners(this);
-		listeners.setClient(client);
 	}
 
 	/**
@@ -370,10 +346,6 @@ public class GUI {
 		return InetAddress.getLocalHost();
 	}
 
-	public void addWindowListener(WindowListeners windowListeners) {
-		// TODO Auto-generated method stub
-		//this.addWindowListener(windowListeners);
-	}
 
 	//=========================
 	//getter and setter
