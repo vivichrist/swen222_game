@@ -13,6 +13,7 @@ import world.game.GameBuilder;
 import world.game.GameState;
 import world.game.Player;
 
+//TODO: Needs more tests - works fine in practice
 /**
  * Tests for the GameBuilder class
  * @author Kalo Pilato - ID:300313803

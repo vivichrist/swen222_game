@@ -80,6 +80,8 @@ public class RendererController {
 	public static void movePlayer(Player player, Point point){
 		if(!singlePlayer) netCon.movePlayer(player, point);
 		state.movePlayer(player, point);
+		System.out.println("Player one position: " + state.getPlayers().get(0).getPosition());
+		System.out.println("Player two position: " + state.getPlayers().get(1).getPosition());
 	}
 	
 	/**

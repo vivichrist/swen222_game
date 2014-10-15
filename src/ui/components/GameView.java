@@ -97,7 +97,7 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL.GL_LINE_SMOOTH );
             	gl2.glEnable( GL2.GL_POLYGON_SMOOTH );
             	gl2.glEnable( GL2.GL_POLYGON_OFFSET_LINE );
-            	gl2.glPolygonOffset( 0.1f, 100f );
+            	// gl2.glPolygonOffset( 0.1f, 100f );
             	gl2.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
             	gl2.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );
             	// Antialias lines
@@ -110,7 +110,6 @@ public class GameView extends GLJPanel
                 gl2.glShadeModel(GL2.GL_SMOOTH);
             	scene.addSurrounds();
             	gl2.glLineWidth( 2f );
-            	System.out.println( "Dynamic Scene Object count:" + data.getDynamicScene().size() );
             	for( GraphicalObject go: data.getDynamicScene() )
             	{
             		go.initialise( gl2 );
@@ -246,9 +245,6 @@ public class GameView extends GLJPanel
                 projection,
                 viewport,
                 pos );
-        	System.out.println("World coords at projected-z = " + posZ.get( 0 ) + " are ( "
-                    + pos.get( 0 ) + ", " + pos.get( 1 ) + ", " + pos.get( 2 )
-                    + ")");
         	Point p = new Point( (int) (pos.get( 0 )/cellsize)
         					   , (int) (pos.get( 1 )/cellsize) );
         	GraphicalObject go = GameViewData.instance().getGameElements().get( p );
@@ -273,6 +269,6 @@ public class GameView extends GLJPanel
 		{
 			data.getDynamicScene().get( i ).draw( gl2 );
 		}
-			
+
     }
 }

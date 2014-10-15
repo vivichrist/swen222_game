@@ -41,16 +41,8 @@ public class GameScene
 		// size of map is in the header
 		xlimit = player.getFloor().getXLimit();
 		ylimit = player.getFloor().getYLimit();
-		System.out.println( "columns rows:" +xlimit+ ","+ylimit);
 		// read in the map
 		staticMap = player.getFloor().getCellTypeMap();
-		// print out the map
-		for ( CellType[] line: staticMap )
-		{
-			for ( CellType c: line )
-				System.out.print( " " + c.ordinal() );
-			System.out.println();
-		}
 	}
 
 
@@ -111,8 +103,6 @@ public class GameScene
 				|| graphicData.getGameElements().get( p ) != null )
 		{
 			CellType ct =  graphicData.getGameElements().get( p ).getType();
-			System.out.println( "Collide (" + newXCoordinate + ","
-									+ newYCoordinate + ") type: " + ct );
 			if ( ct == CellType.RINGS )
 			{
 				teleport = true;
@@ -266,7 +256,6 @@ public class GameScene
 					graphicData.addPointsToGameElement( furniture.getPoints(), dynamicObject );
 				} else if ( container != null )
 				{ // load containers (briefcase, chest etc.)
-					System.out.println( "Container: " + container.getType() );
 					dynamicObject = DymanicRender.instanceContainer(
 							container.getType(), Behave.ORIENTATION, location
 							, container.getFacing(), ColourPalette.MAROON );
