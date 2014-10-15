@@ -215,7 +215,8 @@ public class RendererController {
 	 * @param p the Player that wins
 	 */
 	public static void setWinner(Player p){
-		netCon.setWinner(p.getName());
+		if(!singlePlayer) netCon.setWinner(p.getName());
+		else UIController.setWinner(p.getName());
 	}
 	
 	/**
