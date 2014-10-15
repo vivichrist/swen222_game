@@ -61,18 +61,12 @@ public class GUI {
 	private static int width = 800;
 	private static int height = 770;
 
-	private GameState gameState;//do not change this field for jacky only
-	private static UIController controller;
-	GameState state = null;
-	MultyPlayer player1 = null;
-	ArrayList<Player>players;
-	Map[]floors;
-	Server server = null;
-	GLJPanel gameView;
-	private Client client;
-
 	private JFrame frame;	// this is the frame the game will be shown on 
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
+	private GLJPanel gameView;	// the rendering window of the game
+
+	private static UIController controller;	// the handler between the GameState and the GUI
+	private Client client;	// is client side of the game
 
 	/**
 	 * The following stores the panel shown on the bottom of the frame which has player's 
@@ -97,7 +91,6 @@ public class GUI {
 
 	// buttons on all panels 
 	private JButton jbNew;
-	private JButton jbLoad;
 	private JButton jbInfo;
 	private JButton jbExit;
 	private JButton jbSingle;
@@ -166,12 +159,10 @@ public class GUI {
 
 		// buttons used on startPanel
 		jbNew = new JButton("New");
-		jbLoad = new JButton("Load");
 		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 
 		setButtonStyle(jbNew, 75, startPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbLoad, 80, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
 
@@ -804,11 +795,7 @@ public class GUI {
 		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
 		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
-
-	public GameState getState(){
-		return gameState;
-	}
-
+	
 	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
 	}
@@ -818,7 +805,7 @@ public class GUI {
 	}
 
 	public static void main(String[] args){
-		GUI gui = new GUI();
+		new GUI();
 	}
 
 	public String getName(){
