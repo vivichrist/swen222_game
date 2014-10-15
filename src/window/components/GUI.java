@@ -86,10 +86,8 @@ public class GUI {
 	/**
 	 * The following JPanels are the panels used to display on the frame according 
 	 * to players' game entry choices
-	 */
+	 */	
 	private JPanel backgroundPanel;
-	private JPanel startPanel;
-	private JPanel choosePlayerPanel;
 	private JPanel chooseNamePanel;
 	private JPanel chooseServerPanel;
 	private JPanel serverStartsPanel;
@@ -99,11 +97,7 @@ public class GUI {
 	private JPanel wrongInfoPanel;
 
 	// buttons on all panels 
-	private JButton jbNew;
-	private JButton jbInfo;
-	private JButton jbExit;
-	private JButton jbSingle;
-	private JButton jbMultiple;
+
 	private JButton jbStartServer;
 	private JButton jbJoinServer;
 	private JButton jbStart;
@@ -155,51 +149,8 @@ public class GUI {
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setVisible( true );
 
-		startPanel();
-	}
-
-	/**
-	 * The following method sets up the first panel appears on the frame, 
-	 * creates four buttons on it. Let players choose how to start the game.
-	 */
-	private void startPanel() {
-		startPanel = new JPanel();
-		setUpPanel(startPanel, 350, 180, 90, 600);
-
-		// buttons used on startPanel
-		jbNew = new JButton("New");
-		jbInfo = new JButton("Info");
-		jbExit = new JButton("Exit");
-
-		setButtonStyle(jbNew, 75, startPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbInfo, 65, startPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbExit, 65, startPanel, new Color(0, 135, 200).brighter());
-
-		// set the panel to transparent and add the panel to frame
-		startPanel.setOpaque(false);
-		layeredPane.add(startPanel, JLayeredPane.MODAL_LAYER);
-		addListennerStart();
-	}
-
-	/**
-	 * The following method sets up the frame that let player choose 
-	 * either starts a single-player game or starts a multiple-player game
-	 */
-	public void choosePlayerPanel(){
-		choosePlayerPanel = new JPanel();
-		setUpPanel(choosePlayerPanel, 325, 200, 150, 120);
-
-		// buttons used on choosePlayerPanel
-		jbSingle = new JButton("Single");
-		jbMultiple = new JButton("Multiple");
-
-		setButtonStyle(jbSingle, 95, choosePlayerPanel, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbMultiple, 115, choosePlayerPanel, new Color(0, 135, 200).brighter());
-
-		// set the panel to transparent and add the panel to frame
-		choosePlayerPanel.setOpaque(false);
-		layeredPane.add(choosePlayerPanel, JLayeredPane.MODAL_LAYER);
-		addListennerChoosePlayer();
+		StartPanel startPanel = new StartPanel(this);
+		addPanel(startPanel);
 	}
 
 	/**
@@ -516,48 +467,6 @@ public class GUI {
 		panel.add(button);
 	}
 
-	/**
-	 * The following method adds action listener onto buttons on startPanel
-	 */
-	public void addListennerStart(){
-		jbNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbNew){	// if button New is clicked, startPanel will be removed and choosePlayerPanel will appear
-					layeredPane.remove(startPanel);
-					choosePlayerPanel();
-					frame.repaint();
-				}}});
-
-		jbExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-	}
-
-	/**
-	 * The following method adds action listener onto buttons on choosePlayerPanel
-	 */
-	public void addListennerChoosePlayer(){
-		jbSingle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbSingle){	// if button Single is clicked, choosePlayerPanel will be removed and chooseNamePanel will appear
-					layeredPane.remove(choosePlayerPanel);
-					chooseNamePanel();
-					frame.repaint();
-				}}});
-
-		jbMultiple.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbMultiple){	// if button Multiple is clicked, choosePlayerPanel will be removed and chooseServerPanel will appear
-					layeredPane.remove(choosePlayerPanel);
-					chooseServerPanel();
-					frame.repaint();
-				}}});
-	}
 
 	/**
 	 * The following method adds action listener onto buttons on chooseNamePanel
@@ -598,7 +507,7 @@ public class GUI {
 							);
 					if (nP == null){
 						layeredPane.remove(chooseServerPanel);
-						startPanel();
+				//		startPanel();
 						frame.repaint();
 					} else {
 						boolean isStr = false;
@@ -807,10 +716,14 @@ public class GUI {
 	
 	
 	
+	protected void addPanel(Panel panel){
+		layeredPane.add(panel, JLayeredPane.MODAL_LAYER);
+		frame.repaint();
+	}
 	
-	
-	protected void removePanel(JPanel panel){
-		frame.remove(panel);
+	protected void removePanel(Panel panel){
+		layeredPane.remove(panel);
+		frame.repaint();
 	}
 	
 	
