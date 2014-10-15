@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map.Entry;
 
+import controllers.RendererController;
 import world.ColourPalette;
 import world.components.CellType;
 import world.components.Container;
@@ -118,7 +119,7 @@ public class GameScene
 			else if ( ct.toString() == player.getType().toString()
 					|| ct == CellType.TORCH )
 			{ // collect torch and remove it from view if player does not have one
-				if ( game.pickupObjectAtPoint( player, p ) )
+				if ( RendererController.pickupObjectAtPoint( player, p ) )
 					graphicData.remove( p );
 			}
 			else if ( ct == CellType.KEY  )

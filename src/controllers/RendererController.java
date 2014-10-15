@@ -85,14 +85,30 @@ public class RendererController {
 	}
 	
 	/**
-	 * once current player pickup a object will call this method and pass to netCon to 
-	 * create a new pickup pack 
-	 * 
-	 * */
-	
-	public static void  pickupObject(Player player, MoveableObject object, Point point){
-		netCon.pickupObject(player, object, point);
+	 * Picks up an item for the current Player in the Game
+	 * @param player the Player to pick up an item
+	 * @param p the Point to pick the item up from
+	 * @return true if successfully picked up
+	 */
+	public static boolean pickupObjectAtPoint(Player player, Point p){
+		boolean pickedUp = (state.pickupObjectAtPoint(player, p));
+		if(pickedUp){
+			if(!singlePlayer) netCon.pickupObject(player, p);
+			return true;
+		}
+		return false;
 	}
+	
+	/**
+	 * Picks up an item for another Player in the Game
+	 * @param player the Player to pick up an item
+	 * @param p the Point to pick the item up from
+	 */
+	public static void pickupObjectOtherPlayer(Player player, Point p){
+		state.pickupObjectAtPoint(player, p);
+		view.remove(p);
+	}
+	
 	/**
 	 * remove Object from client side after other client pickup a object
 	 * @param player - player who pickup the object
