@@ -136,24 +136,6 @@ public class GUI {
 		addPanel(startPanel);
 	}
 
-//	/**
-//	 * The following method sets up the frame that tells the player server
-//	 * is waiting for other players to join in to start the game
-//	 */
-//	public void waitClientsPanel(){
-//
-//		// label used on waitClientsPanel
-//		JLabel waitClients = new JLabel("Wait For Other Players...");
-//		waitClients.setPreferredSize(new Dimension(600, 200));
-//		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
-//		waitClients.setForeground(new Color(100, 200, 100).brighter());
-//		waitClientsPanel.add(waitClients);
-//
-//		// set the panel to transparent and add the panel to frame
-//		waitClientsPanel.setOpaque(false);
-//		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
-//	}
-
 	/**
 	 * The following method sets up the frame that tells the player server
 	 * is waiting for other players to join in to start the game

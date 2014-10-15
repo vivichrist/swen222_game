@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import controllers.RendererController;
 import controllers.UIController;
 import window.components.GUI;
 import world.components.Door;
@@ -99,8 +100,7 @@ public class GameState implements java.io.Serializable{
 				player.getTokenList().tokenFound(token);
 				UIController.refreshTokenPanel();
 				if(player.getTokenList().collectedAll()){
-					//TODO: update action here to go in to win state checking or something
-					System.out.println("All Tokens Collected!");
+					RendererController.setWinner(player);
 				}
 				return true;
 			}
