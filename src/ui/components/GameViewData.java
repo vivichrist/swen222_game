@@ -65,6 +65,7 @@ public class GameViewData
 			throw new RuntimeException(
 					"No Object at Point:" + current + " -> null" );
 		gameElements.put( next, go );
+		// put old object back
 	}
 
 	/**
@@ -81,7 +82,7 @@ public class GameViewData
 					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
 			dynamicScene.add( dyn );
 			toInitialise = dyn;
-			gameElements.put( next, dyn );
+			// gameElements.put( next, dyn );
 			return;
 		}
 		newPlayerMove.put( current, next );
