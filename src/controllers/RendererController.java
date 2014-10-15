@@ -119,10 +119,12 @@ public class RendererController {
 	 * @param p the Point to pick up the Key from
 	 */
 	public static void pickupKeyOtherPlayer(String playerName, Point p){
-		Player player = state.getPlayer(playerName);
-		Key toDrop = state.pickupKey(player, p);
-		if(toDrop == null) return;
-		if(player.getFloor() == GameView.player.getFloor()) view.addKey(toDrop.getColor(), p);
+		if(!playerName.equals(GameView.player.getName())){
+			Player player = state.getPlayer(playerName);
+			Key toDrop = state.pickupKey(player, p);
+			if(toDrop == null) return;
+			if(player.getFloor() == GameView.player.getFloor()) view.addKey(toDrop.getColor(), p);
+		}
 	}
 	
 	/**
