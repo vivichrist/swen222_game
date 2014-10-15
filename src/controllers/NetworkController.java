@@ -147,9 +147,8 @@ public class NetworkController {
 	 * @param player - current player
 	 * @param object - 
 	 * */
-	public void pickupObject(Player player, MoveableObject object, Point point){
+	public void pickupObject(Player player, Point point){
 		this.player = player;
-		this.object = object;
 		this.point = point;
 		byte[]data = this.serialize(this.PlayerAndObject);
 		Packet06PickupObject pickup = new Packet06PickupObject(data);
