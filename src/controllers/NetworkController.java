@@ -17,12 +17,8 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.Packet08PickupKey;
-import ServerClients.UDPpackets.UDPPacket;
-import ui.components.GameView;
-import window.components.GUI;
 import world.components.Key;
 import world.components.MoveableObject;
-import world.game.GameState;
 import world.game.Player;
 /**
  * A NetworkController to handle interactions between the Server/Client and Controller(GameState and the GUI)
@@ -30,11 +26,11 @@ import world.game.Player;
  *
  */
 public class NetworkController  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static Client client;
-	private static GUI gui;
-	private static GameState state;
-	private GameView gameView;
-	private Object PlayerAndObject;
 	static Player player;
 	static MoveableObject object;
 	private static UIController controller;
@@ -92,7 +88,6 @@ public class NetworkController  implements Serializable{
 
 	 */
 	public void setGameView(GLJPanel gameView) {
-		this.gameView = (GameView)gameView;
 	}
 	/**
 	 * set client from GUI
@@ -145,7 +140,6 @@ public class NetworkController  implements Serializable{
 	}
 	/**
 	 * this method will called from rendererController
-	 * serialize the PlayerAndObject
 	 * end packet to client, then broadcast to all clients
 	 * @param player - current player
 	 * @param object - 
@@ -157,6 +151,13 @@ public class NetworkController  implements Serializable{
 		pickup.writeData(client);
 
 	}
+	
+	/**
+	 * this method will called from rendererController
+	 * end packet to client, then broadcast to all clients
+	 * @param player - current player
+	 * @param key - 
+	 * */
 	public void pickupKey(String name, Point point){
 		Packet08PickupKey pickup = new Packet08PickupKey(name,point);
 		pickup.writeData(client);
@@ -174,14 +175,6 @@ public class NetworkController  implements Serializable{
 		drop.writeData(client);
 	}
 
-
-	public void addObjectToView(byte[]data){
-
-		//PlayerAndObject object =(controllers.NetworkController.PlayerAndObject) this.deserialise(data);
-		//TODO: kalo call this method to update the 
-		//renCon.addObjectToView(object.player, object.object);
-	}
-
 	/**
 	 * this method will called after server send a drop message, 
 	 * 
@@ -192,12 +185,19 @@ public class NetworkController  implements Serializable{
 		
 		renCon.pickupObjectOtherPlayer(packet.getUsername(),packet.getPoint());
 	}
+	
+	/**
+	 * this method will called after server send a drop message, 
+	 * 
+	 * */
 	public void pickupKeyOtherPlayer(Packet08PickupKey packet) {
 
 		renCon.pickupKeyOtherPlayer(packet.getUsername(),packet.getPoint());
 	}
 
-
+	/**
+	 * trigger the door open  - send commond to rendererController to open the door
+	 * */
 	public void triggerDoor(String name, Point p) {
 		renCon.triggerDoor(name, p);
 

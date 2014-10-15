@@ -146,6 +146,10 @@ public class Client extends Thread {
 
 
 	
+	private void handlePickupObject(Packet07DropObject packet) {
+		// TODO Auto-generated method stub
+		
+	}
 	/**
 	 * this method will send message from client to server
 	 * @param data  - byte array data packet with PacketType 
@@ -208,17 +212,7 @@ public class Client extends Thread {
 	private void handlePickupKey(Packet08PickupKey packet) {
 		networkController.pickupKeyOtherPlayer(packet);
 	}
-	/**
-	 * this method is handle the pickup object action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
-	 * */
-	private void handlePickupObject(Packet07DropObject packet) {
-
-		networkController.addObjectToView(packet.getRealData());
-	}
-
+	
 	/**
 	 * this method is handle the move action, 
 	 * received  data from server, 
