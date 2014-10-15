@@ -20,7 +20,6 @@ public class Player implements java.io.Serializable{
 	private final TokenType type;
 	private final Inventory inventory;
 	private Direction facing = Direction.NORTH;
-	//TODO: should Players maintain their position? or should the game state? or both?
 	private Map floor;
 	private Point position;
 	
@@ -114,7 +113,6 @@ public class Player implements java.io.Serializable{
 	 * @return true if successfully moved
 	 */
 	public boolean move(Point p){
-		System.out.println(floor.getXLimit()+ " " +floor.getYLimit());
 		if(floor.movePlayer(this, position, p)){
 			position = p;
 			return true;

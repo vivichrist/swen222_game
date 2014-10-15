@@ -24,7 +24,8 @@ public class RendererController {
 	private static boolean singlePlayer;
 	
 	/**
-	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database
+	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database.
+	 * @requires Constructor must be called after the GameView has been constructed.
 	 */
 	public RendererController(boolean single){
 		view = GameViewData.instance();
@@ -53,7 +54,7 @@ public class RendererController {
 	}
 	
 	/**
-	 * @return the singlePlayer
+	 * @return true if this is a single player game
 	 */
 	public boolean isSinglePlayer() {
 		return singlePlayer;
@@ -69,7 +70,6 @@ public class RendererController {
 		System.out.println("moving player: " + player.getName() + " to " + point.toString());
 		state.movePlayer(player, point);
 		view.addNewPlayerMove(oldPos, point);
-		System.out.println(player.getName() + " position: " + state.getPlayer(player.getName()).getPosition().toString());
 	}
 	
 	/**
@@ -142,6 +142,10 @@ public class RendererController {
 		return false;
 	}
 	
+	/**
+	 * Returns a List of the current Players in this game
+	 * @return a List of Players
+	 */
 	public List<Player> getPlayers(){
 		return state.getPlayers();
 	}
@@ -159,7 +163,7 @@ public class RendererController {
 	/**
 	 * Teleport the currentPlayer in the Game
 	 * @param player the Player to teleport
-	 * @return
+	 * @return true if the Player was Teleported
 	 */
 	public static boolean teleport(Player player){
 		if(uiCon.teleport(player)){
