@@ -21,7 +21,7 @@ public class Packet08PickupKey extends UDPPacket {
 	private int x;
 	private int y;
 
-	/**Constructor - creates a pickup package
+	/**Constructor - creates a pickup key package
 	 * @param username
 	 * @param point - player location
 	 * 
@@ -30,9 +30,7 @@ public class Packet08PickupKey extends UDPPacket {
 		super(-2);
 		this.username = username;
 		this.point = point;
-		for(int i = 0; i<getData().length; i++){
-			System.out.println(getData()[i]);
-		}
+	
 	}
 	
 	/**Constructor - creates a pickup package
@@ -71,7 +69,6 @@ public class Packet08PickupKey extends UDPPacket {
 	
 	@Override
 	public byte[] getData() {
-		// TODO Auto-generated method stub
 		return ("-2"+ ","+this.username +","+this.point.x+","+this.point.y).getBytes();
 	}
 	/**
