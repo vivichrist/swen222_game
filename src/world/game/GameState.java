@@ -30,10 +30,6 @@ public class GameState implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	private  List<Player> players;
 	private  Map[] floors;
-	
-	//TODO: are these fields used? ask Jacky
-	private boolean isMoved;
-	private boolean serverConnection= false;
 
 
 	/**
@@ -53,10 +49,6 @@ public class GameState implements java.io.Serializable{
 	 */
 	public void movePlayer(Player player, Point point){
 		player.move(point);
-		isMoved = true;
-	}
-	public boolean isMoved(){
-		return isMoved;
 	}
 
 	//TODO: assign Players to clients as appropriate - this method is purely for integration testing of a single player game state
