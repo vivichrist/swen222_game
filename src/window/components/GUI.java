@@ -2,22 +2,12 @@ package window.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -26,25 +16,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import ServerClients.Client;
-import ServerClients.Server;
-//import ServerClients.test;
 import ServerClients.UDPpackets.Packet00Login;
 import controllers.RendererController;
 import controllers.UIController;
 import controllers.NetworkController;
 import ui.components.GameView;
 import world.ColourPalette;
-import world.components.GameToken;
-import world.components.Map;
 import world.game.GameBuilder;
 import world.game.GameState;
-import world.game.MultyPlayer;
 import world.game.Player;
-
-import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
-
-import java.awt.event.*;
 
 
 /**
@@ -192,9 +172,6 @@ public class GUI {
 
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
-		renCon.setState(state);
-		renCon.setNetCon(netCon);
-		renCon.setUICon(controller);
 
 		netCon.setGameView(gameView);
 		gameView.setEnabled( true );
@@ -283,29 +260,6 @@ public class GUI {
 		return -1;
 	}
 
-	/**
-	 * The following method would be called when the player walks up a container.
-	 * The item in the container is passed to the method, the method would pop up
-	 * a window and tell the player what is found in the container.
-	 * @param item	the item found in the container
-	 */
-	public void findContainer(GameToken item){
-		// get the image of the item found
-		String color = southPanel.getCollectItemsCanvas().identifyColor(item.getColor());
-		String info = "Find " + item.toString().toUpperCase() + " in " + color.toUpperCase();
-		String resource = "Resource/" + item.toString().toLowerCase() + "/" + item.toString().toLowerCase() + " " + color + ".png";
-		ImageIcon icon = new ImageIcon(resource);
-		Image img = icon.getImage() ;  
-		Image newimg = img.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH) ;  
-		icon = new ImageIcon(newimg);
-
-		// pop up the window to show the information
-		javax.swing.UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Verdana", Font.PLAIN, 18))); 
-		JOptionPane.showMessageDialog(frame, info, "Container", JOptionPane.INFORMATION_MESSAGE, icon);
-	}
-
-
-
 	protected void addPanel(Panel panel){
 		layeredPane.add(panel, JLayeredPane.MODAL_LAYER);
 		frame.repaint();
@@ -316,26 +270,12 @@ public class GUI {
 		frame.repaint();
 	}
 
-
-
-
-
-
-
 	public void redrawCollectItemCanvas(){
 		southPanel.getCollectItemsCanvas().repaint();
 	}
 
 	public void redrawUsefulItemCanvas(){
 		southPanel.getUsefulItemsCanvas().repaint();
-	}
-
-	public static void main(String[] args){
-		new GUI();
-	}
-
-	public String getName(){
-		return name;
 	}
 
 	/**
@@ -345,7 +285,6 @@ public class GUI {
 	protected InetAddress getSeverName() throws UnknownHostException {
 		return InetAddress.getLocalHost();
 	}
-
 
 	//=========================
 	//getter and setter
@@ -425,6 +364,10 @@ public class GUI {
 	
 	public void setWinner(String w){
 		winner = w;
+	}
+	
+	public String getName(){
+		return name;
 	}
 }
 
