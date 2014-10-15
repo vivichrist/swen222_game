@@ -177,7 +177,7 @@ public class Client extends Thread {
 	}
 	
 	private void handlePickupObject(Packet06PickupObject packet) {
-		networkController.removeObjectFromClient(packet);
+		networkController.pickupObjectOtherPlayer(packet);
 	}
 	private void handlePickupObject(Packet07DropObject packet) {
 

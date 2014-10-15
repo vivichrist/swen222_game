@@ -182,12 +182,12 @@ public class NetworkController {
 	 * 
 	 * */
 
-	public void removeObjectFromClient(Packet06PickupObject packet) {
+	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
 			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
 			Player player = p.player;
 			MoveableObject object = p.object;
 			Point point = p.point;
-			renCon.removeObject(player,object,point);
+			renCon.pickupObjectOtherPlayer(player,point);
 		
 		
 
