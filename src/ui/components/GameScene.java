@@ -23,7 +23,12 @@ import world.game.Player;
 /**
  * @author Vivian Stewart
  * - Setup of the visual world.
- * - Collision Detection between world and the player.
+ *		* Populate the two rendering lists
+ * - Setup collision detection between the world and the player.
+ *		* Populate collision/selection map
+ * - Define the boundaries of the world
+ * - Execute collision detection between the world and the player and
+ * 	 trigger behaviour of graphical objects
  */
 public class GameScene
 {
