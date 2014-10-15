@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.media.opengl.awt.GLJPanel;
 
@@ -26,7 +27,7 @@ import world.game.Player;
  * @author zhaojiang chang - 300282984
  *
  */
-public class NetworkController {
+public class NetworkController  implements Serializable{
 	private static Client client;
 	private static GUI gui;
 	private static GameState state;
@@ -193,7 +194,7 @@ public class NetworkController {
 		
 
 	}
-	class PlayerAndObject implements java.io.Serializable {
+	class PlayerAndObject implements Serializable {
 		Player player;
 		MoveableObject object;
 		Point point;
