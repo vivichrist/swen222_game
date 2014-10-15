@@ -104,9 +104,10 @@ public class RendererController {
 	 * @param player the Player to pick up an item
 	 * @param p the Point to pick the item up from
 	 */
-	public static void pickupObjectOtherPlayer(Player player, Point p){
-		System.out.println("Player picking up object: " + player.getName());
+	public static void pickupObjectOtherPlayer(String playername, Point p){
+		System.out.println("Player picking up object: " + playername);
 		System.out.println("Point to pick up from : " + p.toString());
+		Player player = state.getPlayer(playername);
 		state.pickupObjectAtPoint(player, p);
 		view.remove(p);
 	}
