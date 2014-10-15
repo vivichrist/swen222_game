@@ -179,7 +179,7 @@ public class RendererController {
 		//TODO: current player drop a object - updat the gamestate
 		
 		uiCon.dropObject(player,object);
-		netCon.dropObject(player,object,point);
+		//netCon.dropObject(player,object,point);
 	}
 	
 	/**

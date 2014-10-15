@@ -50,7 +50,7 @@ public class ChoosePlayerPanel extends Panel{
 				JButton button = (JButton) ae.getSource();
 				if(button == jbMultiple){	// if button Multiple is clicked, choosePlayerPanel will be removed and chooseServerPanel will appear
 					gui.removePanel(ChoosePlayerPanel.this);
-					gui.chooseServerPanel();
+					gui.addPanel(new ChooseServerPanel(gui));
 				}}});
 	}
 }

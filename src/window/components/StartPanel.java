@@ -20,10 +20,6 @@ public class StartPanel extends Panel{
 	private JButton jbInfo;
 	private JButton jbExit;
 
-	/**
-	 * The following method sets up the first panel appears on the frame, 
-	 * creates four buttons on it. Let players choose how to start the game.
-	 */
 	public StartPanel(GUI gui) {
 		super(gui);
 		setBounds(350, 180, 90, 600);

@@ -18,7 +18,6 @@ public class BackgroundPanel extends Panel{
 	}
 
 	@Override
-	protected void addListenner() {
-	}
+	protected void addListenner() {}
 
 }

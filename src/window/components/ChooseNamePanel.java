@@ -11,19 +11,18 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
- * The ChoosePlayerPanel class is a JPanel which is represented on 
- * the frame once the player choose to start a new game. ChoosePlayerPanel
- * class is responsible for letting player choose to start a single-player
- * mode game or a multiple-player mode game.  
+ * The ChooseNamePanel class is a JPanel which is represented on 
+ * the frame once the player choose to start a single-mode game. ChooseNamePanel
+ * class is responsible for letting player enter a player name.  
  * 
  * @author Zhiheng Sun,  ID: 300256273
  * 
  */
 public class ChooseNamePanel extends Panel{
 
+	// buttons on the panel
 	private JButton jbStart;
 	private JTextField textFieldName;
-
 
 	public ChooseNamePanel(GUI gui) {
 		super(gui);
@@ -52,7 +51,6 @@ public class ChooseNamePanel extends Panel{
 		add(textFieldName);
 		add(space);
 		setButtonStyle(jbStart, 110, Color.MAGENTA);
-
 	}
 
 	@Override

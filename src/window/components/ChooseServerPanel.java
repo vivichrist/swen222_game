@@ -12,8 +12,17 @@ import javax.swing.JOptionPane;
 
 import ServerClients.Server;
 
+/**
+ * The ChooseServerPanel class is a JPanel which is represented on the frame. 
+ * ChooseServerPanel class is responsible for letting player choose to start 
+ * a server or join a server  
+ * 
+ * @author Zhiheng Sun,  ID: 300256273
+ * 
+ */
 public class ChooseServerPanel extends Panel{
 
+	// buttons on the panel
 	private JButton jbStartServer;
 	private JButton jbJoinServer;
 
@@ -72,8 +81,7 @@ public class ChooseServerPanel extends Panel{
 							Server server = new Server(port, gui.getNumPlayer());
 							server.start();
 
-							gui.serverStartsPanel();
-
+							gui.addPanel(new ServerStartsPanel(gui));
 						}}}}});
 
 		jbJoinServer.addActionListener(new ActionListener() {
@@ -81,12 +89,12 @@ public class ChooseServerPanel extends Panel{
 				JButton button = (JButton) ae.getSource();
 				if(button == jbJoinServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and joinServerPanel will appear
 					gui.removePanel(ChooseServerPanel.this);
-					gui.joinServerPanel();
+					gui.addPanel(new JoinServerPanel(gui));			
 				}}});
 	}
 
 	/**
-	 * this method is check the socket port 
+	 * The following method is to check the socket port 
 	 * @param port the number is going to check
 	 * \*/
 	private static boolean available(int port) {

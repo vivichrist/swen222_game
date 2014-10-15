@@ -6,8 +6,6 @@ import java.awt.Image;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,8 +14,10 @@ import java.util.ArrayList;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -61,15 +61,6 @@ public class GUI {
 	private static int width = 800;
 	private static int height = 770;
 
-	// please comment these variables, sorry I can't do it as I don't know them. 
-	// can we set the variables to private?
-	//private GameState gameState;//do not change this field for jacky only
-	GameState state = null;
-	MultyPlayer player1 = null;
-	ArrayList<Player>players;
-	Map[]floors;
-	Server server = null;
-
 	public JFrame frame;	// this is the frame the game will be shown on 
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
 	private GLJPanel gameView;	// the rendering window of the game
@@ -88,16 +79,9 @@ public class GUI {
 	 * to players' game entry choices
 	 */	
 	private Panel backgroundPanel;
-	private JPanel serverStartsPanel;
-	private JPanel joinServerPanel;
-	private JPanel waitClientsPanel;
+
 	private JPanel gameOverPanel;
 	private JPanel wrongInfoPanel;
-
-	// buttons on all panels 
-
-
-	private JButton jbClientStart;
 
 	// textFields on all panels
 	private JTextField serverName;
@@ -114,7 +98,8 @@ public class GUI {
 	public String strPortNum;	// the shown port number on serverStarts panel in multiple-player mode
 	public String strServerNameC;	// the player entered server name in multiple-player mode
 	public String strPortNumC;	// the player entered port number in multiple-player mode
-
+	public String winner;	// the winner of the game
+	
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -135,168 +120,38 @@ public class GUI {
 		layeredPane = new JLayeredPane();
 		backgroundPanel = new BackgroundPanel(this);
 		layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
-		
+
 		frame.setLayeredPane(layeredPane);
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setVisible( true );
+
+		serverName = new JTextField(18);
+		portNum = new JTextField(18);
+		textFieldNameC = new JTextField(18);
+		serverNameC = new JTextField(18);
+		portNumC = new JTextField("4768",18);
 
 		StartPanel startPanel = new StartPanel(this);
 		addPanel(startPanel);
 	}
 
-
-	/**
-	 * The following method sets up the frame that shows server has 
-	 * been started and shows the server name and port number
-	 */
-	public void serverStartsPanel(){
-		serverStartsPanel = new JPanel();
-		setUpPanel(serverStartsPanel, 150, 180, 500, 500);
-
-		// labels, textFields and button used on serverStartsPanel
-		JLabel serverStarts = new JLabel("SERVER STARTS!");
-		serverStarts.setPreferredSize(new Dimension(450, 100));
-		serverStarts.setFont(new Font("Arial", Font.BOLD, 50));
-		serverStarts.setForeground(new Color(100, 200, 100).brighter());
-
-		JLabel information = new JLabel("The following information is for client to join server");
-		information.setPreferredSize(new Dimension(500, 40));
-		information.setFont(new Font("Arial", Font.BOLD, 20));
-		information.setForeground(new Color(0, 135, 200).brighter());
-
-		JLabel name = new JLabel("Server IP : ");
-		serverName = new JTextField(18);
-
-		name.setPreferredSize(new Dimension(150, 60));
-		name.setFont(new Font("Arial", Font.PLAIN, 20));
-		name.setForeground(new Color(0, 135, 200).brighter());
-
-		serverName.setPreferredSize(new Dimension(250, 40));
-		serverName.setFont(new Font("Arial", Font.PLAIN, 20));
-		serverName.setForeground(new Color(30, 30, 30));
-		serverName.setText(strServerName);
-		serverName.setEditable(false);
-
-		JLabel port = new JLabel("Port Number : ");
-		portNum = new JTextField(18);
-
-		port.setPreferredSize(new Dimension(150, 60));
-		port.setFont(new Font("Arial", Font.PLAIN, 20));
-		port.setForeground(new Color(0, 135, 200).brighter());
-
-		portNum.setPreferredSize(new Dimension(130, 40));
-		portNum.setFont(new Font("Arial", Font.PLAIN, 20));
-		portNum.setForeground(new Color(30, 30, 30));
-		portNum.setText(strPortNum);
-		portNum.setEditable(false);
-
-		serverStartsPanel.add(serverStarts);
-		serverStartsPanel.add(information);
-		serverStartsPanel.add(name);
-		serverStartsPanel.add(serverName);
-		serverStartsPanel.add(port);
-		serverStartsPanel.add(portNum);
-
-		// set the panel to transparent and add the panel to frame
-		serverStartsPanel.setOpaque(false);
-		layeredPane.add(serverStartsPanel, JLayeredPane.MODAL_LAYER);
-	}
-
-	/**
-	 * The following method sets up the frame that let player enter 
-	 * the player name, the server name and port number to join the 
-	 * server to start game
-	 */
-	public void joinServerPanel(){
-		joinServerPanel = new JPanel();
-		setUpPanel(joinServerPanel, 200, 200, 500, 500);
-
-		// labels, textFields and button used on joinServerPanel
-		JLabel nameP = new JLabel("Player Name : ");
-		textFieldNameC = new JTextField(18);
-
-		nameP.setPreferredSize(new Dimension(150, 60));
-		nameP.setFont(new Font("Arial", Font.PLAIN, 20));
-		nameP.setForeground(new Color(0, 135, 200).brighter());
-
-		textFieldNameC.setPreferredSize(new Dimension(250, 40));
-		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
-		textFieldNameC.setForeground(new Color(30, 30, 30));
-
-		JLabel name = new JLabel("Server IP: ");
-		String serverIP = null;
-		try {
-			serverIP = getSeverName().getHostAddress();
-			int countDot = 0;
-			for(int i = 0; i<serverIP.length(); i++){
-				if(serverIP.substring(i, i+1).equals(".")){
-					countDot++;
-					if(countDot==3){
-						serverIP = serverIP.substring(0, i+1);
-						break;
-					}
-				}
-			}
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		serverNameC = new JTextField(18);
-		serverNameC.setText(serverIP);
-
-		name.setPreferredSize(new Dimension(150, 60));
-		name.setFont(new Font("Arial", Font.PLAIN, 20));
-		name.setForeground(new Color(0, 135, 200).brighter());
-
-		serverNameC.setPreferredSize(new Dimension(250, 40));
-		serverNameC.setFont(new Font("Arial", Font.PLAIN, 20));
-		serverNameC.setForeground(new Color(30, 30, 30));
-
-		JLabel port = new JLabel("Port Number : ");
-		portNumC = new JTextField("4768",18);
-
-		port.setPreferredSize(new Dimension(150, 60));
-		port.setFont(new Font("Arial", Font.PLAIN, 20));
-		port.setForeground(new Color(0, 135, 200).brighter());
-
-		portNumC.setPreferredSize(new Dimension(130, 40));
-		portNumC.setFont(new Font("Arial", Font.PLAIN, 20));
-		portNumC.setForeground(new Color(30, 30, 30));
-
-		jbClientStart = new JButton("START");
-
-		joinServerPanel.add(nameP);
-		joinServerPanel.add(textFieldNameC);
-		joinServerPanel.add(name);
-		joinServerPanel.add(serverNameC);
-		joinServerPanel.add(port);
-		joinServerPanel.add(portNumC);
-		setButtonStyle(jbClientStart, 110, joinServerPanel, Color.MAGENTA);
-
-		// set the panel to transparent and add the panel to frame
-		joinServerPanel.setOpaque(false);
-		layeredPane.add(joinServerPanel, JLayeredPane.MODAL_LAYER);
-		addListennerJoinServer();
-	}
-
-	/**
-	 * The following method sets up the frame that tells the player server
-	 * is waiting for other players to join in to start the game
-	 */
-	public void waitClientsPanel(){
-		waitClientsPanel = new JPanel();
-		setUpPanel(waitClientsPanel, 130, 200, 600, 200);
-
-		// label used on waitClientsPanel
-		JLabel waitClients = new JLabel("Wait For Other Players...");
-		waitClients.setPreferredSize(new Dimension(600, 200));
-		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
-		waitClients.setForeground(new Color(100, 200, 100).brighter());
-		waitClientsPanel.add(waitClients);
-
-		// set the panel to transparent and add the panel to frame
-		waitClientsPanel.setOpaque(false);
-		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
-	}
+//	/**
+//	 * The following method sets up the frame that tells the player server
+//	 * is waiting for other players to join in to start the game
+//	 */
+//	public void waitClientsPanel(){
+//
+//		// label used on waitClientsPanel
+//		JLabel waitClients = new JLabel("Wait For Other Players...");
+//		waitClients.setPreferredSize(new Dimension(600, 200));
+//		waitClients.setFont(new Font("Arial", Font.BOLD, 50));
+//		waitClients.setForeground(new Color(100, 200, 100).brighter());
+//		waitClientsPanel.add(waitClients);
+//
+//		// set the panel to transparent and add the panel to frame
+//		waitClientsPanel.setOpaque(false);
+//		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
+//	}
 
 	/**
 	 * The following method sets up the frame that tells the player server
@@ -324,7 +179,7 @@ public class GUI {
 	 * @param p	the winner player if it exists
 	 * @param hasWinner	whether is game has a winner or not
 	 */
-	public void gameOverPanel(boolean hasWinner, Player p){
+	public void gameOverPanel(){
 		gameOverPanel = new JPanel();
 		setUpPanel(gameOverPanel, 100, 200, 600, 160);
 
@@ -335,7 +190,7 @@ public class GUI {
 		gameOver.setForeground(new Color(100, 200, 100).brighter());
 		gameOverPanel.add(gameOver);
 
-		JLabel wins = new JLabel(p.getName());
+		JLabel wins = new JLabel(winner);
 		wins.setPreferredSize(new Dimension(310, 80));
 		wins.setFont(new Font("Arial", Font.BOLD, 50));
 		wins.setForeground(new Color(100, 200, 100).brighter());
@@ -357,102 +212,6 @@ public class GUI {
 	 */
 	private void setUpPanel(JPanel panel, int left, int top, int width, int height){
 		panel.setBounds(left, top, width, height);
-	}
-
-	/**
-	 * The following method sets the button style by the given 
-	 * characteristics and adds the button onto the given panel
-	 * @param button	the given button to set style on
-	 * @param buttonWidth	the given width of the button
-	 * @param panel	the panel the button will be on
-	 * @param defaultColor	the default color of the given button
-	 */
-	private void setButtonStyle (final JButton button, final int buttonWidth, final JPanel panel, final Color defaultColor){
-		// set the button size and font
-		button.setPreferredSize(new Dimension(buttonWidth, 60));
-		button.setFont(new Font("Arial", Font.PLAIN, 30));
-		button.setForeground(defaultColor);
-		button.setHorizontalTextPosition(SwingConstants.CENTER);
-		button.setBorder(null);
-
-		// set the button to transparent
-		button.setOpaque(false);
-		button.setContentAreaFilled(false);
-		button.setBorderPainted(false);
-		button.setFocusPainted(false);
-
-		// add mouseListener onto the button 
-		button.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				button.setForeground(defaultColor);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				button.setForeground(new Color(100, 200, 100).brighter());
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {}
-		});
-
-		// add the button to the given panel
-		panel.add(button);
-	}
-
-
-	/**
-	 * The following method adds action listener onto buttons on chooseNamePanel
-	 */
-	public void addListennerChooseName(){
-
-	}
-
-	/**
-	 * The following method adds action listener onto buttons on chooseServerPanel
-	 */
-	public void addListennerChooseServer(){
-		
-	}
-
-	/**
-	 * The following method adds action listener onto buttons on joinServerPanel
-	 */
-	public void addListennerJoinServer(){
-		jbClientStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				JButton button = (JButton) ae.getSource();
-				if(button == jbClientStart){	// if button Start is clicked, joinServerPanel will be removed and multiple-player mode game will be started
-					if(!textFieldNameC.getText().equals("") && !serverNameC.getText().equals("") && !portNumC.getText().equals("")){
-						nameC = textFieldNameC.getText();
-						strPortNumC = portNumC.getText();
-						strServerNameC = serverNameC.getText();
-						if(isIPAdd(strServerNameC)){
-							layeredPane.remove(joinServerPanel);
-							layeredPane.remove(backgroundPanel);
-							startGame2();
-						}
-						frame.repaint();
-					}}}
-		});
-		textFieldNameC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				nameC = textFieldNameC.getText();	// get the player name player entered from the textField
-			}
-		});
-		serverNameC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				strServerNameC = serverNameC.getText();	// get the server name player entered from the textField
-			}
-		});
-		portNumC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				strPortNumC = portNumC.getText();	// get the port number player entered from the textField
-			}
-		});
 	}
 
 	/**
@@ -624,28 +383,14 @@ public class GUI {
 		return InetAddress.getLocalHost();
 	}
 
-
-
-	/**
-	 * this method is check player input server Ip address
-	 * if input is not ip address will return false
-	 * */
-	public static final boolean isIPAdd(final String ip) {
-		boolean isIPv4;
-		try {
-			final InetAddress inet = InetAddress.getByName(ip);
-			isIPv4 = inet.getHostAddress().equals(ip)
-					&& inet instanceof Inet4Address;
-		} catch (final UnknownHostException e) {
-			isIPv4 = false;
-		}
-		return isIPv4;
-	}
-
 	public void addWindowListener(WindowListeners windowListeners) {
 		// TODO Auto-generated method stub
 		//this.addWindowListener(windowListeners);
 	}
+
+	//=========================
+	//getter and setter
+	//=========================
 
 	public JFrame getFrame(){
 		return frame;
@@ -662,11 +407,11 @@ public class GUI {
 	public void setNumPlayer(int parseInt) {
 		this.numPlayer = parseInt;
 	}
-	
+
 	public void setStrServerName(String s) {
 		this.strServerName = s;
 	}
-	
+
 	public void setStrPortNum(String s) {
 		this.strPortNum = s;
 	}
@@ -677,6 +422,50 @@ public class GUI {
 
 	public int getNumPlayer() {
 		return numPlayer;
+	}
+
+	public JTextField getServerName() {
+		return this.serverName;
+	}
+
+	public String getStrServerName() {
+		return this.strServerName;
+	}
+
+	public JTextField getPortNum() {
+		return this.portNum;
+	}
+
+	public JTextField getTextFieldNameC() {
+		return textFieldNameC;
+	}
+
+	public JTextField getServerNameC() {
+		return serverNameC;
+	}
+
+	public JTextField getPortNumC() {
+		return portNumC;
+	}
+
+	public void setNameC(String text) {
+		nameC = text;		
+	}
+
+	public void setStrPortNumC(String text) {
+		strPortNumC = text;
+	}
+
+	public void setStrServerNameC(String text) {
+		strServerNameC = text;	
+	}
+
+	public String getStrServerNameC() {
+		return strServerNameC;
+	}
+	
+	public void setWinner(String w){
+		winner = w;
 	}
 }
 
