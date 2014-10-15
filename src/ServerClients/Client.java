@@ -33,13 +33,10 @@ public class Client extends Thread {
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 	private  int port;
-	private GameState state;
 	private NetworkController networkController;
 	public boolean connection;
-	public static boolean isConnectToServer = false;
 	public String name;
 	public GUI gui;
-	public MultyPlayer p;
 	
 
 	/**
@@ -88,6 +85,9 @@ public class Client extends Thread {
 	/**
 	 * the parsePacket will check the first two byte 
 	 * byte will identify the type of data received
+	 * @param data received from client
+	 * @param address client ip address
+	 * @param port client port
 	 * 
 	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
@@ -142,6 +142,7 @@ public class Client extends Thread {
 	
 	/**
 	 * this method will send message from client to server
+	 * @param data  - byte array data packet with PacketType 
 	 * */
 	public void sendData(byte[]data){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
@@ -154,13 +155,13 @@ public class Client extends Thread {
 	}
 	/**
 	 * this method is handle login package 
+	 * @param packet - received packet from client 
 	 * */
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
-				+ " has joined the game...");
+				+ " joined the game...");
 		new MultyPlayer( packet.getUsername(),null,address, port);
-		System.out.println("=============>" +  packet.getUsername() + address + port);
-		 p = new MultyPlayer( packet.getUsername(),null,address, port);
+		
 	}
 
 	private void handleData(Packet02Data packet) {
@@ -208,10 +209,6 @@ public class Client extends Thread {
 		}
 	}
 
-
-	public MultyPlayer getPlayer() {
-		return p;
-	}
 	
 	public GameState deserialize(byte[]bytes) {
 

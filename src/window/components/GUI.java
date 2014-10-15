@@ -81,7 +81,7 @@ public class GUI {
 
 	// please comment these variables, sorry I can't do it as I don't know them. 
 	// can we set the variables to private?
-	private GameState gameState;//do not change this field for jacky only
+	//private GameState gameState;//do not change this field for jacky only
 	private static UIController controller;
 	GameState state = null;
 	MultyPlayer player1 = null;

@@ -194,10 +194,10 @@ public class Server extends Thread {
 	public void sendActionDataToAllClients(byte[] data) {
 		for (MultyPlayer p : connectedPlayers) {
 			System.out.println(name+"  "+ p.getName());
-			if(!name.equals(p.getName())){
+			//if(!name.equals(p.getName())){
 				sendData(data, p.ipAddress, p.port);
 				System.out.println(p.ipAddress+ "  "+p.port);
-			}
+			//}
 		}
 
 
