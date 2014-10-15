@@ -8,9 +8,14 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+/**
+ * @author Vivian Stewart
+ * The information loaded from file to draw a 3D object. Indices are the lists
+ * of vertices in the polygon, line, or point (array can be variable length).  
+ */
 public class Mesh
 {
-
+	
 	private List<Integer[]>	indices;
 	private List<Float[]>	vertices;
 
@@ -20,6 +25,9 @@ public class Mesh
 		this.vertices = vertices;
 	}
 	
+	/**
+	 * @return a defensive copy of the loaded indices
+	 */
 	public List<int[]> getIndices()
 	{
 		List<int[]> copy = new ArrayList<int[]>();
@@ -37,6 +45,9 @@ public class Mesh
 		}
 		return copy;
 	}
+	/**
+	 * @return a defensive copy of the loaded vertices
+	 */
 	public List<float[]> getVertices()
 	{
 		List<float[]> copy = new ArrayList<float[]>();
@@ -55,6 +66,11 @@ public class Mesh
 		return copy;
 	}
 	
+	/**
+	 * Get indices of a particular array length as a Buffer for jogl compatibility
+	 * @param glType
+	 * @return
+	 */
 	public IntBuffer getIndBuffer( int glType )
 	{
 		List<Integer> prebuf = new LinkedList<Integer>();
@@ -78,6 +94,9 @@ public class Mesh
 		return IntBuffer.wrap( unboxArrInt( prebuf.toArray( ind ) ) );
 	}
 	
+	/**
+	 * @return FloatBuffer version of the vertices
+	 */
 	public FloatBuffer getVertexBuffer()
 	{
 		LinkedList<Float> prebuf = new LinkedList<Float>();
@@ -95,6 +114,11 @@ public class Mesh
 				unboxArrFloat( prebuf.toArray( fs ) ) );
 	}
 	
+	/**
+	 * Convert Integer array to int primitive array
+	 * @param unbox - to be converted
+	 * @return converted array
+	 */
 	private int[] unboxArrInt( Integer[] unbox )
 	{
 		
@@ -109,7 +133,11 @@ public class Mesh
 		    }
 		    return result;
 	}
-	
+	/**
+	 * Convert Float array to float primitive array
+	 * @param unbox - to be converted
+	 * @return converted array
+	 */
 	private float[] unboxArrFloat( Float[] unbox )
 	{
 		
