@@ -79,6 +79,7 @@ public class GUI {
 	 * to players' game entry choices
 	 */	
 	private Panel backgroundPanel;
+	private Panel waitClientsPanel;
 
 	private JPanel gameOverPanel;
 	private JPanel wrongInfoPanel;
@@ -252,8 +253,12 @@ public class GUI {
 	 * The following method starts the game for multiple-player mode
 	 */
 	protected void startGame2() {
-		waitClientsPanel();
+		//waitClientsPanel();
 
+		waitClientsPanel = new WaitClientsPanel(this);
+		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
+
+		
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		client = new Client(this,nameC,strServerNameC,clientPortNumber );
 		client.start();
