@@ -185,6 +185,13 @@ public class GameViewData
 		dynamicScene.remove( go );
 	}
 
+	public void removePlayerAtPoint( Point p )
+	{
+		for ( DymanicRender dyn: dynamicScene )
+			if ( dyn.getType() == CellType.PLAYER && dyn.getLocation().equals( p ) )
+				dynamicScene.remove( dyn );
+	}
+
 	/**
 	 * @return the last element clicked on by the player
 	 */

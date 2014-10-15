@@ -147,9 +147,8 @@ public class NetworkController {
 	 * @param player - current player
 	 * @param object - 
 	 * */
-	public void pickupObject(Player player, MoveableObject object, Point point){
+	public void pickupObject(Player player, Point point){
 		this.player = player;
-		this.object = object;
 		this.point = point;
 		byte[]data = this.serialize(this.PlayerAndObject);
 		Packet06PickupObject pickup = new Packet06PickupObject(data);
@@ -183,12 +182,12 @@ public class NetworkController {
 	 * 
 	 * */
 
-	public void removeObjectFromClient(Packet06PickupObject packet) {
+	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
 			PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
 			Player player = p.player;
 			MoveableObject object = p.object;
 			Point point = p.point;
-			renCon.removeObject(player,object,point);
+			renCon.pickupObjectOtherPlayer(player,point);
 		
 		
 

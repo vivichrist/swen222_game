@@ -37,6 +37,7 @@ public abstract class UDPPacket {
     }
 
     public abstract byte[] getData();
+    public abstract byte[] getRealData();
 
     public static PacketTypes lookupPacket(String packetId) {
         try {

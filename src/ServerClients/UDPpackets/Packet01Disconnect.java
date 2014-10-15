@@ -52,5 +52,10 @@ public class Packet01Disconnect extends UDPPacket {
     public String getUsername() {
         return username;
     }
+	@Override
+	public byte[] getRealData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
