@@ -156,7 +156,7 @@ public class GUI {
 	public void setUp(){
 		frame = new JFrame();
 		frame.setTitle("Adventure Game");
-		frame.setBackground(Color.BLACK);
+		frame.getRootPane().setBackground(Color.BLACK);
 		frame.setSize(width, height);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
@@ -793,7 +793,7 @@ public class GUI {
 		}
 		// let player choose a floor and assign it to s
 		String s = (String)JOptionPane.showInputDialog(
-				frame,
+				null,
 				"Which floor you want to go to?",
 				"Floor Chooser",
 				JOptionPane.PLAIN_MESSAGE,

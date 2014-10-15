@@ -26,7 +26,9 @@ import java.nio.IntBuffer;
 
 /**
  * A simple line drawn 3D adventure board game program that draws with JOGL in
- * a Swing JFrame using the AWT GLJPanel.
+ * a Swing JFrame using the AWT GLJPanel. This is the root class for the
+ * renderer which interacts with the scene and the input listener while housing
+ * an OpenGL rendering context (GLAutoDrawable)
  * @author Vivian Stewart
  */
 @SuppressWarnings( "serial" )
@@ -148,12 +150,6 @@ public class GameView extends GLJPanel
             				 , 0.0f, 0.0f, 1.0f );// up
             	gl2.glRotatef( direction, 0 ,0 ,1.0f );
             	gl2.glTranslatef( -position.x, -position.y, -10.0f );
-            	GameViewData gdata = GameViewData.instance();
-            	if ( gdata.getToInitialise() != null )
-            	{
-            		gdata.getToInitialise().initialise( gl2 );
-            		gdata.resetToInitialise();
-            	}
                 render( gl2 );
                 mouseSelect( gl2 );
             }

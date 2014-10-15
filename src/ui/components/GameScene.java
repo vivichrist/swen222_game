@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map.Entry;
 
+import controllers.RendererController;
+
 import world.ColourPalette;
 import world.components.CellType;
 import world.components.Container;
@@ -119,8 +121,8 @@ public class GameScene
 				System.out.println("Teleporting to Floor:" + teleport );
 				return true;
 			}
-			else if ( ct == CellType.KEYDOOR )
-			{	if ( game.canOpenDoor( player, p ) )
+			else if ( ct == CellType.KEYDOOR || ct == CellType.DOOR )
+			{	if ( RendererController.canOpenDoor( player, p ) )
 					return ((DymanicRender)graphicData
 							.getGameElements().get( p )).collide();
 				return true;
@@ -141,7 +143,6 @@ public class GameScene
 					DymanicRender dyn = DymanicRender.instanceKey(
 							p, key.getColor() );
 					graphicData.addGrapicalObject( dyn );
-					GameViewData.instance().setToInitialise( dyn );
 				}
 
 			} else
