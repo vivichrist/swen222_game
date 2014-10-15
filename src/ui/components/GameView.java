@@ -110,7 +110,6 @@ public class GameView extends GLJPanel
                 gl2.glShadeModel(GL2.GL_SMOOTH);
             	scene.addSurrounds();
             	gl2.glLineWidth( 2f );
-            	System.out.println( "Dynamic Scene Object count:" + data.getDynamicScene().size() );
             	for( GraphicalObject go: data.getDynamicScene() )
             	{
             		go.initialise( gl2 );
