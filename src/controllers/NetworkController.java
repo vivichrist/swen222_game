@@ -17,6 +17,7 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.Packet08PickupKey;
+import ServerClients.UDPpackets.Packet09WinGame;
 import world.components.Key;
 import world.components.MoveableObject;
 import world.game.Player;
@@ -204,8 +205,16 @@ public class NetworkController  implements Serializable{
 	}
 
 
-	public void setWinner(String username) {
-		renCon.setWinner(username);
+	public void setWinnerFromNetwork(String username) {
+		renCon.setWinnerFromNetwork(username);
+	}
+	
+	public void setWinner(String name){
+		
+		Packet09WinGame win = new Packet09WinGame(name);
+		win.writeData(client);
+
+		
 	}
 
 	/**
