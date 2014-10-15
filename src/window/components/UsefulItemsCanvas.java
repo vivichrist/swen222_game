@@ -20,19 +20,19 @@ import world.game.Player;
  */
 public class UsefulItemsCanvas extends Canvas {
 
-	private Player player;	// the current player
-	
 	/**
 	 * The following is a list of ImageIcons of the inventory of the current player
 	 */
 	private ArrayList<ImageIcon> usefulItems;
+
+	/**
+	 * The following is a list of floor names which will be used to
+	 * write on the canvas to display the current floor of the player
+	 */
+	private String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 	
-	
-	
-	
-	
-	private int time;
-	
+	private Player player;	// the current player
+	private int floorNum;	// the current floor number of the player
 	
 	/**
 	 * Sets up the UsefulItemsCanvas for the given player
@@ -42,10 +42,10 @@ public class UsefulItemsCanvas extends Canvas {
 		this.player = player;
 		this.setBackground(Color.BLACK);
 		this.setBounds(0, 600, 750, 65);
-		
+		floorNum = player.getFloor().floorNumber();
 		// Kalo bugfix:
 		//usefulItems = new ArrayList<ImageIcon>();
-		
+
 		getUsefulItems();
 	}
 
@@ -56,13 +56,13 @@ public class UsefulItemsCanvas extends Canvas {
 	private void getUsefulItems() {
 		//Kalo bugfix:
 		usefulItems = new ArrayList<ImageIcon>();
-		
+
 		for (int i = usefulItems.size(); i < player.getInventory().size(); i++){	// go through the player's inventory, add images to collectItems
 			String resource = "Resource/inventory/" + player.getInventory().get(i).toString().toLowerCase() + ".png";
 			usefulItems.add(new ImageIcon(resource));
 		}
 	}
-
+	
 	/**
 	 * The following method draws all the images on the UsefulItemsCanvas.
 	 */
@@ -72,5 +72,26 @@ public class UsefulItemsCanvas extends Canvas {
 		for(int i = 0; i < usefulItems.size(); i++){	// go through the player's inventory images, draw the images on canvas with given width and height
 			g.drawImage(usefulItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
+
+		String floor = null;
+		for (int j = 0; j < floorsName.length; j ++){	// go through the floor names array to find the corresponding floor name 
+			if (j == floorNum){
+				floor = "Floor : " + floorsName[j] + " Floor";
+			}
+		}
+
+		// set the floor name string style and draw it on canvas
+		g.setFont(new Font("Arial", Font.BOLD, 31));
+		g.setColor(Color.WHITE);
+		g.drawString(floor, 420, 45);
+	}
+	
+	/**
+	 * The following method set the current floor number of the player 
+	 * with the given number
+	 * @param num	the given floor number 
+	 */	
+	public void setFloorNum(int num){
+		floorNum = num;
 	}
 }
