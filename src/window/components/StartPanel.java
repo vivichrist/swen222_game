@@ -17,7 +17,6 @@ public class StartPanel extends Panel{
 
 	// buttons on the panel
 	private JButton jbNew;
-	private JButton jbInfo;
 	private JButton jbExit;
 
 	public StartPanel(GUI gui) {
@@ -29,11 +28,9 @@ public class StartPanel extends Panel{
 	protected void setUpComponents() {
 		// buttons used on startPanel
 		jbNew = new JButton("New");
-		jbInfo = new JButton("Info");
 		jbExit = new JButton("Exit");
 		
 		setButtonStyle(jbNew, 75, new Color(0, 135, 200).brighter());
-		setButtonStyle(jbInfo, 65, new Color(0, 135, 200).brighter());
 		setButtonStyle(jbExit, 65, new Color(0, 135, 200).brighter());
 	}
 
