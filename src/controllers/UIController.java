@@ -18,7 +18,7 @@ public class UIController {
 	private static GUI gui;
 	
 	/**
-	 * Constructor - creates a Controller for GameState/GUI interaction in this game
+	 * Constructor - creates a UIController for GameState/GUI interaction in this game
 	 * @param state the GameState of this game
 	 * @param gui the GUI for this game
 	 */
@@ -27,8 +27,11 @@ public class UIController {
 		this.gui = gui;
 	}
 	
+	/**
+	 * Constructor - creates a UIController with a given GUI
+	 * @param gui
+	 */
 	public UIController(GUI gui){
-		//this.state = state;
 		this.gui = gui;
 	}
 	
@@ -45,35 +48,17 @@ public class UIController {
 	public static void refreshInventoryPanel(){
 		gui.redrawUsefulItemCanvas();
 	}
-
-	public void moveOtherPlayer(Player player, Point point) {
-		System.out.println("waiting for vivian === move other player");
-		state.movePlayer(player, point);
-	}
-	
-	public void movePlayer(Player player, Point point){
-		state.movePlayer(player, point);
-	}
-	
-	public boolean teleport(Player p){
-		int floor = gui.getFloor(state.floorCount());
-		return state.teleport(p, floor);
-	}
-	public Player getPlayer(String username) {
-		return state.getPlayer(username);
-	}
-	
 	
 	/**
-	 * this method is going to update the player inventory list once current player 
-	 * dorp an object
-	 * 
-	 * */
+	 * Alerts the Winner of this game
+	 * @param p the Player that wins this game
+	 */
+	public static void setWinner(Player p){
+		gui.setWinner(p.getName());
+	}
 
-	public void dropObject(Player player, MoveableObject object) {
-		// TODO kalo please check the following code make sure it is delete the correct object
-		//state.getPlayer(player.getName()).getInventory().remove(object);
-		
+	public Player getPlayer(String username) {
+		return state.getPlayer(username);
 	}
 
 
