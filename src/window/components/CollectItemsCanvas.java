@@ -2,7 +2,6 @@ package window.components;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -36,13 +35,6 @@ public class CollectItemsCanvas extends Canvas {
 
 	private Player player;	// the current player
 	private TokenType type;	// the token type of the current player
-	private int floorNum;	// the current floor number of the player
-	
-	/**
-	 * The following is a list of floor names which will be used to
-	 * write on the canvas to display the current floor of the player
-	 */
-	private String[] floorsName = new String[]{"Ground", "First", "Second", "Third", "Fourth"};
 
 	/**
 	 * Sets up the CollectItemsCanvas for the given player
@@ -55,7 +47,6 @@ public class CollectItemsCanvas extends Canvas {
 		this.setBounds(0, 600, 750, 70);
 		initialiseItems();
 		getCollectItems();
-		floorNum = player.getFloor().floorNumber();
 	}
 
 	/**
@@ -122,26 +113,12 @@ public class CollectItemsCanvas extends Canvas {
 		for(int i = 0; i < collectItems.size(); i++){	// go through the player's tokens images, draw the images on canvas with given width and height
 			g.drawImage(collectItems.get(i).getImage(), gap * i, 0, 65, 65, null);
 		}
-		
-		String floor = null;
-		for (int j = 0; j < floorsName.length; j ++){	// go through the floor names array to find the corresponding floor name 
-			if (j == floorNum){
-				floor = "Floor : " + floorsName[j] + " Floor";
-			}
-		}
-		
-		// set the floor name string style and draw it on canvas
-		g.setFont(new Font("Arial", Font.BOLD, 31));
-		g.setColor(new Color(100, 200, 100));
-		g.drawString(floor, 420, 45);
-	}
 
-	/**
-	 * The following method set the current floor number of the player 
-	 * with the given number
-	 * @param num	the given floor number 
-	 */	
-	public void setFloorNum(int num){
-		floorNum = num;
+		// set the player name string style and draw it on canvas
+		g.setFont(new Font("Arial", Font.BOLD, 31));
+		g.setColor(Color.WHITE);
+		String info = "Player : " + player.getName();
+		g.drawString(info, 420, 45);
 	}
 }
+
