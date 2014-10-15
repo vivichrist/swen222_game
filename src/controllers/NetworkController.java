@@ -183,15 +183,21 @@ public class NetworkController  implements Serializable{
 	 * */
 
 	public void pickupObjectOtherPlayer(Packet06PickupObject packet) {
+		
 			//PlayerAndObject p = (controllers.NetworkController.PlayerAndObject) this.deserialise(((Packet06PickupObject)packet).getRealData());
 //			Player player = p.player;
 //			MoveableObject object = p.object;
 //			Point point = p.point;
-		//	renCon.pickupObjectOtherPlayer(player,point);
+			renCon.pickupObjectOtherPlayer(packet.getUsername(),packet.getPoint());
 		
 		
 
 	}
+	public void triggerDoor(String name, Point p) {
+		renCon.triggerDoor(name, p);
+		
+	}
+
 	
 	/**
 	 * serialize object
@@ -243,6 +249,7 @@ public class NetworkController  implements Serializable{
 		return null;
 	}
 
+	
 
 
 
