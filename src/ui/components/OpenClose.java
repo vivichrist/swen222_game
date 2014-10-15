@@ -3,6 +3,11 @@ package ui.components;
 import java.awt.geom.Point2D;
 import javax.media.opengl.GL2;
 
+/**
+ * @author vivian
+ * Open and close doors in the world. Shifting them to the side and then back
+ * after some time.
+ */
 public class OpenClose implements Behaviour
 {
 	private float open = 0f, openSpeed = 0f;
@@ -30,14 +35,6 @@ public class OpenClose implements Behaviour
 		if ( open > 0 ) return true;
 		openSpeed = 1.4f / GameView.cellsize;
 		return true;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main( String[] args )
-	{
-
 	}
 
 }

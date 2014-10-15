@@ -209,6 +209,10 @@ public class GameViewData
 		((DymanicRender)gameElements.get( doorpoint )).collide();
 	}
 
+	/**
+	 * Remove other players from the render list. For game state use.
+	 * @param p
+	 */
 	public void removePlayerAtPoint( Point p )
 	{
 		for ( DymanicRender dyn: dynamicScene )
@@ -250,9 +254,4 @@ public class GameViewData
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
 	}
-
-	/**
-	 * @return the dynamic element to be initialised because it has been added
-	 * late after mass initialisation happened (to load vertices and indices)
-	 */
 }

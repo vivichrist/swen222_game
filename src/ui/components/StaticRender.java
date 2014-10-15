@@ -9,6 +9,11 @@ import javax.media.opengl.GL2;
 
 import world.components.CellType;
 
+/**
+ * @author Vivian Stewart
+ * Any graphical object that exists persistently and never changes is rendered
+ * through this class.
+ */
 public class StaticRender implements GraphicalObject
 {
 

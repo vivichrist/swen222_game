@@ -2,6 +2,10 @@ package ui.components;
 
 import javax.media.opengl.GL2;
 
+/**
+ * @author Vivian Stewart
+ * Maintains the OpenGL display list of graphical objects that do not change.
+ */
 public class StaticDisplayList
 {
 	private int	staticID;
@@ -20,6 +24,10 @@ public class StaticDisplayList
 		staticID = 0;
 	}
 
+	/**
+	 * @param gl - OpenGL context
+	 * @return true if successful
+	 */
 	public boolean createDisplaylist( GL2 gl )
 	{
 		GameViewData data	= GameViewData.instance();
@@ -40,6 +48,10 @@ public class StaticDisplayList
     	return true;
 	}
 
+	/**
+	 * @param gl - OpenGL context
+	 * @return old staticID
+	 */
 	public int destroy( GL2 gl )
 	{
 		if ( staticID == 0 ) return staticID;

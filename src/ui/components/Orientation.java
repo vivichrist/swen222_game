@@ -6,6 +6,10 @@ import javax.media.opengl.GL2;
 
 import world.components.Direction;
 
+/**
+ * @author Vivian Stewart
+ * Align furniture or any GraphicalObject that faces a particular direction
+ */
 public class Orientation implements Behaviour
 {
 	private int depth, width;//, count = 0;
