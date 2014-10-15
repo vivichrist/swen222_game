@@ -30,6 +30,14 @@ public class Torch implements MoveableObject, java.io.Serializable{
 	}
 	
 	/**
+	 * Returns the lit state of this Torch
+	 * @return true if lit
+	 */
+	public boolean isLit(){
+		return lit;
+	}
+	
+	/**
 	 * Returns a String representation of this Torch
 	 */
 	public String toString(){
