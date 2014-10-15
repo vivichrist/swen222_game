@@ -7,9 +7,10 @@ import java.awt.Font;
 import javax.swing.JLabel;
 
 /**
- * The ChooseServerPanel class is a JPanel which is represented on the frame. 
- * ChooseServerPanel class is responsible for letting player choose to start 
- * a server or join a server  
+ * The WaitClientsPanel class is a JPanel which is represented on the frame
+ * once the player choose to join a server and there is not enough clients. 
+ * WaitClientsPanel class is responsible for letting player know he needs 
+ * to wait.
  * 
  * @author Zhiheng Sun,  ID: 300256273
  * 

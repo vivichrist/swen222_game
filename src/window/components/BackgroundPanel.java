@@ -4,10 +4,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
- * The ChooseServerPanel class is a JPanel which is represented on the frame. 
- * ChooseServerPanel class is responsible for letting player choose to start 
- * a server or join a server  
- * 
+ * The BackgroundPanel class is a JPanel which is represented 
+ * as the background image on the frame. 
+
  * @author Zhiheng Sun,  ID: 300256273
  * 
  */

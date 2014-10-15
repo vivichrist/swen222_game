@@ -48,7 +48,7 @@ public class ChooseServerPanel extends Panel{
 				JButton button = (JButton) ae.getSource();
 				if(button == jbStartServer){	// if button Starts Server is clicked, chooseServerPanel will be removed and serverStartsPanel will appear
 					String nP= JOptionPane.showInputDialog(
-							gui.frame, 
+							gui.getFrame(), 
 							"Enter the number of players of the game", 
 							"Number of Players", 
 							JOptionPane.INFORMATION_MESSAGE
