@@ -245,5 +245,6 @@ public class RendererController {
 			view.addNewPlayerMove(null, player.getPosition());
 		}
 	}
+
 	
 }

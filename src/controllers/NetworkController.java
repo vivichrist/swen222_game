@@ -204,6 +204,10 @@ public class NetworkController  implements Serializable{
 	}
 
 
+	public void setWinner(String username) {
+		renCon.setWinner(username);
+	}
+
 	/**
 	 * serialize object
 	 * 
