@@ -61,31 +61,4 @@ public class GameBuilderTests {
 		GameState state = new GameBuilder(pNames).getGameState();
 		assertTrue(state.floorCount() == pNames.size());
 	}
-	
-	/**
-	 * Checks whether a player move in a single player came is correctly completed
-	 */
-	@Test public void movePlayer1(){
-		GameState state = new GameBuilder("Test Player").getGameState();
-		Player p = state.getPlayer(0);
-		Point destination = new Point(3, 15);
-		state.movePlayer(p, destination);
-		assertTrue(p.getPosition().equals(destination));
-	}
-	
-	/**
-	 * Checks whether a player move in a multiplayer came is correctly completed
-	 */
-	@Test public void movePlayer2(){
-		ArrayList<String> pNames = new ArrayList<String>();
-		pNames.add("Dave");
-		pNames.add("Stephen");
-		pNames.add("Marco");
-		pNames.add("BrainStackOverflow");
-		GameState state = new GameBuilder(pNames).getGameState();
-		Player p = state.getPlayer(2);
-		Point destination = new Point(3, 15);
-		state.movePlayer(p, destination);
-		assertTrue(p.getPosition().equals(destination));
-	}
 }

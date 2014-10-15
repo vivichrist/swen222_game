@@ -99,15 +99,7 @@ public class NetworkController {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	/**
-	 * set game state
-	 * @param set state
-	 * */
 
-	public void setState(GameState st) {
-		controller.setState(st);
-
-	}
 	
 	/**
 	 * get player
@@ -116,16 +108,6 @@ public class NetworkController {
 
 	public Player getPlayer(String username) {
 		return controller.getPlayer(username);
-	}
-
-	/**
-	 * check server connection
-	 *  @param boolean value - return true means connect to the server 
-
-	 */
-	public void setConnection(boolean connection) {
-		controller.setConnection(connection);
-
 	}
 
 //	/**

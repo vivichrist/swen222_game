@@ -59,17 +59,8 @@ public class UIController {
 		int floor = gui.getFloor(state.floorCount());
 		return state.teleport(p, floor);
 	}
-
-	public void setState(GameState st) {
-		state.setState(st);
-	}
-
 	public Player getPlayer(String username) {
 		return state.getPlayer(username);
-	}
-
-	public void setConnection(boolean connection) {
-		state.setConnection(connection);
 	}
 	
 	
