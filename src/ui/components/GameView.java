@@ -204,10 +204,6 @@ public class GameView extends GLJPanel
 			gl.glLoadIdentity();
 			scene.addSurrounds();
         	gl.glLineWidth( 2f );
-			for( GraphicalObject go: data.getDynamicScene() )
-        	{
-        		go.initialise( gl );
-        	}
         	StaticDisplayList staticDisplayList = StaticDisplayList.instance();
         	staticDisplayList.createDisplaylist( gl );
         	keyInput.reset( scene );
@@ -215,6 +211,9 @@ public class GameView extends GLJPanel
     }
 
     /**
+     * Uses glUnproject to find the object in 3D space that was clicked on and
+     * change its' colour to selection colour. Also changing the colour of the
+     * previously selected object back to the unselected colour. 
      * @param gl context
      */
     private void mouseSelect( GL2 gl )

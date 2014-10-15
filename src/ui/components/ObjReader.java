@@ -58,11 +58,6 @@ public class ObjReader
 			sc.close();
 			return;
 		}
-//		else 
-//		{
-//			System.out.println(
-//					"Unsupported parameter:" + lineNumber + " -> " + line );
-//		}
 		sc.close();
 	}
 
@@ -135,6 +130,7 @@ public class ObjReader
 		throw new RuntimeException( string );
 	}
 	/**
+	 * Test of .obj load file
 	 * @param args
 	 */
 	public static void main( String[] args )

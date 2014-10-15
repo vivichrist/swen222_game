@@ -10,7 +10,6 @@ import java.util.Map;
 
 import world.components.CellType;
 import world.components.Direction;
-import world.game.Player;
 
 /**
  * @author Vivian Stewart
@@ -167,6 +166,12 @@ public class GameViewData
 		return dynamicScene.add( (DymanicRender)gobject );
 	}
 	
+	/**
+	 * Add a phantom key to the world, that is, another player has
+	 * swapped the key currently held for the key collided with.
+	 * @param colour - key colour.
+	 * @param location - location of pickup/dropped key.
+	 */
 	public void addKey( Color colour, Point location )
 	{
 		DymanicRender dyn = DymanicRender.instanceKey(

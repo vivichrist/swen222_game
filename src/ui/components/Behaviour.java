@@ -6,7 +6,7 @@ import javax.media.opengl.GL2;
 
 /**
  * @author Vivian Stewart
- * Behaviour 
+ * Behaviour of the associated GraphicalObject
  */
 public interface Behaviour
 {
@@ -17,7 +17,8 @@ public interface Behaviour
 	 */
 	public void modify( GL2 gl, Point2D.Float pos );
 	/**
-	 * @return
+	 * Activated on collision with player
+	 * @return true if object is collidable.
 	 */
 	public boolean activate();
 }
