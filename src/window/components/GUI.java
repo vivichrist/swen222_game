@@ -358,7 +358,7 @@ public class GUI {
 		textFieldNameC.setFont(new Font("Arial", Font.PLAIN, 20));
 		textFieldNameC.setForeground(new Color(30, 30, 30));
 
-		JLabel name = new JLabel("Server Name : ");
+		JLabel name = new JLabel("Server IP: ");
 		serverNameC = new JTextField(18);
 
 		name.setPreferredSize(new Dimension(150, 60));
