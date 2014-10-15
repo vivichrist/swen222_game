@@ -26,7 +26,7 @@ public class ChoosePlayerPanel extends Panel{
 	}
 
 	@Override
-	protected void setUpButtons() {
+	protected void setUpComponents() {
 		// buttons used on choosePlayerPanel
 		jbSingle = new JButton("Single");
 		jbMultiple = new JButton("Multiple");
@@ -42,7 +42,7 @@ public class ChoosePlayerPanel extends Panel{
 				JButton button = (JButton) ae.getSource();
 				if(button == jbSingle){	// if button Single is clicked, choosePlayerPanel will be removed and chooseNamePanel will appear
 					gui.removePanel(ChoosePlayerPanel.this);
-					gui.chooseNamePanel();
+					gui.addPanel(new ChooseNamePanel(gui));
 				}}});
 
 		jbMultiple.addActionListener(new ActionListener() {
