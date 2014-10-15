@@ -150,7 +150,8 @@ public class NetworkController {
 	public void pickupObject(Player player, Point point){
 		this.player = player;
 		this.point = point;
-		byte[]data = this.serialize(this.PlayerAndObject);
+		PlayerAndObject p = new PlayerAndObject();
+		byte[]data = this.serialize(p);
 		Packet06PickupObject pickup = new Packet06PickupObject(data);
 		pickup.writeData(client);
 
@@ -201,6 +202,7 @@ public class NetworkController {
 			object = NetworkController.object;
 			point = NetworkController.point ;
 		}
+		
 	}
 	/**
 	 * serialize object

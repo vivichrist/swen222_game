@@ -178,6 +178,7 @@ public class Client extends Thread {
 	}
 	
 	private void handlePickupObject(Packet06PickupObject packet) {
+		System.out.println();
 		networkController.pickupObjectOtherPlayer(packet);
 	}
 	private void handlePickupObject(Packet07DropObject packet) {
@@ -188,11 +189,11 @@ public class Client extends Thread {
 
 		Player p = networkController.getPlayer(packet.getUsername());
 		if(p!=null){
-			if(!GUI.nameC.equalsIgnoreCase(p.getName())){
+			//if(!GUI.nameC.equalsIgnoreCase(p.getName())){
 				networkController.moveOtherPlayer(p, packet.getPoint());
-			}else{
-				System.out.println("local player should not move by server");
-			}
+//			}else{
+//				System.out.println("local player should not move by server");
+//			}
 		}
 
 	}
