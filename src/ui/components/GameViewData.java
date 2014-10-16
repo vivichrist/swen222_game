@@ -72,16 +72,18 @@ public class GameViewData
 	 * @param current position
 	 * @param next position
 	 */
-	public void addNewPlayerMove( Point current, Point next )
+	public void addNewPlayerMove( Point current, Point next, Player player )
 	{
 		if ( current == null )
 		{
 			DymanicRender dyn = DymanicRender.instancePlayer(
 					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
 			dynamicScene.add( dyn );
+			addPlayer( next, player );
 			return;
 		}
 		newPlayerMove.put( current, next );
+		movePlayer(current, next);
 	}
 
 	/**
