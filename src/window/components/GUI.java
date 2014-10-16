@@ -366,6 +366,7 @@ public class GUI {
 
 	public void setWinner(String w){
 		winner = w;
+		gameOverPanel();
 	}
 
 	public String getName(){

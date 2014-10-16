@@ -43,7 +43,7 @@ public class Client extends Thread {
 
 	/**
 	 * Constructor - creates a Client
-	 * @param name - current player name 
+	 * @param name - current player name
 	 * @param gui the GUI for this game
 	 * @param ipAddress - server ip address
 	 * @param port - server port
@@ -63,8 +63,8 @@ public class Client extends Thread {
 	}
 	/**
 	 * client check the receive packet
-	 * if received packet is valid then pass to parsePacket method 
-	 * 
+	 * if received packet is valid then pass to parsePacket method
+	 *
 	 */
 	public void run(){
 
@@ -85,12 +85,12 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * the parsePacket will check the first two byte 
+	 * the parsePacket will check the first two byte
 	 * byte will identify the type of data received
 	 * @param data received from client
 	 * @param address client ip address
 	 * @param port client port
-	 * 
+	 *
 	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		String message = new String(data).trim();
@@ -140,10 +140,10 @@ public class Client extends Thread {
 			packet = new Packet08PickupKey(data);
 			handlePickupKey((Packet08PickupKey)packet);
 			break;
-			
+
 		case WIN:
 			packet = new Packet09WinGame(data);
-			handleWin((Packet09WinGame) packet, address, port);
+			handleWin((Packet09WinGame) packet);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class Client extends Thread {
 
 	/**
 	 * this method will send message from client to server
-	 * @param data  - byte array data packet with PacketType 
+	 * @param data  - byte array data packet with PacketType
 	 * */
 	public void sendData(byte[]data){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
@@ -165,8 +165,8 @@ public class Client extends Thread {
 
 	}
 	/**
-	 * this method is handle login package 
-	 * @param packet - received packet from client 
+	 * this method is handle login package
+	 * @param packet - received packet from client
 	 * */
 	private void handleLogin(Packet00Login packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + packet.getUsername()
@@ -175,10 +175,10 @@ public class Client extends Thread {
 
 	}
 	/**
-	 * this method is handle the game state, 
-	 * received serialized data from server, 
-	 * then deserialize 
-	 * @param packet - bytes array 
+	 * this method is handle the game state,
+	 * received serialized data from server,
+	 * then deserialize
+	 * @param packet - bytes array
 	 * */
 	private void handleData(Packet02Data packet) {
 
@@ -187,21 +187,20 @@ public class Client extends Thread {
 		networkController.setClient(this);
 
 	}
-	
-	private void handleWin(Packet09WinGame packet, InetAddress address,
-			int port2) {
+
+	private void handleWin(Packet09WinGame packet) {
 		System.out.println(packet.getUsername()+ " win the game ");
 		networkController.setWinnerFromNetwork(packet.getUsername());
-		
+
 	}
 	private void handlePickupObject(Packet07DropObject packet) {
-		
+
 	}
 	/**
-	 * this method is handle the open door action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
+	 * this method is handle the open door action,
+	 * received  data from server,
+	 * then send to netowrkController to send the action to logic
+	 * @param packet - bytes array
 	 * */
 
 	private void handleOpenDoor(Packet05OpenDoor packet) {
@@ -209,25 +208,25 @@ public class Client extends Thread {
 		networkController.triggerDoor(packet.getName(), packet.getPoint());
 	}
 	/**
-	 * this method is handle the pickup object action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
+	 * this method is handle the pickup object action,
+	 * received  data from server,
+	 * then send to netowrkController to send the action to logic
+	 * @param packet - bytes array
 	 * */
 	private void handlePickupObject(Packet06PickupObject packet) {
 		networkController.pickupObjectOtherPlayer(packet);
 	}
 
-	
+
 	private void handlePickupKey(Packet08PickupKey packet) {
 		networkController.pickupKeyOtherPlayer(packet);
 	}
-	
+
 	/**
-	 * this method is handle the move action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
+	 * this method is handle the move action,
+	 * received  data from server,
+	 * then send to netowrkController to send the action to logic
+	 * @param packet - bytes array
 	 * */
 	private void handleMove(Packet03Move packet) {
 
@@ -243,10 +242,10 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * this method is handle the teleport action, 
-	 * received  data from server, 
-	 * then send to netowrkController to send the action to logic 
-	 * @param packet - bytes array 
+	 * this method is handle the teleport action,
+	 * received  data from server,
+	 * then send to netowrkController to send the action to logic
+	 * @param packet - bytes array
 	 * */
 	private void handleTeleport(Packet04Teleport packet) {
 		Player p = networkController.getPlayer(packet.getUsername());
@@ -262,7 +261,7 @@ public class Client extends Thread {
 	/**
 	 * this method is deserialize the object
 	 * @param bytes array
-	 * 
+	 *
 	 * */
 	public GameState deserialize(byte[]bytes) {
 

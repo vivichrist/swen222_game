@@ -22,6 +22,7 @@ import ServerClients.UDPpackets.Packet05OpenDoor;
 import ServerClients.UDPpackets.Packet06PickupObject;
 import ServerClients.UDPpackets.Packet07DropObject;
 import ServerClients.UDPpackets.Packet08PickupKey;
+import ServerClients.UDPpackets.Packet09WinGame;
 import ServerClients.UDPpackets.UDPPacket;
 import ServerClients.UDPpackets.UDPPacket.PacketTypes;
 import world.game.GameBuilder;
@@ -48,7 +49,7 @@ public class Server extends Thread {
 
 	/**
 	 * Constructor - creates a Server
-	 * @param portNumber - server port number 
+	 * @param portNumber - server port number
 	 * @param numPlayers - number of players
 	 * */
 
@@ -72,8 +73,8 @@ public class Server extends Thread {
 	}
 	/**
 	 * server check the receive packet
-	 * if received packet is valid then pass to parsePacket method 
-	 * 
+	 * if received packet is valid then pass to parsePacket method
+	 *
 	 */
 	public void run(){
 
@@ -103,12 +104,12 @@ public class Server extends Thread {
 
 	}
 	/**
-	 * the parsePacket will check the first two byte 
+	 * the parsePacket will check the first two byte
 	 * byte will identify the type of data received
 	 * @param data received from client
 	 * @param address client ip address
 	 * @param port client port
-	 * 
+	 *
 	 * */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		//System.out.println("bbb9");
@@ -140,7 +141,7 @@ public class Server extends Thread {
 			break;
 		case DATA:
 			packet = new Packet02Data(data);
-			name = ((Packet02Data) packet).getUsername();//may through a exception 
+			name = ((Packet02Data) packet).getUsername();//may through a exception
 			this.handleData(((Packet02Data) packet));
 			break;
 		case MOVE:
@@ -168,16 +169,20 @@ public class Server extends Thread {
 			packet = new Packet08PickupKey(data);
 			handlePickupKey((Packet08PickupKey)packet);
 			break;
+		case WIN:
+			packet = new Packet09WinGame(data);
+			handleWin((Packet09WinGame) packet);
 		}
 	}
 
 
-	
-	
+
+
+
 	/**
-	 * this method is going to send init data to all cilents to 
+	 * this method is going to send init data to all cilents to
 	 * start the game
-	 * 
+	 *
 	 * */
 
 	private void sentStateToAllClients() {
@@ -209,7 +214,7 @@ public class Server extends Thread {
 	}
 	/**
 	 * this method will send message from server to client
-	 * @param data  - byte array data packet with PacketType 
+	 * @param data  - byte array data packet with PacketType
 	 * */
 	private void sendData(byte[]data, InetAddress ipAddress, int port){
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
@@ -250,7 +255,7 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * get player by 
+	 * get player by
 	 * */
 	public MultyPlayer getPlayer(String username) {
 		for (MultyPlayer player : this.connectedPlayers) {
@@ -282,7 +287,7 @@ public class Server extends Thread {
 		byte[] temp = packet.getData();
 		Packet05OpenDoor pk = new Packet05OpenDoor(temp);
 		packet.writeData(this);
-	}		
+	}
 	private void handlePickupObject(Packet06PickupObject packet) {
 		byte[] temp = packet.getData();
 		Packet06PickupObject pk = new Packet06PickupObject(temp);
@@ -293,7 +298,7 @@ public class Server extends Thread {
 		byte[] temp = packet.getData();
 		Packet08PickupKey pk = new Packet08PickupKey(temp);
 		pk.writeData(this);
-		
+
 	}
 	private void handleDropObject(Packet07DropObject packet) {
 
@@ -301,6 +306,11 @@ public class Server extends Thread {
 		Packet07DropObject pk = new Packet07DropObject(temp);
 		pk.writeData(this);
 
+	}
+	private void handleWin(Packet09WinGame packet) {
+		byte[] temp = packet.getData();
+		Packet09WinGame pk = new Packet09WinGame(temp);
+		pk.writeData(this);
 	}
 	private void handleMove(Packet03Move packet) {
 		if(getPlayer(packet.getUsername())!=null){
