@@ -172,6 +172,7 @@ public class Server extends Thread {
 		case WIN:
 			packet = new Packet09WinGame(data);
 			handleWin((Packet09WinGame) packet);
+			break;
 		}
 	}
 
