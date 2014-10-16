@@ -80,7 +80,6 @@ public class GameViewData
 			return;
 		}
 		newPlayerMove.put( current, next );
-		movePlayer(current, next);
 	}
 
 	/**
@@ -223,12 +222,12 @@ public class GameViewData
 		Player player = playerElements.remove( current );
 		if ( player == null )
 			throw new RuntimeException(
-					"No Player at Point:" + current + " -> null" );
+					"No Player at Point:" + current + " -> " + player );
 		playerElements.put( next, player );
 		// put old object back, Controlled behaviour will update
 	}
 
-	public void addPlayer( Point position, Player player ) {
+	private void addPlayer( Point position, Player player ) {
 		playerElements.put( position, player );
 		DymanicRender dyn = DymanicRender.instancePlayer(
 				Behave.CONTROLLED, position, Direction.NORTH, ColourPalette.GREY1 );

@@ -280,8 +280,8 @@ public class GameScene
 				dynamicObject = DymanicRender.instancePlayer(
 						Behave.CONTROLLED, p.getPosition()
 						, p.getFacing(), Color.darkGray );
-				graphicData.addDynamicOnly(dynamicObject);
-				graphicData.addPlayer( p.getPosition(), p );
+				graphicData.addDynamicOnly( dynamicObject );
+				graphicData.addNewPlayerMove( null, p.getPosition(), p );
 			}
 		}
 
