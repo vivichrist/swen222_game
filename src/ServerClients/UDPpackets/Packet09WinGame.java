@@ -59,7 +59,7 @@ public class Packet09WinGame extends UDPPacket {
 	 */
 	@Override
 	public byte[] getData() {
-		return ("-3" + this.username).getBytes();
+		return ("-3" + ","+this.username).getBytes();
 	}
 
 	public String getUsername() {
