@@ -30,7 +30,6 @@ public class Controlled implements Behaviour
 		System.out.println(
 				"move player from:" + oldLocation + "->" + newLocation );
 		gdata.removePlayerMove( oldLocation );
-		// gdata.remove( oldLocation );
 	}
 
 	@Override

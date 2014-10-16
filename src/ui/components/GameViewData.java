@@ -74,6 +74,11 @@ public class GameViewData
 	 */
 	public void addNewPlayerMove( Point current, Point next, Player player )
 	{
+		if ( next == null )
+		{
+			removePlayerAtPoint( current );
+			return;
+		}
 		if ( current == null )
 		{
 			addPlayer( next, player );
@@ -265,6 +270,7 @@ public class GameViewData
 		previousSelection = null;
 		dynamicScene.clear();
 		newPlayerMove.clear();
+		playerElements.clear();
 		staticScene.clear(); // must clear staticID from opengl
 		gameElements.clear();
 	}
