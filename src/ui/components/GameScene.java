@@ -104,14 +104,15 @@ public class GameScene
 			return false;
 		}
 		Point p = new Point( newXCoordinate, newYCoordinate );
+		GraphicalObject go = graphicData.getGameElements().get( p );
+		Player po = graphicData.getPlayerElements().get( p );
 		if ( staticMap[newXCoordinate][newYCoordinate].ordinal()
-					> CellType.WALL.ordinal()
-				|| graphicData.getGameElements().get( p ) != null
-				|| graphicData.getPlayerElements().get( p ) != null )
+					> CellType.WALL.ordinal() || go != null || po != null )
 		{
-			CellType ct =  graphicData.getGameElements().get( p ).getType();
-			if ( graphicData.getPlayerElements().get( p ) != null )
+			if ( po != null )
 				return true;
+			CellType ct = null;
+			if ( go != null ) ct = go.getType();
 			if ( ct == CellType.RINGS )
 			{
 				teleport = true;
@@ -120,8 +121,7 @@ public class GameScene
 			}
 			if ( ct == CellType.KEYDOOR || ct == CellType.DOOR )
 			{	if ( RendererController.canOpenDoor( player, p ) )
-					return ((DymanicRender)graphicData
-							.getGameElements().get( p )).collide();
+					return ((DymanicRender)go).collide();
 				return true;
 			} // tokens and torch
 			else if ( ct.toString() == player.getType().toString()
@@ -143,8 +143,7 @@ public class GameScene
 				}
 
 			} else
-				return ((DymanicRender)graphicData
-							.getGameElements().get( p )).collide();
+				return ((DymanicRender)go).collide();
 		}
 		return staticMap[newXCoordinate][newYCoordinate] == CellType.WALL;
 	}
@@ -277,10 +276,6 @@ public class GameScene
 		{
 			if ( player != p && p.getFloor() == fmap )
 			{
-				dynamicObject = DymanicRender.instancePlayer(
-						Behave.CONTROLLED, p.getPosition()
-						, p.getFacing(), Color.darkGray );
-				graphicData.addDynamicOnly( dynamicObject );
 				graphicData.addNewPlayerMove( null, p.getPosition(), p );
 			}
 		}
