@@ -108,7 +108,7 @@ public class RendererController {
 		System.out.println("Point to pick up from : " + p.toString());
 		Player player = state.getPlayer(playername);
 		state.pickupObjectAtPoint(player, p);
-		view.remove(p);
+		if(GameView.player.getName().equals(playername)) view.remove(p);
 	}
 
 	/**
