@@ -28,7 +28,7 @@ public class ChooseServerPanel extends Panel{
 
 	public ChooseServerPanel(GUI gui) {
 		super(gui);
-		setBounds(300, 200, 200, 120);	
+		setBounds(300, 240, 200, 120);	
 	}
 
 	@Override

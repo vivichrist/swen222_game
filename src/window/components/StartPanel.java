@@ -21,7 +21,7 @@ public class StartPanel extends Panel{
 
 	public StartPanel(GUI gui) {
 		super(gui);
-		setBounds(350, 180, 90, 600);
+		setBounds(350, 240, 90, 600);
 	}
 
 	@Override

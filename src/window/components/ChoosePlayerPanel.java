@@ -22,7 +22,7 @@ public class ChoosePlayerPanel extends Panel{
 
 	public ChoosePlayerPanel(GUI gui) {
 		super(gui);
-		setBounds(325, 200, 150, 120);
+		setBounds(325, 240, 150, 120);
 	}
 
 	@Override
