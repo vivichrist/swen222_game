@@ -76,9 +76,6 @@ public class GameViewData
 	{
 		if ( current == null )
 		{
-			DymanicRender dyn = DymanicRender.instancePlayer(
-					Behave.CONTROLLED, next, Direction.NORTH, Color.darkGray );
-			dynamicScene.add( dyn );
 			addPlayer( next, player );
 			return;
 		}
