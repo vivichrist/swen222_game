@@ -122,6 +122,9 @@ public class GUI {
 	 * @param hasWinner	whether is game has a winner or not
 	 */
 	public void gameOverPanel(){
+		gameView.setVisible(false);
+		southPanel.getPanel().setVisible(false);
+		
 		gameOverPanel = new JPanel();
 		setUpPanel(gameOverPanel, 100, 200, 600, 160);
 
@@ -132,7 +135,7 @@ public class GUI {
 		gameOver.setForeground(new Color(100, 200, 100).brighter());
 		gameOverPanel.add(gameOver);
 
-		JLabel wins = new JLabel(winner);
+		JLabel wins = new JLabel(winner + " Wins!");
 		wins.setPreferredSize(new Dimension(310, 80));
 		wins.setFont(new Font("Arial", Font.BOLD, 50));
 		wins.setForeground(new Color(100, 200, 100).brighter());
