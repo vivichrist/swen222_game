@@ -101,7 +101,6 @@ public class GameState implements java.io.Serializable{
 				UIController.refreshTokenPanel();
 				if(player.getTokenList().collectedAll()){
 					RendererController.setWinner(player);
-					System.out.println("You Win!");
 				}
 				return true;
 			}
