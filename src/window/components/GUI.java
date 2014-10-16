@@ -28,20 +28,20 @@ import world.game.Player;
 
 
 /**
- * The GUI is responsible for setting up the game entry. This class generates 
- * different options to let player choose different game mode. The class also 
+ * The GUI is responsible for setting up the game entry. This class generates
+ * different options to let player choose different game mode. The class also
  * records players's information and pass to other classes.
- * 
+ *
  * @author Zhiheng Sun,  ID: 300256273
- * 
+ *
  */
 public class GUI {
 
-	// the dimension of the frame 
+	// the dimension of the frame
 	private static int width = 800;
 	private static int height = 770;
 
-	private JFrame frame;	// this is the frame the game will be shown on 
+	private JFrame frame;	// this is the frame the game will be shown on
 	private JLayeredPane layeredPane;	// this is used to add panel onto the frame
 	private GLJPanel gameView;	// the rendering window of the game
 
@@ -49,15 +49,15 @@ public class GUI {
 	private Client client;	// is client side of the game
 
 	/**
-	 * The following stores the panel shown on the bottom of the frame which has player's 
+	 * The following stores the panel shown on the bottom of the frame which has player's
 	 * collected tokens images and player's inventory images
 	 */
 	private SouthPanel southPanel;
 
 	/**
-	 * The following JPanels are the panels used to display on the frame according 
+	 * The following JPanels are the panels used to display on the frame according
 	 * to players' stage of the game entry.
-	 */	
+	 */
 	private Panel backgroundPanel;
 	private Panel waitClientsPanel;
 
@@ -79,7 +79,7 @@ public class GUI {
 	private String strServerNameC;	// the player entered server name in multiple-player mode
 	private String strPortNumC;	// the player entered port number in multiple-player mode
 	private String winner;	// the winner of the game
-	
+
 	public GUI(){
 		new ColourPalette();
 		setUp();
@@ -144,9 +144,9 @@ public class GUI {
 	}
 
 	/**
-	 * The following method sets the bounds of the given panel with the 
+	 * The following method sets the bounds of the given panel with the
 	 * given values
-	 * @param panel	the given panel to set bounds to 
+	 * @param panel	the given panel to set bounds to
 	 * @param left	the left position of the panel
 	 * @param top	the top position of the panel
 	 * @param width	the width of the panel
@@ -172,6 +172,8 @@ public class GUI {
 
 		RendererController renCon = new RendererController(true);
 		NetworkController netCon = new NetworkController(controller, renCon);
+		renCon.setState(state);
+		renCon.setUICon(controller);
 
 		netCon.setGameView(gameView);
 		gameView.setEnabled( true );
@@ -193,7 +195,7 @@ public class GUI {
 		waitClientsPanel = new WaitClientsPanel(this);
 		layeredPane.add(waitClientsPanel, JLayeredPane.MODAL_LAYER);
 
-		
+
 		int clientPortNumber = Integer.parseInt(strPortNumC);
 		client = new Client(this,nameC,strServerNameC,clientPortNumber );
 		client.start();
@@ -222,7 +224,7 @@ public class GUI {
 	 * The following method pops up a window to ask the player to choose which floor
 	 * he wants to go to when the player enters teleport
 	 * @param number	how many floors the game current holds
-	 * @return	the floor player chose 
+	 * @return	the floor player chose
 	 */
 	public int getFloor(int number){
 		int currentFloor = player.getFloor().floorNumber();
@@ -249,7 +251,7 @@ public class GUI {
 		if (s == null){
 			return -1;
 		}
-		// change the string s back to corresponding integer and call the canvas to rewrite the floor name 
+		// change the string s back to corresponding integer and call the canvas to rewrite the floor name
 		for (int j = 0; j < floorsName.length; j++){
 			if (s.equalsIgnoreCase(floorsName[j] + " Floor")){
 				southPanel.getUsefulItemsCanvas().setFloorNum(j);
@@ -280,7 +282,7 @@ public class GUI {
 
 	/**
 	 * this method is going to return the current local host address
-	 * 
+	 *
 	 * */
 	protected InetAddress getSeverName() throws UnknownHostException {
 		return InetAddress.getLocalHost();
@@ -347,7 +349,7 @@ public class GUI {
 	}
 
 	public void setNameC(String text) {
-		nameC = text;		
+		nameC = text;
 	}
 
 	public void setStrPortNumC(String text) {
@@ -355,17 +357,17 @@ public class GUI {
 	}
 
 	public void setStrServerNameC(String text) {
-		strServerNameC = text;	
+		strServerNameC = text;
 	}
 
 	public String getStrServerNameC() {
 		return strServerNameC;
 	}
-	
+
 	public void setWinner(String w){
 		winner = w;
 	}
-	
+
 	public String getName(){
 		return name;
 	}
