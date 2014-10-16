@@ -8,13 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import world.ColourPalette;
 import world.components.CellType;
 import world.components.Direction;
+import world.game.Player;
 
 /**
  * @author Vivian Stewart
  * Centralised data for scene and scene rendering.
- * - The OpenGL display list reference to draw all objects that do not change or 
+ * - The OpenGL display list reference to draw all objects that do not change or
  * 	 move.
  * - Both of the rendering lists are housed here.
  * - The map of collidable and selectable items.
@@ -28,6 +30,7 @@ public class GameViewData
 	private final Map<Point, GraphicalObject>	gameElements;
 	private final Map<Point, Point>				newPlayerMove;
 	private DymanicRender 						previousSelection = null;
+	private Map<Point, Player> 					playerElements;
 	private static GameViewData					instance = null;
 
 	/**
@@ -48,6 +51,7 @@ public class GameViewData
 		dynamicScene = Collections.synchronizedList( new ArrayList<DymanicRender>() );
 		gameElements = Collections.synchronizedMap( new HashMap<Point, GraphicalObject>() );
 		newPlayerMove = Collections.synchronizedMap( new HashMap<Point, Point>() );
+		playerElements = Collections.synchronizedMap( new HashMap<Point, Player>() );
 	}
 
 	/**
@@ -58,18 +62,8 @@ public class GameViewData
 		return Collections.unmodifiableMap( gameElements );
 	}
 
-	/**
-	 * @param current - position of element
-	 * @param next - position to move element to
-	 */
-	public void moveGameElement( Point current, Point next )
-	{
-		GraphicalObject go = gameElements.remove( current );
-		if ( go == null )
-			throw new RuntimeException(
-					"No Object at Point:" + current + " -> null" );
-		gameElements.put( next, go );
-		// put old object back
+	public Map<Point, Player> getPlayerElements() {
+		return Collections.unmodifiableMap( playerElements );
 	}
 
 	/**
@@ -165,7 +159,7 @@ public class GameViewData
 		}
 		return dynamicScene.add( (DymanicRender)gobject );
 	}
-	
+
 	/**
 	 * Add a phantom key to the world, that is, another player has
 	 * swapped the key currently held for the key collided with.
@@ -199,7 +193,7 @@ public class GameViewData
 					"No Object at Point:" + p + " -> null" );
 		dynamicScene.remove( go );
 	}
-	
+
 	/**
 	 * Used when other players open doors in multiplayer mode.
 	 * @param doorpoint - phantom door opening
@@ -218,6 +212,28 @@ public class GameViewData
 		for ( DymanicRender dyn: dynamicScene )
 			if ( dyn.getType() == CellType.PLAYER && dyn.getLocation().equals( p ) )
 				dynamicScene.remove( dyn );
+		playerElements.remove( p );
+	}
+
+	/**
+	 * @param current - position of element
+	 * @param next - position to move element to
+	 */
+	public void movePlayer( Point current, Point next )
+	{
+		Player player = playerElements.remove( current );
+		if ( player == null )
+			throw new RuntimeException(
+					"No Player at Point:" + current + " -> null" );
+		playerElements.put( next, player );
+		// put old object back, Controlled behaviour will update
+	}
+
+	public void addPlayer( Point position, Player player ) {
+		playerElements.put( position, player );
+		DymanicRender dyn = DymanicRender.instancePlayer(
+				Behave.CONTROLLED, position, Direction.NORTH, ColourPalette.GREY1 );
+		dynamicScene.add( dyn );
 	}
 
 	/**

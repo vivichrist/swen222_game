@@ -106,16 +106,19 @@ public class GameScene
 		Point p = new Point( newXCoordinate, newYCoordinate );
 		if ( staticMap[newXCoordinate][newYCoordinate].ordinal()
 					> CellType.WALL.ordinal()
-				|| graphicData.getGameElements().get( p ) != null )
+				|| graphicData.getGameElements().get( p ) != null
+				|| graphicData.getPlayerElements().get( p ) != null )
 		{
 			CellType ct =  graphicData.getGameElements().get( p ).getType();
+			if ( graphicData.getPlayerElements().get( p ) != null )
+				return true;
 			if ( ct == CellType.RINGS )
 			{
 				teleport = true;
 				System.out.println("Teleporting to Floor:" + teleport );
 				return true;
 			}
-			else if ( ct == CellType.KEYDOOR || ct == CellType.DOOR )
+			if ( ct == CellType.KEYDOOR || ct == CellType.DOOR )
 			{	if ( RendererController.canOpenDoor( player, p ) )
 					return ((DymanicRender)graphicData
 							.getGameElements().get( p )).collide();
@@ -278,6 +281,7 @@ public class GameScene
 						Behave.CONTROLLED, p.getPosition()
 						, p.getFacing(), Color.darkGray );
 				graphicData.addDynamicOnly(dynamicObject);
+				graphicData.addPlayer( p.getPosition(), p );
 			}
 		}
 
