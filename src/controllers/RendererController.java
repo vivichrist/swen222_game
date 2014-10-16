@@ -69,7 +69,7 @@ public class RendererController {
 	public static void moveOtherPlayer(Player player, Point point){
 		Point oldPos = player.getPosition();
 		state.movePlayer(state.getPlayer(player.getName()), point);
-		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point);
+		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point, player);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class RendererController {
 		state.teleport(player, floorNumber);
 		// If the player lands on the same floor as the current player they need to be added to the current view
 		if(player.getFloor() == GameView.player.getFloor()){
-			view.addNewPlayerMove(null, player.getPosition());
+			view.addNewPlayerMove(null, player.getPosition(), player);
 		}
 	}
 
