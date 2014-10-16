@@ -23,7 +23,7 @@ public class RendererController {
 	private static GameState state;
 	private static GameViewData view;
 	private static boolean singlePlayer;
-	
+
 	/**
 	 * Constructor - creates a RendererController with a Pointer to the Singleton GameViewData for updating Renderer database.
 	 * @requires Constructor must be called after the GameView has been constructed.
@@ -32,7 +32,7 @@ public class RendererController {
 		view = GameViewData.instance();
 		singlePlayer = single;
 	}
-	
+
 	/**
 	 * @param n the netCon to set
 	 */
@@ -46,14 +46,14 @@ public class RendererController {
 	public static void setState(GameState s) {
 		state = s;
 	}
-	
+
 	/**
 	 * @param u the UIController to set
 	 */
 	public static void setUICon(UIController u){
 		uiCon = u;
 	}
-	
+
 	/**
 	 * @return true if this is a single player game
 	 */
@@ -71,7 +71,7 @@ public class RendererController {
 		state.movePlayer(state.getPlayer(player.getName()), point);
 		if(player.getFloor() == GameView.player.getFloor()) view.addNewPlayerMove(oldPos, point);
 	}
-	
+
 	/**
 	 * Moves the current Player in the Game
 	 * @param player the Player to move
@@ -80,10 +80,8 @@ public class RendererController {
 	public static void movePlayer(Player player, Point point){
 		if(!singlePlayer) netCon.movePlayer(player, point);
 		state.movePlayer(player, point);
-		System.out.println("Player one position: " + state.getPlayers().get(0).getPosition());
-		System.out.println("Player two position: " + state.getPlayers().get(1).getPosition());
 	}
-	
+
 	/**
 	 * Picks up an item for the current Player in the Game
 	 * @param player the Player to pick up an item
@@ -99,7 +97,7 @@ public class RendererController {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Picks up an item for another Player in the Game
 	 * @param player the Player to pick up an item
@@ -112,7 +110,7 @@ public class RendererController {
 		state.pickupObjectAtPoint(player, p);
 		view.remove(p);
 	}
-	
+
 	/**
 	 * Picks up a Key for another Player, dropping their current Key (if they have one) and updating the Renderer (if on the same floor)
 	 * @param playerName the name of the Player picking up the Key
@@ -131,7 +129,7 @@ public class RendererController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Picks up a Key for a Player, dropping their current Key (if they have one)
 	 * @param player the Player picking up the Key
@@ -143,8 +141,8 @@ public class RendererController {
 		if(!singlePlayer) netCon.pickupKey(player.getName(), p);
 		return toDrop;
 	}
-	
-	
+
+
 	/**
 	 * Checks whether a Player can open a door
 	 * @param player the Player opening the door
@@ -159,7 +157,7 @@ public class RendererController {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Triggers a Door to open in the Renderer from another Client
 	 * @param name the name of the Player
@@ -168,7 +166,7 @@ public class RendererController {
 	public static void triggerDoor(String name, Point p){
 		if(state.getPlayer(name).getFloor() == GameView.player.getFloor()) view.triggerDoorOpen(p);
 	}
-	
+
 	/**
 	 * Returns a List of the current Players in this game
 	 * @return a List of Players
@@ -176,7 +174,7 @@ public class RendererController {
 	public List<Player> getPlayers(){
 		return state.getPlayers();
 	}
-	
+
 	/**
 	 * Teleport the currentPlayer in the Game
 	 * @param player the Player to teleport
@@ -189,7 +187,7 @@ public class RendererController {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Teleport another Player in the Game
 	 * @param playerName the name of the Player
@@ -209,16 +207,16 @@ public class RendererController {
 		}
 	}
 
-	
+
 	/**
 	 * Notifies the Winner of this game
 	 * @param p the Player that wins
 	 */
 	public static void setWinner(Player p){
 		if(!singlePlayer) netCon.setWinner(p.getName());
-		else UIController.setWinner(p.getName());
+		UIController.setWinner(p.getName());
 	}
-	
+
 	/**
 	 * Passes through the winner notification alert from the network
 	 * @param p the Player that has won
@@ -227,5 +225,5 @@ public class RendererController {
 		UIController.setWinner(playerName);
 	}
 
-	
+
 }

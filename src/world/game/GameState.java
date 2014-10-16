@@ -71,13 +71,13 @@ public class GameState implements java.io.Serializable{
 	 */
 	public boolean teleport(Player p, int floorNumber){
 		if(floorNumber >= floors.length || floorNumber < 0) return false;
-		else{			
+		else{
 			p.getFloor().removePlayer(p);
 			floors[floorNumber].placePlayer(p.getPosition(), p);
 			p.setFloor(floors[floorNumber]);
 			return true;
 		}
-		
+
 	}
 
 	/**
@@ -101,11 +101,12 @@ public class GameState implements java.io.Serializable{
 				UIController.refreshTokenPanel();
 				if(player.getTokenList().collectedAll()){
 					RendererController.setWinner(player);
+					System.out.println("You Win!");
 				}
 				return true;
 			}
 		}
-		
+
 		// Handle the case that the object is a Torch (Players can only carry one Torch)
 		if(object instanceof Torch){
 			Torch torch = (Torch) object;
@@ -127,14 +128,14 @@ public class GameState implements java.io.Serializable{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Performs a Key pickup for a given Player and Point.
 	 * @param player the Player to pick up the Key
 	 * @param p the Point to pick the Key up from
 	 * @return the Key from the Player's Inventory to be dropped, returns null if no Key was previously held
 	 */
-	public Key pickupKey(Player player, Point p){	
+	public Key pickupKey(Player player, Point p){
 		Key key = player.getFloor().removeKey(p);
 		Key toReturn = player.getInventory().addKey(key);
 		if(toReturn != null){
@@ -155,7 +156,7 @@ public class GameState implements java.io.Serializable{
 		}
 		return null;
 	}
-	
+
 	public Player getPlayer(){
 		return players.get(0);
 	}
@@ -171,7 +172,7 @@ public class GameState implements java.io.Serializable{
 		if(player.getInventory().contains(door.getKey()) || !door.isLockable()) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Return the current GameState
 	 * @return the current GameState
@@ -179,11 +180,11 @@ public class GameState implements java.io.Serializable{
 	public GameState getState(){
 		return this;
 	}
-	
+
 	/**
 	 * Returns the number of floors in this game world
 	 * @return the number of floors in this game world
-	 */ 
+	 */
 	public int floorCount(){
 		return floors.length;
 	}
@@ -196,6 +197,6 @@ public class GameState implements java.io.Serializable{
 	public List<Player> getPlayers(){
 		return players;
 	}
-	
+
 
 }
