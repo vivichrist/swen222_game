@@ -186,7 +186,7 @@ public class Client extends Thread {
 		GameState st = deserialize(packet.getRealData());
 		networkController = new MultiPlayerBuild(st, gui, name).getNetworkController();
 		networkController.setClient(this);
-
+		
 	}
 
 	private void handleWin(Packet09WinGame packet) {

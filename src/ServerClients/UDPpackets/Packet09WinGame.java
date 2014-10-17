@@ -21,7 +21,7 @@ public class Packet09WinGame extends UDPPacket {
 	public Packet09WinGame(byte[] data) {
 		super(-3);
 		String[] dataArray = readData(data).split(",");
-		this.username = dataArray[0];
+		this.username = dataArray[1];
 		System.out.println("username = "+ username);
 	}
 
@@ -69,7 +69,7 @@ public class Packet09WinGame extends UDPPacket {
 	@Override
 	public byte[] getRealData() {
 		// TODO Auto-generated method stub
-		return null;
+		return (this.username).getBytes();
 	}
 
 
