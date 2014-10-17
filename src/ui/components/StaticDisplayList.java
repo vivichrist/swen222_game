@@ -34,7 +34,6 @@ public class StaticDisplayList
 		if ( staticID != 0 )
 		{
 			destroy( gl );
-			instance = this;
 		}
 		staticID  = gl.glGenLists( 1 );
 		if ( staticID == 0 ) return false;
@@ -50,13 +49,13 @@ public class StaticDisplayList
 
 	/**
 	 * @param gl - OpenGL context
-	 * @return old staticID
+	 * @return staticID should be 0
 	 */
 	public int destroy( GL2 gl )
 	{
 		if ( staticID == 0 ) return staticID;
 		gl.glDeleteLists( staticID, 1 );
-		instance = null;
+		staticID = 0;
 		return staticID;
 	}
 

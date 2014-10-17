@@ -88,7 +88,7 @@ public class GameViewData
 	}
 
 	/**
-	 * This Method a buffered "other player" move from the newPlayerMove map
+	 * This method removes a buffered "other player" move from the newPlayerMove map
 	 * because it has been moved.
 	 * @param old is the point the player has moved from, and also the
 	 * reference key
@@ -99,7 +99,7 @@ public class GameViewData
 	}
 
 	/**
-	 * @return the buffer of other player moves as unmodifiable map
+	 * @return the buffer of other player moves as an unmodifiable map
 	 */
 	public Map<Point, Point> getOtherPlayerMove()
 	{
