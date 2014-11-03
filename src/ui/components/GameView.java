@@ -98,7 +98,7 @@ public class GameView extends GLJPanel
             	gl2.glEnable( GL2.GL_POINT_SMOOTH );
             	gl2.glEnable( GL.GL_LINE_SMOOTH );
             	gl2.glEnable( GL2.GL_POLYGON_SMOOTH );
-            	gl2.glEnable( GL2.GL_POLYGON_OFFSET_LINE );
+            	// gl2.glEnable( GL2.GL_POLYGON_OFFSET_LINE );
             	// gl2.glPolygonOffset( 0.1f, 100f );
             	gl2.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
             	gl2.glHint( GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST );
@@ -196,10 +196,8 @@ public class GameView extends GLJPanel
     	position.setLocation( newx, newy );
     	// update key input every frame unless input is received
     	keyInput.resetKeyUpdate( );
-    	if ( scene.isTeleport() )
-    	{
-    		if ( RendererController.teleport( player ) )
-    			scene.resetTeleport();
+    	if ( scene.isTeleport() && RendererController.teleport( player ) ) {
+    		scene.resetTeleport();
 			scene = new GameScene( state, player );
 			gl.glLoadIdentity();
 			scene.addSurrounds();

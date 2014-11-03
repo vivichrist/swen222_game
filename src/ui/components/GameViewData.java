@@ -234,8 +234,9 @@ public class GameViewData
 
 	private void addPlayer( Point position, Player player ) {
 		playerElements.put( position, player );
+		// in the dynamic scene the point gets modified
 		DymanicRender dyn = DymanicRender.instancePlayer(
-				Behave.CONTROLLED, position, Direction.NORTH, ColourPalette.GREY1 );
+				Behave.CONTROLLED, new Point( position ), Direction.NORTH, ColourPalette.GREY1 );
 		dynamicScene.add( dyn );
 	}
 

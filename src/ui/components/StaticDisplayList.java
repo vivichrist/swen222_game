@@ -5,10 +5,13 @@ import javax.media.opengl.GL2;
 /**
  * @author Vivian Stewart
  * Maintains the OpenGL display list of graphical objects that do not change.
+ * this is stored on the gpu's video memory and staticID is a reference or
+ * handle to that rendering task
  */
 public class StaticDisplayList
 {
 	private int	staticID;
+	private static StaticDisplayList instance = null;
 
 	public static StaticDisplayList	instance()
 	{
@@ -17,10 +20,9 @@ public class StaticDisplayList
 		return instance;
 	}
 
-	private static StaticDisplayList instance = null;
-
 	private StaticDisplayList()
 	{
+		// only positive numbers are handles to valid display lists
 		staticID = 0;
 	}
 
@@ -61,6 +63,7 @@ public class StaticDisplayList
 
 	public void drawDisplayList( GL2 gl )
 	{
+		// there may be no list yet in which case we do nothing
 		if ( staticID == 0 ) return;
 		gl.glCallList(staticID );
 	}

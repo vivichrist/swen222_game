@@ -83,9 +83,11 @@ public class GameScene
 		{
 			CellType ct =  graphicData.getGameElements().get( p ).getType();
 			// tokens, keys, rings and torch
-			if (( ct.ordinal() < CellType.CHEST.ordinal()
-						&& ct.ordinal() < CellType.OUTOFBOUNDS.ordinal() )
-					|| ct == CellType.RINGS )
+			if ( ( 
+					ct.ordinal() > CellType.CHEST.ordinal()
+					&& ct.ordinal() < CellType.OUTOFBOUNDS.ordinal() 
+				 )
+				 || ct == CellType.RINGS )
 				return false;
 			return true;
 		}
@@ -97,7 +99,7 @@ public class GameScene
 	 * @param newYCoordinate - column select
 	 * @return if this square has a collidable object in it and trigger its' behaviour
 	 */
-	public boolean isCollidable( int newXCoordinate, int newYCoordinate )
+	private boolean isCollidable( int newXCoordinate, int newYCoordinate )
 	{
 		if ( newXCoordinate >= xlimit || newYCoordinate >= ylimit )
 		{
